@@ -20,11 +20,11 @@ app.use(cookieParser());
 
 app.engine('html', engine.mustache);
 app.set('view engine', 'html');
-
-app.use('/', index);
-app.use('/deepblue', deepblue)
+app.set('views', __dirname + '/views');
 
 app.use(express.static(path.join(__dirname, 'client')));
+app.use('/deepblue', deepblue)
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
