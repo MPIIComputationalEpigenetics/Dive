@@ -21,7 +21,7 @@ export class SimpleHTTPComponent {
     makeRequest() : void {
         debugger;
         this.loading = true;
-        this.http.request('http://jsonplaceholder.typicode.com/posts/1') 
+        this.http.request('deepblue/list_gene_models') 
             .subscribe((res: Response) => {
                 this.data = res.json();
                 this.loading = false;
