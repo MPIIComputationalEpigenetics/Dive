@@ -3,21 +3,21 @@ import { NgModule }      from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent }  from './app.component';
 import { HttpModule, JsonpModule } from '@angular/http';
-import { SimpleHTTPComponent } from './SimpleHTTPComponent';
-
-
+import { AnnotationListComponent } from './deepblue.ui.components';
 
 @NgModule({
-  imports:      [ 
+  imports: [ 
     BrowserModule,
     HttpModule,
     JsonpModule
   ],
   declarations: [ 
      AppComponent, 
-     SimpleHTTPComponent 
+     AnnotationListComponent     
   ],
-  bootstrap:    [ AppComponent ]
+  bootstrap: [ 
+    AppComponent 
+  ]
 })
 
 export class AppModule { }
