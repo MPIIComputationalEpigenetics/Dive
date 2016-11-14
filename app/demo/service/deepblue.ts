@@ -7,7 +7,7 @@ import { Observable }     from 'rxjs/Observable'
 
 @Injectable()
 export class DeepBlueService {
-    private deepBlueUrl = 'deepblue';
+    private deepBlueUrl = 'api';
 
     constructor (private http: Http) {}
 

@@ -89,6 +89,10 @@ import {CountryService} from './demo/service/countryservice';
 import {EventService} from './demo/service/eventservice';
 import {NodeService} from './demo/service/nodeservice';
 
+import { DeepBlueService } from './demo/service/deepblue';
+
+import { AnnotationListComponent } from './demo/view/deepblue';
+
 @NgModule({
     imports: [
         BrowserModule,
@@ -156,7 +160,7 @@ import {NodeService} from './demo/service/nodeservice';
         ToolbarModule,
         TooltipModule,
         TreeModule,
-        TreeTableModule
+        TreeTableModule        
     ],
     declarations: [
         Application,
@@ -174,11 +178,16 @@ import {NodeService} from './demo/service/nodeservice';
         EmptyDemo,
         FileDemo,
         UtilsDemo,
-        Documentation
+        Documentation,
+        AnnotationListComponent
     ],
     providers: [
         {provide: LocationStrategy, useClass: HashLocationStrategy},
-        CarService,CountryService,EventService,NodeService
+        CarService,
+        CountryService,
+        EventService,
+        NodeService,
+        DeepBlueService
     ],
     bootstrap:[Application]
 })
