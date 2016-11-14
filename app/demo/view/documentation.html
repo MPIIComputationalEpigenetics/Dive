@@ -1,0 +1,340 @@
+<div class="ui-g">
+    <div class="ui-g-12">
+        <div class="card docs"> 
+            <h1>Running the Demo</h1>
+            <p>Extract the contents of the ultima zip file and then run;</p>   
+<pre>
+npm install
+npm start
+</pre>
+            <p>Navigate to http://localhost:8080 to view the demo in your local environment.</p>
+                    
+            <h1>Layout</h1>
+            <p>Ultima consists of 3 main parts; the application layout component, layout resources and theme resources. application.html inside app folder is the html template for the base layout having a router-outlet 
+                for routing. Required resources for layout are placed inside the resources/layout folder and similarly theme resources are inside resources/theme folder. 
+                To install ultima, use the application.html content as your main template and copy the layout-theme resources to your application to get the styling and functionality.
+                CSS and JS resources that belong to layout-theme are loaded with link-script tags in index.html of sample application however you may also use a bundler like webpack to install them as well.
+            </p>
+            
+            <p style="background-color: #e8e8e8; padding: 8px 14px">If you have an existing CLI application, see the CLI section below for integration.</p>
+            
+            <h1>Initialize</h1>
+            <p>After the view of your application is initialized, call Ultima.init by passing the native element to initiate the layout.</p>
+<pre>
+import &#123;Component,AfterViewInit,ElementRef&#125; from '@angular/core';
+
+declare var Ultima: any;
+    
+@Component(&#123;
+    selector: 'my-app',
+    templateUrl: 'app/application.html'
+&#125;)
+export class Application implements AfterViewInit &#123;
+
+    constructor(private el: ElementRef) &#123;&#125;
+
+    ngAfterViewInit() &#123;
+        Ultima.init(this.el.nativeElement);
+    &#125;
+&#125;
+</pre>
+            
+            <h1>Size</h1>
+            <p>Ultima comes in two sizes, default is closer to the material design specification with bigger fonts and paddings whereas the alternative compact size
+            shrinks the dimensions of the UI elements. To activate the compact mode add "layout-compact" style class to the .layout-wrapper element in application.html
+            which is the enclosing div of whole content.</p>
+            
+            <h1>Theme</h1>    
+            <p>Ultima provides 12 PrimeNG themes out of the box, setup of a theme simple including the css of theme to your page that are located inside resources/theme folder.</p>
+            
+            <ul>
+                <li>theme-blue</li>
+                <li>theme-blue-grey</li>
+                <li>theme-brown</li>
+                <li>theme-cyan</li>
+                <li>theme-dark-blue</li>
+                <li>theme-dark-green</li>
+                <li>theme-green</li>
+                <li>theme-grey</li>
+                <li>theme-indigo</li>
+                <li>theme-purple-amber</li>
+                <li>theme-purple-cyan</li>
+                <li>theme-teal</li>
+            </ul>
+            
+            <p>A custom theme can be developed by the following steps.</p>
+            <ul>
+                <li>Choose a custom theme name such as theme-myown.</li>
+                <li>Create a folder named theme-myown and place an empty theme.scss inside</li>
+                <li>Copy the sass folder from the distribution to your application.</li>
+                <li>Define the variables listed below and import the <i>/sass/theme/_theme.scss</i> file.</li>
+                <li>Build the scss to generate css</li>
+                <li>Include the generated theme.css to your page.</li>
+            </ul>
+            
+            <p>Here are the variables required to create a theme, you may need to change the last line according to the 
+                relative path of the sass folder in your application.</p>
+                
+<pre>
+$primaryColor: #009688;
+$primaryDarkColor: #00695C;
+$primaryLightColor: #80CBC4;
+$accentColor: #CDDC39;
+$accentDarkColor: #9E9D24;
+$accentLightColor: #E6EE9C;
+$accentTextColor: #212121;
+
+@import '../sass/theme/_theme';
+</pre> 
+                
+            <p> An example sass command to compile the css would be;</p>
+                
+<pre>
+sass resources/theme-myown/theme.scss resources/theme-myown/theme.css  --sourcemap=none
+</pre> 
+
+            <p>Watch mode is handy to avoid compiling everytime when a change is made, instead use the following command
+            so that sass generates the file whenever you make a customization. This builds all css files whenever a change is made to any scss file.</p>
+<pre>
+sass -w resources/ --sourcemap=none
+</pre> 
+
+            <p>Same can also be applied to layout itself;</p>
+            <ul>
+                <li>Choose a layout name such as layout-myown.</li>
+                <li>Create an empty file named layout-myown.scss inside a folder like resources/layout/css folder.</li>
+                <li>Define the variables listed below and import the <i>/sass/layout/_layout.scss</i> file.</li>
+                <li>Build the scss to generate css</li>
+                <li>Serve the css by importing it using a link tag or a bundler.</li>
+            </ul>
+            
+            <p>Here are the variables required to create a layout, you may need to change the last line according to the 
+                relative path of the sass folder in your application.</p>
+            
+<pre>
+$primaryColor: #03A9F4;
+$primaryDarkColor: #0277BD;
+$primaryLightColor: #81D4FA;
+$accentColor: #FFC107;
+$accentDarkColor: #FF8F00;
+$accentLightColor: #FFE082;
+$accentTextColor: #212121;
+$darkMenuBgColor: #424242;
+$darkMenuHoverColor: #676767;
+
+@import '/../sass/layout/_layout';
+</pre> 
+
+            <p>Check out the video tutorial that follows the steps above to create the dark-blue theme and layout. It is based on PrimeFaces version but generation part
+                applies to PrimeNG as well.</p>
+            
+            <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/XmU7QYFYuPk" frameborder="0"></iframe>
+            </div>
+            
+            <p>For both cases, several .scss files such as _layout.scss, _theme.scss or _variables.scss has to be present relative to your scss files, these are available inside the resources/sass folder in the distribution.</p>
+            <p>In case you'd like to customize the structure not just the colors, the _variables.scss is where the structural variables (e.g. font size, paddings) for the layout are defined.</p>
+<pre>
+$textColor: #212121;
+$textSecondaryColor: #757575;
+
+/* Material Mode */
+$fontSize: 16px;
+$lineHeight: 24px;
+$headerFontSize: 16px;
+$headerPadding: 10px 16px;
+$contentFontSize: 16px;
+$contentPadding: 10px 16px;
+$inputHeaderFontSize: 16px;
+$inputHeaderPadding: 10px 16px;
+$inputFontSize: 16px;
+$buttonFontSize: 16px;
+$inputOptionFontSize: 16px;
+$inputOptionPadding: 10px 14px;
+$iconFontSize: 24px;
+
+/* Compact Mode */
+$c-fontSize: 14px;
+$c-lineHeight: 18px;
+$c-headerFontSize: 14px;
+$c-headerPadding: 8px 14px;
+$c-contentFontSize: 14px;
+$c-contentPadding: 8px 14px;
+$c-iconFontSize: 20px;
+$c-buttonFontSize: 14px;
+$c-inputFontSize: 14px;
+$c-inputHeaderFontSize: 14px;
+$c-inputHeaderPadding: 6px 10px;
+$c-inputOptionFontSize: 14px;
+$c-inputOptionPadding: 6px 10px;
+$c-dtPadding: 6px 10px;
+
+/* Common */
+$hoverBgColor: #e8e8e8;
+$hoverTextColor: #000000;
+$dividerColor: #bdbdbd;
+$dividerLightColor: #cacaca;
+$grayBgColor: #757575;
+</pre>        
+
+                                    
+            <h1>Menu Modes</h1>
+            <p>Menu has 3 modes, static, overlay and horizontal. Layout container element in application.html is used to define which mode to use by adding specific classes. List
+            below indicates the style classes for each mode. In addition menu</p>
+            <ul>
+                <li>Static: "layout-wrapper menu-layout-static"</li>
+                <li>Overlay: "layout-wrapper menu-layout-overlay"</li>
+                <li>Horizontal: "layout-wrapper menu-layout-static menu-layout-horizontal"</li>
+            </ul>
+            
+            <p>For example to create a horizontal menu, the div element should be in following form;</p>
+<pre>
+&lt;div class="layout-wrapper layout-compact"&gt;
+    &lt;div class="layout-container menu-layout-static menu-layout-horizonal"&gt;
+</pre>            
+
+            <p>It is also possible to leave the choice to the user by keeping the preference at a component and usign an expression to bind it so that user can switch between modes. Sample
+            application has an example implementation of such use case.</p>          
+<pre>
+&lt;div [ngClass]="&#123;'layout-wrapper':true,'layout-compact':layoutCompact&#125;"&gt;
+    &lt;div [ngClass]="&#123;'layout-container':true,'menu-layout-static':(layoutMode=='static'||layoutMode=='horizontal'),
+            'menu-layout-overlay':(layoutMode=='overlay'),'menu-layout-horizontal':(layoutMode=='horizontal')&#125;"&gt;
+</pre>  
+
+<pre>
+@Component(&#123;
+    selector: 'my-app',
+    templateUrl: 'app/application.html'
+&#125;)
+export class Application implements AfterViewInit &#123;
+
+    layoutCompact: boolean = true;
+
+    layoutMode: string = 'static';
+    
+    darkMenu: boolean = false;
+    
+    profileMode: string = 'inline';
+
+    constructor(private el: ElementRef) &#123;&#125;
+
+    ngAfterViewInit() &#123;
+        Ultima.init(this.el.nativeElement);
+    &#125;
+&#125;
+</pre>
+
+            <h1>Dark Menu</h1>
+            <p>Default color scheme of menu is light and alternative dark mode can be activated by adding layout-menu-dark style class to the menu container that 
+                is an element having .layout-menu as its class.</p>
+<pre>
+&lt;div [ngClass]="&#123;'layout-menu':true,'layout-menu-dark':darkMenu&#125;"&gt;
+</pre>
+            
+            <h1>Profile Modes</h1>
+            <p>There are two possible locations for the user profile menu, first version is inline located inside the main menu and second option is the topbar menu. For inline mode,
+            profile content should be placed above the menu and for inline mode content goes in topbar-items list. The sample demo application provides examples for
+            both cases and even takes it to the next step by making it dynamic with an expression</p>
+<pre>
+&lt;ul class="topbar-items fadeInDown animated"&gt;
+    &lt;li class="profile-item" [hidden]="profileMode!='top'&&layoutMode!='horizontal'"&gt;
+</pre>
+            
+            <h1>Utilities</h1>
+            <p>Ultima provides various helper features such as material iconset compatible with PrimeNG components and helper classes. Visit <a [routerLink]="['/utils']">utils</a> page for details.</p>
+                    
+            <h1>Grid CSS</h1>
+            <p>Ultima uses PrimeNG Grid CSS (ui-g-*) throughout the samples, we strongly suggest using Grid CSS as your layout framework as it is well tested and supported by PrimeNG. Grid CSS is
+            available inside primeng.css.</p> 
+            
+            <h1>Migration Guide</h1>
+            <p>1.0.1 to 1.0.2</p>
+            <ul>
+                <li>Update css files of layout and theme<./li>
+            </ul> 
+            
+            <p>1.0.1 to 1.0.2</p>
+            <ul>
+                <li>Update layout.js</li>
+            </ul> 
+            
+            <p>1.0.0 to 1.0.1</p>
+            <ul>
+                <li>Update layout.js</li>
+            </ul>                 
+        </div>
+        <div class="card docs">
+            <h1>Angular CLI Integration</h1>
+            <p>If you have an existing application, skip to the "Integration with an Existing CLI Application" section. 
+                For creating a project with using angular-cli, we need to download and install the angular-cli.</p>
+<pre>
+npm install -g angular-cli
+</pre>
+            <h2>Creating an Empty Project with Angular CLI</h2>
+            <p>Run the following commands to create the application and run it.</p>
+<pre>
+ng new ultima-with-cli
+cd ultima-with-cli
+ng serve
+</pre>
+        <p>Now install PrimeNG.</p>
+<pre>
+npm install primeng --save
+</pre>
+         <p>Locate the styles.css inside the src folder and add the css of PrimeNG.</p>
+<pre>
+@import url('../node_modules/primeng/resources/primeng.min.css');
+</pre>
+
+        <p>For a sample quickstart on PrimeNG with CLI, visit <a href="https://github.com/primefaces/primeng-quickstart-cli">primeng-quickstart-cli</a> at GitHub.</p>
+
+        <h1>Integration Ultima with an Existing CLI Application</h1>
+        <p>We need to copy the ultima resources to the CLI project.
+           First step is the main layout for Ultima located in the app folder. Copy the content of ultima/app/application.html and ultima/app/application.ts 
+           to cli applications src/app/app.component.html and app.component.ts files respectively.</p>
+           
+           <p>Next step is to install the assets of Ultima. Copy the respurces/layout and resources/theme folders of Ultima to
+               app/assets folder of your application, then locate angular-cli.json at the root of your cli application and add following styles and scripts.
+           </p>
+<pre>
+"styles": [
+        "styles.css",
+        "./app/assets/theme/theme-blue.css",
+        "./app/assets/layout/css/layout-blue.css"
+      ]
+</pre>
+<pre>
+"scripts": [
+        "../node_modules/jquery/dist/jquery.min.js",   
+        "./app/assets/layout/js/layout.js",
+        "./app/assets/layout/js/nanoscroller.js",
+        "./app/assets/layout/js/ripple.js"
+      ]
+</pre>
+        <h1>Layout</h1>
+        <p>In CLI, the main application component initialize the Ultima layout.</p>
+<pre>
+import &#123; Component, AfterViewInit, ElementRef &#125; from '@angular/core';
+
+declare var Ultima: any;
+
+@Component(&#123;
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+&#125;)
+export class AppComponent implements AfterViewInit &#123;
+
+  constructor(private el: ElementRef) &#123;&#125;
+
+  ngAfterViewInit() &#123;
+        Ultima.init(this.el.nativeElement);
+    &#125;
+&#125;
+</pre>
+
+        <h1>Run</h1>
+        <p>Run ng-serve to test the Ultima setup.</p>
+        </div>
+    </div>
+</div>

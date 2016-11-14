@@ -1,0 +1,316 @@
+<div [ngClass]="{'layout-wrapper':true,'layout-compact':layoutCompact}">
+    
+    <div [ngClass]="{'layout-container':true,'menu-layout-static':(layoutMode=='static'||layoutMode=='horizontal'),
+            'menu-layout-overlay':(layoutMode=='overlay'),'menu-layout-horizontal':(layoutMode=='horizontal')}">
+        <!-- Top Bar -->
+        <div class="topbar clearfix">
+            <div class="topbar-left">            
+                <div class="logo"></div>
+            </div>
+
+            <div class="topbar-right">
+                <a id="menu-button" href="#">
+                    <i></i>
+                </a>
+                
+                <a id="topbar-menu-button" href="#">
+                    <i class="material-icons">menu</i>
+                </a>
+                <ul class="topbar-items fadeInDown animated">
+                    <li class="profile-item" [hidden]="profileMode!='top'&&layoutMode!='horizontal'">
+                        <a href="#">                            
+                            <div class="profile-image"></div>
+                            <span class="topbar-item-name">Jane Williams</span>
+                        </a>
+                        
+                        <ul class="ultima-menu animated">
+                            <li role="menuitem">
+                                <a href="#">
+                                    <i class="material-icons">person</i>
+                                    <span>Profile</span>
+                                </a>
+                            </li>
+                            <li role="menuitem">
+                                <a href="#">
+                                    <i class="material-icons">security</i>
+                                    <span>Privacy</span>
+                                </a>
+                            </li>
+                            <li role="menuitem">
+                                <a href="#">
+                                    <i class="material-icons">settings_applications</i>
+                                    <span>Settings</span>
+                                </a>
+                            </li>
+                            <li role="menuitem">
+                                <a href="#">
+                                    <i class="material-icons">power_settings_new</i>
+                                    <span>Logout</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="topbar-icon material-icons">settings</i>
+                            <span class="topbar-item-name">Settings</span>
+                        </a>
+                        <ul class="ultima-menu animated">
+                            <li role="menuitem">
+                                <a href="#">
+                                    <i class="material-icons">palette</i>
+                                    <span>Change Theme</span>
+                                </a>
+                            </li>
+                            <li role="menuitem">
+                                <a href="#">
+                                    <i class="material-icons">favorite_border</i>
+                                    <span>Favorites</span>
+                                </a>
+                            </li>
+                            <li role="menuitem">
+                                <a href="#">
+                                    <i class="material-icons">lock</i>
+                                    <span>Lock Screen</span>
+                                </a>
+                            </li>
+                            <li role="menuitem">
+                                <a href="#">
+                                    <i class="material-icons">wallpaper</i>
+                                    <span>Wallpaper</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="topbar-icon material-icons animated swing">message</i>
+                            <span class="topbar-badge animated rubberBand">5</span>
+                            <span class="topbar-item-name">Messages</span>
+                        </a>
+                        <ul class="ultima-menu animated">
+                            <li role="menuitem">
+                                <a href="#" class="topbar-message">
+                                    <img src="resources/layout/images/avatar1.png" width="35"/>
+                                    <span>Give me a call</span>
+                                </a>
+                            </li>
+                            <li role="menuitem">
+                                <a href="#" class="topbar-message">
+                                    <img src="resources/layout/images/avatar2.png" width="35"/>
+                                    <span>Sales reports attached</span>
+                                </a>
+                            </li>
+                            <li role="menuitem">
+                                <a href="#" class="topbar-message">
+                                    <img src="resources/layout/images/avatar3.png" width="35"/>
+                                    <span>About your invoice</span>
+                                </a>
+                            </li>
+                            <li role="menuitem">
+                                <a href="#" class="topbar-message">
+                                    <img src="resources/layout/images/avatar2.png" width="35"/>
+                                    <span>Meeting today at 10pm</span>
+                                </a>
+                            </li>
+                            <li role="menuitem">
+                                <a href="#" class="topbar-message">
+                                    <img src="resources/layout/images/avatar4.png" width="35"/>
+                                    <span>Out of office</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="topbar-icon material-icons">timer</i>
+                            <span class="topbar-badge animated rubberBand">4</span>
+                            <span class="topbar-item-name">Notifications</span>
+                        </a>
+                        <ul class="ultima-menu animated">
+                            <li role="menuitem">
+                                <a href="#">
+                                    <i class="material-icons">bug_report</i>
+                                    <span>Pending tasks</span>
+                                </a>
+                            </li>
+                            <li role="menuitem">
+                                <a href="#">
+                                    <i class="material-icons">event</i>
+                                    <span>Meeting today at 3pm</span>
+                                </a>
+                            </li>
+                            <li role="menuitem">
+                                <a href="#">
+                                    <i class="material-icons">file_download</i>
+                                    <span>Download documents</span>
+                                </a>
+                            </li>
+                            <li role="menuitem">
+                                <a href="#">
+                                    <i class="material-icons">flight</i>
+                                    <span>Book flight</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="search-item">
+                        <span class="md-inputfield">
+                            <input type="text">
+                            <label>Search</label>
+                            <i class="topbar-icon material-icons">search</i>
+                        </span>
+                        
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Menu -->
+        <div [ngClass]="{'layout-menu':true,'layout-menu-dark':darkMenu}">
+            <div class="nano">
+                <div class="nano-content menu-scroll-content">
+                    <div class="profile" [hidden]="profileMode!='inline'||layoutMode=='horizontal'">
+                        <div class="profile-image"></div>
+                        <a id="profile-options" href="#">
+                            <span class="profile-name">Jane Williams</span>
+                            <i class="material-icons">keyboard_arrow_down</i>
+                        </a>
+                    </div>
+
+                    <ul id="profile-menu" class="ultima-menu" [hidden]="profileMode!='inline'">
+                        <li role="menuitem">
+                            <a href="#" class="ripplelink">
+                                <i class="material-icons">person</i>
+                                <span>Profile</span>
+                            </a>
+                        </li>
+                        <li role="menuitem">
+                            <a href="#" class="ripplelink">
+                                <i class="material-icons">security</i>
+                                <span>Privacy</span>
+                            </a>
+                        </li>
+                        <li role="menuitem">
+                            <a href="#" class="ripplelink">
+                                <i class="material-icons">settings_application</i>
+                                <span>Settings</span>
+                            </a>
+                        </li>
+                        <li role="menuitem">
+                            <a href="#" class="ripplelink">
+                                <i class="material-icons">power_settings_new</i>
+                                <span>Logout</span>
+                            </a>
+                        </li>
+                    </ul>
+                    <ul id="main-menu" class="ultima-menu clearfix">
+                        <li role="menuitem"><a [routerLink]="['/']"><i class="material-icons">dashboard</i><span>Dashboard</span></a></li>
+                        <li role="menuitem">
+                            <a href="#" class="ripplelink"><i class="material-icons">palette</i><span>Themes</span><i class="material-icons">keyboard_arrow_down</i></a>
+                            <ul role="menu">
+                                <li role="menuitem"><a href="#" class="ripplelink" (click)="changeTheme($event, 'indigo')"><i class="material-icons">brush</i><span>Indigo - Pink</span></a></li>
+                                <li role="menuitem"><a href="#" class="ripplelink" (click)="changeTheme($event, 'brown')"><i class="material-icons">brush</i><span>Brown - Green</span></a></li>
+                                <li role="menuitem"><a href="#" class="ripplelink" (click)="changeTheme($event, 'blue')"><i class="material-icons">brush</i><span>Blue - Amber</span></a></li>
+                                <li role="menuitem"><a href="#" class="ripplelink" (click)="changeTheme($event, 'blue-grey')"><i class="material-icons">brush</i><span>Blue Grey - Green</span></a></li>
+                                <li role="menuitem"><a href="#" class="ripplelink" (click)="changeTheme($event, 'dark-blue')"><i class="material-icons">brush</i><span>Dark - Blue</span></a></li>
+                                <li role="menuitem"><a href="#" class="ripplelink" (click)="changeTheme($event, 'dark-green')"><i class="material-icons">brush</i><span>Dark - Green</span></a></li>
+                                <li role="menuitem"><a href="#" class="ripplelink" (click)="changeTheme($event, 'green')"><i class="material-icons">brush</i><span>Green - Yellow</span></a></li>
+                                <li role="menuitem"><a href="#" class="ripplelink" (click)="changeTheme($event, 'purple-cyan')"><i class="material-icons">brush</i><span>Purple - Cyan</span></a></li>
+                                <li role="menuitem"><a href="#" class="ripplelink" (click)="changeTheme($event, 'purple-amber')"><i class="material-icons">brush</i><span>Purple - Amber</span></a></li>
+                                <li role="menuitem"><a href="#" class="ripplelink" (click)="changeTheme($event, 'teal')"><i class="material-icons">brush</i><span>Teal - Lime</span></a></li>
+                                <li role="menuitem"><a href="#" class="ripplelink" (click)="changeTheme($event, 'cyan')"><i class="material-icons">brush</i><span>Cyan - Amber</span></a></li>
+                                <li role="menuitem"><a href="#" class="ripplelink" (click)="changeTheme($event, 'grey')"><i class="material-icons">brush</i><span>Grey - Deep Orange</span></a></li>
+                            </ul>
+                        </li>
+                        <li role="menuitem"><a href="#" class="ripplelink"><i class="material-icons">settings_application</i><span>Customization</span><i class="material-icons">keyboard_arrow_down</i></a>
+                            <ul role="menu">
+                                <li role="menuitem"><a href="#" class="ripplelink" (click)="layoutCompact=true;$event.preventDefault()"><i class="material-icons">fiber_manual_record</i><span>Compact Size</span></a></li>
+                                <li role="menuitem"><a href="#" class="ripplelink" (click)="layoutCompact=false;$event.preventDefault()"><i class="material-icons">fiber_smart_record</i><span>Material Size</span></a></li>
+                                <li role="menuitem"><a href="#" class="ripplelink" (click)="layoutMode='static';$event.preventDefault()"><i class="material-icons">menu</i><span>Static Menu</span></a></li>
+                                <li role="menuitem"><a href="#" class="ripplelink" (click)="layoutMode='overlay';$event.preventDefault()"><i class="material-icons">exit_to_app</i><span>Overlay Menu</span></a></li>
+                                <li role="menuitem"><a href="#" class="ripplelink" (click)="layoutMode='horizontal';$event.preventDefault()"><i class="material-icons">border_horizontal</i><span>Horizontal Menu</span></a></li>
+                                <li role="menuitem"><a href="#" class="ripplelink" (click)="darkMenu=false;$event.preventDefault()"><i class="material-icons">label_outline</i><span>Light Menu</span></a></li>
+                                <li role="menuitem"><a href="#" class="ripplelink" (click)="darkMenu=true;$event.preventDefault()"><i class="material-icons">label</i><span>Dark Menu</span></a></li>
+                                <li role="menuitem"><a href="#" class="ripplelink" (click)="profileMode='inline';$event.preventDefault()"><i class="material-icons">contacts</i><span>Inline Profile</span></a></li>
+                                <li role="menuitem"><a href="#" class="ripplelink" (click)="profileMode='top';$event.preventDefault()"><i class="material-icons">person_pin</i><span>Top Profile</span></a></li>
+                            </ul>
+                        </li>
+                        <li id="menuform:um_components" role="menuitem"><a href="#" class="ripplelink"><i class="material-icons">list</i><span>Components</span><i class="material-icons">keyboard_arrow_down</i></a>
+                            <ul role="menu">
+                                <li role="menuitem"><a class="ripplelink" [routerLink]="['/sample']" [routerLinkActive]="['active-menulink']"><i class="material-icons">desktop_mac</i><span>Sample Page</span></a></li>
+                                <li role="menuitem"><a class="ripplelink" [routerLink]="['/forms']" [routerLinkActive]="['active-menulink']"><i class="material-icons">input</i><span>Forms</span></a></li>
+                                <li role="menuitem"><a class="ripplelink" [routerLink]="['/data']" [routerLinkActive]="['active-menulink']"><i class="material-icons">grid_on</i><span>Data</span></a></li>
+                                <li role="menuitem"><a class="ripplelink" [routerLink]="['/panels']" [routerLinkActive]="['active-menulink']"><i class="material-icons">content_paste</i><span>Panels</span></a></li>
+                                <li role="menuitem"><a class="ripplelink" [routerLink]="['/overlays']" [routerLinkActive]="['active-menulink']"><i class="material-icons">content_copy</i><span>Overlays</span></a></li>
+                                <li role="menuitem"><a class="ripplelink" [routerLink]="['/menus']" [routerLinkActive]="['active-menulink']"><i class="material-icons">menu</i><span>Menus</span></a></li>
+                                <li role="menuitem"><a class="ripplelink" [routerLink]="['/messages']" [routerLinkActive]="['active-menulink']"><i class="material-icons">message</i><span>Messages</span></a></li>
+                                <li role="menuitem"><a class="ripplelink" [routerLink]="['/charts']" [routerLinkActive]="['active-menulink']"><i class="material-icons">insert_chart</i><span>Charts</span></a></li>
+                                <li role="menuitem"><a class="ripplelink" [routerLink]="['/file']" [routerLinkActive]="['active-menulink']"><i class="material-icons">attach_file</i><span>File</span></a></li>
+                                <li role="menuitem"><a class="ripplelink" [routerLink]="['/misc']" [routerLinkActive]="['active-menulink']"><i class="material-icons">toys</i><span>Misc</span></a></li>
+                            </ul>
+                        </li>
+                        <li id="menuform:um_default" role="menuitem"><a href="#" class="ripplelink"><i class="material-icons">get_app</i><span>Template Pages</span><i class="material-icons">keyboard_arrow_down</i></a>
+                            <ul role="menu">
+                                <li role="menuitem"><a class="ripplelink" href="landing.html" target="_blank"><i class="material-icons">flight_land</i><span>Landing</span></a></li>
+                                <li role="menuitem"><a class="ripplelink" [routerLink]="['/empty']" [routerLinkActive]="['active-menulink']"><i class="material-icons">hourglass_empty</i><span>Empty Page</span></a></li>
+                                <li role="menuitem"><a class="ripplelink" href="./login" target="_blank"><i class="material-icons">verified_user</i><span>Login Page</span></a></li>
+                                <li role="menuitem"><a class="ripplelink" href="error.html" target="_blank"><i class="material-icons">error</i><span>Error Page</span></a></li>
+                                <li role="menuitem"><a class="ripplelink" href="404.html" target="_blank"><i class="material-icons">error_outline</i><span>404 Page</span></a></li>
+                                <li role="menuitem"><a class="ripplelink" href="access.html" target="_blank"><i class="material-icons">security</i><span>Access Denied Page</span></a></li>
+                            </ul>
+                        </li>
+                        <li role="menuitem"><a href="#" class="ripplelink"><i class="material-icons">menu</i><span>Menu Hierarchy</span><i class="material-icons">keyboard_arrow_down</i></a>
+                            <ul role="menu">
+                                <li role="menuitem"><a href="#" class="ripplelink"><i class="material-icons">subject</i><span>Submenu 1</span><i class="material-icons">keyboard_arrow_down</i></a>
+                                    <ul role="menu">
+                                        <li role="menuitem"><a href="#" class="ripplelink"><i class="material-icons">subject</i><span>Submenu 1.1</span><i class="material-icons">keyboard_arrow_down</i></a>
+                                            <ul role="menu">
+                                                <li role="menuitem"><a href="#" class="ripplelink"><i class="material-icons">subject</i><span>Link 1.1.1</span></a></li>
+                                                <li role="menuitem"><a href="#" class="ripplelink"><i class="material-icons">subject</i><span>Link 1.1.2</span></a></li>
+                                                <li role="menuitem"><a href="#" class="ripplelink"><i class="material-icons">subject</i><span>Link 1.1.3</span></a></li>
+                                            </ul>
+                                        </li>
+                                        <li role="menuitem"><a href="#" class="ripplelink"><i class="material-icons">subject</i><span>Submenu 1.2</span><i class="material-icons">keyboard_arrow_down</i></a>
+                                            <ul role="menu">
+                                                <li role="menuitem"><a href="#" class="ripplelink"><i class="material-icons">subject</i><span>Link 1.2.1</span></a></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li role="menuitem"><a href="#" class="ripplelink"><i class="material-icons">subject</i><span>Submenu 2</span><i class="material-icons">keyboard_arrow_down</i></a>
+                                    <ul role="menu">
+                                        <li ole="menuitem"><a href="#" class="ripplelink"><i class="material-icons">subject</i><span>Submenu 2.1</span><i class="material-icons">keyboard_arrow_down</i></a>
+                                            <ul role="menu">
+                                                <li role="menuitem"><a href="#" class="ripplelink"><i class="material-icons">subject</i><span>Link 2.1.1</span></a></li>
+                                                <li role="menuitem"><a href="#" class="ripplelink"><i class="material-icons">subject</i><span>Link 2.1.2</span></a></li>
+                                            </ul>
+                                        </li>
+                                        <li role="menuitem"><a href="#" class="ripplelink"><i class="material-icons">subject</i><span>Submenu 2.2</span><i class="material-icons">keyboard_arrow_down</i></a>
+                                            <ul role="menu">
+                                                <li role="menuitem"><a href="#" class="ripplelink"><i class="material-icons">subject</i><span>Link 2.2.1</span></a></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li role="menuitem"><a [routerLink]="['/utils']" [routerLinkActive]="['active-menulink']" class="ripplelink"><i class="material-icons">build</i><span>Utils</span></a></li>
+                        <li role="menuitem"><a [routerLink]="['/documentation']" [routerLinkActive]="['active-menulink']" class="ripplelink"><i class="material-icons">find_in_page</i><span>Documentation</span></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="layout-main">
+            <router-outlet></router-outlet>
+            
+            <div class="footer">
+                <div class="card clearfix">
+                    <span class="footer-text-left">PrimeNG ULTIMA for Angular2</span>
+                    <span class="footer-text-right"><span class="ui-icon ui-icon-copyright"></span>  <span>All Rights Reserved</span></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
