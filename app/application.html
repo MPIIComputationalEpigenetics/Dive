@@ -165,7 +165,7 @@
                 </ul>
             </div>
         </div>
-        
+               
         <!-- Menu -->
         <div [ngClass]="{'layout-menu':true,'layout-menu-dark':darkMenu}">
             <div class="nano">
@@ -206,6 +206,9 @@
                     </ul>
                     <ul id="main-menu" class="ultima-menu clearfix">
                         <li role="menuitem"><a [routerLink]="['/']"><i class="material-icons">dashboard</i><span>Dashboard</span></a></li>
+
+                        <genome-selector></genome-selector>
+                        
                         <li role="menuitem">
                             <a href="#" class="ripplelink"><i class="material-icons">palette</i><span>Themes</span><i class="material-icons">keyboard_arrow_down</i></a>
                             <ul role="menu">

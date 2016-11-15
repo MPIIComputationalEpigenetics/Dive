@@ -13,10 +13,12 @@ import {EmptyDemo} from './demo/view/emptydemo';
 import {ChartsDemo} from './demo/view/chartsdemo';
 import {FileDemo} from './demo/view/filedemo';
 import {UtilsDemo} from './demo/view/utilsdemo';
+import {SummaryScreen} from './demo/view/summary';
 import {Documentation} from './demo/view/documentation';
 
 export const routes: Routes = [
-    {path: '', component: DashboardDemo},
+    {path: '', component: SummaryScreen},
+    //{path: '', component: SummaryScreen},
     {path: 'sample', component: SampleDemo},
     {path: 'forms', component: FormsDemo},
     {path: 'data', component: DataDemo},

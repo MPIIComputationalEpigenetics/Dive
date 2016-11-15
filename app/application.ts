@@ -1,4 +1,5 @@
 import {Component,AfterViewInit,ElementRef} from '@angular/core';
+import {MenuModule,MenuItem} from 'primeng/primeng';
 
 declare var Ultima: any;
 

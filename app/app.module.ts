@@ -84,6 +84,8 @@ import {FileDemo} from './demo/view/filedemo';
 import {UtilsDemo} from './demo/view/utilsdemo';
 import {Documentation} from './demo/view/documentation';
 
+import {SummaryScreen} from './demo/view/summary';
+
 import {CarService} from './demo/service/carservice';
 import {CountryService} from './demo/service/countryservice';
 import {EventService} from './demo/service/eventservice';
@@ -91,7 +93,8 @@ import {NodeService} from './demo/service/nodeservice';
 
 import { DeepBlueService } from './demo/service/deepblue';
 
-import { AnnotationListComponent } from './demo/view/deepblue';
+import { AnnotationListComponent,
+          GenomeSelectorComponent } from './demo/view/deepblue';
 
 @NgModule({
     imports: [
@@ -179,8 +182,10 @@ import { AnnotationListComponent } from './demo/view/deepblue';
         FileDemo,
         UtilsDemo,
         Documentation,
-        AnnotationListComponent
-    ],
+        SummaryScreen,
+        AnnotationListComponent,
+        GenomeSelectorComponent
+    ],  
     providers: [
         {provide: LocationStrategy, useClass: HashLocationStrategy},
         CarService,
