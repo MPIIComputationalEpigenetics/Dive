@@ -1,5 +1,7 @@
 import { Injectable }     from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { Http,
+         Response, 
+         URLSearchParams } from '@angular/http';
 
 import { Genome, Annotation }     from '../domain/deepblue';
 import { Observable }     from 'rxjs/Observable'
@@ -29,7 +31,13 @@ export class DeepBlueService {
     }
         
     getAnnotations() : Observable<Annotation[]> {
-        return this.http.get(this.deepBlueUrl + "/list_annotations")
+        var genomeName: string = "hg19";
+        if (this.selectedGenome) {
+            genomeName = this.selectedGenome.name;
+        }
+        let params: URLSearchParams = new URLSearchParams();
+        params.set('genome', genomeName);
+        return this.http.get(this.deepBlueUrl + "/list_annotations", {"search": params})
             .map(this.extractAnnotation)
             .catch(this.handleError);
     }
