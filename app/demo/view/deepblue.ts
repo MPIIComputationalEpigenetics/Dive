@@ -1,39 +1,44 @@
 import { Component, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs/Subscription';
+
+import { SelectItem } from 'primeng/primeng';
+
 import { Annotation, Genome } from '../domain/deepblue'
 
 import { DeepBlueService } from '../service/deepblue'
 
-import { SelectItem } from 'primeng/primeng';
-
 
 @Component({
     selector: 'list-annotations',
-    providers: [DeepBlueService],
     template: `
         <ul>
             <li *ngFor="let annotation of annotations">{{ annotation.name }}</li>
         </ul>
         `
 })
-export class AnnotationListComponent implements OnInit {
+export class AnnotationListComponent {
     errorMessage: string;
     annotations: Annotation[];
+    genomeSubscription: Subscription;
 
-    constructor (private deepBlueService: DeepBlueService) {}
-
-    ngOnInit() {
-        this.deepBlueService.getAnnotations()
-            .subscribe(
-                annotations => this.annotations = annotations,
-                error => this.errorMessage = <any>error
-            );
-    }           
+    constructor (private deepBlueService: DeepBlueService) {
+        this.genomeSubscription = deepBlueService.genomeValue$.subscribe(
+            genome => {
+                this.deepBlueService.getAnnotations(genome)
+                    .subscribe(
+                        annotations => this.annotations = annotations,
+                        error => this.errorMessage = <any>error);
+        });      
+    }
+             
+    ngOnDestroy() {
+        this.genomeSubscription.unsubscribe();
+    }  
 }
 
 
 @Component({
     selector: 'genome-selector',
-    providers: [DeepBlueService],
     templateUrl: 'app/demo/view/genome.selector.html'
 })
 export class GenomeSelectorComponent implements OnInit {
@@ -48,18 +53,18 @@ export class GenomeSelectorComponent implements OnInit {
             .subscribe(
                 genomes => {                    
                     this.selectGenomes = genomes;
-                    this.deepBlueService.selectedGenome = this.selectGenomes[0];
+                    this.deepBlueService.setGenome(genomes[0]);
                 },
                 error => this.errorMessage = <any>error
             );
     }
 
     changeGenome(event, genome) {
-      this.deepBlueService.selectedGenome = genome;
+      this.deepBlueService.setGenome(genome);
     }
 
-    getStyle(genome) {
-      if (genome.id == this.deepBlueService.selectedGenome.id) {
+    getStyle(genome) : string {
+      if (genome.id == this.deepBlueService.getGenome().id) {
         return "check circle";
       } else {
         return "alarm on";

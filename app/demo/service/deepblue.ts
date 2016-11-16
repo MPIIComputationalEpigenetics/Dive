@@ -3,17 +3,32 @@ import { Http,
          Response, 
          URLSearchParams } from '@angular/http';
 
+import { BehaviorSubject }    from 'rxjs/BehaviorSubject';
+
 import { Genome, Annotation }     from '../domain/deepblue';
 import { Observable }     from 'rxjs/Observable'
 
 
 @Injectable()
 export class DeepBlueService {
-    public selectedGenome;
-
     private deepBlueUrl = 'api';
 
-    constructor (private http: Http) {}
+    // Observable string sources
+    public genomeSource = new BehaviorSubject<Genome>({id: "g1", name: "hg19", extra_metadata: null});
+
+    // Observable string streams
+    genomeValue$: Observable<Genome> = this.genomeSource.asObservable();
+
+    // Service messages
+    setGenome(genome: Genome) {
+        this.genomeSource.next(genome);
+    }
+
+    getGenome(): Genome {
+        return this.genomeSource.getValue();
+    }
+
+    constructor (private http: Http) { }
 
     // Functions to select data from the Server
     getGenomes() : Observable<Genome[]> {
@@ -30,13 +45,10 @@ export class DeepBlueService {
         });
     }
         
-    getAnnotations() : Observable<Annotation[]> {
-        var genomeName: string = "hg19";
-        if (this.selectedGenome) {
-            genomeName = this.selectedGenome.name;
-        }
+    getAnnotations(genome) : Observable<Annotation[]> {
         let params: URLSearchParams = new URLSearchParams();
-        params.set('genome', genomeName);
+        params.set('genome', genome.name);
+        console.log(genome.name);
         return this.http.get(this.deepBlueUrl + "/list_annotations", {"search": params})
             .map(this.extractAnnotation)
             .catch(this.handleError);
