@@ -1,10 +1,10 @@
 .splash-screen {
-    background-color: #3F51B5;
+    background-color: #FFFFFF;
     height: 100%;
-    padding-top: 250px;
+    padding-top: 200px;
     
     .splash-container {
-        width: 250px;
+        width: 383px;
         margin: 0 auto;
         text-align: center
     }
@@ -12,10 +12,10 @@
     .logo {
         display: inline-block;
         vertical-align: middle;
-        width: 200px;
-        height: 30px;
-        background: url("../images/logo2x.png") top left no-repeat;
-        background-size: 200px 30px;
+        width: 383px;
+        height: 383px;
+        background: url("../images/logo-dive.jpg") top left no-repeat;
+        background-size: 383 383px;
     }
     
     .load-bar {
@@ -36,15 +36,15 @@
       text-align: center;
     }
     .bar:nth-child(1) {
-      background-color: #E91E63;
+      background-color: #3F4A9F;
       animation: loading 3s linear infinite;
     }
     .bar:nth-child(2) {
-      background-color: #8BC34A;
+      background-color: #FFFFFF;
       animation: loading 3s linear 1s infinite;
     }
     .bar:nth-child(3) {
-      background-color: #FFC107;
+      background-color: #005DAC;
       animation: loading 3s linear 2s infinite;
     }
     @keyframes loading {

@@ -3,22 +3,56 @@ import { Subscription } from 'rxjs/Subscription';
 
 import { SelectItem } from 'primeng/primeng';
 
-import { Annotation, Genome } from '../domain/deepblue'
+import { Annotation, 
+         Genome, 
+         EpigeneticMark } from '../domain/deepblue'
 
 import { DeepBlueService } from '../service/deepblue'
 
 
+
+@Component({
+    selector: 'dive-status',
+    template: `
+            <genome-selector></genome-selector>
+            <li role="menuitem">
+                <a [routerLink]="['/']">x
+                    <i class="material-icons">dashboard</i>
+                    <span>{{ deepBlueService.getAnnotation()?.name }}</span>
+                </a>                
+            </li>                
+            <histone-mark-selector></histone-mark-selector>
+            `
+})
+export class DiveStatus {
+    constructor (private deepBlueService: DeepBlueService) { }        
+}
 @Component({
     selector: 'list-annotations',
-    template: `
-        <ul>
-            <li *ngFor="let annotation of annotations">{{ annotation.name }}</li>
-        </ul>
+    template: `   
+                <div class="ui-g form-group">
+                    <div class="ui-g-12 ui-md-2">
+                        <label for="input">Annotation Name</label>
+                    </div>
+                    <div class="ui-g-12 ui-md-4">
+                        <p-dropdown 
+                            id="dropdown" 
+                            [options]="menuAnnotations" 
+                            [(ngModel)]="selectedAnnotation" 
+                            filter="filter" 
+                            [autoWidth]="false"
+                            (onChange)="selectAnnotation($event)"
+                        >
+                        </p-dropdown>
+                    </div>
+                </div>
         `
 })
 export class AnnotationListComponent {
     errorMessage: string;
     annotations: Annotation[];
+    menuAnnotations: SelectItem[];
+    selectedAnnotation: SelectItem;
     genomeSubscription: Subscription;
 
     constructor (private deepBlueService: DeepBlueService) {
@@ -26,9 +60,18 @@ export class AnnotationListComponent {
             genome => {
                 this.deepBlueService.getAnnotations(genome)
                     .subscribe(
-                        annotations => this.annotations = annotations,
+                        annotations => {
+                            this.annotations = annotations;
+                            this.menuAnnotations = annotations.map((annotation) => {
+                                return {label: annotation.name, value: annotation};
+                            });
+                        },
                         error => this.errorMessage = <any>error);
         });      
+    }
+
+    selectAnnotation(event) {
+        this.deepBlueService.setAnnotation(event.value);
     }
              
     ngOnDestroy() {
@@ -36,6 +79,43 @@ export class AnnotationListComponent {
     }  
 }
 
+//
+
+@Component({
+  selector: 'histone-mark-selector',
+    templateUrl: 'app/demo/view/histones.selector.html'
+})
+export class HistoneExperimentsMenu {
+    errorMessage: string;
+    selectHistones: EpigeneticMark[];
+
+    constructor (private deepBlueService: DeepBlueService) {}
+
+    ngOnInit() {         
+        this.deepBlueService.getHistones()
+            .subscribe(
+                histones => {                    
+                    this.selectHistones = histones;
+                },
+                error => this.errorMessage = <any>error
+            );
+    }
+
+    changeHistone(event, histone) {
+        this.deepBlueService.setEpigeneticMark(histone);
+    }  
+
+    getStyle(histone) : string {
+        if (histone.id == this.deepBlueService.getEpigeneticMark().id) {
+        return "check circle";
+      } else {
+        return "alarm on";
+      }
+    }
+}
+
+
+// Building Menu Items with Genome names
 
 @Component({
     selector: 'genome-selector',

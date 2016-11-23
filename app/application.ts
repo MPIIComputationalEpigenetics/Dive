@@ -1,6 +1,8 @@
 import {Component,AfterViewInit,ElementRef} from '@angular/core';
 import {MenuModule,MenuItem} from 'primeng/primeng';
 
+import { DeepBlueService } from './demo/service/deepblue';
+
 declare var Ultima: any;
 
 @Component({
@@ -17,7 +19,7 @@ export class Application implements AfterViewInit {
     
     profileMode: string = 'inline';
 
-    constructor(private el: ElementRef) {}
+    constructor(private el: ElementRef, private deepBlueService: DeepBlueService) {}
 
     ngAfterViewInit() {
         Ultima.init(this.el.nativeElement);

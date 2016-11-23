@@ -170,44 +170,11 @@
         <div [ngClass]="{'layout-menu':true,'layout-menu-dark':darkMenu}">
             <div class="nano">
                 <div class="nano-content menu-scroll-content">
-                    <div class="profile" [hidden]="profileMode!='inline'||layoutMode=='horizontal'">
-                        <div class="profile-image"></div>
-                        <a id="profile-options" href="#">
-                            <span class="profile-name">Jane Williams</span>
-                            <i class="material-icons">keyboard_arrow_down</i>
-                        </a>
-                    </div>
 
-                    <ul id="profile-menu" class="ultima-menu" [hidden]="profileMode!='inline'">
-                        <li role="menuitem">
-                            <a href="#" class="ripplelink">
-                                <i class="material-icons">person</i>
-                                <span>Profile</span>
-                            </a>
-                        </li>
-                        <li role="menuitem">
-                            <a href="#" class="ripplelink">
-                                <i class="material-icons">security</i>
-                                <span>Privacy</span>
-                            </a>
-                        </li>
-                        <li role="menuitem">
-                            <a href="#" class="ripplelink">
-                                <i class="material-icons">settings_application</i>
-                                <span>Settings</span>
-                            </a>
-                        </li>
-                        <li role="menuitem">
-                            <a href="#" class="ripplelink">
-                                <i class="material-icons">power_settings_new</i>
-                                <span>Logout</span>
-                            </a>
-                        </li>
-                    </ul>
                     <ul id="main-menu" class="ultima-menu clearfix">
-                        <li role="menuitem"><a [routerLink]="['/']"><i class="material-icons">dashboard</i><span>Dashboard</span></a></li>
 
-                        <genome-selector></genome-selector>
+
+                        <dive-status></dive-status>
                         
                         <li role="menuitem">
                             <a href="#" class="ripplelink"><i class="material-icons">palette</i><span>Themes</span><i class="material-icons">keyboard_arrow_down</i></a>
@@ -310,8 +277,8 @@
             
             <div class="footer">
                 <div class="card clearfix">
-                    <span class="footer-text-left">PrimeNG ULTIMA for Angular2</span>
-                    <span class="footer-text-right"><span class="ui-icon ui-icon-copyright"></span>  <span>All Rights Reserved</span></span>
+                    <span class="footer-text-left">DeepBlue Dive</span>
+                    <span class="footer-text-right"><span class="ui-icon ui-icon-copyright"></span>  <span>Max Planck Institute for Informatics - Saarland Informatics Campus</span></span>
                 </div>
             </div>
         </div>

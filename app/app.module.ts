@@ -94,7 +94,9 @@ import {NodeService} from './demo/service/nodeservice';
 import { DeepBlueService } from './demo/service/deepblue';
 
 import { AnnotationListComponent,
-          GenomeSelectorComponent } from './demo/view/deepblue';
+         DiveStatus,
+         GenomeSelectorComponent,
+         HistoneExperimentsMenu } from './demo/view/deepblue';
 
 @NgModule({
     imports: [
@@ -183,8 +185,10 @@ import { AnnotationListComponent,
         UtilsDemo,
         Documentation,
         SummaryScreen,
+        DiveStatus,
         AnnotationListComponent,
-        GenomeSelectorComponent
+        GenomeSelectorComponent,
+        HistoneExperimentsMenu
     ],  
     providers: [
         {provide: LocationStrategy, useClass: HashLocationStrategy},
