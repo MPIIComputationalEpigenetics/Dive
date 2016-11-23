@@ -554,7 +554,7 @@
     -webkit-border-radius: 3px;
     border-radius: 3px; }
     .exception-body .ui-button:hover {
-      background-color: #FF8F00; }
+      background-color: #274d8d; }
   .exception-body.error-page .exception-type {
     background-color: #e62a10; }
     .exception-body.error-page .exception-type img {
@@ -586,7 +586,7 @@
   -webkit-border-radius: 3px;
   border-radius: 3px; }
   .landing-wrapper .ui-button:hover {
-    background-color: #FF8F00; }
+    background-color: #274d8d; }
 .landing-wrapper #header {
   width: 100%;
   min-height: 400px;
@@ -902,7 +902,7 @@ body {
   z-index: 100;
   width: 100%;
   height: 90px;
-  background-color: #03A9F4;
+  background-color: #3e464c;
   -webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
   -moz-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26); }
@@ -928,7 +928,7 @@ body {
     padding: 15px;
     position: relative; }
     .layout-container .topbar .topbar-right #menu-button {
-      color: #212121;
+      color: #ffffff;
       display: inline-block;
       vertical-align: middle;
       height: 36px;
@@ -936,7 +936,7 @@ body {
       position: relative;
       left: -16px;
       top: 3px;
-      background-color: #FFC107;
+      background-color: #5180ce;
       -moz-border-radius: 50%;
       -webkit-border-radius: 50%;
       border-radius: 50%;
@@ -1023,7 +1023,7 @@ body {
     .layout-container .topbar .topbar-right .topbar-items .search-item input:focus ~ label {
       top: -5px;
       font-size: 12px;
-      color: #03A9F4; }
+      color: #3e464c; }
     .layout-container .topbar .topbar-right .topbar-items .search-item input.ui-state-filled ~ label {
       display: none; }
     .layout-container .topbar .topbar-right .topbar-items .search-item label {
@@ -1115,8 +1115,8 @@ body {
       .layout-container .layout-menu.layout-menu-dark ul.ultima-menu li a:hover {
         background-color: #676767; }
     .layout-container .layout-menu.layout-menu-dark ul.ultima-menu li.active-menuitem > a {
-      color: #212121;
-      background-color: #FFC107; }
+      color: #ffffff;
+      background-color: #5180ce; }
 .layout-container.menu-layout-overlay .layout-menu {
   margin-left: -300px; }
 .layout-container.menu-layout-overlay .layout-main {
@@ -1197,7 +1197,7 @@ body {
       display: inline-block;
       vertical-align: middle; }
   .layout-container .ultima-menu li.active-menuitem > a {
-    color: #03A9F4;
+    color: #3e464c;
     background-color: #e8e8e8; }
     .layout-container .ultima-menu li.active-menuitem > a i:last-child {
       -webkit-transform: rotate(-180deg);
@@ -1239,7 +1239,7 @@ body {
 
 .ajax-loader {
   font-size: 32px;
-  color: #FFC107; }
+  color: #5180ce; }
 
 @media (min-width: 1025px) {
   .layout-container .topbar-items {
@@ -1260,8 +1260,8 @@ body {
           position: absolute;
           right: -5px;
           top: -5px;
-          background-color: #FFC107;
-          color: #212121;
+          background-color: #5180ce;
+          color: #ffffff;
           -moz-border-radius: 50%;
           -webkit-border-radius: 50%;
           border-radius: 50%;
@@ -1317,7 +1317,7 @@ body {
     -webkit-box-shadow: none;
     -moz-box-shadow: none; }
     .layout-container.menu-layout-horizontal .topbar .topbar-left {
-      background-color: #03A9F4;
+      background-color: #3e464c;
       box-shadow: none;
       -webkit-box-shadow: none;
       -moz-box-shadow: none; }
@@ -1386,13 +1386,13 @@ body {
           .layout-container.menu-layout-horizontal .layout-menu ul.ultima-menu > li > ul li ul ul ul ul ul li a {
             padding-left: 96px; }
         .layout-container.menu-layout-horizontal .layout-menu ul.ultima-menu > li > ul li.active-menuitem > a {
-          color: #03A9F4;
+          color: #3e464c;
           background-color: #e8e8e8; }
       .layout-container.menu-layout-horizontal .layout-menu ul.ultima-menu > li.active-menuitem > a {
-        color: #212121;
-        background-color: #FFC107; }
+        color: #ffffff;
+        background-color: #5180ce; }
         .layout-container.menu-layout-horizontal .layout-menu ul.ultima-menu > li.active-menuitem > a i {
-          color: #212121; }
+          color: #ffffff; }
     .layout-container.menu-layout-horizontal .layout-menu.layout-menu-dark {
       background-color: #424242; }
       .layout-container.menu-layout-horizontal .layout-menu.layout-menu-dark ul.ultima-menu li a {
@@ -1402,8 +1402,8 @@ body {
           .layout-container.menu-layout-horizontal .layout-menu.layout-menu-dark ul.ultima-menu li a:hover i {
             color: #ffffff; }
       .layout-container.menu-layout-horizontal .layout-menu.layout-menu-dark ul.ultima-menu li.active-menuitem > a {
-        color: #212121;
-        background-color: #FFC107; }
+        color: #ffffff;
+        background-color: #5180ce; }
       .layout-container.menu-layout-horizontal .layout-menu.layout-menu-dark ul.ultima-menu li ul {
         background-color: #424242; }
   .layout-container.menu-layout-horizontal .layout-main {
@@ -1475,8 +1475,8 @@ body {
         position: absolute;
         left: 30px;
         top: 10px;
-        background-color: #FFC107;
-        color: #212121;
+        background-color: #5180ce;
+        color: #ffffff;
         -moz-border-radius: 50%;
         -webkit-border-radius: 50%;
         border-radius: 50%;
@@ -1490,7 +1490,7 @@ body {
         display: inline-block;
         vertical-align: middle; }
     .layout-container .topbar .topbar-right .topbar-items > li.active-top-menu > a {
-      color: #03A9F4; }
+      color: #3e464c; }
     .layout-container .topbar .topbar-right .topbar-items > li.active-top-menu > ul {
       display: block; }
       .layout-container .topbar .topbar-right .topbar-items > li.active-top-menu > ul li a {
@@ -1516,7 +1516,7 @@ body {
       .layout-container .topbar .topbar-right .topbar-items > li.search-item input:focus ~ label,
       .layout-container .topbar .topbar-right .topbar-items > li.search-item input.ui-state-filled ~ label {
         top: -20px;
-        color: #03A9F4; }
+        color: #3e464c; }
       .layout-container .topbar .topbar-right .topbar-items > li.search-item label {
         top: 1px;
         color: #212121; }
