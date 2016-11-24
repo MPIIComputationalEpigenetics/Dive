@@ -6,9 +6,9 @@ import { Http,
 import { BehaviorSubject }    from 'rxjs/BehaviorSubject';
 
 import { Observable }     from 'rxjs/Observable'
-import 'rxjs/Rx';
 
-import { EpigeneticMark, 
+import { IdName,
+         EpigeneticMark, 
          Genome, 
          Annotation }     from '../domain/deepblue';
 
@@ -70,6 +70,7 @@ export class DeepBlueService {
         let params: URLSearchParams = new URLSearchParams();
         params.set('genome', this.getGenome().name);
         params.set('controlled_vocabulary', "epigenetic_marks");
+        params.set('type', "peaks");
         return this.http.get(this.deepBlueUrl + "/collection_experiments_count", {"search": params})        
             .map(this.extractHistone)
             .catch(this.handleError);
@@ -112,7 +113,6 @@ export class DeepBlueService {
         }
         let params: URLSearchParams = new URLSearchParams();
         params.set('genome', genome.name);
-        console.log(genome.name);
         return this.http.get(this.deepBlueUrl + "/list_annotations", {"search": params})
             .map(this.extractAnnotation)
             .catch(this.handleError);
@@ -124,6 +124,50 @@ export class DeepBlueService {
         return data.map((value) => {
             return new Annotation(value);
         });
+    }
+
+    getExperiments(genome, epigenetic_mark) : Observable<IdName[]> {
+        if (!genome) {
+            return Observable.empty<IdName[]>();
+        }
+
+        if (!epigenetic_mark) {
+            return Observable.empty<IdName[]>();
+        }
+
+        let params: URLSearchParams = new URLSearchParams();
+        params.set('genome', genome.name);
+        params.set('type', "peaks");
+        params.set('epigenetic_mark', epigenetic_mark.name);
+        return this.http.get(this.deepBlueUrl + "/list_experiments", {"search": params})
+            .map(this.extractIdName)
+            .catch(this.handleError);        
+    }
+
+    private extractIdName( res: Response) {
+        let body = res.json();
+        var data =  body[1] || [] ;
+        return data.map((value) => {
+            return new IdName(value);
+        });
+    }
+
+    getInfos(ids: string[]) : Observable<Object[]> {
+        let params: URLSearchParams = new URLSearchParams();
+        for (let id of ids) {
+            params.append('id', id);
+        }
+     
+        return this.http.get(this.deepBlueUrl + "/info", {"search": params})
+            .map(this.extractExperiment)
+            .catch(this.handleError);
+    }
+
+    private extractExperiment( res: Response ) : Object[] {
+        let body = res.json();
+        var data = body[1] || [];
+
+        return data as Object[];
     }
 
     private handleError (error: Response | any ) {

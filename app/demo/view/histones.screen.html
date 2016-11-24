@@ -1,0 +1,8 @@
+<h1>Histone  {{ deepBlueService.getEpigeneticMark().name }} </h1>
+
+
+<h2>Experiments</h2>
+
+<ul>
+    <li *ngFor="let experiment of experiments"> {{ experiment.name }}({{ experiment.id }})   </li>            
+</ul>

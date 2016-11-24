@@ -93,6 +93,8 @@ import {NodeService} from './demo/service/nodeservice';
 
 import { DeepBlueService } from './demo/service/deepblue';
 
+import { HistonesScreen } from './demo/view/histones.screen';
+
 import { AnnotationListComponent,
          DiveStatus,
          GenomeSelectorComponent,
@@ -186,9 +188,10 @@ import { AnnotationListComponent,
         Documentation,
         SummaryScreen,
         DiveStatus,
+        HistonesScreen,
         AnnotationListComponent,
         GenomeSelectorComponent,
-        HistoneExperimentsMenu
+        HistoneExperimentsMenu,
     ],  
     providers: [
         {provide: LocationStrategy, useClass: HashLocationStrategy},

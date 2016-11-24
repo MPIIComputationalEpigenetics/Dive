@@ -58,16 +58,16 @@ export class AnnotationListComponent {
     constructor (private deepBlueService: DeepBlueService) {
         this.genomeSubscription = deepBlueService.genomeValue$.subscribe(
             genome => {
-                this.deepBlueService.getAnnotations(genome)
-                    .subscribe(
-                        annotations => {
-                            this.annotations = annotations;
-                            this.menuAnnotations = annotations.map((annotation) => {
-                                return {label: annotation.name, value: annotation};
-                            });
-                        },
-                        error => this.errorMessage = <any>error);
-        });      
+                this.deepBlueService.getAnnotations(genome).subscribe(
+                    annotations => {
+                        this.annotations = annotations;
+                        this.menuAnnotations = annotations.map((annotation) => {
+                            return {label: annotation.name, value: annotation};
+                        });
+                    },
+                    error => this.errorMessage = <any>error);
+            }
+        );      
     }
 
     selectAnnotation(event) {
@@ -88,17 +88,18 @@ export class AnnotationListComponent {
 export class HistoneExperimentsMenu {
     errorMessage: string;
     selectHistones: EpigeneticMark[];
+    genomeSubscription: Subscription;
 
-    constructor (private deepBlueService: DeepBlueService) {}
-
-    ngOnInit() {         
-        this.deepBlueService.getHistones()
-            .subscribe(
-                histones => {                    
-                    this.selectHistones = histones;
-                },
-                error => this.errorMessage = <any>error
-            );
+    constructor (private deepBlueService: DeepBlueService) {
+        this.genomeSubscription = deepBlueService.genomeValue$.subscribe(
+            genome => {
+                this.deepBlueService.getHistones().subscribe(
+                    histones => {
+                        this.selectHistones = histones;
+                    },
+                    error => this.errorMessage = <any>error);
+            }
+        );      
     }
 
     changeHistone(event, histone) {
@@ -112,6 +113,10 @@ export class HistoneExperimentsMenu {
         return "alarm on";
       }
     }
+
+    ngOnDestroy() {
+        this.genomeSubscription.unsubscribe();
+    }  
 }
 
 

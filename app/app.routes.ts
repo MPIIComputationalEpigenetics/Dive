@@ -15,10 +15,11 @@ import {FileDemo} from './demo/view/filedemo';
 import {UtilsDemo} from './demo/view/utilsdemo';
 import {SummaryScreen} from './demo/view/summary';
 import {Documentation} from './demo/view/documentation';
+import {HistonesScreen} from './demo/view/histones.screen';
 
 export const routes: Routes = [
     {path: '', component: SummaryScreen},
-    //{path: '', component: SummaryScreen},
+    {path: 'histonemark', component: HistonesScreen},
     {path: 'sample', component: SampleDemo},
     {path: 'forms', component: FormsDemo},
     {path: 'data', component: DataDemo},
@@ -35,3 +36,4 @@ export const routes: Routes = [
 ];
 
 export const AppRoutes: ModuleWithProviders = RouterModule.forRoot(routes);
+
