@@ -7,6 +7,8 @@ import { BehaviorSubject }    from 'rxjs/BehaviorSubject';
 
 import { Observable }     from 'rxjs/Observable'
 
+import { Subject }     from 'rxjs/Subject'
+
 import { IdName,
          EpigeneticMark, 
          Genome, 
@@ -19,16 +21,24 @@ export class DeepBlueService {
 
     // Observable string sources
     public genomeSource = 
-        new BehaviorSubject<Genome>({id: "g1", name: "hg19", extra_metadata: null});
+        new BehaviorSubject<Genome>({id: "-", name: "-", extra_metadata: null});
     public annotationSource = 
-        new BehaviorSubject<Annotation>({id: "a0", name: "-", extra_metadata: null});
+        new BehaviorSubject<Annotation>({id: "-", name: "-", extra_metadata: null});
     public epigeneticMarkSource = 
-        new BehaviorSubject<EpigeneticMark>({id: "em0", name: "-", extra_metadata: null});        
+        new BehaviorSubject<EpigeneticMark>({id: "-", name: "-", extra_metadata: null});        
+
+
+    totalSelectedRegtions : Number = 0;            
 
     // Observable string streams
     genomeValue$: Observable<Genome> = this.genomeSource.asObservable();
     annotationValue$: Observable<Annotation> = this.annotationSource.asObservable();
     epigeneticMarkValue$: Observable<EpigeneticMark> = this.epigeneticMarkSource.asObservable();
+
+
+    getTotalSelectedRegtions() : Number {
+        return this.totalSelectedRegtions;
+    }
 
     // Service messages
     setGenome(genome: Genome) {
@@ -37,6 +47,12 @@ export class DeepBlueService {
 
     setAnnotation(annotation: Annotation) {
         this.annotationSource.next(annotation);
+
+        this.selectAnnotation(annotation).subscribe((query_id) => 
+            this.countRegionsRequest(query_id).subscribe((total) =>
+                this.totalSelectedRegtions = total["count"]
+            )
+        ); 
     }
 
     setEpigeneticMark(epigeneticMark: EpigeneticMark) {
@@ -144,6 +160,65 @@ export class DeepBlueService {
             .catch(this.handleError);        
     }
 
+    
+    selectAnnotation(annotation) : Observable<string> {
+        if (!annotation) {
+            return Observable.empty<string>();
+        }        
+
+        let params: URLSearchParams = new URLSearchParams();
+        params.set("annotation_name", annotation.name);
+        params.set("genome", this.getGenome().name);
+        return this.http.get(this.deepBlueUrl + "/select_annotations", {"search": params})
+            .map(this.extractId)
+            .catch(this.handleError);
+    }
+
+
+    getResult(request_id) : Observable<any> {
+        let params: URLSearchParams = new URLSearchParams();
+        params.set("request_id", request_id);
+        
+        var pollSubject = new Subject<any>();
+
+        var pollData = this.http.get(this.deepBlueUrl + "/get_request_data", {"search" : params})
+                    .map((res: Response) => {
+                        let body = res.json();
+                        var status = body[0] || "error"
+                        if (status == "okay") {
+                            expand.unsubscribe();
+                            pollSubject.next(body[1]);
+                        }                                     
+                    });
+
+        var expand = pollData.expand( 
+            () => Observable.timer(500).concatMap(() => pollData)            
+        ).subscribe();
+
+        return pollSubject.asObservable();
+    
+    }
+
+    countRegionsRequest(query_id) : Observable<string> {
+        let params: URLSearchParams = new URLSearchParams();
+        params.set("query_id", query_id);
+
+        var request : Observable<string> = 
+            this.http.get(this.deepBlueUrl + "/count_regions", {"search": params})
+            .map(this.extractId)
+            .flatMap((request_id) => {
+                return this.getResult(request_id);        
+            })
+
+        return request;
+    }
+
+    private extractId( res: Response) {
+        let body = res.json();
+        return body[1] || "" ;
+    }
+
+
     private extractIdName( res: Response) {
         let body = res.json();
         var data =  body[1] || [] ;
@@ -183,3 +258,28 @@ export class DeepBlueService {
         return Observable.throw(errMsg);
     }
 }
+
+
+/***
+ * 
+ * 
+ * Rx.Observable.forkJoin can do this.
+
+First import Obserable:
+
+import {Observable} from 'rxjs/Observable';
+Now join all observables with forkJoin:
+
+// a set of customer IDs was given to retrieve
+var ids:number[] = [1, 4, 7];
+
+// map them into a array of observables and forkJoin
+Observable.forkJoin(
+    ids.map(
+        i => this.http.get('/customers/' + i)
+            .map(res => res.json())
+    ))
+    .subscribe(customers => this.customers = customers);
+ * 
+ * 
+ */

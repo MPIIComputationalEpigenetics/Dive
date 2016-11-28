@@ -1,8 +1,37 @@
 <h1>Histone  {{ deepBlueService.getEpigeneticMark().name }} </h1>
 
 
-<h2>Experiments</h2>
+<div class="card card-w-title">
+    <h1>Select the data</h1>
+    <p-tabView>
+        <p-tabPanel header="BioSource">
+            <p-multiSelect 
+                [defaultLabel]="defaultSelectBiosourcesLabel"
+                [options]="biosourcesItems" 
+                [(ngModel)]="selectedMultiSelectBiosources"
+                (onChange)="selectBiosources($event)">
+            </p-multiSelect>
+        </p-tabPanel>
 
+        <p-tabPanel header="BioSources">
+                        
+        </p-tabPanel>
+
+        <p-tabPanel header="Samples">
+                        
+        </p-tabPanel>
+
+        <p-tabPanel header="Techniques">
+                        
+        </p-tabPanel>
+
+        <p-tabPanel header="Projects">
+                        
+        </p-tabPanel>
+    </p-tabView>
+</div>
+        
+<h2>Experiments</h2>
 <ul>
     <li *ngFor="let experiment of experiments"> {{ experiment.name }}({{ experiment.id }})   </li>            
 </ul>

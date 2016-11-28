@@ -15,6 +15,7 @@ import { DeepBlueService } from '../service/deepblue'
     selector: 'dive-status',
     template: `
             <genome-selector></genome-selector>
+            {{ deepBlueService.getTotalSelectedRegtions() }}
             <li role="menuitem">
                 <a [routerLink]="['/']">x
                     <i class="material-icons">dashboard</i>
