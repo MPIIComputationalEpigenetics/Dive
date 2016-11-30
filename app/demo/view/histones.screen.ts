@@ -28,6 +28,8 @@ export class HistonesScreen {
 
     selectedExperiments: Object[] = [];
 
+    data: any;
+
     segregate(experiments: Object[]) {
 
         var biosources = {}
@@ -43,7 +45,7 @@ export class HistonesScreen {
             let experiment_epigenetic_mark = experiment['epigenetic_mark'];
             let experiment_technique = experiment['technique'];
             let experiment_project = experiment['project'];
-
+experiments
             if (!(experiment_biosource in biosources)) {
                 biosources[experiment_biosource] = []
                 this.biosourcesItems.push(
@@ -98,11 +100,44 @@ export class HistonesScreen {
                     error => this.errorMessage = <any>error);
             }
         );
+
+        this.data = {
+            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+            datasets: [
+                {
+                    label: 'My First dataset',
+                    backgroundColor: '#42A5F5',
+                    borderColor: '#1E88E5',
+                    data: [65, 59, 80, 81, 56, 55, 40]
+                },
+                {
+                    label: 'My Second dataset',
+                    backgroundColor: '#9CCC65',
+                    borderColor: '#7CB342',
+                    data: [28, 48, 40, 19, 86, 27, 90]
+                }
+            ]
+        }        
     }
 
     selectBiosources(event) {
-      console.log(event);
+      debugger;
+      var experiments : Object[] = [];
+      experiments = experiments.concat.apply([], event.value);
+
+      console.log(experiments);
+
+      this.deepBlueService.selectMultipleExperiments(experiments).subscribe((a : any) => {
+          debugger;
+          console.log(a);
+      });
+      
     }               
+    
+
+    reloadPlot() {
+
+    }
 
     ngOnDestroy() {
         this.epigeneticMarkSubscription.unsubscribe();

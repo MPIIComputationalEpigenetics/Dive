@@ -1,3 +1,4 @@
+import { DataDemo } from './datademo';
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -7,13 +8,43 @@ import { Annotation,
          Genome, 
          EpigeneticMark } from '../domain/deepblue'
 
-import { DeepBlueService } from '../service/deepblue'
+import { DataStack, DeepBlueService, SelectedData } from '../service/deepblue';
 
+
+
+@Component({
+    selector: 'data-stack',
+    template: `
+
+    <ul role="menu">
+        <li *ngFor="let data of dataStack.getData() " (click)="removeData($event, data)">        
+            <a href="#" class="ripplelink">
+                <i class="material-icons">check circle</i><span> {{ data.idName.name }}</span>
+            </a>
+        </li>            
+    </ul>
+    
+    `
+})
+export class DataStackView {
+
+
+    dataStack: DataStack;
+
+    constructor (private deepBlueService: DeepBlueService) {
+        this.dataStack = deepBlueService.getDataStack();
+    }
+
+    removeData(event, data) {
+        console.log(event, data);
+    }
+}
 
 
 @Component({
     selector: 'dive-status',
     template: `
+            <data-stack></data-stack>
             <genome-selector></genome-selector>
             {{ deepBlueService.getTotalSelectedRegtions() }}
             <li role="menuitem">

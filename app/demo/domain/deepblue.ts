@@ -1,56 +1,55 @@
+export class IdName {
+    constructor (public id: string, public name: string) {  }
+}
 
-export class IdNameCount {
+export class IdNameCount extends IdName {
     id: string;
     name: string;
     count: number;
 
-    constructor (data: string[]) {
-        this.id = data[0];
-        this.name = data[1];
-        this.count = parseInt(data[2]);
-    }
+    constructor (data: string[] ) {
+        super(data[0], data[1]);
+        this.count = parseInt(data[2]);                     
+    }     
 }
 
-export class IdName {
-    id: string;
-    name: string; 
-
-    constructor (data: string[]) {
-        this.id = data[0];
-        this.name = data[1];
-    }
-}
-
-export class EpigeneticMark {
-    id: string;
-    name: string;
-    extra_metadata: Object; 
-
-    constructor (data: string[] ) {        
-        this.id = data[0];
-        this.name = data[1];        
-    }
-}
-
-export class Annotation {
+export class EpigeneticMark extends IdName {
     id: string;
     name: string;
     extra_metadata: Object; 
 
     constructor (data: string[] ) {
-        this.id = data[0];
-        this.name = data[1];
+        super(data[0], data[1])             
     }
 }
 
-export class Genome {
+export class Annotation extends IdName {
+    id: string;
+    name: string;
+    extra_metadata: Object; 
+
+    constructor (data: string[] ) {
+        super(data[0], data[1])             
+    }
+}
+
+export class Experiment extends IdName {
     id: string;
     name: string;
     extra_metadata: Object;
     
     constructor (data: string[] ) {
-        this.id = data[0];
-        this.name = data[1];
+        super(data[0], data[1])             
+    }
+}
+
+export class Genome extends IdName {
+    id: string;
+    name: string;
+    extra_metadata: Object;
+    
+    constructor (data: string[] ) {
+        super(data[0], data[1])             
     }
 }
 

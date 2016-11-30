@@ -31,6 +31,9 @@
     </p-tabView>
 </div>
         
+
+<p-chart type="bar" [data]="data"></p-chart>
+
 <h2>Experiments</h2>
 <ul>
     <li *ngFor="let experiment of experiments"> {{ experiment.name }}({{ experiment.id }})   </li>            

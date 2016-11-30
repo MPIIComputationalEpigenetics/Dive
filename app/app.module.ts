@@ -97,6 +97,7 @@ import { HistonesScreen } from './demo/view/histones.screen';
 
 import { AnnotationListComponent,
          DiveStatus,
+         DataStackView,
          GenomeSelectorComponent,
          HistoneExperimentsMenu } from './demo/view/deepblue';
 
@@ -189,6 +190,7 @@ import { AnnotationListComponent,
         SummaryScreen,
         DiveStatus,
         HistonesScreen,
+        DataStackView,
         AnnotationListComponent,
         GenomeSelectorComponent,
         HistoneExperimentsMenu,

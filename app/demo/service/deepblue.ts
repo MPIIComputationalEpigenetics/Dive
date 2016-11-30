@@ -11,8 +11,32 @@ import { Subject }     from 'rxjs/Subject'
 
 import { IdName,
          EpigeneticMark, 
+         Experiment,
          Genome, 
          Annotation }     from '../domain/deepblue';
+
+
+    export class SelectedData {
+        constructor (public idName: IdName, public query_id: string) { }
+    }
+
+    export class DataStack {
+
+        _data: SelectedData[] = [];
+
+        insert(data: SelectedData) {
+            this._data.push(data);
+        }
+
+        remove(data: SelectedData) {
+            // TODO :)
+        }
+
+        getData() : SelectedData[] {
+            return this._data;
+        }
+    }
+
 
 
 @Injectable()
@@ -35,6 +59,12 @@ export class DeepBlueService {
     annotationValue$: Observable<Annotation> = this.annotationSource.asObservable();
     epigeneticMarkValue$: Observable<EpigeneticMark> = this.epigeneticMarkSource.asObservable();
 
+    dataStack: DataStack = new DataStack();
+
+
+    getDataStack() : DataStack {
+        return this.dataStack;
+    }
 
     getTotalSelectedRegtions() : Number {
         return this.totalSelectedRegtions;
@@ -48,11 +78,15 @@ export class DeepBlueService {
     setAnnotation(annotation: Annotation) {
         this.annotationSource.next(annotation);
 
-        this.selectAnnotation(annotation).subscribe((query_id) => 
-            this.countRegionsRequest(query_id).subscribe((total) =>
-                this.totalSelectedRegtions = total["count"]
-            )
-        ); 
+        this.selectAnnotation(annotation).subscribe((ann_query_id) =>  {
+            this.cacheQuery(ann_query_id).subscribe((query_id) => {
+                var sd: SelectedData  = new SelectedData(annotation, query_id);
+                this.dataStack.insert(sd);
+                this.countRegionsRequest(query_id).subscribe((total) =>
+                    this.totalSelectedRegtions = total["count"]
+                )
+            })
+        }); 
     }
 
     setEpigeneticMark(epigeneticMark: EpigeneticMark) {
@@ -107,7 +141,7 @@ export class DeepBlueService {
         return data.map((value) => {
             return (new EpigeneticMark(value));
         });
-    }
+    }que 
 
     getGenomes() : Observable<Genome[]> {
         return this.http.get(this.deepBlueUrl + "/list_genomes")
@@ -156,7 +190,13 @@ export class DeepBlueService {
         params.set('type', "peaks");
         params.set('epigenetic_mark', epigenetic_mark.name);
         return this.http.get(this.deepBlueUrl + "/list_experiments", {"search": params})
-            .map(this.extractIdName)
+            .map((res: Response) => {
+                let body = res.json();
+                var data =  body[1] || [] ;
+                return data.map((value) => {
+                    return new Experiment(value);
+                });
+            })
             .catch(this.handleError);        
     }
 
@@ -173,6 +213,44 @@ export class DeepBlueService {
             .map(this.extractId)
             .catch(this.handleError);
     }
+
+    selectExperiment(experiment) : Observable<string> {
+        if (!experiment) {
+            return Observable.empty<string>();
+        }        
+
+        let params: URLSearchParams = new URLSearchParams();
+        params.set("experiment_name", experiment.name);
+        params.set("genome", this.getGenome().name);
+        return this.http.get(this.deepBlueUrl + "/select_experiments", {"search": params})
+            .map(this.extractId)
+            .catch(this.handleError);
+    }
+
+    selectMultipleExperiments(experiments: Object[]) : Observable<string[]> {
+
+        var observableBatch: Observable<string>[] = [];
+
+        experiments.forEach(( experiment, key ) => {
+            observableBatch.push( this.selectExperiment(experiment) );
+        });
+
+        return Observable.forkJoin(observableBatch);
+    }
+
+
+    cacheQuery(query_id) : Observable<string> {
+        if (!query_id) {
+            return Observable.empty<string>();
+        }        
+
+        let params: URLSearchParams = new URLSearchParams();
+        params.set("query_id", query_id);
+        params.set("cache", "true");
+        return this.http.get(this.deepBlueUrl + "/query_cache", {"search": params})
+            .map(this.extractId)
+            .catch(this.handleError);
+    }    
 
 
     getResult(request_id) : Observable<any> {
@@ -218,15 +296,6 @@ export class DeepBlueService {
         return body[1] || "" ;
     }
 
-
-    private extractIdName( res: Response) {
-        let body = res.json();
-        var data =  body[1] || [] ;
-        return data.map((value) => {
-            return new IdName(value);
-        });
-    }
-
     getInfos(ids: string[]) : Observable<Object[]> {
         let params: URLSearchParams = new URLSearchParams();
         for (let id of ids) {
@@ -258,28 +327,3 @@ export class DeepBlueService {
         return Observable.throw(errMsg);
     }
 }
-
-
-/***
- * 
- * 
- * Rx.Observable.forkJoin can do this.
-
-First import Obserable:
-
-import {Observable} from 'rxjs/Observable';
-Now join all observables with forkJoin:
-
-// a set of customer IDs was given to retrieve
-var ids:number[] = [1, 4, 7];
-
-// map them into a array of observables and forkJoin
-Observable.forkJoin(
-    ids.map(
-        i => this.http.get('/customers/' + i)
-            .map(res => res.json())
-    ))
-    .subscribe(customers => this.customers = customers);
- * 
- * 
- */
