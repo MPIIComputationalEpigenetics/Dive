@@ -35,6 +35,10 @@ import { IdName,
         getData() : SelectedData[] {
             return this._data;
         }
+
+        getCurrent() : SelectedData { 
+            return this._data[this._data.length-1];
+        }
     }
 
 
@@ -80,7 +84,7 @@ export class DeepBlueService {
 
         this.selectAnnotation(annotation).subscribe((ann_query_id) =>  {
             this.cacheQuery(ann_query_id).subscribe((query_id) => {
-                var sd: SelectedData  = new SelectedData(annotation, query_id);
+                let sd: SelectedData  = new SelectedData(annotation, query_id);
                 this.dataStack.insert(sd);
                 this.countRegionsRequest(query_id).subscribe((total) =>
                     this.totalSelectedRegtions = total["count"]
@@ -128,8 +132,8 @@ export class DeepBlueService {
 
     private extractHistone( res: Response) {
         let body = res.json();
-        var data =  body[1] || [] ;
-        var regexp = new RegExp("h([134]|2[ab])([a-z])([0-9]+)(.*)");
+        let data =  body[1] || [] ;
+        let regexp = new RegExp("h([134]|2[ab])([a-z])([0-9]+)(.*)");
         
         data = data.filter((em) => {
             // em[1] is where the name is
@@ -151,7 +155,7 @@ export class DeepBlueService {
 
     private extractGenomes( res: Response) {
         let body = res.json();
-        var data =  body[1] || [] ;
+        let data =  body[1] || [] ;
         return data.map((value) => {
             return new Genome(value);
         });
@@ -170,7 +174,7 @@ export class DeepBlueService {
 
     private extractAnnotation( res: Response) {
         let body = res.json();
-        var data =  body[1] || [] ;
+        let data =  body[1] || [] ;
         return data.map((value) => {
             return new Annotation(value);
         });
@@ -192,7 +196,7 @@ export class DeepBlueService {
         return this.http.get(this.deepBlueUrl + "/list_experiments", {"search": params})
             .map((res: Response) => {
                 let body = res.json();
-                var data =  body[1] || [] ;
+                let data =  body[1] || [] ;
                 return data.map((value) => {
                     return new Experiment(value);
                 });
@@ -229,10 +233,30 @@ export class DeepBlueService {
 
     selectMultipleExperiments(experiments: Object[]) : Observable<string[]> {
 
-        var observableBatch: Observable<string>[] = [];
+        let observableBatch: Observable<string>[] = [];
 
         experiments.forEach(( experiment, key ) => {
             observableBatch.push( this.selectExperiment(experiment) );
+        });
+
+        return Observable.forkJoin(observableBatch);
+    }
+
+
+    overlapWithSelected(query_ids: string[]) : Observable<string[]> {
+
+        let observableBatch: Observable<string>[] = [];
+
+        query_ids.forEach(( id, key ) => {
+            let params: URLSearchParams = new URLSearchParams();
+            params.set("query_data_id", this.dataStack.getCurrent().query_id);
+            params.set("query_filter_id", id);
+            let o : Observable<string> =  
+                this.http.get(this.deepBlueUrl + "/intersection", {"search": params})
+                .map(this.extractId)
+                .catch(this.handleError);
+
+            observableBatch.push(o);             
         });
 
         return Observable.forkJoin(observableBatch);
@@ -257,19 +281,19 @@ export class DeepBlueService {
         let params: URLSearchParams = new URLSearchParams();
         params.set("request_id", request_id);
         
-        var pollSubject = new Subject<any>();
+        let pollSubject = new Subject<any>();
 
-        var pollData = this.http.get(this.deepBlueUrl + "/get_request_data", {"search" : params})
+        let pollData = this.http.get(this.deepBlueUrl + "/get_request_data", {"search" : params})
                     .map((res: Response) => {
                         let body = res.json();
-                        var status = body[0] || "error"
+                        let status = body[0] || "error"
                         if (status == "okay") {
                             expand.unsubscribe();
                             pollSubject.next(body[1]);
                         }                                     
                     });
 
-        var expand = pollData.expand( 
+        let expand = pollData.expand( 
             () => Observable.timer(500).concatMap(() => pollData)            
         ).subscribe();
 
@@ -281,7 +305,7 @@ export class DeepBlueService {
         let params: URLSearchParams = new URLSearchParams();
         params.set("query_id", query_id);
 
-        var request : Observable<string> = 
+        let request : Observable<string> = 
             this.http.get(this.deepBlueUrl + "/count_regions", {"search": params})
             .map(this.extractId)
             .flatMap((request_id) => {
@@ -309,7 +333,7 @@ export class DeepBlueService {
 
     private extractExperiment( res: Response ) : Object[] {
         let body = res.json();
-        var data = body[1] || [];
+        let data = body[1] || [];
 
         return data as Object[];
     }

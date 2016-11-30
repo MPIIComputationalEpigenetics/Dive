@@ -127,9 +127,13 @@ experiments
 
       console.log(experiments);
 
-      this.deepBlueService.selectMultipleExperiments(experiments).subscribe((a : any) => {
+      this.deepBlueService.selectMultipleExperiments(experiments).subscribe((query_ids : any) => {
           debugger;
-          console.log(a);
+          console.log(query_ids);
+
+          this.deepBlueService.overlapWithSelected(query_ids).subscribe((overlap_ids: any) => {
+              debugger;
+          });
       });
       
     }               
