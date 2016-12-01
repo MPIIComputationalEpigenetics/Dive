@@ -9,7 +9,7 @@
                 [defaultLabel]="defaultSelectBiosourcesLabel"
                 [options]="biosourcesItems" 
                 [(ngModel)]="selectedMultiSelectBiosources"
-                (onChange)="selectBiosources($event)">
+                (onChange)="selectBiosources($event)">                
             </p-multiSelect>
         </p-tabPanel>
 
@@ -32,7 +32,7 @@
 </div>
         
 
-<p-chart type="bar" [data]="data"></p-chart>
+<p-chart type="bar" [data]="data" (onDataSelect)="selectExperimentBar($event)"></p-chart>
 
 <h2>Experiments</h2>
 <ul>

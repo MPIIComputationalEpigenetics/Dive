@@ -41,6 +41,27 @@ import { IdName,
         }
     }
 
+    export class DeepBlueOperation {
+        constructor (public data: IdName, public query_id: string, public command: string, public cached: boolean = false) { }
+
+        cacheIt(query_id: string) : DeepBlueOperation {
+            return new DeepBlueOperation(this.data, query_id, this.command, true);
+        }
+
+        getSelectedData() : SelectedData {
+            return new SelectedData(this.data, this.query_id);
+        }
+    }
+
+    export class DeepBlueRequest {
+        constructor (public data: IdName, public request_id: string) { }
+    }
+
+    export class DeepBlueResult {
+        constructor (public data: IdName, public result: Object) { }
+    }
+
+
 
 
 @Injectable()
@@ -82,13 +103,14 @@ export class DeepBlueService {
     setAnnotation(annotation: Annotation) {
         this.annotationSource.next(annotation);
 
-        this.selectAnnotation(annotation).subscribe((ann_query_id) =>  {
-            this.cacheQuery(ann_query_id).subscribe((query_id) => {
-                let sd: SelectedData  = new SelectedData(annotation, query_id);
+        this.selectAnnotation(annotation).subscribe((selected_annotation) =>  {
+            this.cacheQuery(selected_annotation).subscribe((cached_data) => {                
+                let sd: SelectedData = new SelectedData(annotation, cached_data.query_id);
                 this.dataStack.insert(sd);
-                this.countRegionsRequest(query_id).subscribe((total) =>
-                    this.totalSelectedRegtions = total["count"]
-                )
+                let dbo: DeepBlueOperation = new DeepBlueOperation(annotation, cached_data.query_id, "select_annotation");                
+                this.countRegionsRequest(dbo).subscribe((total) => {
+                    this.totalSelectedRegtions = total["result"]["count"];
+                })
             })
         }); 
     }
@@ -205,35 +227,43 @@ export class DeepBlueService {
     }
 
     
-    selectAnnotation(annotation) : Observable<string> {
+    selectAnnotation(annotation) : Observable<DeepBlueOperation> {
         if (!annotation) {
-            return Observable.empty<string>();
+            return Observable.empty<DeepBlueOperation>();
         }        
 
         let params: URLSearchParams = new URLSearchParams();
         params.set("annotation_name", annotation.name);
         params.set("genome", this.getGenome().name);
         return this.http.get(this.deepBlueUrl + "/select_annotations", {"search": params})
-            .map(this.extractId)
+            .map((res: Response) => {
+                let body = res.json();
+                    let response: string = body[1] || "" ;
+                    return new DeepBlueOperation(annotation, response, "select_annotation");
+                })
             .catch(this.handleError);
     }
 
-    selectExperiment(experiment) : Observable<string> {
+    selectExperiment(experiment) : Observable<DeepBlueOperation> {
         if (!experiment) {
-            return Observable.empty<string>();
+            return Observable.empty<DeepBlueOperation>();
         }        
 
         let params: URLSearchParams = new URLSearchParams();
         params.set("experiment_name", experiment.name);
-        params.set("genome", this.getGenome().name);
+        params.set("genome", this.getGenome().name);        
         return this.http.get(this.deepBlueUrl + "/select_experiments", {"search": params})
-            .map(this.extractId)
+            .map((res: Response) => {
+                let body = res.json();
+                    let response: string = body[1] || "" ;
+                    return new DeepBlueOperation(experiment, response, "select_experiment");
+                })
             .catch(this.handleError);
     }
 
-    selectMultipleExperiments(experiments: Object[]) : Observable<string[]> {
+    selectMultipleExperiments(experiments: Object[]) : Observable<DeepBlueOperation[]> {
 
-        let observableBatch: Observable<string>[] = [];
+        let observableBatch: Observable<DeepBlueOperation>[] = [];
 
         experiments.forEach(( experiment, key ) => {
             observableBatch.push( this.selectExperiment(experiment) );
@@ -243,17 +273,21 @@ export class DeepBlueService {
     }
 
 
-    overlapWithSelected(query_ids: string[]) : Observable<string[]> {
+    overlapWithSelected(selected_data: DeepBlueOperation[]) : Observable<DeepBlueOperation[]> {
 
-        let observableBatch: Observable<string>[] = [];
+        let observableBatch: Observable<DeepBlueOperation>[] = [];
 
-        query_ids.forEach(( id, key ) => {
+        selected_data.forEach(( selected, key ) => {
             let params: URLSearchParams = new URLSearchParams();
             params.set("query_data_id", this.dataStack.getCurrent().query_id);
-            params.set("query_filter_id", id);
-            let o : Observable<string> =  
+            params.set("query_filter_id", selected.query_id);
+            let o : Observable<DeepBlueOperation> =  
                 this.http.get(this.deepBlueUrl + "/intersection", {"search": params})
-                .map(this.extractId)
+                .map((res: Response) => {
+                    let body = res.json();
+                    let response: string = body[1] || "" ;
+                    return new DeepBlueOperation(selected.data, response, "intersection");
+                })
                 .catch(this.handleError);
 
             observableBatch.push(o);             
@@ -263,33 +297,40 @@ export class DeepBlueService {
     }
 
 
-    cacheQuery(query_id) : Observable<string> {
-        if (!query_id) {
-            return Observable.empty<string>();
+    cacheQuery(selected_data: DeepBlueOperation) : Observable<DeepBlueOperation> {
+        if (!selected_data) {
+            return Observable.empty<DeepBlueOperation>();
         }        
 
         let params: URLSearchParams = new URLSearchParams();
-        params.set("query_id", query_id);
+        params.set("query_id", selected_data.query_id);
         params.set("cache", "true");
         return this.http.get(this.deepBlueUrl + "/query_cache", {"search": params})
-            .map(this.extractId)
+            .map((res: Response) => {
+                    let body = res.json();
+                    let response: string = body[1] || "" ;
+                    return selected_data.cacheIt(response);
+            })
             .catch(this.handleError);
     }    
 
 
-    getResult(request_id) : Observable<any> {
+    getResult(op_request: DeepBlueRequest) : Observable<DeepBlueResult> {
         let params: URLSearchParams = new URLSearchParams();
-        params.set("request_id", request_id);
+        params.set("request_id", op_request.request_id);
         
-        let pollSubject = new Subject<any>();
+        let pollSubject = new Subject<DeepBlueResult>();
 
         let pollData = this.http.get(this.deepBlueUrl + "/get_request_data", {"search" : params})
                     .map((res: Response) => {
                         let body = res.json();
+                        console.log(body);
                         let status = body[0] || "error"
                         if (status == "okay") {
+                            let op_result = new DeepBlueResult(op_request.data, body[1]);
                             expand.unsubscribe();
-                            pollSubject.next(body[1]);
+                            pollSubject.next(op_result);
+                            pollSubject.complete();
                         }                                     
                     });
 
@@ -301,18 +342,46 @@ export class DeepBlueService {
     
     }
 
-    countRegionsRequest(query_id) : Observable<string> {
+    countRegionsRequest(op_exp: DeepBlueOperation) : Observable<DeepBlueResult> {
         let params: URLSearchParams = new URLSearchParams();
-        params.set("query_id", query_id);
+        params.set("query_id", op_exp.query_id);
 
-        let request : Observable<string> = 
+        let request : Observable<DeepBlueResult> = 
             this.http.get(this.deepBlueUrl + "/count_regions", {"search": params})
-            .map(this.extractId)
+            .map((res: Response) => {
+                let body = res.json();
+                return new DeepBlueRequest(op_exp.data, body[1] || "");
+            })
             .flatMap((request_id) => {
                 return this.getResult(request_id);        
             })
 
         return request;
+    }
+
+    getResultBatch(op_requests: DeepBlueRequest[]) :  Observable<DeepBlueResult[]> {
+        let observableBatch: Observable<DeepBlueResult>[] = [];
+
+        op_requests.forEach(( op_request, key ) => {
+            let o : Observable<DeepBlueResult> = this.getResult(op_request);
+            observableBatch.push(o);             
+        });
+
+        return Observable.forkJoin(observableBatch);
+
+    }
+
+    countRegionsBatch(query_ids: DeepBlueOperation[]) :  Observable<DeepBlueResult[]> {
+        let observableBatch: Observable<DeepBlueResult>[] = [];
+
+        query_ids.forEach(( op_exp, key ) => {
+            let o : Observable<DeepBlueResult> = this.countRegionsRequest(op_exp);
+
+            observableBatch.push(o);             
+        });
+
+        return Observable.forkJoin(observableBatch);
+
     }
 
     private extractId( res: Response) {

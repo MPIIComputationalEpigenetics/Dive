@@ -7,7 +7,10 @@ import { IdName,
          Genome, 
          EpigeneticMark } from '../domain/deepblue'
 
-import { DeepBlueService } from '../service/deepblue'
+import { DeepBlueService, 
+         SelectedData, 
+         DeepBlueOperation,
+         DeepBlueResult } from '../service/deepblue';
 
 
 @Component({
@@ -110,37 +113,59 @@ experiments
                     borderColor: '#1E88E5',
                     data: [65, 59, 80, 81, 56, 55, 40]
                 },
-                {
-                    label: 'My Second dataset',
-                    backgroundColor: '#9CCC65',
-                    borderColor: '#7CB342',
-                    data: [28, 48, 40, 19, 86, 27, 90]
-                }
             ]
         }        
     }
 
     selectBiosources(event) {
-      debugger;
       var experiments : Object[] = [];
       experiments = experiments.concat.apply([], event.value);
 
       console.log(experiments);
 
-      this.deepBlueService.selectMultipleExperiments(experiments).subscribe((query_ids : any) => {
-          debugger;
-          console.log(query_ids);
+      this.deepBlueService.selectMultipleExperiments(experiments).subscribe((selected_experiments : DeepBlueOperation[]) => {
+          console.log(selected_experiments);
 
-          this.deepBlueService.overlapWithSelected(query_ids).subscribe((overlap_ids: any) => {
-              debugger;
+          this.deepBlueService.overlapWithSelected(selected_experiments).subscribe((overlap_ids: DeepBlueOperation[]) => {
+              console.log(overlap_ids);
+
+              this.deepBlueService.countRegionsBatch(overlap_ids).subscribe((datum: DeepBlueResult[]) => {
+                  debugger;
+                  console.log("DATUM:", datum);
+                  this.reloadPlot(datum);
+              })
           });
       });
       
     }               
     
+    reloadPlot(datum: Object[]) {
+        let plot_data: Number[] = [];
+        let labels: string[] = [];
 
-    reloadPlot() {
+        datum.forEach((result: DeepBlueResult) => {
+            plot_data.push(result["result"]["count"]);
+            labels.push(result["data"]["name"]);
+        });
 
+        
+        let datasets = [
+            {
+                label: 'Overlaps',
+                backgroundColor: '#42A5F5',
+                borderColor: '#1E88E5',
+                data: plot_data
+            }
+        ]
+
+        this.data["labels"] = labels;
+        this.data["datasets"] = datasets;
+    }
+
+    selectExperimentBar(event) {
+        debugger;
+        let selected = event.t;
+        console.log(selected);
     }
 
     ngOnDestroy() {
