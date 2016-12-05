@@ -1,7 +1,11 @@
+import { MessagesDemo } from './messagesdemo';
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 
 import { SelectItem } from 'primeng/primeng';
+
+import { Subject }     from 'rxjs/Subject'
+import { Observable }     from 'rxjs/Observable'
 
 import { IdName, 
          Genome, 
@@ -30,8 +34,13 @@ export class HistonesScreen {
     defaultSelectBiosourcesLabel: string = "Select the Biosource"
 
     selectedExperiments: Object[] = [];
+    currentlyProcessing: Object[] = [];    
 
     data: any;
+    
+    getSelectedExperiments() : Object[] {
+        return this.selectedExperiments;
+    }
 
     segregate(experiments: Object[]) {
 
@@ -48,7 +57,7 @@ export class HistonesScreen {
             let experiment_epigenetic_mark = experiment['epigenetic_mark'];
             let experiment_technique = experiment['technique'];
             let experiment_project = experiment['project'];
-experiments
+
             if (!(experiment_biosource in biosources)) {
                 biosources[experiment_biosource] = []
                 this.biosourcesItems.push(
@@ -104,41 +113,58 @@ experiments
             }
         );
 
+        this.getSelectedExperimentsObservable().subscribe((experiments: Object[]) => {
+            if (experiments.length == 0) {
+                return;
+            }
+            
+            if (experiments != this.getSelectedExperiments()) {
+                return;
+            }
+
+            if (experiments == this.currentlyProcessing) {
+                return;
+            }
+
+            this.currentlyProcessing = experiments;
+
+            this.deepBlueService.selectMultipleExperiments(experiments).subscribe((selected_experiments : DeepBlueOperation[]) => {
+                console.log(selected_experiments);
+
+                this.deepBlueService.overlapWithSelected(selected_experiments).subscribe((overlap_ids: DeepBlueOperation[]) => {
+                    console.log(overlap_ids);
+
+                    this.deepBlueService.countRegionsBatch(overlap_ids).subscribe((datum: DeepBlueResult[]) => {
+                        console.log("DATUM:", datum);
+                        this.reloadPlot(datum);
+                    })
+                });
+             });
+        });
+        
+    
         this.data = {
-            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-            datasets: [
-                {
-                    label: 'My First dataset',
-                    backgroundColor: '#42A5F5',
-                    borderColor: '#1E88E5',
-                    data: [65, 59, 80, 81, 56, 55, 40]
-                },
-            ]
+            labels: [],
+            datasets: []
         }        
     }
 
+    setSelectedExperiments(experiments: Object[]) {
+        this.selectedExperiments = experiments;
+    }
+
+    getSelectedExperimentsObservable() : Observable<Object[]> {
+        return Observable.interval(500).map((a) => {
+            return this.getSelectedExperiments();
+        });
+    }
+    
     selectBiosources(event) {
       var experiments : Object[] = [];
       experiments = experiments.concat.apply([], event.value);
-
-      console.log(experiments);
-
-      this.deepBlueService.selectMultipleExperiments(experiments).subscribe((selected_experiments : DeepBlueOperation[]) => {
-          console.log(selected_experiments);
-
-          this.deepBlueService.overlapWithSelected(selected_experiments).subscribe((overlap_ids: DeepBlueOperation[]) => {
-              console.log(overlap_ids);
-
-              this.deepBlueService.countRegionsBatch(overlap_ids).subscribe((datum: DeepBlueResult[]) => {
-                  debugger;
-                  console.log("DATUM:", datum);
-                  this.reloadPlot(datum);
-              })
-          });
-      });
-      
-    }               
-    
+      this.setSelectedExperiments(experiments);
+    }
+                              
     reloadPlot(datum: Object[]) {
         let plot_data: Number[] = [];
         let labels: string[] = [];
@@ -162,10 +188,17 @@ experiments
         this.data["datasets"] = datasets;
     }
 
-    selectExperimentBar(event) {
-        debugger;
-        let selected = event.t;
-        console.log(selected);
+    selectExperimentBar(e) {
+        let dataset = e.dataset;
+        let element = e.element;
+        let position = element._index;
+
+        console.log(dataset[position]);
+    }
+
+    click(e, bar) {
+        console.log(e);
+        console.log(bar);
     }
 
     ngOnDestroy() {

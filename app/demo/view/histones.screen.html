@@ -31,8 +31,8 @@
     </p-tabView>
 </div>
         
+<p-chart *ngIf="data.labels.length >= 0" type="bar" [data]="data" (Click)="click($event, bar)" (onDataSelect)="selectExperimentBar($event)"></p-chart>
 
-<p-chart type="bar" [data]="data" (onDataSelect)="selectExperimentBar($event)"></p-chart>
 
 <h2>Experiments</h2>
 <ul>

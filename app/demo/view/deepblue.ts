@@ -1,15 +1,18 @@
 import { DataDemo } from './datademo';
-import { Component, OnInit } from '@angular/core';
+import { Component, 
+         ViewChild, 
+         OnInit,
+         } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 
-import { SelectItem } from 'primeng/primeng';
+import { Dropdown,
+         SelectItem } from 'primeng/primeng';
 
 import { Annotation, 
          Genome, 
          EpigeneticMark } from '../domain/deepblue'
 
 import { DataStack, DeepBlueService, SelectedData } from '../service/deepblue';
-
 
 
 @Component({
@@ -68,7 +71,7 @@ export class DiveStatus {
                     </div>
                     <div class="ui-g-12 ui-md-4">
                         <p-dropdown 
-                            id="dropdown" 
+                            #annotationsDropdown 
                             [options]="menuAnnotations" 
                             [(ngModel)]="selectedAnnotation" 
                             filter="filter" 
@@ -87,15 +90,28 @@ export class AnnotationListComponent {
     selectedAnnotation: SelectItem;
     genomeSubscription: Subscription;
 
+    @ViewChild('annotationsDropdown') annotationsDropdown: Dropdown
+
     constructor (private deepBlueService: DeepBlueService) {
         this.genomeSubscription = deepBlueService.genomeValue$.subscribe(
             genome => {
                 this.deepBlueService.getAnnotations(genome).subscribe(
                     annotations => {
                         this.annotations = annotations;
-                        this.menuAnnotations = annotations.map((annotation) => {
-                            return {label: annotation.name, value: annotation};
+                        this.menuAnnotations = annotations.map((annotation: Annotation) => {
+                            let item :SelectItem = {label: annotation.name, value: annotation};
+                            return item;
                         });
+
+                        setTimeout(() => {                            
+                            let item = this.menuAnnotations.find((value: SelectItem) => {
+                                return value.label.toLowerCase().startsWith("cpg islands");
+                            });
+                            if (item) {
+                                this.annotationsDropdown.selectedOption = item;
+                            }
+                        }, 0);
+
                     },
                     error => this.errorMessage = <any>error);
             }
