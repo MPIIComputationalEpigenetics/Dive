@@ -97,21 +97,18 @@ export class AnnotationListComponent {
             genome => {
                 this.deepBlueService.getAnnotations(genome).subscribe(
                     annotations => {
+                        if (annotations.length == 0) {
+                            return;
+                        }
                         this.annotations = annotations;
                         this.menuAnnotations = annotations.map((annotation: Annotation) => {
-                            let item :SelectItem = {label: annotation.name, value: annotation};
-                            return item;
-                        });
-
-                        setTimeout(() => {                            
-                            let item = this.menuAnnotations.find((value: SelectItem) => {
-                                return value.label.toLowerCase().startsWith("cpg islands");
-                            });
-                            if (item) {
-                                this.annotationsDropdown.selectedOption = item;
+                            let l =  {label: annotation.name, value: annotation};
+                            if (l.label.toLowerCase().startsWith("cpg islands")) {
+                                this.annotationsDropdown.selectItem(null, l);
                             }
-                        }, 0);
-
+                            
+                            return l;
+                        });
                     },
                     error => this.errorMessage = <any>error);
             }
