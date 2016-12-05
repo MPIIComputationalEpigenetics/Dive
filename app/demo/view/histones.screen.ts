@@ -1,5 +1,5 @@
 import { MessagesDemo } from './messagesdemo';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 
 import { SelectItem } from 'primeng/primeng';
@@ -10,6 +10,9 @@ import { Observable }     from 'rxjs/Observable'
 import { IdName, 
          Genome, 
          EpigeneticMark } from '../domain/deepblue'
+
+import { DataLoadProgressBar } from '../view/deepblue';
+
 
 import { DeepBlueService, 
          SelectedData, 
@@ -36,7 +39,11 @@ export class HistonesScreen {
     selectedExperiments: Object[] = [];
     currentlyProcessing: Object[] = [];    
 
+    current_request: number = 0;
+
     data: any;
+
+    @ViewChild('progressbar') progressbar: DataLoadProgressBar
     
     getSelectedExperiments() : Object[] {
         return this.selectedExperiments;
@@ -125,16 +132,41 @@ export class HistonesScreen {
             if (experiments == this.currentlyProcessing) {
                 return;
             }
+            this.current_request++;
 
+            // Each experiment is selected, overlaped, and count (3 times each)
+            this.progressbar.reset(experiments.length * 3, this.current_request);
             this.currentlyProcessing = experiments;
 
-            this.deepBlueService.selectMultipleExperiments(experiments).subscribe((selected_experiments : DeepBlueOperation[]) => {
-                console.log(selected_experiments);
+            this.deepBlueService.selectMultipleExperiments(experiments, this.progressbar, this.current_request).subscribe((selected_experiments : DeepBlueOperation[]) => {
+                if (selected_experiments.length == 0) {
+                    return;
+                }
+                if (selected_experiments[0].request_count != this.current_request) {
+                    console.log("new request executing, leaving...");
+                    return;
+                }          
+                      
+                this.deepBlueService.overlapWithSelected(selected_experiments, this.progressbar, this.current_request).subscribe((overlap_ids: DeepBlueOperation[]) => {
 
-                this.deepBlueService.overlapWithSelected(selected_experiments).subscribe((overlap_ids: DeepBlueOperation[]) => {
-                    console.log(overlap_ids);
+                    if (overlap_ids.length == 0) {
+                        return;
+                    }
+                    if (overlap_ids[0].request_count != this.current_request) {
+                        console.log("new request executing, leaving...");
+                        return;
+                    }          
 
-                    this.deepBlueService.countRegionsBatch(overlap_ids).subscribe((datum: DeepBlueResult[]) => {
+                    this.deepBlueService.countRegionsBatch(overlap_ids, this.progressbar, this.current_request).subscribe((datum: DeepBlueResult[]) => {
+
+                        if (datum.length == 0) {
+                            return;
+                        }
+                        if (datum[0].request_count != this.current_request) {
+                            console.log("new request executing, leaving...");
+                            return;
+                        }          
+                                                
                         console.log("DATUM:", datum);
                         this.reloadPlot(datum);
                     })
@@ -144,9 +176,18 @@ export class HistonesScreen {
         
     
         this.data = {
-            labels: [],
-            datasets: []
-        }        
+            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+            datasets: [
+                {
+                    label: 'First Dataset',
+                    data: [65, 59, 80, 81, 56, 55, 40]
+                },
+                {
+                    label: 'Second Dataset',
+                    data: [28, 48, 40, 19, 86, 27, 90]
+                }
+            ]
+        }     
     }
 
     setSelectedExperiments(experiments: Object[]) {
@@ -166,6 +207,7 @@ export class HistonesScreen {
     }
                               
     reloadPlot(datum: Object[]) {
+        debugger;
         let plot_data: Number[] = [];
         let labels: string[] = [];
 

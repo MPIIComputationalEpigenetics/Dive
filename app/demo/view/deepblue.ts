@@ -10,10 +10,23 @@ import { Dropdown,
 
 import { Annotation, 
          Genome, 
-         EpigeneticMark } from '../domain/deepblue'
+         EpigeneticMark, 
+         ProgressElement } from '../domain/deepblue'
 
 import { DataStack, DeepBlueService, SelectedData } from '../service/deepblue';
 
+
+@Component({
+    selector: 'data-load-progess-bar',
+    template: `
+        <p-progressBar [value]="progress_value" [showValue]="true"></p-progressBar>
+    `
+})
+export class DataLoadProgressBar extends ProgressElement {    
+    constructor () {
+        super()             
+    }
+}
 
 @Component({
     selector: 'data-stack',

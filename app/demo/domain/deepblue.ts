@@ -53,3 +53,26 @@ export class Genome extends IdName {
     }
 }
 
+
+export class ProgressElement {
+    total_to_load: number = 0;
+    total_loaded: number = 0;
+    progress_value: number = 0;
+    request_count: number = -1;
+
+    reset(total, request_count) {
+        this.total_to_load = total;
+        this.total_loaded = 0;
+        this.progress_value = 0;
+        this.request_count = request_count;        
+    }
+
+    increment(request_count: number) {
+        if (request_count != this.request_count) {
+            return;
+        }
+        this.total_loaded++;
+        this.progress_value = (this.total_loaded * 100 / this.total_to_load);
+        console.log(this.progress_value);
+    }
+}

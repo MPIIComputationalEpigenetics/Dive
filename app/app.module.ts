@@ -99,6 +99,7 @@ import { AnnotationListComponent,
          DiveStatus,
          DataStackView,
          GenomeSelectorComponent,
+         DataLoadProgressBar,
          HistoneExperimentsMenu } from './demo/view/deepblue';
 
 @NgModule({
@@ -191,6 +192,8 @@ import { AnnotationListComponent,
         DiveStatus,
         HistonesScreen,
         DataStackView,
+        DataLoadProgressBar,
+        
         AnnotationListComponent,
         GenomeSelectorComponent,
         HistoneExperimentsMenu,
