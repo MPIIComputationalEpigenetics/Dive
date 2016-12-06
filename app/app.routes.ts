@@ -10,7 +10,6 @@ import {MenusDemo} from './demo/view/menusdemo';
 import {MessagesDemo} from './demo/view/messagesdemo';
 import {MiscDemo} from './demo/view/miscdemo';
 import {EmptyDemo} from './demo/view/emptydemo';
-import {ChartsDemo} from './demo/view/chartsdemo';
 import {FileDemo} from './demo/view/filedemo';
 import {UtilsDemo} from './demo/view/utilsdemo';
 import {SummaryScreen} from './demo/view/summary';
@@ -29,7 +28,6 @@ export const routes: Routes = [
     {path: 'messages', component: MessagesDemo},
     {path: 'misc', component: MiscDemo},
     {path: 'empty', component: EmptyDemo},
-    {path: 'charts', component: ChartsDemo},
     {path: 'file', component: FileDemo},
     {path: 'utils', component: UtilsDemo},
     {path: 'documentation', component: Documentation}

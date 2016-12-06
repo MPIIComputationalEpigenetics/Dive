@@ -34,8 +34,11 @@
 
 <data-load-progess-bar #progressbar></data-load-progess-bar>
 
-<p-chart *ngIf="data.labels.length >= 0" type="bar" [data]="data" (Click)="click($event, bar)" (onDataSelect)="selectExperimentBar($event)"></p-chart>
+<!-- 
+    <p-chart *ngIf="data.labels.length >= 0" type="bar" [data]="data" (Click)="click($event, bar)" (onDataSelect)="selectExperimentBar($event)"></p-chart>
+-->
 
+<simple-chart-example> </simple-chart-example>
 
 <h2>Experiments</h2>
 <ul>

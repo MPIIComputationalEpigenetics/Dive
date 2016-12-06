@@ -11,7 +11,6 @@ import {BreadcrumbModule} from 'primeng/primeng';
 import {ButtonModule} from 'primeng/primeng';
 import {CalendarModule} from 'primeng/primeng';
 import {CarouselModule} from 'primeng/primeng';
-import {ChartModule} from 'primeng/primeng';
 import {CheckboxModule} from 'primeng/primeng';
 import {CodeHighlighterModule} from 'primeng/primeng';
 import {ConfirmDialogModule} from 'primeng/primeng';
@@ -79,7 +78,6 @@ import {MenusDemo} from './demo/view/menusdemo';
 import {MessagesDemo} from './demo/view/messagesdemo';
 import {MiscDemo} from './demo/view/miscdemo';
 import {EmptyDemo} from './demo/view/emptydemo';
-import {ChartsDemo} from './demo/view/chartsdemo';
 import {FileDemo} from './demo/view/filedemo';
 import {UtilsDemo} from './demo/view/utilsdemo';
 import {Documentation} from './demo/view/documentation';
@@ -91,9 +89,12 @@ import {CountryService} from './demo/service/countryservice';
 import {EventService} from './demo/service/eventservice';
 import {NodeService} from './demo/service/nodeservice';
 
+import { ChartModule } from 'angular2-highcharts';
+
 import { DeepBlueService } from './demo/service/deepblue';
 
-import { HistonesScreen } from './demo/view/histones.screen';
+import { HistonesScreen,
+    SimpleChart } from './demo/view/histones.screen';
 
 import { AnnotationListComponent,
          DiveStatus,
@@ -183,7 +184,6 @@ import { AnnotationListComponent,
         MessagesDemo,
         MessagesDemo,
         MiscDemo,
-        ChartsDemo,
         EmptyDemo,
         FileDemo,
         UtilsDemo,
@@ -193,7 +193,7 @@ import { AnnotationListComponent,
         HistonesScreen,
         DataStackView,
         DataLoadProgressBar,
-        
+        SimpleChart,
         AnnotationListComponent,
         GenomeSelectorComponent,
         HistoneExperimentsMenu,

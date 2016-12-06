@@ -19,6 +19,25 @@ import { DeepBlueService,
          DeepBlueOperation,
          DeepBlueResult } from '../service/deepblue';
 
+ 
+@Component({
+    selector: 'simple-chart-example',
+    template: `
+        <chart [options]="options"></chart>
+    `
+})
+export class SimpleChart {
+    constructor() {
+        this.options = {
+            title : { text : 'simple chart' },
+            series: [{
+                data: [29.9, 71.5, 106.4, 129.2],
+            }]
+        };
+    }
+    options: Object;
+}
+
 
 @Component({
     selector: 'histones-summary',
@@ -224,10 +243,13 @@ export class HistonesScreen {
                 borderColor: '#1E88E5',
                 data: plot_data
             }
-        ]
+        ];
 
-        this.data["labels"] = labels;
-        this.data["datasets"] = datasets;
+        let data = {
+            "labels": labels,
+            "datasets": datasets
+        }
+        this.data = data;
     }
 
     selectExperimentBar(e) {
