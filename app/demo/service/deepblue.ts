@@ -323,7 +323,7 @@ export class DeepBlueService {
     }    
 
 
-    getResult(op_request: DeepBlueRequest, request_count: number) : Observable<DeepBlueResult> {
+    getResult(op_request: DeepBlueRequest, progress_element: ProgressElement, request_count: number) : Observable<DeepBlueResult> {
         let params: URLSearchParams = new URLSearchParams();
         params.set("request_id", op_request.request_id);
         
@@ -335,6 +335,7 @@ export class DeepBlueService {
                         console.log(body);
                         let status = body[0] || "error"
                         if (status == "okay") {
+                            progress_element.increment(request_count);
                             let op_result = new DeepBlueResult(op_request.data, body[1], request_count);
                             expand.unsubscribe();
                             pollSubject.next(op_result);
@@ -362,17 +363,17 @@ export class DeepBlueService {
                 return new DeepBlueRequest(op_exp.data, body[1] || "", request_count);
             })
             .flatMap((request_id) => {
-                return this.getResult(request_id, request_count);        
+                return this.getResult(request_id, progress_element, request_count);        
             })
 
         return request;
     }
 
-    getResultBatch(op_requests: DeepBlueRequest[], request_count: number) :  Observable<DeepBlueResult[]> {
+    getResultBatch(op_requests: DeepBlueRequest[], progress_element: ProgressElement, request_count: number) :  Observable<DeepBlueResult[]> {
         let observableBatch: Observable<DeepBlueResult>[] = [];
 
         op_requests.forEach(( op_request, key ) => {
-            let o : Observable<DeepBlueResult> = this.getResult(op_request, request_count);
+            let o : Observable<DeepBlueResult> = this.getResult(op_request, progress_element, request_count);
             observableBatch.push(o);             
         });
 

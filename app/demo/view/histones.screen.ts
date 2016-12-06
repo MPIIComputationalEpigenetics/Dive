@@ -153,8 +153,8 @@ export class HistonesScreen {
             }
             this.current_request++;
 
-            // Each experiment is selected, overlaped, and count (3 times each)
-            this.progressbar.reset(experiments.length * 3, this.current_request);
+            // Each experiment is selected, overlaped, count, get request data (4 times each)
+            this.progressbar.reset(experiments.length * 4, this.current_request);
             this.currentlyProcessing = experiments;
 
             this.deepBlueService.selectMultipleExperiments(experiments, this.progressbar, this.current_request).subscribe((selected_experiments : DeepBlueOperation[]) => {
