@@ -104,7 +104,7 @@ export class DeepBlueService {
     setAnnotation(annotation: Annotation) {        
         let progress_element: ProgressElement = new ProgressElement();
         let request_count = 0;        
-        progress_element.reset(3, request_count);
+        progress_element.reset(4, request_count);
         this.annotationSource.next(annotation);
 
         this.selectAnnotation(annotation, progress_element, request_count).subscribe((selected_annotation) =>  {

@@ -94,7 +94,7 @@ import { ChartModule } from 'angular2-highcharts';
 import { DeepBlueService } from './demo/service/deepblue';
 
 import { HistonesScreen,
-    SimpleChart } from './demo/view/histones.screen';
+        OverlapsBarChart } from './demo/view/histones.screen';
 
 import { AnnotationListComponent,
          DiveStatus,
@@ -193,7 +193,7 @@ import { AnnotationListComponent,
         HistonesScreen,
         DataStackView,
         DataLoadProgressBar,
-        SimpleChart,
+        OverlapsBarChart,
         AnnotationListComponent,
         GenomeSelectorComponent,
         HistoneExperimentsMenu,

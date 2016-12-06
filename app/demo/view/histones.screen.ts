@@ -13,29 +13,95 @@ import { IdName,
 
 import { DataLoadProgressBar } from '../view/deepblue';
 
-
 import { DeepBlueService, 
          SelectedData, 
          DeepBlueOperation,
          DeepBlueResult } from '../service/deepblue';
-
- 
+  
 @Component({
-    selector: 'simple-chart-example',
+    selector: 'overlaps-bar-chart',
+    styles: [`
+      chart {
+        display: block;
+      }
+    `],    
     template: `
-        <chart [options]="options"></chart>
+        <chart [options]="options" (load)="saveInstance($event.context)">></chart>
     `
 })
-export class SimpleChart {
-    constructor() {
-        this.options = {
-            title : { text : 'simple chart' },
-            series: [{
-                data: [29.9, 71.5, 106.4, 129.2],
-            }]
-        };
-    }
+export class OverlapsBarChart {
     options: Object;
+    chart : Object;
+
+    setNewData(data) {
+        return this.chart["series"][0].setData(data); 
+    }
+
+    hasData() : boolean {
+        if (!this.chart) {
+            return false;
+        }
+        debugger;        
+        return this.chart["series"][0]["data"].length > 0;
+    }
+
+     saveInstance(chartInstance) {
+        this.chart = chartInstance;
+    }
+
+    constructor(private deepBlueService: DeepBlueService) {
+        this.options = {            
+            chart: {
+            type: 'column'
+        },
+        title: {
+            text: `Overlapping with ${deepBlueService.getAnnotation().name}`
+        },
+        xAxis: {
+            type: 'category',
+            labels: {
+                rotation: -45,
+                style: {
+                    fontSize: '13px',
+                    fontFamily: 'Verdana, sans-serif'
+                }
+            }
+        },
+        credits: {
+            enabled: false
+        },  
+        width: null,
+        height: null,          
+        yAxis: {
+            min: 0,
+            title: {
+                text: 'Overlaped peaks (regions)'
+            }
+        },
+        legend: {
+            enabled: false
+        },
+        tooltip: {
+            pointFormat: `Overlap with ${deepBlueService.getAnnotation().name}: <b>{point.y} peaks</b>`
+        },
+        series: [{
+            name: 'Overlaping',
+            data: [ ],
+            dataLabels: {
+                enabled: true,
+                rotation: -90,
+                color: '#FFFFFF',
+                align: 'right',
+                format: '{point.y:.1f}', // one decimal
+                y: 10, // 10 pixels down from the top
+                style: {
+                    fontSize: '12px',
+                    fontFamily: 'Verdana, sans-serif'
+                }
+            },            
+        }]
+        }
+    }
 }
 
 
@@ -62,7 +128,8 @@ export class HistonesScreen {
 
     data: any;
 
-    @ViewChild('progressbar') progressbar: DataLoadProgressBar
+    @ViewChild('progressbar') progressbar: DataLoadProgressBar;
+    @ViewChild('overlapbarchart') overlapbarchart: OverlapsBarChart;
     
     getSelectedExperiments() : Object[] {
         return this.selectedExperiments;
@@ -191,22 +258,7 @@ export class HistonesScreen {
                     })
                 });
              });
-        });
-        
-    
-        this.data = {
-            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-            datasets: [
-                {
-                    label: 'First Dataset',
-                    data: [65, 59, 80, 81, 56, 55, 40]
-                },
-                {
-                    label: 'Second Dataset',
-                    data: [28, 48, 40, 19, 86, 27, 90]
-                }
-            ]
-        }     
+        });         
     }
 
     setSelectedExperiments(experiments: Object[]) {
@@ -214,7 +266,7 @@ export class HistonesScreen {
     }
 
     getSelectedExperimentsObservable() : Observable<Object[]> {
-        return Observable.interval(500).map((a) => {
+        return Observable.interval(25).map((a) => {
             return this.getSelectedExperiments();
         });
     }
@@ -226,30 +278,14 @@ export class HistonesScreen {
     }
                               
     reloadPlot(datum: Object[]) {
-        debugger;
-        let plot_data: Number[] = [];
-        let labels: string[] = [];
+        interface KeyValuePair extends Array<string | number> { 0: string; 1: number; }
+        let newdata: Array<KeyValuePair> = [];
 
         datum.forEach((result: DeepBlueResult) => {
-            plot_data.push(result["result"]["count"]);
-            labels.push(result["data"]["name"]);
+            newdata.push([result["data"]["name"], result["result"]["count"]]);
         });
 
-        
-        let datasets = [
-            {
-                label: 'Overlaps',
-                backgroundColor: '#42A5F5',
-                borderColor: '#1E88E5',
-                data: plot_data
-            }
-        ];
-
-        let data = {
-            "labels": labels,
-            "datasets": datasets
-        }
-        this.data = data;
+        this.overlapbarchart.setNewData(newdata);
     }
 
     selectExperimentBar(e) {

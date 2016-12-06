@@ -19,7 +19,7 @@ import { DataStack, DeepBlueService, SelectedData } from '../service/deepblue';
 @Component({
     selector: 'data-load-progess-bar',
     template: `
-        <p-progressBar [value]="progress_value" [showValue]="true"></p-progressBar>
+        <p-progressBar *ngIf="progress_value > 0 && progress_value < 100" [value]="progress_value" [showValue]="true"></p-progressBar>
     `
 })
 export class DataLoadProgressBar extends ProgressElement {    
