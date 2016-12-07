@@ -13,7 +13,7 @@ import { Observable } from 'rxjs/Observable'
 
 import { Subject } from 'rxjs/Subject'
 
-import { DeepBlueOperation } from '../domain/operation'
+import { DeepBlueOperation } from '../domain/operations'
 
 
 export class DataStackItem {
