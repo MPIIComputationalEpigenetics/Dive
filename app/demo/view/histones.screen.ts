@@ -117,7 +117,7 @@ export class OverlapsBarChart {
         
         this.deepBlueService.includeFilter(experiment);
         this.deepBlueService.setDataInfoSelected(experiment);
-        setTimeout(() => this.chart.reflow(), 0);        
+        setTimeout(() => this.chart["reflow"](), 0);        
     }
 }
 
