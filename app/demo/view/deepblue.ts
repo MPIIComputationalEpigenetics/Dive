@@ -80,14 +80,13 @@ export class DataStackView {
     selector: 'dive-status',
     template: `
             <data-stack></data-stack>
-            <genome-selector></genome-selector>
-            {{ deepBlueService.getTotalSelectedRegtions() }}
             <li role="menuitem">
-                <a [routerLink]="['/']">x
+                <a [routerLink]="['/']">
                     <i class="material-icons">dashboard</i>
-                    <span>{{ deepBlueService.getAnnotation()?.name }}</span>
+                    <span>{{ deepBlueService.getAnnotation()?.name }} ({{deepBlueService.getTotalSelectedRegtions()}})</span>
                 </a>                
             </li>                
+            <genome-selector></genome-selector>
             <histone-mark-selector></histone-mark-selector>
             `
 })
