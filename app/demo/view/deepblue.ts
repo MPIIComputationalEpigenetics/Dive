@@ -1,19 +1,21 @@
 import { DataDemo } from './datademo';
-import { Component, 
-         ViewChild, 
-         OnInit,
-         } from '@angular/core';
+import {
+    Component,
+    ViewChild,
+    OnInit,
+} from '@angular/core';
+
 import { Subscription } from 'rxjs/Subscription';
 
-import { Dropdown,
-         SelectItem } from 'primeng/primeng';
+import {
+    Dropdown,
+    SelectItem
+} from 'primeng/primeng';
 
-import { Annotation, 
-         Genome, 
-         EpigeneticMark, 
-         ProgressElement } from '../domain/deepblue'
+import { IdName, Annotation, EpigeneticMark, Experiment, Genome, ProgressElement } from '../domain/deepblue';
 
-import { DataStack, DeepBlueService, SelectedData } from '../service/deepblue';
+import { DataStack } from '../service/datastack';
+import { DeepBlueService } from '../service/deepblue';
 
 
 @Component({
@@ -21,17 +23,28 @@ import { DataStack, DeepBlueService, SelectedData } from '../service/deepblue';
     template: `
         <div class="card card-w-title">
             <h2>Data information</h2>
-            {{ data.name }}                
+            {{ data.name }}
+
+            <button pButton type="button" (click)="filterOverlapping()" label="Filter overlapping"></button>            
         </div>
     `
 })
 export class DataInfoBox {
     dataSelectedSubscription: Subscription;
-    data: Object = null; 
-    constructor (private deepBlueService: DeepBlueService) {
+    data: IdName = null;
+    constructor(private deepBlueService: DeepBlueService) {
         this.dataSelectedSubscription = deepBlueService.dataInfoSelectedValue$.subscribe((data: any) => {
             this.data = data || {};
         });
+    }
+
+    filterOverlapping() {
+        console.log("filter overlapping");
+        this.deepBlueService.includeFilter(this.data)
+    }
+
+    filterNonOverlapping() {
+        console.log("filter non overlapping");
     }
 }
 
@@ -41,9 +54,9 @@ export class DataInfoBox {
         <p-progressBar *ngIf="progress_value > -1 && progress_value < 100" [value]="progress_value" [showValue]="true"></p-progressBar>
     `
 })
-export class DataLoadProgressBar extends ProgressElement {    
-    constructor () {
-        super()             
+export class DataLoadProgressBar extends ProgressElement {
+    constructor() {
+        super()
     }
 }
 
@@ -63,12 +76,7 @@ export class DataLoadProgressBar extends ProgressElement {
 })
 export class DataStackView {
 
-
-    dataStack: DataStack;
-
-    constructor (private deepBlueService: DeepBlueService) {
-        this.dataStack = deepBlueService.getDataStack();
-    }
+    constructor(private deepBlueService: DeepBlueService, private dataStack: DataStack) { }
 
     removeData(event, data) {
         console.log(event, data);
@@ -91,7 +99,7 @@ export class DataStackView {
             `
 })
 export class DiveStatus {
-    constructor (private deepBlueService: DeepBlueService) { }        
+    constructor(private deepBlueService: DeepBlueService) { }
 }
 @Component({
     selector: 'select-annotation',
@@ -122,7 +130,7 @@ export class AnnotationListComponent {
 
     @ViewChild('annotationsDropdown') annotationsDropdown: Dropdown
 
-    constructor (private deepBlueService: DeepBlueService) {
+    constructor(private deepBlueService: DeepBlueService) {
         this.genomeSubscription = deepBlueService.genomeValue$.subscribe(
             genome => {
                 this.deepBlueService.getAnnotations(genome).subscribe(
@@ -132,32 +140,32 @@ export class AnnotationListComponent {
                         }
                         this.annotations = annotations;
                         this.menuAnnotations = annotations.map((annotation: Annotation) => {
-                            let l =  {label: annotation.name, value: annotation};
+                            let l = { label: annotation.name, value: annotation };
                             if (l.label.toLowerCase().startsWith("cpg islands")) {
                                 this.annotationsDropdown.selectItem(null, l);
                             }
-                            
+
                             return l;
                         });
                     },
                     error => this.errorMessage = <any>error);
             }
-        );      
+        );
     }
 
     selectAnnotation(event) {
         this.deepBlueService.setAnnotation(event.value);
     }
-             
+
     ngOnDestroy() {
         this.genomeSubscription.unsubscribe();
-    }  
+    }
 }
 
 //
 
 @Component({
-  selector: 'histone-mark-selector',
+    selector: 'histone-mark-selector',
     templateUrl: 'app/demo/view/histones.selector.html'
 })
 export class HistoneExperimentsMenu {
@@ -165,7 +173,7 @@ export class HistoneExperimentsMenu {
     selectHistones: EpigeneticMark[];
     genomeSubscription: Subscription;
 
-    constructor (private deepBlueService: DeepBlueService) {
+    constructor(private deepBlueService: DeepBlueService) {
         this.genomeSubscription = deepBlueService.genomeValue$.subscribe(
             genome => {
                 this.deepBlueService.getHistones().subscribe(
@@ -174,24 +182,24 @@ export class HistoneExperimentsMenu {
                     },
                     error => this.errorMessage = <any>error);
             }
-        );      
+        );
     }
 
     changeHistone(event, histone) {
         this.deepBlueService.setEpigeneticMark(histone);
-    }  
+    }
 
-    getStyle(histone) : string {
+    getStyle(histone): string {
         if (histone.id == this.deepBlueService.getEpigeneticMark().id) {
-        return "check circle";
-      } else {
-        return "alarm on";
-      }
+            return "check circle";
+        } else {
+            return "alarm on";
+        }
     }
 
     ngOnDestroy() {
         this.genomeSubscription.unsubscribe();
-    }  
+    }
 }
 
 
@@ -206,28 +214,28 @@ export class GenomeSelectorComponent implements OnInit {
     errorMessage: string;
     selectGenomes: Genome[];
 
-    constructor (private deepBlueService: DeepBlueService) {}
+    constructor(private deepBlueService: DeepBlueService) { }
 
-    ngOnInit() {         
+    ngOnInit() {
         this.deepBlueService.getGenomes()
             .subscribe(
-                genomes => {                    
-                    this.selectGenomes = genomes;
-                    this.deepBlueService.setGenome(genomes[0]);
-                },
-                error => this.errorMessage = <any>error
+            genomes => {
+                this.selectGenomes = genomes;
+                this.deepBlueService.setGenome(genomes[0]);
+            },
+            error => this.errorMessage = <any>error
             );
     }
 
     changeGenome(event, genome) {
-      this.deepBlueService.setGenome(genome);
+        this.deepBlueService.setGenome(genome);
     }
 
-    getStyle(genome) : string {
-      if (genome.id == this.deepBlueService.getGenome().id) {
-        return "check circle";
-      } else {
-        return "alarm on";
-      }
+    getStyle(genome): string {
+        if (genome.id == this.deepBlueService.getGenome().id) {
+            return "check circle";
+        } else {
+            return "alarm on";
+        }
     }
 }

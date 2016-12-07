@@ -1,3 +1,4 @@
+import { DataStack } from '../service/datastack';
 import { MessagesDemo } from './messagesdemo';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
@@ -13,10 +14,10 @@ import { IdName,
 
 import { DataLoadProgressBar } from '../view/deepblue';
 
-import { DeepBlueService, 
-         SelectedData, 
-         DeepBlueOperation,
-         DeepBlueResult } from '../service/deepblue';
+import { DeepBlueService } from '../service/deepblue';
+
+import { DeepBlueOperation,
+         DeepBlueResult } from '../domain/operations';
   
 @Component({
     selector: 'overlaps-bar-chart',
@@ -32,7 +33,7 @@ import { DeepBlueService,
 export class OverlapsBarChart {
     options: Object;
     chart : Object;
-
+Object
     setNewData(data) {
         return this.chart["series"][0].setData(data); 
     }
@@ -97,7 +98,7 @@ export class OverlapsBarChart {
                     enabled: true,
                     rotation: -90,
                     color: '#FFFFFF',
-                    align: 'right',
+                    align: 'right',       
                     format: '{point.y:.1f}', // one decimal
                     y: 10, // 10 pixels down from the top
                     style: {
@@ -113,9 +114,8 @@ export class OverlapsBarChart {
     clickExperimentBar(click) {
         let point = click.point;
         let category = point.category;
-        let experiment = point.series.options.data[category][2];
+        let experiment: IdName = point.series.options.data[category][2];
         
-        this.deepBlueService.includeFilter(experiment);
         this.deepBlueService.setDataInfoSelected(experiment);
         setTimeout(() => this.chart["reflow"](), 0);        
     }
@@ -208,7 +208,7 @@ export class HistonesScreen {
             "projects": projects }
     }
 
-    constructor (private deepBlueService: DeepBlueService) {
+    constructor (private deepBlueService: DeepBlueService, private dataStack : DataStack) {
         this.epigeneticMarkSubscription = deepBlueService.epigeneticMarkValue$.subscribe(
             selected_epigenetic_mark => {
                 this.deepBlueService.getExperiments(deepBlueService.getGenome(), selected_epigenetic_mark).subscribe(
@@ -225,7 +225,7 @@ export class HistonesScreen {
             }
         );
 
-        this.getSelectedExperimentsObservable().subscribe((experiments: Object[]) => {
+        this.getSelectedExperimentsObservable().subscribe((experiments: IdName[]) => {
             if (experiments.length == 0) {
                 return;
             }
@@ -251,8 +251,10 @@ export class HistonesScreen {
                     console.log("new request executing, leaving...");
                     return;
                 }          
+
+                let current : DeepBlueOperation = dataStack.getCurrentOperation();
                       
-                this.deepBlueService.overlapWithSelected(selected_experiments, this.progressbar, this.current_request).subscribe((overlap_ids: DeepBlueOperation[]) => {
+                this.deepBlueService.overlapWithSelected(current, selected_experiments, this.progressbar, this.current_request).subscribe((overlap_ids: DeepBlueOperation[]) => {
 
                     if (overlap_ids.length == 0) {
                         return;

@@ -91,6 +91,8 @@ import {NodeService} from './demo/service/nodeservice';
 
 import { ChartModule } from 'angular2-highcharts';
 
+import { DataStack } from './demo/service/datastack';
+
 import { DeepBlueService } from './demo/service/deepblue';
 
 import { HistonesScreen,
@@ -206,7 +208,8 @@ import { AnnotationListComponent,
         CountryService,
         EventService,
         NodeService,
-        DeepBlueService
+        DeepBlueService,
+        DataStack
     ],
     bootstrap:[Application]
 })
