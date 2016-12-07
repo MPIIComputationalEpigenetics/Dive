@@ -7,9 +7,13 @@ import {
     ProgressElement
 } from '../domain/deepblue';
 
+import { Injectable } from '@angular/core';
+
 import { DeepBlueService } from '../service/deepblue';
 
 import { Observable } from 'rxjs/Observable'
+
+import { Subscription } from 'rxjs/Subscription';
 
 import { Subject } from 'rxjs/Subject'
 
@@ -20,14 +24,26 @@ export class DataStackItem {
     constructor(public op: DeepBlueOperation, public what: string, public count: number) { }
 }
 
+@Injectable()
 export class DataStack {
 
+    epigeneticMarkSubscription: Subscription;
     _data: DataStackItem[] = [];
 
-    constructor(private deepBlueService: DeepBlueService) { }
+    constructor(private deepBlueService: DeepBlueService) { 
 
-    init(data: IdName): Observable<IdName> {
+        this.epigeneticMarkSubscription = deepBlueService.annotationValue$.subscribe((annotation: Annotation) => {
+            this.init(annotation);
+        });
+
+    }
+
+    init(data: IdName): Observable<IdName> {        
         this._data = [];
+
+        if (data.id == "" || data.id == null) {
+            return;
+        }
 
         let progress_element: ProgressElement = new ProgressElement();
         let request_count = 0;
@@ -61,7 +77,7 @@ export class DataStack {
 
         // TODO: use/make a generic method for experiments and annotations 
         this.deepBlueService.selectExperiment(data, progress_element, request_count).subscribe((selected_experiment) => {
-            this.deepBlueService.overlap(this.getCurrent().op.query_id, selected_experiment, progress_element, request_count).subscribe((overlap_operatio) => {
+            this.deepBlueService.overlap(this.getCurrentOperation(), selected_experiment, progress_element, request_count).subscribe((overlap_operatio) => {
                 this.deepBlueService.cacheQuery(selected_experiment, progress_element, request_count).subscribe((cached_data) => {
                     let dbo: DeepBlueOperation = new DeepBlueOperation(data, cached_data.query_id, "select_experiment", 0);
                     this.deepBlueService.countRegionsRequest(dbo, progress_element, request_count).subscribe((total) => {

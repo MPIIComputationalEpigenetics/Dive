@@ -32,13 +32,10 @@ export class DeepBlueService {
     private deepBlueUrl = 'api';
 
     // Observable string sources
-    public genomeSource = new BehaviorSubject<Genome>({ id: "-", name: "-", extra_metadata: null });
-    public annotationSource = new BehaviorSubject<Annotation>({ id: "-", name: "-", extra_metadata: null });
-    public epigeneticMarkSource = new BehaviorSubject<EpigeneticMark>({ id: "-", name: "-", extra_metadata: null });
+    public genomeSource = new BehaviorSubject<Genome>({ id: "", name: "", extra_metadata: null });
+    public annotationSource = new BehaviorSubject<Annotation>({ id: "", name: "", extra_metadata: null });
+    public epigeneticMarkSource = new BehaviorSubject<EpigeneticMark>({ id: "", name: "", extra_metadata: null });
     public dataInfoSelectedSource = new BehaviorSubject<IdName>(null);
-
-
-    totalSelectedRegtions: Number = 0;
 
     // Observable string streams
     genomeValue$: Observable<Genome> = this.genomeSource.asObservable();
@@ -52,10 +49,6 @@ export class DeepBlueService {
 
     getDataInfoSelected(): IdName {
         return this.dataInfoSelectedSource.getValue();
-    }
-
-    getTotalSelectedRegtions(): Number {
-        return this.totalSelectedRegtions;
     }
 
     // Service messages

@@ -112,7 +112,7 @@ Object
     }
 
     clickExperimentBar(click) {
-        let point = click.point;
+        let point = click.point;                            
         let category = point.category;
         let experiment: IdName = point.series.options.data[category][2];
         
@@ -161,7 +161,7 @@ export class HistonesScreen {
         var epigenetic_marks = {}
         var techniques = {}
         var projects = {}
-        
+                                    
 
         for (let experiment of experiments) {
             let experiment_biosource = experiment['sample_info']['biosource_name'];
@@ -209,19 +209,15 @@ export class HistonesScreen {
     }
 
     constructor (private deepBlueService: DeepBlueService, private dataStack : DataStack) {
-        this.epigeneticMarkSubscription = deepBlueService.epigeneticMarkValue$.subscribe(
-            selected_epigenetic_mark => {
-                this.deepBlueService.getExperiments(deepBlueService.getGenome(), selected_epigenetic_mark).subscribe(
-                    experiments_ids => {                                                                      
-                        var ids = experiments_ids.map((e) => e.id); 
-                        this.deepBlueService.getInfos(ids).subscribe(                            
-                            full_info => {
-                                this.experiments = full_info;
-                                this.segregated_data = this.segregate(full_info);
-                            }
-                        );
-                    },
-                    error => this.errorMessage = <any>error);
+        this.epigeneticMarkSubscription = deepBlueService.epigeneticMarkValue$.subscribe(selected_epigenetic_mark => {
+                this.deepBlueService.getExperiments(deepBlueService.getGenome(), selected_epigenetic_mark).subscribe(experiments_ids => {
+                    var ids = experiments_ids.map((e) => e.id); 
+                    this.deepBlueService.getInfos(ids).subscribe(full_info => {
+                        this.experiments = full_info;
+                        this.segregated_data = this.segregate(full_info);
+                    });
+                },
+                error => this.errorMessage = <any>error);
             }
         );
 

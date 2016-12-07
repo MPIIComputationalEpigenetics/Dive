@@ -64,14 +64,15 @@ export class DataLoadProgressBar extends ProgressElement {
     selector: 'data-stack',
     template: `
 
-    <ul role="menu">
-        <li *ngFor="let data of dataStack.getData() " (click)="removeData($event, data)">        
-            <a href="#" class="ripplelink">
-                <i class="material-icons">check circle</i><span> {{ data.idName.name }}</span>
-            </a>
-        </li>            
-    </ul>
-    
+    <span class="shadow-box ui-shadow-2">
+        <ul>
+            <li *ngFor="let data of dataStack.getData() " (click)="removeData($event, data)">        
+                <a href="#">
+                    <span> {{ data.what }}: <b>{{ data.op.data.name }}</b>  <i>({{ data.count }}</i>) <i class="material-icons">remove</i></span>
+                </a>
+            </li>            
+        </ul>
+    </span>    
     `
 })
 export class DataStackView {
@@ -87,11 +88,10 @@ export class DataStackView {
 @Component({
     selector: 'dive-status',
     template: `
-            <data-stack></data-stack>
             <li role="menuitem">
                 <a [routerLink]="['/']">
                     <i class="material-icons">dashboard</i>
-                    <span>{{ deepBlueService.getAnnotation()?.name }} ({{deepBlueService.getTotalSelectedRegtions()}})</span>
+                    <span>Selected data: {{ deepBlueService.getAnnotation()?.name }}</span>
                 </a>                
             </li>                
             <genome-selector></genome-selector>
@@ -131,10 +131,13 @@ export class AnnotationListComponent {
     @ViewChild('annotationsDropdown') annotationsDropdown: Dropdown
 
     constructor(private deepBlueService: DeepBlueService) {
-        this.genomeSubscription = deepBlueService.genomeValue$.subscribe(
-            genome => {
-                this.deepBlueService.getAnnotations(genome).subscribe(
-                    annotations => {
+
+
+        this.genomeSubscription = deepBlueService.genomeValue$.subscribe(genome => {
+                if (genome.id == null || genome.name == "") {
+                    return;
+                }
+                this.deepBlueService.getAnnotations(genome).subscribe(annotations => {
                         if (annotations.length == 0) {
                             return;
                         }
@@ -174,15 +177,12 @@ export class HistoneExperimentsMenu {
     genomeSubscription: Subscription;
 
     constructor(private deepBlueService: DeepBlueService) {
-        this.genomeSubscription = deepBlueService.genomeValue$.subscribe(
-            genome => {
-                this.deepBlueService.getHistones().subscribe(
-                    histones => {
-                        this.selectHistones = histones;
-                    },
-                    error => this.errorMessage = <any>error);
-            }
-        );
+        this.genomeSubscription = deepBlueService.genomeValue$.subscribe(genome => {
+            this.deepBlueService.getHistones().subscribe(histones => {
+                this.selectHistones = histones;
+            },
+            error => this.errorMessage = <any>error);
+        });
     }
 
     changeHistone(event, histone) {
