@@ -45,7 +45,7 @@ export class OverlapsBarChart {
         return this.chart["series"][0]["data"].length > 0;
     }
 
-     saveInstance(chartInstance) {
+    saveInstance(chartInstance) {
         this.chart = chartInstance;
     }
 
@@ -53,54 +53,70 @@ export class OverlapsBarChart {
         this.options = {            
             chart: {
             type: 'column'
-        },
-        title: {
-            text: `Overlapping with ${deepBlueService.getAnnotation().name}`
-        },
-        xAxis: {
-            type: 'category',
-            labels: {
-                rotation: -45,
-                style: {
-                    fontSize: '13px',
-                    fontFamily: 'Verdana, sans-serif'
-                }
-            }
-        },
-        credits: {
-            enabled: false
-        },  
-        width: null,
-        height: null,          
-        yAxis: {
-            min: 0,
+            },
             title: {
-                text: 'Overlaped peaks (regions)'
-            }
-        },
-        legend: {
-            enabled: false
-        },
-        tooltip: {
-            pointFormat: `Overlap with ${deepBlueService.getAnnotation().name}: <b>{point.y} peaks</b>`
-        },
-        series: [{
-            name: 'Overlaping',
-            data: [ ],
-            dataLabels: {
-                enabled: true,
-                rotation: -90,
-                color: '#FFFFFF',
-                align: 'right',
-                format: '{point.y:.1f}', // one decimal
-                y: 10, // 10 pixels down from the top
-                style: {
-                    fontSize: '12px',
-                    fontFamily: 'Verdana, sans-serif'
+                text: `Overlapping with ${deepBlueService.getAnnotation().name}`
+            },
+            xAxis: {
+                type: 'category',
+                labels: {
+                    rotation: -45,
+                    style: {
+                        fontSize: '13px',
+                        fontFamily: 'Verdana, sans-serif'
+                    }
                 }
-            },            
-        }]
+            },
+            credits: {
+                enabled: false
+            },  
+            width: null,
+            height: null,          
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Overlaped peaks (regions)'
+                }
+            },
+            legend: {
+                enabled: false
+            },
+            tooltip: {
+                pointFormat: `Overlap with ${deepBlueService.getAnnotation().name}: <b>{point.y} peaks</b>`
+            },
+            series: [{
+                name: 'Overlaping',
+                data: [ ],
+                point: {
+                        events: {
+                            click: function (click, e) {
+                                // Dummy function that will be overwrited bellow.
+                            }
+                        }
+                },
+                dataLabels: {
+                    enabled: true,
+                    rotation: -90,
+                    color: '#FFFFFF',
+                    align: 'right',
+                    format: '{point.y:.1f}', // one decimal
+                    y: 10, // 10 pixels down from the top
+                    style: {
+                        fontSize: '12px',
+                        fontFamily: 'Verdana, sans-serif'
+                    }
+                },            
+            }]
         }
+        this.options['series'][0]['point']['events']['click'] = (ev) => this.setNewCoisa(ev);
+    }
+
+    setNewCoisa(click) {
+        let point = click.point;
+        let category = point.category;
+        let experiment = point.series.options.data[category][2];
+        
+        this.deepBlueService.includeFilter(experiment);
     }
 }
 
@@ -220,8 +236,8 @@ export class HistonesScreen {
             }
             this.current_request++;
 
-            // Each experiment is selected, overlaped, count, get request data (4 times each)
-            this.progressbar.reset(experiments.length * 4, this.current_request);
+            // Each experiment is started, selected, overlaped, count, get request data (4 times each)
+            this.progressbar.reset(experiments.length * 5, this.current_request);
             this.currentlyProcessing = experiments;
 
             this.deepBlueService.selectMultipleExperiments(experiments, this.progressbar, this.current_request).subscribe((selected_experiments : DeepBlueOperation[]) => {
@@ -278,11 +294,11 @@ export class HistonesScreen {
     }
                               
     reloadPlot(datum: Object[]) {
-        interface KeyValuePair extends Array<string | number> { 0: string; 1: number; }
+        interface KeyValuePair extends Array<string | number | Object> { 0: string; 1: number; 2: Object}
         let newdata: Array<KeyValuePair> = [];
 
         datum.forEach((result: DeepBlueResult) => {
-            newdata.push([result["data"]["name"], result["result"]["count"]]);
+            newdata.push([result["data"]["name"], result["result"]["count"], result["data"]]);
         });
 
         this.overlapbarchart.setNewData(newdata);

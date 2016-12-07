@@ -19,7 +19,7 @@ import { DataStack, DeepBlueService, SelectedData } from '../service/deepblue';
 @Component({
     selector: 'data-load-progess-bar',
     template: `
-        <p-progressBar *ngIf="progress_value > 0 && progress_value < 100" [value]="progress_value" [showValue]="true"></p-progressBar>
+        <p-progressBar *ngIf="progress_value > -1 && progress_value < 100" [value]="progress_value" [showValue]="true"></p-progressBar>
     `
 })
 export class DataLoadProgressBar extends ProgressElement {    
@@ -76,7 +76,7 @@ export class DiveStatus {
     constructor (private deepBlueService: DeepBlueService) { }        
 }
 @Component({
-    selector: 'list-annotations',
+    selector: 'select-annotation',
     template: `   
                 <div class="ui-g form-group">
                     <div class="ui-g-12 ui-md-2">
@@ -94,8 +94,7 @@ export class DiveStatus {
                         </p-dropdown>
                     </div>
                 </div>
-        `
-})
+        `})
 export class AnnotationListComponent {
     errorMessage: string;
     annotations: Annotation[];

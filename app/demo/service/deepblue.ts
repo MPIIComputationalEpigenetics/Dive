@@ -25,6 +25,11 @@ import { IdName,
 
         _data: SelectedData[] = [];
 
+        init(data: SelectedData) {
+            this._data = [];
+            this._data.push(data);
+        }
+
         insert(data: SelectedData) {
             this._data.push(data);
         }
@@ -101,6 +106,7 @@ export class DeepBlueService {
         this.genomeSource.next(genome);
     }
 
+    /* Define the annotation that we are going to dive */
     setAnnotation(annotation: Annotation) {        
         let progress_element: ProgressElement = new ProgressElement();
         let request_count = 0;        
@@ -110,7 +116,7 @@ export class DeepBlueService {
         this.selectAnnotation(annotation, progress_element, request_count).subscribe((selected_annotation) =>  {
             this.cacheQuery(selected_annotation, progress_element, request_count).subscribe((cached_data) => {                
                 let sd: SelectedData = new SelectedData(annotation, cached_data.query_id);
-                this.dataStack.insert(sd);
+                this.dataStack.init(sd);
                 let dbo: DeepBlueOperation = new DeepBlueOperation(annotation, cached_data.query_id, "select_annotation", 0);                
                 this.countRegionsRequest(dbo, progress_element, request_count).subscribe((total) => {
                     this.totalSelectedRegtions = total["result"]["count"];
@@ -272,6 +278,7 @@ export class DeepBlueService {
         let observableBatch: Observable<DeepBlueOperation>[] = [];
 
         experiments.forEach(( experiment, key ) => {
+            progress_element.increment(request_count);
             observableBatch.push( this.selectExperiment(experiment, progress_element, request_count) );
         });
 
@@ -344,7 +351,7 @@ export class DeepBlueService {
                     });
 
         let expand = pollData.expand( 
-            () => Observable.timer(500).concatMap(() => pollData)            
+            () => Observable.timer(250).concatMap(() => pollData)            
         ).subscribe();
 
         return pollSubject.asObservable();
@@ -428,5 +435,9 @@ export class DeepBlueService {
         }
         console.log(errMsg);
         return Observable.throw(errMsg);
+    }
+
+    public includeFilter(experiment: Experiment) {
+        console.log('includeFilter', experiment);
     }
 }

@@ -57,7 +57,7 @@ export class Genome extends IdName {
 export class ProgressElement {
     total_to_load: number = 0;
     total_loaded: number = 0;
-    progress_value: number = 0;
+    progress_value: number = -1;
     request_count: number = -1;
 
     reset(total, request_count) {
@@ -72,7 +72,6 @@ export class ProgressElement {
             return;
         }
         this.total_loaded++;
-        this.progress_value = (this.total_loaded * 100 / this.total_to_load);
-        console.log(this.progress_value);
+        this.progress_value = Math.ceil(this.total_loaded * 100 / this.total_to_load);
     }
 }
