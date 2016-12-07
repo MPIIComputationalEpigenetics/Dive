@@ -17,6 +17,25 @@ import { DataStack, DeepBlueService, SelectedData } from '../service/deepblue';
 
 
 @Component({
+    selector: 'data-info-box',
+    template: `
+        <div class="card card-w-title">
+            <h2>Data information</h2>
+            {{ data.name }}                
+        </div>
+    `
+})
+export class DataInfoBox {
+    dataSelectedSubscription: Subscription;
+    data: Object = null; 
+    constructor (private deepBlueService: DeepBlueService) {
+        this.dataSelectedSubscription = deepBlueService.dataInfoSelectedValue$.subscribe((data: any) => {
+            this.data = data || {};
+        });
+    }
+}
+
+@Component({
     selector: 'data-load-progess-bar',
     template: `
         <p-progressBar *ngIf="progress_value > -1 && progress_value < 100" [value]="progress_value" [showValue]="true"></p-progressBar>

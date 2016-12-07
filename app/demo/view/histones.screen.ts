@@ -40,8 +40,7 @@ export class OverlapsBarChart {
     hasData() : boolean {
         if (!this.chart) {
             return false;
-        }
-        debugger;        
+        }        
         return this.chart["series"][0]["data"].length > 0;
     }
 
@@ -108,15 +107,17 @@ export class OverlapsBarChart {
                 },            
             }]
         }
-        this.options['series'][0]['point']['events']['click'] = (ev) => this.setNewCoisa(ev);
+        this.options['series'][0]['point']['events']['click'] = (ev) => this.clickExperimentBar(ev);
     }
 
-    setNewCoisa(click) {
+    clickExperimentBar(click) {
         let point = click.point;
         let category = point.category;
         let experiment = point.series.options.data[category][2];
         
         this.deepBlueService.includeFilter(experiment);
+        this.deepBlueService.setDataInfoSelected(experiment);
+        setTimeout(() => this.chart.reflow(), 0);        
     }
 }
 
@@ -143,6 +144,8 @@ export class HistonesScreen {
     current_request: number = 0;
 
     data: any;
+
+    hasData: boolean = false;
 
     @ViewChild('progressbar') progressbar: DataLoadProgressBar;
     @ViewChild('overlapbarchart') overlapbarchart: OverlapsBarChart;
@@ -311,10 +314,9 @@ export class HistonesScreen {
 
         console.log(dataset[position]);
     }
-
-    click(e, bar) {
-        console.log(e);
-        console.log(bar);
+    
+    hasDataDetail() : boolean {
+        return this.deepBlueService.getDataInfoSelected() != null;
     }
 
     ngOnDestroy() {

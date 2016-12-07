@@ -101,7 +101,8 @@ import { AnnotationListComponent,
          DataStackView,
          GenomeSelectorComponent,
          DataLoadProgressBar,
-         HistoneExperimentsMenu } from './demo/view/deepblue';
+         HistoneExperimentsMenu,
+         DataInfoBox } from './demo/view/deepblue';
 
 @NgModule({
     imports: [
@@ -197,6 +198,7 @@ import { AnnotationListComponent,
         AnnotationListComponent,
         GenomeSelectorComponent,
         HistoneExperimentsMenu,
+        DataInfoBox
     ],  
     providers: [
         {provide: LocationStrategy, useClass: HashLocationStrategy},

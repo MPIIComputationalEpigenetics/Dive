@@ -75,12 +75,10 @@ export class DeepBlueService {
     private deepBlueUrl = 'api';
 
     // Observable string sources
-    public genomeSource = 
-        new BehaviorSubject<Genome>({id: "-", name: "-", extra_metadata: null});
-    public annotationSource = 
-        new BehaviorSubject<Annotation>({id: "-", name: "-", extra_metadata: null});
-    public epigeneticMarkSource = 
-        new BehaviorSubject<EpigeneticMark>({id: "-", name: "-", extra_metadata: null});        
+    public genomeSource = new BehaviorSubject<Genome>({id: "-", name: "-", extra_metadata: null});
+    public annotationSource = new BehaviorSubject<Annotation>({id: "-", name: "-", extra_metadata: null});
+    public epigeneticMarkSource = new BehaviorSubject<EpigeneticMark>({id: "-", name: "-", extra_metadata: null});
+    public dataInfoSelectedSource = new BehaviorSubject<any>(null);
 
 
     totalSelectedRegtions : Number = 0;            
@@ -89,9 +87,17 @@ export class DeepBlueService {
     genomeValue$: Observable<Genome> = this.genomeSource.asObservable();
     annotationValue$: Observable<Annotation> = this.annotationSource.asObservable();
     epigeneticMarkValue$: Observable<EpigeneticMark> = this.epigeneticMarkSource.asObservable();
+    dataInfoSelectedValue$: Observable<any> = this.dataInfoSelectedSource.asObservable();
 
     dataStack: DataStack = new DataStack();
 
+    setDataInfoSelected(data: any) {
+        this.dataInfoSelectedSource.next(data);
+    }
+
+    getDataInfoSelected() : any {        
+        return this.dataInfoSelectedSource.getValue();
+    }
 
     getDataStack() : DataStack {
         return this.dataStack;
