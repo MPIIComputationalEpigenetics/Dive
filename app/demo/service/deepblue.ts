@@ -387,8 +387,4 @@ export class DeepBlueService {
         console.log(errMsg);
         return Observable.throw(errMsg);
     }
-
-    public includeFilter(data: IdName) {
-        // this.dataStack.overlap(data);
-    }
 }

@@ -25,14 +25,17 @@ import { DeepBlueService } from '../service/deepblue';
             <h2>Data information</h2>
             {{ data.name }}
 
-            <button pButton type="button" (click)="filterOverlapping()" label="Filter overlapping"></button>            
+            <button pButton type="button" (click)="filterOverlapping()" label="Filter overlapping"></button>
+            <data-load-progress-bar #progressbar></data-load-progress-bar>            
         </div>
     `
 })
 export class DataInfoBox {
     dataSelectedSubscription: Subscription;
     data: IdName = null;
-    constructor(private deepBlueService: DeepBlueService) {
+    @ViewChild('progressbar') progressbar: DataLoadProgressBar;
+
+    constructor(private deepBlueService: DeepBlueService, private dataStack: DataStack) {
         this.dataSelectedSubscription = deepBlueService.dataInfoSelectedValue$.subscribe((data: any) => {
             this.data = data || {};
         });
@@ -40,7 +43,7 @@ export class DataInfoBox {
 
     filterOverlapping() {
         console.log("filter overlapping");
-        this.deepBlueService.includeFilter(this.data)
+        this.dataStack.overlap(this.data, this.progressbar);
     }
 
     filterNonOverlapping() {
@@ -49,7 +52,7 @@ export class DataInfoBox {
 }
 
 @Component({
-    selector: 'data-load-progess-bar',
+    selector: 'data-load-progress-bar',
     template: `
         <p-progressBar *ngIf="progress_value > -1 && progress_value < 100" [value]="progress_value" [showValue]="true"></p-progressBar>
     `
@@ -63,17 +66,19 @@ export class DataLoadProgressBar extends ProgressElement {
 @Component({
     selector: 'data-stack',
     template: `
-
-    <span class="shadow-box ui-shadow-2">
-        <ul>
-            <li *ngFor="let data of dataStack.getData() " (click)="removeData($event, data)">        
-                <a href="#">
-                    <span> {{ data.what }}: <b>{{ data.op.data.name }}</b>  <i>({{ data.count }}</i>) <i class="material-icons">remove</i></span>
-                </a>
-            </li>            
-        </ul>
-    </span>    
-    `
+    <br/><br/>
+    <div class="ui-g dashboard">
+        <div class="ui-g-12 ui-md-12 ui-lg-12 task-list">
+            <p-panel header="Diving into:">
+                <ul>
+                    <li *ngFor="let data of dataStack.getData() " (click)="removeData($event, data)">
+                        <span class="task-name">{{ data.what }}: <b>{{ data.op.data.name }}</b> ({{ data.count }})</span>
+                        <i class="material-icons">remove</i>           
+                    </li>
+                </ul>
+            </p-panel>
+        </div>
+    </div>`
 })
 export class DataStackView {
 
@@ -96,7 +101,7 @@ export class DataStackView {
             </li>                
             <genome-selector></genome-selector>
             <histone-mark-selector></histone-mark-selector>
-            `
+            `,
 })
 export class DiveStatus {
     constructor(private deepBlueService: DeepBlueService) { }
