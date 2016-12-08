@@ -19,6 +19,24 @@ import { DeepBlueService } from '../service/deepblue';
 import { DeepBlueOperation,
          DeepBlueResult } from '../domain/operations';
   
+
+class CacheData {
+    
+    constructor (private _data: Object = {}) {}
+
+    put(key: string, value: string) {
+        this._data[key] = value;
+    }
+
+    get(key: string) {
+        return this._data[key];
+    }
+
+    clear() {
+        this._data = {};
+    }
+}
+
 @Component({
     selector: 'overlaps-bar-chart',
     styles: [`
@@ -138,7 +156,10 @@ export class HistonesScreen {
 
     defaultSelectBiosourcesLabel: string = "Select the Biosource"
 
-    selectedExperiments: Object[] = [];
+    selectedExperimentsSource = new Subject<IdName[]>();
+    selectedExperimentsValue$: Observable<IdName[]> = this.selectedExperimentsSource.asObservable();
+
+    selectedExperiments: IdName[] = [];
     currentlyProcessing: Object[] = [];    
 
     current_request: number = 0;
@@ -221,7 +242,9 @@ export class HistonesScreen {
             }
         );
 
-        this.getSelectedExperimentsObservable().subscribe((experiments: IdName[]) => {
+        this.selectedExperimentsValue$.debounceTime(500).subscribe(() => {
+            let experiments = this.selectedExperiments;
+
             if (experiments.length == 0) {
                 return;
             }
@@ -278,19 +301,14 @@ export class HistonesScreen {
         });         
     }
 
-    setSelectedExperiments(experiments: Object[]) {
+    setSelectedExperiments(experiments: IdName[]) {
         this.selectedExperiments = experiments;
     }
 
-    getSelectedExperimentsObservable() : Observable<Object[]> {
-        return Observable.interval(25).map((a) => {
-            return this.getSelectedExperiments();
-        });
-    }
-    
     selectBiosources(event) {
-      var experiments : Object[] = [];
+      var experiments : IdName[] = [];
       experiments = experiments.concat.apply([], event.value);
+      this.selectedExperimentsSource.next(experiments);
       this.setSelectedExperiments(experiments);
     }
                               
