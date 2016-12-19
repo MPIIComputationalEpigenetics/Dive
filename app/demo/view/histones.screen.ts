@@ -8,9 +8,7 @@ import { SelectItem } from 'primeng/primeng';
 import { Subject }     from 'rxjs/Subject'
 import { Observable }     from 'rxjs/Observable'
 
-import { IdName, 
-         Genome, 
-         EpigeneticMark } from '../domain/deepblue'
+import { EpigeneticMark, FullExperiment, Genome, IdName } from '../domain/deepblue';
 
 import { DataLoadProgressBar } from '../view/deepblue';
 
@@ -19,23 +17,6 @@ import { DeepBlueService } from '../service/deepblue';
 import { DeepBlueOperation,
          DeepBlueResult } from '../domain/operations';
   
-
-class CacheData {
-    
-    constructor (private _data: Object = {}) {}
-
-    put(key: string, value: string) {
-        this._data[key] = value;
-    }
-
-    get(key: string) {
-        return this._data[key];
-    }
-
-    clear() {
-        this._data = {};
-    }
-}
 
 @Component({
     selector: 'overlaps-bar-chart',
@@ -175,7 +156,7 @@ export class HistonesScreen {
         return this.selectedExperiments;
     }
 
-    segregate(experiments: Object[]) {
+    segregate(experiments: FullExperiment[]) {
 
         var biosources = {}
         var samples = {}
@@ -185,11 +166,11 @@ export class HistonesScreen {
                                     
 
         for (let experiment of experiments) {
-            let experiment_biosource = experiment['sample_info']['biosource_name'];
-            let experiment_sample_id = experiment['sample_id'];
-            let experiment_epigenetic_mark = experiment['epigenetic_mark'];
-            let experiment_technique = experiment['technique'];
-            let experiment_project = experiment['project'];
+            let experiment_biosource = experiment.sample_info()['biosource_name'];
+            let experiment_sample_id = experiment.sample_id();
+            let experiment_epigenetic_mark = experiment.epigenetic_mark();
+            let experiment_technique = experiment.technique();
+            let experiment_project = experiment.project();
 
             if (!(experiment_biosource in biosources)) {
                 biosources[experiment_biosource] = []
@@ -230,10 +211,11 @@ export class HistonesScreen {
     }
 
     constructor (private deepBlueService: DeepBlueService, private dataStack : DataStack) {
+
         this.epigeneticMarkSubscription = deepBlueService.epigeneticMarkValue$.subscribe(selected_epigenetic_mark => {
                 this.deepBlueService.getExperiments(deepBlueService.getGenome(), selected_epigenetic_mark).subscribe(experiments_ids => {
                     var ids = experiments_ids.map((e) => e.id); 
-                    this.deepBlueService.getInfos(ids).subscribe(full_info => {
+                    this.deepBlueService.getExperimentsInfos(ids).subscribe(full_info => {
                         this.experiments = full_info;
                         this.segregated_data = this.segregate(full_info);
                     });
@@ -262,19 +244,26 @@ export class HistonesScreen {
             this.progressbar.reset(experiments.length * 5, this.current_request);
             this.currentlyProcessing = experiments;
 
+            console.log("selectMultipleExperiments");
             this.deepBlueService.selectMultipleExperiments(experiments, this.progressbar, this.current_request).subscribe((selected_experiments : DeepBlueOperation[]) => {
                 if (selected_experiments.length == 0) {
                     return;
                 }
                 if (selected_experiments[0].request_count != this.current_request) {
+                    console.log(selected_experiments[0].request_count, this.current_request);
+                    console.log(selected_experiments[0]);   
                     console.log("new request executing, leaving...");
                     return;
                 }          
 
+                console.log("got selectMultipleExperiments", selected_experiments);
+
                 let current : DeepBlueOperation = dataStack.getCurrentOperation();
                       
+
                 this.deepBlueService.overlapWithSelected(current, selected_experiments, this.progressbar, this.current_request).subscribe((overlap_ids: DeepBlueOperation[]) => {
 
+                    console.log("got overlapWithSelected", overlap_ids);
                     if (overlap_ids.length == 0) {
                         return;
                     }

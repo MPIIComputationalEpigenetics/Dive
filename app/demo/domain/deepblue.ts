@@ -1,10 +1,18 @@
-export class IdName {
+import { IKey } from './interfaces';
+
+export class IdName implements IKey{
     constructor (public id: string, public name: string) {  }
+
+    key() : string {
+        return this.id;
+    }
+
+    clone() : IdName {
+        return new IdName(this.id, this.name);
+    }
 }
 
 export class IdNameCount extends IdName {
-    id: string;
-    name: string;
     count: number;
 
     constructor (data: string[] ) {
@@ -14,42 +22,66 @@ export class IdNameCount extends IdName {
 }
 
 export class EpigeneticMark extends IdName {
-    id: string;
-    name: string;
-    extra_metadata: Object; 
-
     constructor (data: string[] ) {
         super(data[0], data[1])             
     }
 }
 
 export class Annotation extends IdName {
-    id: string;
-    name: string;
-    extra_metadata: Object; 
-
     constructor (data: string[] ) {
         super(data[0], data[1])             
     }
 }
 
 export class Experiment extends IdName {
-    id: string;
-    name: string;
-    extra_metadata: Object;
-    
     constructor (data: string[] ) {
         super(data[0], data[1])             
     }
 }
 
 export class Genome extends IdName {
-    id: string;
-    name: string;
-    extra_metadata: Object;
-    
     constructor (data: string[] ) {
         super(data[0], data[1])             
+    }
+}
+
+export class FullMetadata extends IdName {
+    values: Object;
+
+    constructor (data: Object) {
+        super(data["_id"], data["name"]);
+        this.values = data;
+    }
+
+    get(key: string) : any {
+        return this.values[key];
+    }
+}
+
+
+export class FullExperiment extends FullMetadata {
+    constructor (data: Object) {
+        super(data);
+    }
+
+    sample_info(): Object {
+        return this.values["sample_info"];
+    }
+
+    sample_id() : string {
+        return this.values["sample_id"];
+    }
+
+    epigenetic_mark(): string {
+        return this.values["epigenetic_mark"];
+    }
+
+    technique() : string {
+        return this.values["technique"];
+    }
+
+    project() : string {
+        return this.values["project"];
     }
 }
 

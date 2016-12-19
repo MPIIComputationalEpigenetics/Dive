@@ -54,10 +54,9 @@ export class DataStack {
         // TODO: use/make a generic method for experiments and annotations                
         this.deepBlueService.selectAnnotation(data, progress_element, request_count).subscribe((selected_annotation) => {
             this.deepBlueService.cacheQuery(selected_annotation, progress_element, request_count).subscribe((cached_data) => {
-                let dbo: DeepBlueOperation = new DeepBlueOperation(data, cached_data.query_id, "select_annotation", 0);
-                this.deepBlueService.countRegionsRequest(dbo, progress_element, request_count).subscribe((total) => {
+                this.deepBlueService.countRegionsRequest(cached_data, progress_element, request_count).subscribe((total) => {
                     let totalSelectedRegtions = total["result"]["count"];
-                    let dataStackItem: DataStackItem = new DataStackItem(dbo, "Selection", totalSelectedRegtions);
+                    let dataStackItem: DataStackItem = new DataStackItem(cached_data, "Selection", totalSelectedRegtions);
                     this._data.push(dataStackItem);
                     source.next(data);
                     source.complete();
@@ -76,12 +75,11 @@ export class DataStack {
 
         // TODO: use/make a generic method for experiments and annotations
         this.deepBlueService.selectExperiment(data, progress_element, request_count).subscribe((selected_experiment) => {
-            this.deepBlueService.overlap(this.getCurrentOperation(), selected_experiment, progress_element, request_count).subscribe((overlap_operatio) => {
-                this.deepBlueService.cacheQuery(overlap_operatio, progress_element, request_count).subscribe((cached_data) => {
-                    let dbo: DeepBlueOperation = new DeepBlueOperation(data, cached_data.query_id, "overlap", 0);
-                    this.deepBlueService.countRegionsRequest(dbo, progress_element, request_count).subscribe((total) => {
+            this.deepBlueService.overlap(this.getCurrentOperation(), selected_experiment, progress_element, request_count).subscribe((overlap_operation) => {
+                this.deepBlueService.cacheQuery(overlap_operation, progress_element, request_count).subscribe((cached_data) => {
+                    this.deepBlueService.countRegionsRequest(cached_data, progress_element, request_count).subscribe((total) => {
                         let totalSelectedRegtions = total["result"]["count"];
-                        let dataStackItem: DataStackItem = new DataStackItem(dbo, "Overlap with", totalSelectedRegtions);
+                        let dataStackItem: DataStackItem = new DataStackItem(cached_data, "Overlap with", totalSelectedRegtions);
                         this._data.push(dataStackItem);
                         source.next(data);
                         source.complete();

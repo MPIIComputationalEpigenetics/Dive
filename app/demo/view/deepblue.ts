@@ -183,6 +183,9 @@ export class HistoneExperimentsMenu {
 
     constructor(private deepBlueService: DeepBlueService) {
         this.genomeSubscription = deepBlueService.genomeValue$.subscribe(genome => {
+            if (!(genome.id)) {
+                return;
+            }
             this.deepBlueService.getHistones().subscribe(histones => {
                 this.selectHistones = histones;
             },
