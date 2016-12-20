@@ -85,7 +85,7 @@ export class DataStackView {
     constructor(private deepBlueService: DeepBlueService, private dataStack: DataStack) { }
 
     removeData(event, data) {
-        console.log(event, data);
+        this.dataStack.remove(data);
     }
 }
 

@@ -80,7 +80,6 @@ export class DataStack {
                         let totalSelectedRegtions = total["result"]["count"];
                         let dataStackItem: DataStackItem = new DataStackItem(cached_data, "Overlap with", totalSelectedRegtions);
                         this._data.push(dataStackItem);
-                        debugger;
                         this.topStackSubject.next(dataStackItem);
                     });
                 })
@@ -88,8 +87,19 @@ export class DataStack {
         });
     }
 
-    remove(data: IdName) {
-        // TODO :)
+    remove(data: DataStackItem) {
+        let query_id = data.op.query_id;
+        debugger;
+        // find position
+        let i = this._data.length - 1;
+        for (; i >= 0; i--) {
+           if (this._data[i].op.query_id == query_id) {
+               break;
+           }
+        }
+
+        this._data = this._data.slice(0, i);
+        this.topStackSubject.next(this._data[this._data.length - 1]);
     }
 
     getData(): DataStackItem[] {
