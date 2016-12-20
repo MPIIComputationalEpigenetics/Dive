@@ -1,12 +1,12 @@
-import { DataStack } from '../service/datastack';
+import { DataStack, DataStackItem } from '../service/datastack';
 import { MessagesDemo } from './messagesdemo';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 
 import { SelectItem } from 'primeng/primeng';
 
-import { Subject }     from 'rxjs/Subject'
-import { Observable }     from 'rxjs/Observable'
+import { Subject } from 'rxjs/Subject'
+import { Observable } from 'rxjs/Observable'
 
 import { EpigeneticMark, FullExperiment, Genome, IdName } from '../domain/deepblue';
 
@@ -14,9 +14,11 @@ import { DataLoadProgressBar } from '../view/deepblue';
 
 import { DeepBlueService } from '../service/deepblue';
 
-import { DeepBlueOperation,
-         DeepBlueResult } from '../domain/operations';
-  
+import {
+    DeepBlueOperation,
+    DeepBlueResult
+} from '../domain/operations';
+
 
 @Component({
     selector: 'overlaps-bar-chart',
@@ -24,23 +26,23 @@ import { DeepBlueOperation,
       chart {
         display: block;
       }
-    `],    
+    `],
     template: `
         <chart [options]="options" (load)="saveInstance($event.context)">></chart>
     `
 })
 export class OverlapsBarChart {
     options: Object;
-    chart : Object;
-Object
+    chart: Object;
+    Object
     setNewData(data) {
-        return this.chart["series"][0].setData(data); 
+        return this.chart["series"][0].setData(data);
     }
 
-    hasData() : boolean {
+    hasData(): boolean {
         if (!this.chart) {
             return false;
-        }        
+        }
         return this.chart["series"][0]["data"].length > 0;
     }
 
@@ -49,9 +51,9 @@ Object
     }
 
     constructor(private deepBlueService: DeepBlueService) {
-        this.options = {            
+        this.options = {
             chart: {
-            type: 'column'
+                type: 'column'
             },
             title: {
                 text: `Overlapping with ${deepBlueService.getAnnotation().name}`
@@ -68,9 +70,9 @@ Object
             },
             credits: {
                 enabled: false
-            },  
+            },
             width: null,
-            height: null,          
+            height: null,
             yAxis: {
                 min: 0,
                 title: {
@@ -85,38 +87,38 @@ Object
             },
             series: [{
                 name: 'Overlaping',
-                data: [ ],
+                data: [],
                 point: {
-                        events: {
-                            click: function (click, e) {
-                                // Dummy function that will be overwrited bellow.
-                            }
+                    events: {
+                        click: function (click, e) {
+                            // Dummy function that will be overwrited bellow.
                         }
+                    }
                 },
                 dataLabels: {
                     enabled: true,
                     rotation: -90,
                     color: '#FFFFFF',
-                    align: 'right',       
+                    align: 'right',
                     format: '{point.y:.1f}', // one decimal
                     y: 10, // 10 pixels down from the top
                     style: {
                         fontSize: '12px',
                         fontFamily: 'Verdana, sans-serif'
                     }
-                },            
+                },
             }]
         }
         this.options['series'][0]['point']['events']['click'] = (ev) => this.clickExperimentBar(ev);
     }
 
     clickExperimentBar(click) {
-        let point = click.point;                            
+        let point = click.point;
         let category = point.category;
         let experiment: IdName = point.series.options.data[category][2];
-        
+
         this.deepBlueService.setDataInfoSelected(experiment);
-        setTimeout(() => this.chart["reflow"](), 0);        
+        setTimeout(() => this.chart["reflow"](), 0);
     }
 }
 
@@ -141,7 +143,7 @@ export class HistonesScreen {
     selectedExperimentsValue$: Observable<IdName[]> = this.selectedExperimentsSource.asObservable();
 
     selectedExperiments: IdName[] = [];
-    currentlyProcessing: Object[] = [];    
+    currentlyProcessing: Object[] = [];
 
     current_request: number = 0;
 
@@ -151,8 +153,8 @@ export class HistonesScreen {
 
     @ViewChild('progressbar') progressbar: DataLoadProgressBar;
     @ViewChild('overlapbarchart') overlapbarchart: OverlapsBarChart;
-    
-    getSelectedExperiments() : Object[] {
+
+    getSelectedExperiments(): Object[] {
         return this.selectedExperiments;
     }
 
@@ -163,7 +165,7 @@ export class HistonesScreen {
         var epigenetic_marks = {}
         var techniques = {}
         var projects = {}
-                                    
+
 
         for (let experiment of experiments) {
             let experiment_biosource = experiment.sample_info()['biosource_name'];
@@ -175,18 +177,18 @@ export class HistonesScreen {
             if (!(experiment_biosource in biosources)) {
                 biosources[experiment_biosource] = []
                 this.biosourcesItems.push(
-                    {label: experiment_biosource, value: biosources[experiment_biosource]}
+                    { label: experiment_biosource, value: biosources[experiment_biosource] }
                 )
             }
-                    
+
             if (!(experiment_sample_id in samples)) {
                 samples[experiment_sample_id] = []
-            }        
-            
+            }
+
             if (!(experiment_epigenetic_mark in epigenetic_marks)) {
                 epigenetic_marks[experiment_epigenetic_mark] = []
-            }            
-            
+            }
+
             if (!(experiment_technique in techniques)) {
                 techniques[experiment_technique] = []
             }
@@ -203,91 +205,88 @@ export class HistonesScreen {
         }
 
         return {
-            "biosources": biosources, 
-            "samples": samples, 
+            "biosources": biosources,
+            "samples": samples,
             "epigenetic_marks": epigenetic_marks,
             "techniques": techniques,
-            "projects": projects }
+            "projects": projects
+        }
     }
 
-    constructor (private deepBlueService: DeepBlueService, private dataStack : DataStack) {
+    constructor(private deepBlueService: DeepBlueService, private dataStack: DataStack) {
 
         this.epigeneticMarkSubscription = deepBlueService.epigeneticMarkValue$.subscribe(selected_epigenetic_mark => {
-                this.deepBlueService.getExperiments(deepBlueService.getGenome(), selected_epigenetic_mark).subscribe(experiments_ids => {
-                    var ids = experiments_ids.map((e) => e.id); 
-                    this.deepBlueService.getExperimentsInfos(ids).subscribe(full_info => {
-                        this.experiments = full_info;
-                        this.segregated_data = this.segregate(full_info);
-                    });
-                },
+            this.deepBlueService.getExperiments(deepBlueService.getGenome(), selected_epigenetic_mark).subscribe(experiments_ids => {
+                var ids = experiments_ids.map((e) => e.id);
+                this.deepBlueService.getExperimentsInfos(ids).subscribe(full_info => {
+                    this.experiments = full_info;
+                    this.segregated_data = this.segregate(full_info);
+                });
+            },
                 error => this.errorMessage = <any>error);
-            }
+        }
         );
 
-        this.selectedExperimentsValue$.debounceTime(500).subscribe(() => {
-            let experiments = this.selectedExperiments;
+        this.selectedExperimentsValue$.debounceTime(250).subscribe(() => this.processOverlaps());
 
-            if (experiments.length == 0) {
+        this.dataStack.topStackValue$.subscribe((dataStackItem : DataStackItem) => this.processOverlaps())
+    }
+
+
+    processOverlaps() {
+        debugger;
+        
+        let experiments = this.selectedExperiments;
+
+        if (experiments.length == 0) {
+            return;
+        }
+
+        if (experiments != this.getSelectedExperiments()) {
+            return;
+        }
+
+        if (experiments == this.currentlyProcessing) {
+            return;
+        }
+        this.current_request++;
+
+        // Each experiment is started, selected, overlaped, count, get request data (4 times each)
+        this.progressbar.reset(experiments.length * 5, this.current_request);
+        this.currentlyProcessing = experiments;
+
+        this.deepBlueService.selectMultipleExperiments(experiments, this.progressbar, this.current_request).subscribe((selected_experiments: DeepBlueOperation[]) => {
+            if (selected_experiments.length == 0) {
                 return;
             }
-            
-            if (experiments != this.getSelectedExperiments()) {
+            if (selected_experiments[0].request_count != this.current_request) {
                 return;
             }
 
-            if (experiments == this.currentlyProcessing) {
-                return;
-            }
-            this.current_request++;
+            let current: DeepBlueOperation = this.dataStack.getCurrentOperation();
 
-            // Each experiment is started, selected, overlaped, count, get request data (4 times each)
-            this.progressbar.reset(experiments.length * 5, this.current_request);
-            this.currentlyProcessing = experiments;
-
-            console.log("selectMultipleExperiments");
-            this.deepBlueService.selectMultipleExperiments(experiments, this.progressbar, this.current_request).subscribe((selected_experiments : DeepBlueOperation[]) => {
-                if (selected_experiments.length == 0) {
+            this.deepBlueService.overlapWithSelected(current, selected_experiments, this.progressbar, this.current_request).subscribe((overlap_ids: DeepBlueOperation[]) => {
+                if (overlap_ids.length == 0) {
                     return;
                 }
-                if (selected_experiments[0].request_count != this.current_request) {
-                    console.log(selected_experiments[0].request_count, this.current_request);
-                    console.log(selected_experiments[0]);   
-                    console.log("new request executing, leaving...");
+                if (overlap_ids[0].request_count != this.current_request) {
                     return;
-                }          
+                }
 
-                console.log("got selectMultipleExperiments", selected_experiments);
+                this.deepBlueService.countRegionsBatch(overlap_ids, this.progressbar, this.current_request).subscribe((datum: DeepBlueResult[]) => {
 
-                let current : DeepBlueOperation = dataStack.getCurrentOperation();
-                      
-
-                this.deepBlueService.overlapWithSelected(current, selected_experiments, this.progressbar, this.current_request).subscribe((overlap_ids: DeepBlueOperation[]) => {
-
-                    console.log("got overlapWithSelected", overlap_ids);
-                    if (overlap_ids.length == 0) {
+                    if (datum.length == 0) {
                         return;
                     }
-                    if (overlap_ids[0].request_count != this.current_request) {
-                        console.log("new request executing, leaving...");
+                    if (datum[0].request_count != this.current_request) {
                         return;
-                    }          
+                    }
 
-                    this.deepBlueService.countRegionsBatch(overlap_ids, this.progressbar, this.current_request).subscribe((datum: DeepBlueResult[]) => {
-
-                        if (datum.length == 0) {
-                            return;
-                        }
-                        if (datum[0].request_count != this.current_request) {
-                            console.log("new request executing, leaving...");
-                            return;
-                        }          
-                                                
-                        console.log("DATUM:", datum);
-                        this.reloadPlot(datum);
-                    })
-                });
-             });
-        });         
+                    this.currentlyProcessing = [];
+                    this.reloadPlot(datum);
+                })
+            });
+        });
     }
 
     setSelectedExperiments(experiments: IdName[]) {
@@ -295,14 +294,14 @@ export class HistonesScreen {
     }
 
     selectBiosources(event) {
-      var experiments : IdName[] = [];
-      experiments = experiments.concat.apply([], event.value);
-      this.selectedExperimentsSource.next(experiments);
-      this.setSelectedExperiments(experiments);
+        var experiments: IdName[] = [];
+        experiments = experiments.concat.apply([], event.value);
+        this.selectedExperimentsSource.next(experiments);
+        this.setSelectedExperiments(experiments);
     }
-                              
+
     reloadPlot(datum: Object[]) {
-        interface KeyValuePair extends Array<string | number | Object> { 0: string; 1: number; 2: Object}
+        interface KeyValuePair extends Array<string | number | Object> { 0: string; 1: number; 2: Object }
         let newdata: Array<KeyValuePair> = [];
 
         datum.forEach((result: DeepBlueResult) => {
@@ -319,12 +318,12 @@ export class HistonesScreen {
 
         console.log(dataset[position]);
     }
-    
-    hasDataDetail() : boolean {
+
+    hasDataDetail(): boolean {
         return this.deepBlueService.getDataInfoSelected() != null;
     }
 
     ngOnDestroy() {
         this.epigeneticMarkSubscription.unsubscribe();
-    }  
+    }
 }

@@ -15,6 +15,8 @@ import { Observable } from 'rxjs/Observable'
 
 import { Subscription } from 'rxjs/Subscription';
 
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+
 import { Subject } from 'rxjs/Subject'
 
 import { DeepBlueOperation } from '../domain/operations'
@@ -27,8 +29,12 @@ export class DataStackItem {
 @Injectable()
 export class DataStack {
 
-    epigeneticMarkSubscription: Subscription;
     _data: DataStackItem[] = [];
+    epigeneticMarkSubscription: Subscription;
+    
+    public topStackSubject = new Subject<DataStackItem>();
+
+    public topStackValue$: Observable<DataStackItem> = this.topStackSubject.asObservable();
 
     constructor(private deepBlueService: DeepBlueService) { 
 
@@ -49,8 +55,6 @@ export class DataStack {
         let request_count = 0;
         progress_element.reset(4, request_count);
 
-        let source = new Subject<IdName>();
-
         // TODO: use/make a generic method for experiments and annotations                
         this.deepBlueService.selectAnnotation(data, progress_element, request_count).subscribe((selected_annotation) => {
             this.deepBlueService.cacheQuery(selected_annotation, progress_element, request_count).subscribe((cached_data) => {
@@ -58,20 +62,15 @@ export class DataStack {
                     let totalSelectedRegtions = total["result"]["count"];
                     let dataStackItem: DataStackItem = new DataStackItem(cached_data, "Selection", totalSelectedRegtions);
                     this._data.push(dataStackItem);
-                    source.next(data);
-                    source.complete();
+                    this.topStackSubject.next(dataStackItem);
                 });
             })
         });
-
-        return source.asObservable();
     }
 
-    overlap(data: IdName, progress_element: ProgressElement): Observable<IdName> {
+    overlap(data: IdName, progress_element: ProgressElement) {
         let request_count = 0;
         progress_element.reset(5, request_count);
-
-        let source = new Subject<IdName>();
 
         // TODO: use/make a generic method for experiments and annotations
         this.deepBlueService.selectExperiment(data, progress_element, request_count).subscribe((selected_experiment) => {
@@ -81,15 +80,12 @@ export class DataStack {
                         let totalSelectedRegtions = total["result"]["count"];
                         let dataStackItem: DataStackItem = new DataStackItem(cached_data, "Overlap with", totalSelectedRegtions);
                         this._data.push(dataStackItem);
-                        source.next(data);
-                        source.complete();
+                        debugger;
+                        this.topStackSubject.next(dataStackItem);
                     });
                 })
             })
         });
-
-        return source.asObservable();
-
     }
 
     remove(data: IdName) {
