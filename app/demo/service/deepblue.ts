@@ -97,7 +97,8 @@ export class DeepBlueService {
     dataInfoSelectedValue$: Observable<IdName> = this.dataInfoSelectedSource.asObservable();
 
     idNamesQueryCache: DataCache<IdName, DeepBlueOperation> = new DataCache<IdName, DeepBlueOperation>()
-    overlapsQueryCache: MultiKeyDataCache<DeepBlueOperation, DeepBlueOperation> = new MultiKeyDataCache<DeepBlueOperation, DeepBlueOperation>()
+    intersectsQueryCache: MultiKeyDataCache<DeepBlueOperation, DeepBlueOperation> = new MultiKeyDataCache<DeepBlueOperation, DeepBlueOperation>()
+    overlapsQueryCache: DataCache<IKey, DeepBlueOperation> = new DataCache<IKey, DeepBlueOperation>()
     operationCache: DataCache<DeepBlueOperation, DeepBlueOperation> = new DataCache<DeepBlueOperation, DeepBlueOperation>()
     requestCache: DataCache<DeepBlueOperation, DeepBlueRequest> = new DataCache<DeepBlueOperation, DeepBlueRequest>()
     resultCache: DataCache<DeepBlueRequest, DeepBlueResult> = new DataCache<DeepBlueRequest, DeepBlueResult>()
@@ -305,7 +306,7 @@ export class DeepBlueService {
     }
 
 
-    overlapWithSelected(current: DeepBlueOperation, selected_data: DeepBlueOperation[], progress_element: ProgressElement, request_count: number): Observable<DeepBlueOperation[]> {
+    intersectWithSelected(current: DeepBlueOperation, selected_data: DeepBlueOperation[], progress_element: ProgressElement, request_count: number): Observable<DeepBlueOperation[]> {
 
         let observableBatch: Observable<DeepBlueOperation>[] = [];
 
@@ -313,10 +314,10 @@ export class DeepBlueService {
             let o: Observable<DeepBlueOperation>;
             let cache_key = [current, selected];
 
-            if (this.overlapsQueryCache.get(cache_key, request_count)) {
+            if (this.intersectsQueryCache.get(cache_key, request_count)) {
                 console.log("overlapSelected hit");
                 progress_element.increment(request_count);
-                let cached_operation = this.overlapsQueryCache.get(cache_key, request_count);
+                let cached_operation = this.intersectsQueryCache.get(cache_key, request_count);
                 o = Observable.of(cached_operation);
             } else {
                 let params: URLSearchParams = new URLSearchParams();
@@ -329,7 +330,7 @@ export class DeepBlueService {
                             progress_element.increment(request_count);
                             return new DeepBlueOperation(selected.data, response, "intersection", request_count);
                         })
-                        .do((operation) => this.overlapsQueryCache.put(cache_key, operation) )
+                        .do((operation) => this.intersectsQueryCache.put(cache_key, operation) )
                         .catch(this.handleError);
             }
             observableBatch.push(o);
@@ -340,7 +341,14 @@ export class DeepBlueService {
 
     overlap(data_one: DeepBlueOperation, data_two: DeepBlueOperation, overlap: string, progress_element: ProgressElement, request_count: number): Observable<DeepBlueOperation> {
 
-        let cache_key = [data_one, data_two];
+
+        let amount = "1";
+        let amount_type = "bp"
+
+        let parameters = [overlap + amount + amount_type];
+
+        let cache_key = new DeepBlueMultiParametersOperation(data_one, data_two, parameters, "overlap", request_count);
+
         if (this.overlapsQueryCache.get(cache_key, request_count)) {
             console.log("overlap hit");
             progress_element.increment(request_count);
@@ -362,7 +370,7 @@ export class DeepBlueService {
                 let body = res.json();
                 let response: string = body[1] || "";
                 progress_element.increment(request_count);
-                return new DeepBlueOperation(data_one.data, response, "intersection", request_count);
+                return new DeepBlueOperation(data_one.data, response, "overlap", request_count);
             })
             .do((operation) => this.overlapsQueryCache.put(cache_key, operation))
             .catch(this.handleError);

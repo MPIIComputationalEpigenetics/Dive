@@ -234,8 +234,6 @@ export class HistonesScreen {
 
 
     processOverlaps() {
-        debugger;
-        
         let experiments = this.selectedExperiments;
 
         if (experiments.length == 0) {
@@ -265,7 +263,7 @@ export class HistonesScreen {
 
             let current: DeepBlueOperation = this.dataStack.getCurrentOperation();
 
-            this.deepBlueService.overlapWithSelected(current, selected_experiments, this.progressbar, this.current_request).subscribe((overlap_ids: DeepBlueOperation[]) => {
+            this.deepBlueService.intersectWithSelected(current, selected_experiments, this.progressbar, this.current_request).subscribe((overlap_ids: DeepBlueOperation[]) => {
                 if (overlap_ids.length == 0) {
                     return;
                 }

@@ -17,22 +17,22 @@ export class DeepBlueOperation implements IKey {
 
     key() : string {
         return this.query_id;
-    }    
+    }
 }
 
 export class DeepBlueMultiParametersOperation implements IKey {
-    constructor(public op_one: DeepBlueOperation, public op_two:DeepBlueOperation, public command: string, public request_count: number, public cached: boolean = false) { }
+    constructor(public op_one: DeepBlueOperation, public op_two:DeepBlueOperation, public parameters: string[], public command: string, public request_count: number, public cached: boolean = false) { }
 
     clone(request_count: number = -1): DeepBlueMultiParametersOperation {
-        return new DeepBlueMultiParametersOperation(this.op_one, this.op_two, this.command, request_count, this.cached);
+        return new DeepBlueMultiParametersOperation(this.op_one, this.op_two, this.parameters, this.command, request_count, this.cached);
     }
 
     cacheIt(query_id: string): DeepBlueMultiParametersOperation {
-        return new DeepBlueMultiParametersOperation(this.op_one, this.op_two, this.command, this.request_count, true);
+        return new DeepBlueMultiParametersOperation(this.op_one, this.op_two, this.parameters, this.command, this.request_count, true);
     }
 
     key() : string {
-        return this.op_one.key() + this.op_two.key();
+        return this.op_one.key() + this.op_two.key() + this.parameters.join();
     }
 }
 
@@ -40,18 +40,18 @@ export class DeepBlueRequest  implements IKey {
     constructor(public data: IdName, public request_id: string, public request_count: number) { }
 
     clone(request_count: number = -1) : DeepBlueRequest {
-        return new DeepBlueRequest(this.data, this.request_id, request_count)        
-    }        
+        return new DeepBlueRequest(this.data, this.request_id, request_count)
+    }
 
     key(): string {
         return this.request_id;
-    } 
+    }
 }
 
 export class DeepBlueResult  implements ICloneable {
     constructor(public data: IdName, public result: Object, public request_count: number) { }
 
     clone(request_count: number = -1) : DeepBlueResult {
-        return new DeepBlueResult(this.data, this.result, request_count);        
-    } 
+        return new DeepBlueResult(this.data, this.result, request_count);
+    }
 }
