@@ -26,7 +26,8 @@ import { DeepBlueService } from '../service/deepblue';
             {{ data.name }}
 
             <button pButton type="button" (click)="filterOverlapping()" label="Filter overlapping"></button>
-            <data-load-progress-bar #progressbar></data-load-progress-bar>            
+            <button pButton type="button" (click)="filterNonOverlapping()" label="Filter overlapping"></button>
+            <data-load-progress-bar #progressbar></data-load-progress-bar>
         </div>
     `
 })
@@ -48,6 +49,7 @@ export class DataInfoBox {
 
     filterNonOverlapping() {
         console.log("filter non overlapping");
+        this.dataStack.non_overlap(this.data, this.progressbar);
     }
 }
 
@@ -73,7 +75,7 @@ export class DataLoadProgressBar extends ProgressElement {
                 <ul>
                     <li *ngFor="let data of dataStack.getData() " (click)="removeData($event, data)">
                         <span class="task-name">{{ data.what }}: <b>{{ data.op.data.name }}</b> ({{ data.count }})</span>
-                        <i class="material-icons">remove</i>           
+                        <i class="material-icons">remove</i>
                     </li>
                 </ul>
             </p-panel>
@@ -97,8 +99,8 @@ export class DataStackView {
                 <a [routerLink]="['/']">
                     <i class="material-icons">dashboard</i>
                     <span>Selected data: {{ deepBlueService.getAnnotation()?.name }}</span>
-                </a>                
-            </li>                
+                </a>
+            </li>
             <genome-selector></genome-selector>
             <histone-mark-selector></histone-mark-selector>
             `,
@@ -108,17 +110,17 @@ export class DiveStatus {
 }
 @Component({
     selector: 'select-annotation',
-    template: `   
+    template: `
                 <div class="ui-g form-group">
                     <div class="ui-g-12 ui-md-2">
                         <label for="input">Annotation Name</label>
                     </div>
                     <div class="ui-g-12 ui-md-4">
-                        <p-dropdown 
-                            #annotationsDropdown 
-                            [options]="menuAnnotations" 
-                            [(ngModel)]="selectedAnnotation" 
-                            filter="filter" 
+                        <p-dropdown
+                            #annotationsDropdown
+                            [options]="menuAnnotations"
+                            [(ngModel)]="selectedAnnotation"
+                            filter="filter"
                             [autoWidth]="false"
                             (onChange)="selectAnnotation($event)"
                         >

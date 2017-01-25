@@ -35,11 +35,11 @@ import {
 
 import { ICloneable } from '../domain/interfaces';
 
-    
+
 export class DataCache<T extends IKey, V extends ICloneable> {
-    
+
     constructor (private _data: Map<string, V> = new Map()) {}
-    
+
     put(key: T, value: V) {
         let cloneValue = value.clone(-1);
         this._data.set(key.key(), cloneValue);
@@ -58,9 +58,9 @@ export class DataCache<T extends IKey, V extends ICloneable> {
 }
 
 export class MultiKeyDataCache<T extends IKey, V extends ICloneable> {
-    
+
     constructor (private _data: Map<string, V> = new Map()) {}
-    
+
     put(keys: T[], value: V) {
         let key_value = keys.map((k) => k.key()).join();
         let cloneValue = value.clone(-1);
@@ -137,7 +137,7 @@ export class DeepBlueService {
         return this.epigeneticMarkSource.getValue();
     }
 
-    // 
+    //
 
     constructor(private http: Http) {
         console.log("NEW DEEPBLUE SERVICE");
@@ -177,7 +177,10 @@ export class DeepBlueService {
     } que
 
     getGenomes(): Observable<Genome[]> {
-        return this.http.get(this.deepBlueUrl + "/list_genomes")
+        let params: URLSearchParams = new URLSearchParams();
+        params.set('controlled_vocabulary', "genomes");
+        params.set('type', "peaks");
+        return this.http.get(this.deepBlueUrl + "/collection_experiments_count", { "search": params })
             .map(this.extractGenomes)
             .catch(this.handleError);
     }
@@ -335,7 +338,7 @@ export class DeepBlueService {
         return Observable.forkJoin(observableBatch);
     }
 
-    overlap(data_one: DeepBlueOperation, data_two: DeepBlueOperation, progress_element: ProgressElement, request_count: number): Observable<DeepBlueOperation> {
+    overlap(data_one: DeepBlueOperation, data_two: DeepBlueOperation, overlap: string, progress_element: ProgressElement, request_count: number): Observable<DeepBlueOperation> {
 
         let cache_key = [data_one, data_two];
         if (this.overlapsQueryCache.get(cache_key, request_count)) {
@@ -343,12 +346,18 @@ export class DeepBlueService {
             progress_element.increment(request_count);
             let cached_operation = this.overlapsQueryCache.get(cache_key, request_count);
             return Observable.of(cached_operation)
-        }    
+        }
 
         let params: URLSearchParams = new URLSearchParams();
+
+        //overlap ( query_data_id, query_filter_id, overlap, amount, amount_type, user_key )
         params.set("query_data_id", data_one.query_id);
         params.set("query_filter_id", data_two.query_id);
-        return this.http.get(this.deepBlueUrl + "/intersection", { "search": params })
+        params.set("overlap", overlap);
+        params.set("amount", "1"); // TODO:  receive this parameter
+        params.set("amount_type", "bp"); // TODO:  receive this parameter
+
+        return this.http.get(this.deepBlueUrl + "/overlap", { "search": params })
             .map((res: Response) => {
                 let body = res.json();
                 let response: string = body[1] || "";
@@ -445,7 +454,7 @@ export class DeepBlueService {
                     return this.getResult(request_id, progress_element, request_count);
                 })
 
-            return request;                
+            return request;
         }
     }
 
@@ -489,7 +498,7 @@ export class DeepBlueService {
             .map((res: Response) => {
                 let body = res.json();
                 let data = body[1] || [];
-                return data.map((value) => {                    
+                return data.map((value) => {
                     return new FullExperiment(value);
                 });
             })
