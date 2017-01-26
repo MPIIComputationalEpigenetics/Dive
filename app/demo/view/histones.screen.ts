@@ -5,8 +5,11 @@ import { Subscription } from 'rxjs/Subscription';
 
 import { SelectItem } from 'primeng/primeng';
 
-import { Subject } from 'rxjs/Subject'
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable'
+
+import { MultiSelect } from 'primeng/primeng';
+
 
 import { EpigeneticMark, FullExperiment, Genome, IdName } from '../domain/deepblue';
 
@@ -133,16 +136,19 @@ export class HistonesScreen {
     segregated_data: Object;
 
     biosourcesItems: SelectItem[] = [];
-    selectedMultiSelectBiosources: string[] = [];
+    selectedMultiSelectBiosources: Object[] = [];
 
     epigeneticMarkSubscription: Subscription;
 
     defaultSelectBiosourcesLabel: string = "Select the Biosource"
 
-    selectedExperimentsSource = new Subject<IdName[]>();
+    selectedExperimentsSource = new BehaviorSubject<IdName[]>([]);
     selectedExperimentsValue$: Observable<IdName[]> = this.selectedExperimentsSource.asObservable();
 
-    selectedExperiments: IdName[] = [];
+
+    selectedBioSourcesSource = new BehaviorSubject<IdName[]>([]);
+    selectedBioSourcesValue$: Observable<IdName[]> = this.selectedBioSourcesSource.asObservable();
+
     currentlyProcessing: Object[] = [];
 
     current_request: number = 0;
@@ -153,19 +159,18 @@ export class HistonesScreen {
 
     @ViewChild('progressbar') progressbar: DataLoadProgressBar;
     @ViewChild('overlapbarchart') overlapbarchart: OverlapsBarChart;
-
-    getSelectedExperiments(): Object[] {
-        return this.selectedExperiments;
-    }
+    @ViewChild('multiselect') multiselect: MultiSelect;
 
     segregate(experiments: FullExperiment[]) {
 
-        var biosources = {}
-        var samples = {}
-        var epigenetic_marks = {}
-        var techniques = {}
-        var projects = {}
+        let biosources = {}
+        let samples = {}
+        let epigenetic_marks = {}
+        let techniques = {}
+        let projects = {}
 
+        let event_items = [];
+        let pre_selected_biosources = this.selectedBioSourcesSource.getValue();
 
         for (let experiment of experiments) {
             let experiment_biosource = experiment.sample_info()['biosource_name'];
@@ -176,9 +181,16 @@ export class HistonesScreen {
 
             if (!(experiment_biosource in biosources)) {
                 biosources[experiment_biosource] = []
-                this.biosourcesItems.push(
-                    { label: experiment_biosource, value: biosources[experiment_biosource] }
-                )
+                let l = { label: experiment_biosource, value: {name: experiment_biosource, experiments: biosources[experiment_biosource]}}
+                this.biosourcesItems.push(l);
+
+                console.log(l.label);
+                console.log(pre_selected_biosources);
+
+                if (pre_selected_biosources.indexOf(l.label) > -1 ) {
+                    event_items.push(l.value);
+                    //this.selectedMultiSelectBiosources.push(l.value);
+                }
             }
 
             if (!(experiment_sample_id in samples)) {
@@ -203,6 +215,8 @@ export class HistonesScreen {
             techniques[experiment_technique].push(experiment);
             projects[experiment_project].push(experiment);
         }
+
+        this.selectBiosources({value: event_items});
 
         return {
             "biosources": biosources,
@@ -234,13 +248,13 @@ export class HistonesScreen {
 
 
     processOverlaps() {
-        let experiments = this.selectedExperiments;
+        let experiments = this.selectedExperimentsSource.getValue();
 
         if (experiments.length == 0) {
             return;
         }
 
-        if (experiments != this.getSelectedExperiments()) {
+        if (experiments != this.selectedExperimentsSource.getValue()) {
             return;
         }
 
@@ -287,15 +301,17 @@ export class HistonesScreen {
         });
     }
 
-    setSelectedExperiments(experiments: IdName[]) {
-        this.selectedExperiments = experiments;
-    }
-
     selectBiosources(event) {
-        var experiments: IdName[] = [];
-        experiments = experiments.concat.apply([], event.value);
+        console.log(this.selectedMultiSelectBiosources);
+        let experiments: IdName[] = [];
+        let selected_data = event.value;
+        let biosources = event.value.map((x) => x.name);
+
+        let exp_arrays = event.value.map((x) => x.experiments)
+        experiments = experiments.concat.apply([], exp_arrays);
+
         this.selectedExperimentsSource.next(experiments);
-        this.setSelectedExperiments(experiments);
+        this.selectedBioSourcesSource.next(biosources);
     }
 
     reloadPlot(datum: Object[]) {

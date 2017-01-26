@@ -1,13 +1,14 @@
-<div class="ui-g ui-fluid">                           
+<div class="ui-g ui-fluid">
     <div [ngClass]="{'ui-g-12': true, 'ui-lg-10': (hasDataDetail()), 'ui-lg-12': (hasDataDetail() == false) }">
         <div class="card card-w-title">
             <h1>Overlaping Histone {{ deepBlueService.getEpigeneticMark().name }} with {{ deepBlueService.getAnnotation().name }}</h1>
-            <p-multiSelect 
+            <p-multiSelect
+                #multiselect
                 [defaultLabel]="defaultSelectBiosourcesLabel"
-                [options]="biosourcesItems" 
+                [options]="biosourcesItems"
                 [(ngModel)]="selectedMultiSelectBiosources"
-                (onChange)="selectBiosources($event)">                
-            </p-multiSelect>                                
+                (onChange)="selectBiosources($event)">
+            </p-multiSelect>
             <overlaps-bar-chart #overlapbarchart> </overlaps-bar-chart>
             <data-load-progress-bar #progressbar></data-load-progress-bar>
         </div>
@@ -15,13 +16,13 @@
 
     <div *ngIf="hasDataDetail()" class="ui-g-12 ui-lg-2">
         <data-info-box></data-info-box>
-    </div>    
+    </div>
 
     <div class="ui-g-12 ui-lg-6">
         <div class="card card-w-title">
             <h2>Displayed data</h2>
             <ul>
-                <li *ngFor="let experiment of experiments"> {{ experiment.name }}({{ experiment.id }})   </li>            
+                <li *ngFor="let experiment of experiments"> {{ experiment.name }}({{ experiment.id }})   </li>
             </ul>
         </div>
     </div>
