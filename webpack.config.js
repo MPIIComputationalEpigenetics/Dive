@@ -7,12 +7,12 @@ module.exports = {
         'app': './app/boot.ts',
         'login.app': './login/login.ts'
     },
-    
+
     output: {
         path: __dirname,
         filename: "./prod/[name].js"
     },
-    
+
     resolve: {
         extensions: ['', '.ts', '.js']
     },
@@ -25,7 +25,7 @@ module.exports = {
             }
         ]
     },
-
+    /*
 	devServer: {
 		proxy: {
 			"/api": {
@@ -34,7 +34,20 @@ module.exports = {
             }
         }
     },
-                   
+    */
+
+	devServer: {
+		proxy: {
+			"/api": {
+				target: "http://localhost:5000/",
+				changeOrigin: true,
+                pathRewrite: {
+					"^/api": ""
+				}
+            }
+        }
+    },
+
     plugins: [
         new webpack.optimize.CommonsChunkPlugin({
             name: ['app', 'vendor', 'polyfills']

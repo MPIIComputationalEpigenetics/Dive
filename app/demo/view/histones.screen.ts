@@ -172,6 +172,9 @@ export class HistonesScreen {
         let event_items = [];
         let pre_selected_biosources = this.selectedBioSourcesSource.getValue();
 
+        this.biosourcesItems = [];
+        this.selectedMultiSelectBiosources = [];
+
         for (let experiment of experiments) {
             let experiment_biosource = experiment.sample_info()['biosource_name'];
             let experiment_sample_id = experiment.sample_id();
@@ -189,7 +192,7 @@ export class HistonesScreen {
 
                 if (pre_selected_biosources.indexOf(l.label) > -1 ) {
                     event_items.push(l.value);
-                    //this.selectedMultiSelectBiosources.push(l.value);
+                    this.selectedMultiSelectBiosources.push(l.value);
                 }
             }
 

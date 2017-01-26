@@ -24,7 +24,7 @@ import { DeepBlueService } from '../service/deepblue';
         <div class="card card-w-title">
             <h2>Data information</h2>
             {{ data.name }}
-            {{ data }}
+            {{ data     }}
 
             <button pButton type="button" (click)="filterOverlapping()" label="Filter overlapping"></button>
             <button pButton type="button" (click)="filterNonOverlapping()" label="Filter not-overlapping"></button>
