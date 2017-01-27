@@ -280,6 +280,11 @@ export class HistonesScreen {
 
             let current: DeepBlueOperation = this.dataStack.getCurrentOperation();
 
+            if (current == null) {
+                return;
+                // todo: empty chart
+            }
+
             this.deepBlueService.intersectWithSelected(current, selected_experiments, this.progressbar, this.current_request).subscribe((overlap_ids: DeepBlueOperation[]) => {
                 if (overlap_ids.length == 0) {
                     return;

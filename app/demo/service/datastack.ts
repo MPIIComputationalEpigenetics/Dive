@@ -9,6 +9,8 @@ import {
 
 import { Injectable } from '@angular/core';
 
+import {Router} from '@angular/router';
+
 import { DeepBlueService } from '../service/deepblue';
 
 import { Observable } from 'rxjs/Observable'
@@ -20,6 +22,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subject } from 'rxjs/Subject'
 
 import { DeepBlueOperation } from '../domain/operations'
+
 
 
 export class DataStackItem {
@@ -36,11 +39,14 @@ export class DataStack {
 
     public topStackValue$: Observable<DataStackItem> = this.topStackSubject.asObservable();
 
-    constructor(private deepBlueService: DeepBlueService) {
+    router : Router;
 
+    constructor(private _router: Router, private deepBlueService: DeepBlueService) {
+        this.router = _router;
         this.epigeneticMarkSubscription = deepBlueService.annotationValue$.subscribe((annotation: Annotation) => {
             this.init(annotation);
         });
+
 
     }
 
@@ -74,7 +80,11 @@ export class DataStack {
 
         // TODO: use/make a generic method for experiments and annotations
         this.deepBlueService.selectExperiment(data, progress_element, request_count).subscribe((selected_experiment) => {
-            this.deepBlueService.overlap(this.getCurrentOperation(), selected_experiment, "true", progress_element, request_count).subscribe((overlap_operation) => {
+            let current_op: DeepBlueOperation = this.getCurrentOperation();
+            if (current_op == null) {
+                return;
+            }
+            this.deepBlueService.overlap(current_op, selected_experiment, "true", progress_element, request_count).subscribe((overlap_operation) => {
                 this.deepBlueService.cacheQuery(overlap_operation, progress_element, request_count).subscribe((cached_data) => {
                     this.deepBlueService.countRegionsRequest(cached_data, progress_element, request_count).subscribe((total) => {
                         let totalSelectedRegtions = total["result"]["count"];
@@ -93,7 +103,11 @@ export class DataStack {
 
         // TODO: use/make a generic method for experiments and annotations
         this.deepBlueService.selectExperiment(data, progress_element, request_count).subscribe((selected_experiment) => {
-            this.deepBlueService.overlap(this.getCurrentOperation(), selected_experiment, "false", progress_element, request_count).subscribe((overlap_operation) => {
+            let current_op: DeepBlueOperation = this.getCurrentOperation();
+            if (current_op == null) {
+                return;
+            }
+            this.deepBlueService.overlap(current_op, selected_experiment, "false", progress_element, request_count).subscribe((overlap_operation) => {
                 this.deepBlueService.cacheQuery(overlap_operation, progress_element, request_count).subscribe((cached_data) => {
                     this.deepBlueService.countRegionsRequest(cached_data, progress_element, request_count).subscribe((total) => {
                         let totalSelectedRegtions = total["result"]["count"];
@@ -117,7 +131,12 @@ export class DataStack {
         }
 
         this._data = this._data.slice(0, i);
-        this.topStackSubject.next(this._data[this._data.length - 1]);
+        if (this._data.length > 0) {
+            this.topStackSubject.next(this._data[this._data.length - 1]);
+        } else {
+            this.topStackSubject.next();
+            this.router.navigate(['/']);
+        }
     }
 
     getData(): DataStackItem[] {
@@ -125,6 +144,9 @@ export class DataStack {
     }
 
     getCurrentOperation(): DeepBlueOperation {
-        return this._data[this._data.length - 1].op;
+        if (this._data.length > 0) {
+            return this._data[this._data.length - 1].op;
+        }
+        return null;
     }
 }
