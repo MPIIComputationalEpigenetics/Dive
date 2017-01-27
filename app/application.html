@@ -1,10 +1,10 @@
 <div [ngClass]="{'layout-wrapper':true,'layout-compact':layoutCompact}">
-    
+
     <div [ngClass]="{'layout-container':true,'menu-layout-static':(layoutMode=='static'||layoutMode=='horizontal'),
             'menu-layout-overlay':(layoutMode=='overlay'),'menu-layout-horizontal':(layoutMode=='horizontal')}">
         <!-- Top Bar -->
         <div class="topbar clearfix">
-            <div class="topbar-left">            
+            <div class="topbar-left">
                 <div class="logo"></div>
             </div>
 
@@ -12,7 +12,7 @@
                 <!-- TODO: Put status here -->
             </div>
         </div>
-               
+
         <!-- Menu -->
         <div [ngClass]="{'layout-menu':true,'layout-menu-dark':darkMenu}">
             <div class="nano">
@@ -22,78 +22,16 @@
 
                     <ul id="main-menu" class="ultima-menu clearfix">
 
-
                         <dive-status></dive-status>
-                        
-                        <li id="menuform:um_components" role="menuitem"><a href="#" class="ripplelink"><i class="material-icons">list</i><span>Components</span><i class="material-icons">keyboard_arrow_down</i></a>
-                            <ul role="menu">
-                                <li role="menuitem"><a class="ripplelink" [routerLink]="['/sample']" [routerLinkActive]="['active-menulink']"><i class="material-icons">desktop_mac</i><span>Sample Page</span></a></li>
-                                <li role="menuitem"><a class="ripplelink" [routerLink]="['/forms']" [routerLinkActive]="['active-menulink']"><i class="material-icons">input</i><span>Forms</span></a></li>
-                                <li role="menuitem"><a class="ripplelink" [routerLink]="['/data']" [routerLinkActive]="['active-menulink']"><i class="material-icons">grid_on</i><span>Data</span></a></li>
-                                <li role="menuitem"><a class="ripplelink" [routerLink]="['/panels']" [routerLinkActive]="['active-menulink']"><i class="material-icons">content_paste</i><span>Panels</span></a></li>
-                                <li role="menuitem"><a class="ripplelink" [routerLink]="['/overlays']" [routerLinkActive]="['active-menulink']"><i class="material-icons">content_copy</i><span>Overlays</span></a></li>
-                                <li role="menuitem"><a class="ripplelink" [routerLink]="['/menus']" [routerLinkActive]="['active-menulink']"><i class="material-icons">menu</i><span>Menus</span></a></li>
-                                <li role="menuitem"><a class="ripplelink" [routerLink]="['/messages']" [routerLinkActive]="['active-menulink']"><i class="material-icons">message</i><span>Messages</span></a></li>
-                                <li role="menuitem"><a class="ripplelink" [routerLink]="['/charts']" [routerLinkActive]="['active-menulink']"><i class="material-icons">insert_chart</i><span>Charts</span></a></li>
-                                <li role="menuitem"><a class="ripplelink" [routerLink]="['/file']" [routerLinkActive]="['active-menulink']"><i class="material-icons">attach_file</i><span>File</span></a></li>
-                                <li role="menuitem"><a class="ripplelink" [routerLink]="['/misc']" [routerLinkActive]="['active-menulink']"><i class="material-icons">toys</i><span>Misc</span></a></li>
-                            </ul>
-                        </li>
-                        <li id="menuform:um_default" role="menuitem"><a href="#" class="ripplelink"><i class="material-icons">get_app</i><span>Template Pages</span><i class="material-icons">keyboard_arrow_down</i></a>
-                            <ul role="menu">
-                                <li role="menuitem"><a class="ripplelink" href="landing.html" target="_blank"><i class="material-icons">flight_land</i><span>Landing</span></a></li>
-                                <li role="menuitem"><a class="ripplelink" [routerLink]="['/empty']" [routerLinkActive]="['active-menulink']"><i class="material-icons">hourglass_empty</i><span>Empty Page</span></a></li>
-                                <li role="menuitem"><a class="ripplelink" href="./login" target="_blank"><i class="material-icons">verified_user</i><span>Login Page</span></a></li>
-                                <li role="menuitem"><a class="ripplelink" href="error.html" target="_blank"><i class="material-icons">error</i><span>Error Page</span></a></li>
-                                <li role="menuitem"><a class="ripplelink" href="404.html" target="_blank"><i class="material-icons">error_outline</i><span>404 Page</span></a></li>
-                                <li role="menuitem"><a class="ripplelink" href="access.html" target="_blank"><i class="material-icons">security</i><span>Access Denied Page</span></a></li>
-                            </ul>
-                        </li>
-                        <li role="menuitem"><a href="#" class="ripplelink"><i class="material-icons">menu</i><span>Menu Hierarchy</span><i class="material-icons">keyboard_arrow_down</i></a>
-                            <ul role="menu">
-                                <li role="menuitem"><a href="#" class="ripplelink"><i class="material-icons">subject</i><span>Submenu 1</span><i class="material-icons">keyboard_arrow_down</i></a>
-                                    <ul role="menu">
-                                        <li role="menuitem"><a href="#" class="ripplelink"><i class="material-icons">subject</i><span>Submenu 1.1</span><i class="material-icons">keyboard_arrow_down</i></a>
-                                            <ul role="menu">
-                                                <li role="menuitem"><a href="#" class="ripplelink"><i class="material-icons">subject</i><span>Link 1.1.1</span></a></li>
-                                                <li role="menuitem"><a href="#" class="ripplelink"><i class="material-icons">subject</i><span>Link 1.1.2</span></a></li>
-                                                <li role="menuitem"><a href="#" class="ripplelink"><i class="material-icons">subject</i><span>Link 1.1.3</span></a></li>
-                                            </ul>
-                                        </li>
-                                        <li role="menuitem"><a href="#" class="ripplelink"><i class="material-icons">subject</i><span>Submenu 1.2</span><i class="material-icons">keyboard_arrow_down</i></a>
-                                            <ul role="menu">
-                                                <li role="menuitem"><a href="#" class="ripplelink"><i class="material-icons">subject</i><span>Link 1.2.1</span></a></li>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li role="menuitem"><a href="#" class="ripplelink"><i class="material-icons">subject</i><span>Submenu 2</span><i class="material-icons">keyboard_arrow_down</i></a>
-                                    <ul role="menu">
-                                        <li ole="menuitem"><a href="#" class="ripplelink"><i class="material-icons">subject</i><span>Submenu 2.1</span><i class="material-icons">keyboard_arrow_down</i></a>
-                                            <ul role="menu">
-                                                <li role="menuitem"><a href="#" class="ripplelink"><i class="material-icons">subject</i><span>Link 2.1.1</span></a></li>
-                                                <li role="menuitem"><a href="#" class="ripplelink"><i class="material-icons">subject</i><span>Link 2.1.2</span></a></li>
-                                            </ul>
-                                        </li>
-                                        <li role="menuitem"><a href="#" class="ripplelink"><i class="material-icons">subject</i><span>Submenu 2.2</span><i class="material-icons">keyboard_arrow_down</i></a>
-                                            <ul role="menu">
-                                                <li role="menuitem"><a href="#" class="ripplelink"><i class="material-icons">subject</i><span>Link 2.2.1</span></a></li>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </li>
-                        <li role="menuitem"><a [routerLink]="['/utils']" [routerLinkActive]="['active-menulink']" class="ripplelink"><i class="material-icons">build</i><span>Utils</span></a></li>
-                        <li role="menuitem"><a [routerLink]="['/documentation']" [routerLinkActive]="['active-menulink']" class="ripplelink"><i class="material-icons">find_in_page</i><span>Documentation</span></a></li>
+
                     </ul>
                 </div>
             </div>
         </div>
-        
+
         <div class="layout-main">
             <router-outlet></router-outlet>
-            
+
             <div class="footer">
                 <div class="card clearfix">
                     <span class="footer-text-left">DeepBlue Dive</span>

@@ -5,6 +5,8 @@
             [target]="targetBioSources"
             sourceHeader="Available"
             targetHeader="Selected"
+            (onMoveToTarget)="onMoveToTarget($event)"
+            (onMoveToSource)="onMoveToSource($event)"
             [responsive]="true">
 
         <template let-biosource>

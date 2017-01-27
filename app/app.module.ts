@@ -69,25 +69,8 @@ import {TreeModule} from 'primeng/primeng';
 import {TreeTableModule} from 'primeng/primeng';
 
 import {Application}  from './application';
-import {DashboardDemo} from './demo/view/dashboarddemo';
-import {SampleDemo} from './demo/view/sampledemo';
-import {FormsDemo} from './demo/view/formsdemo';
-import {DataDemo} from './demo/view/datademo';
-import {PanelsDemo} from './demo/view/panelsdemo';
-import {OverlaysDemo} from './demo/view/overlaysdemo';
-import {MessagesDemo} from './demo/view/messagesdemo';
-import {MiscDemo} from './demo/view/miscdemo';
-import {EmptyDemo} from './demo/view/emptydemo';
-import {FileDemo} from './demo/view/filedemo';
-import {UtilsDemo} from './demo/view/utilsdemo';
-import {Documentation} from './demo/view/documentation';
 
 import {SummaryScreen} from './demo/view/summary';
-
-import {CarService} from './demo/service/carservice';
-import {CountryService} from './demo/service/countryservice';
-import {EventService} from './demo/service/eventservice';
-import {NodeService} from './demo/service/nodeservice';
 
 import { ChartModule } from 'angular2-highcharts';
 
@@ -179,19 +162,6 @@ import { AnnotationListComponent,
     ],
     declarations: [
         Application,
-        DashboardDemo,
-        SampleDemo,
-        FormsDemo,
-        DataDemo,
-        PanelsDemo,
-        OverlaysDemo,
-        MessagesDemo,
-        MessagesDemo,
-        MiscDemo,
-        EmptyDemo,
-        FileDemo,
-        UtilsDemo,
-        Documentation,
         SummaryScreen,
         DiveStatus,
         HistonesScreen,
@@ -206,10 +176,6 @@ import { AnnotationListComponent,
     ],
     providers: [
         {provide: LocationStrategy, useClass: HashLocationStrategy},
-        CarService,
-        CountryService,
-        EventService,
-        NodeService,
         DeepBlueService,
         DataStack
     ],

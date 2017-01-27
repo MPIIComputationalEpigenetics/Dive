@@ -42,6 +42,17 @@ export class BioSourcesScreen {
         })
     }
 
+    onMoveToSource($event) {
+        console.log(this.targetBioSources);
+        this.deepBlueService.setSelectedBioSources(this.targetBioSources);
+    }
+
+
+    onMoveToTarget($event) {
+        console.log(this.targetBioSources);
+        this.deepBlueService.setSelectedBioSources(this.targetBioSources);
+    }
+
     ngOnDestroy() {
         this.genomeSubscription.unsubscribe();
     }

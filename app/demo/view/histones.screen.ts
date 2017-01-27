@@ -11,7 +11,7 @@ import { Observable } from 'rxjs/Observable'
 import { MultiSelect } from 'primeng/primeng';
 
 
-import { EpigeneticMark, FullExperiment, Genome, IdName } from '../domain/deepblue';
+import { BioSource, EpigeneticMark, FullExperiment, Genome, IdName } from '../domain/deepblue';
 
 import { DataLoadProgressBar } from '../view/deepblue';
 
@@ -170,7 +170,7 @@ export class HistonesScreen {
         let projects = {}
 
         let event_items = [];
-        let pre_selected_biosources = this.selectedBioSourcesSource.getValue();
+        let pre_selected_biosources = this.deepBlueService.selectedBioSources.getValue().map((x: BioSource) => x.name);
 
         this.biosourcesItems = [];
         this.selectedMultiSelectBiosources = [];

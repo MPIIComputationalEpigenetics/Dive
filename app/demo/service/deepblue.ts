@@ -91,11 +91,14 @@ export class DeepBlueService {
     public epigeneticMarkSource = new BehaviorSubject<EpigeneticMark>(new EpigeneticMark(["", ""]));
     public dataInfoSelectedSource = new BehaviorSubject<IdName>(null);
 
+    public selectedBioSources = new BehaviorSubject<BioSource[]>([]);
+
     // Observable string streams
     genomeValue$: Observable<Genome> = this.genomeSource.asObservable();
     annotationValue$: Observable<Annotation> = this.annotationSource.asObservable();
     epigeneticMarkValue$: Observable<EpigeneticMark> = this.epigeneticMarkSource.asObservable();
     dataInfoSelectedValue$: Observable<IdName> = this.dataInfoSelectedSource.asObservable();
+    selectedBioSourcesValue$: Observable<BioSource[]> = this.selectedBioSources.asObservable();
 
     idNamesQueryCache: DataCache<IdName, DeepBlueOperation> = new DataCache<IdName, DeepBlueOperation>()
     intersectsQueryCache: MultiKeyDataCache<DeepBlueOperation, DeepBlueOperation> = new MultiKeyDataCache<DeepBlueOperation, DeepBlueOperation>()
@@ -258,6 +261,10 @@ export class DeepBlueService {
                 });
             })
             .catch(this.handleError);
+    }
+
+    setSelectedBioSources(biosources: BioSource[]) {
+        this.selectedBioSources.next(biosources);
     }
 
 
