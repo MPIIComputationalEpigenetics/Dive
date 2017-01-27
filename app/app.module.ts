@@ -70,8 +70,6 @@ import {TreeTableModule} from 'primeng/primeng';
 
 import {Application}  from './application';
 
-import {SummaryScreen} from './demo/view/summary';
-
 import { ChartModule } from 'angular2-highcharts';
 
 import { DataStack } from './demo/service/datastack';
@@ -80,6 +78,8 @@ import { DeepBlueService } from './demo/service/deepblue';
 
 import { HistonesScreen,
         OverlapsBarChart } from './demo/view/histones.screen';
+
+import { SummaryScreen } from './demo/view/summary.screen';
 
 import { BioSourcesScreen } from './demo/view/biosources.screen';
 
@@ -162,7 +162,6 @@ import { AnnotationListComponent,
     ],
     declarations: [
         Application,
-        SummaryScreen,
         DiveStatus,
         HistonesScreen,
         DataStackView,
@@ -172,6 +171,7 @@ import { AnnotationListComponent,
         GenomeSelectorComponent,
         HistoneExperimentsMenu,
         DataInfoBox,
+        SummaryScreen,
         BioSourcesScreen
     ],
     providers: [

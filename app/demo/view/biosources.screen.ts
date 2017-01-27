@@ -38,6 +38,7 @@ export class BioSourcesScreen {
         this.genomeSubscription = deepBlueService.genomeValue$.subscribe(genome => {
             this.deepBlueService.getBioSources().subscribe(biosources => {
                 this.targetBioSources = biosources;
+                this.deepBlueService.setSelectedBioSources(this.targetBioSources);
             })
         })
     }

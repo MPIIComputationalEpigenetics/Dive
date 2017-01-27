@@ -96,7 +96,6 @@ export class DataStackView {
     selector: 'dive-status',
     template: `
             <genome-selector></genome-selector>
-            <li role="menuitem"><a [routerLink]="['/biosources']"><i class="material-icons">dashboard</i><span>BioSources</span></a></li>
             <histone-mark-selector></histone-mark-selector>
             `,
 })
