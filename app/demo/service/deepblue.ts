@@ -13,6 +13,7 @@ import { Subject } from 'rxjs/Subject'
 
 import {
     Annotation,
+    BioSource,
     EpigeneticMark,
     Experiment,
     FullExperiment,
@@ -159,6 +160,28 @@ export class DeepBlueService {
             .map(this.extractHistone)
             .catch(this.handleError);
     }
+
+    getBioSources(): Observable<BioSource[]> {
+        if (!this.getGenome()) {
+            return Observable.empty<EpigeneticMark[]>();
+        }
+        let params: URLSearchParams = new URLSearchParams();
+        params.set('genome', this.getGenome().name);
+        params.set('controlled_vocabulary', "biosources");
+        params.set('type', "peaks");
+        return this.http.get(this.deepBlueUrl + "/collection_experiments_count", { "search": params })
+            .map(this.extractBioSources)
+            .catch(this.handleError);
+    }
+
+    private extractBioSources(res: Response) {
+        let body = res.json();
+        let data = body[1] || [];
+        return data.map((value) => {
+            return new BioSource(value);
+        });
+    }
+
 
     private extractHistone(res: Response) {
         let body = res.json();

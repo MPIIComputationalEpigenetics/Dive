@@ -17,31 +17,37 @@ export class IdNameCount extends IdName {
 
     constructor (data: string[] ) {
         super(data[0], data[1]);
-        this.count = parseInt(data[2]);                     
-    }     
+        this.count = parseInt(data[2]);
+    }
 }
 
 export class EpigeneticMark extends IdName {
     constructor (data: string[] ) {
-        super(data[0], data[1])             
+        super(data[0], data[1])
+    }
+}
+
+export class BioSource extends IdName {
+    constructor (data: string[] ) {
+        super(data[0], data[1])
     }
 }
 
 export class Annotation extends IdName {
     constructor (data: string[] ) {
-        super(data[0], data[1])             
+        super(data[0], data[1])
     }
 }
 
 export class Experiment extends IdName {
     constructor (data: string[] ) {
-        super(data[0], data[1])             
+        super(data[0], data[1])
     }
 }
 
 export class Genome extends IdName {
     constructor (data: string[] ) {
-        super(data[0], data[1])             
+        super(data[0], data[1])
     }
 }
 
@@ -96,7 +102,7 @@ export class ProgressElement {
         this.total_to_load = total;
         this.total_loaded = 0;
         this.progress_value = 0;
-        this.request_count = request_count;        
+        this.request_count = request_count;
     }
 
     increment(request_count: number) {

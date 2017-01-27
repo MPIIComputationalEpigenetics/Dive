@@ -1,4 +1,3 @@
-import { DataDemo } from './datademo';
 import {
     Component,
     ViewChild,
@@ -96,13 +95,8 @@ export class DataStackView {
 @Component({
     selector: 'dive-status',
     template: `
-            <li role="menuitem">
-                <a [routerLink]="['/']">
-                    <i class="material-icons">dashboard</i>
-                    <span>Selected data: {{ deepBlueService.getAnnotation()?.name }}</span>
-                </a>
-            </li>
             <genome-selector></genome-selector>
+            <li role="menuitem"><a [routerLink]="['/biosources']"><i class="material-icons">dashboard</i><span>BioSources</span></a></li>
             <histone-mark-selector></histone-mark-selector>
             `,
 })

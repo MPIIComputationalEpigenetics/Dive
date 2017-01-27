@@ -6,7 +6,6 @@ import {FormsDemo} from './demo/view/formsdemo';
 import {DataDemo} from './demo/view/datademo';
 import {PanelsDemo} from './demo/view/panelsdemo';
 import {OverlaysDemo} from './demo/view/overlaysdemo';
-import {MenusDemo} from './demo/view/menusdemo';
 import {MessagesDemo} from './demo/view/messagesdemo';
 import {MiscDemo} from './demo/view/miscdemo';
 import {EmptyDemo} from './demo/view/emptydemo';
@@ -14,6 +13,7 @@ import {FileDemo} from './demo/view/filedemo';
 import {UtilsDemo} from './demo/view/utilsdemo';
 import {SummaryScreen} from './demo/view/summary';
 import {Documentation} from './demo/view/documentation';
+import {BioSourcesScreen} from './demo/view/biosources.screen';
 import {HistonesScreen} from './demo/view/histones.screen';
 
 export const routes: Routes = [
@@ -24,7 +24,7 @@ export const routes: Routes = [
     {path: 'data', component: DataDemo},
     {path: 'panels', component: PanelsDemo},
     {path: 'overlays', component: OverlaysDemo},
-    {path: 'menus', component: MenusDemo},
+    {path: 'biosources', component: BioSourcesScreen},
     {path: 'messages', component: MessagesDemo},
     {path: 'misc', component: MiscDemo},
     {path: 'empty', component: EmptyDemo},

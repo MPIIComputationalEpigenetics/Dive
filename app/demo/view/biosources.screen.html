@@ -1,0 +1,15 @@
+<div class="card card-w-title">
+    <h1>Select the BioSources that you wish to dive</h1>
+    <p-pickList #picklist
+            [source]="sourceBioSources"
+            [target]="targetBioSources"
+            sourceHeader="Available"
+            targetHeader="Selected"
+            [responsive]="true">
+
+        <template let-biosource>
+            <span>{{biosource.name}}</span>
+        </template>
+
+    </p-pickList>
+</div>

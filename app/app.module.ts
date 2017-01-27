@@ -3,6 +3,7 @@ import {FormsModule} from '@angular/forms';
 import {HttpModule}    from '@angular/http';
 import {BrowserModule} from '@angular/platform-browser';
 import {LocationStrategy,HashLocationStrategy} from '@angular/common';
+import {Router} from '@angular/router';
 import {AppRoutes} from './app.routes';
 
 import {AccordionModule} from 'primeng/primeng';
@@ -74,7 +75,6 @@ import {FormsDemo} from './demo/view/formsdemo';
 import {DataDemo} from './demo/view/datademo';
 import {PanelsDemo} from './demo/view/panelsdemo';
 import {OverlaysDemo} from './demo/view/overlaysdemo';
-import {MenusDemo} from './demo/view/menusdemo';
 import {MessagesDemo} from './demo/view/messagesdemo';
 import {MiscDemo} from './demo/view/miscdemo';
 import {EmptyDemo} from './demo/view/emptydemo';
@@ -97,6 +97,8 @@ import { DeepBlueService } from './demo/service/deepblue';
 
 import { HistonesScreen,
         OverlapsBarChart } from './demo/view/histones.screen';
+
+import { BioSourcesScreen } from './demo/view/biosources.screen';
 
 import { AnnotationListComponent,
          DiveStatus,
@@ -173,7 +175,7 @@ import { AnnotationListComponent,
         ToolbarModule,
         TooltipModule,
         TreeModule,
-        TreeTableModule        
+        TreeTableModule
     ],
     declarations: [
         Application,
@@ -183,7 +185,6 @@ import { AnnotationListComponent,
         DataDemo,
         PanelsDemo,
         OverlaysDemo,
-        MenusDemo,
         MessagesDemo,
         MessagesDemo,
         MiscDemo,
@@ -200,8 +201,9 @@ import { AnnotationListComponent,
         AnnotationListComponent,
         GenomeSelectorComponent,
         HistoneExperimentsMenu,
-        DataInfoBox
-    ],  
+        DataInfoBox,
+        BioSourcesScreen
+    ],
     providers: [
         {provide: LocationStrategy, useClass: HashLocationStrategy},
         CarService,
