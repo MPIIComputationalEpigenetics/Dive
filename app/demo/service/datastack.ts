@@ -9,7 +9,7 @@ import {
 
 import { Injectable } from '@angular/core';
 
-import {Router} from '@angular/router';
+import { Router } from '@angular/router';
 
 import { DeepBlueService } from '../service/deepblue';
 
@@ -39,7 +39,7 @@ export class DataStack {
 
     public topStackValue$: Observable<DataStackItem> = this.topStackSubject.asObservable();
 
-    router : Router;
+    router: Router;
 
     constructor(private _router: Router, private deepBlueService: DeepBlueService) {
         this.router = _router;
@@ -120,14 +120,36 @@ export class DataStack {
         });
     }
 
+    filter_regions(field: string, operation: string, value: string, type: string, progress_element: ProgressElement) {
+        let request_count = 0;
+        progress_element.reset(4, request_count);
+
+
+        let current_op: DeepBlueOperation = this.getCurrentOperation();
+        if (current_op == null) {
+            return;
+        }
+        this.deepBlueService.filter_region (current_op, field, operation, value, type, progress_element, request_count).subscribe((filter_operation) => {
+            this.deepBlueService.cacheQuery(filter_operation, progress_element, request_count).subscribe((cached_data) => {
+                this.deepBlueService.countRegionsRequest(cached_data, progress_element, request_count).subscribe((total) => {
+                    let totalSelectedRegtions = total["result"]["count"];
+                    let dataStackItem: DataStackItem = new DataStackItem(cached_data, "Not-overlap with", totalSelectedRegtions);
+                    this._data.push(dataStackItem);
+                    this.topStackSubject.next(dataStackItem);
+                });
+            })
+        })
+
+    }
+
     remove(data: DataStackItem) {
         let query_id = data.op.query_id;
         // find position
         let i = this._data.length - 1;
         for (; i >= 0; i--) {
-           if (this._data[i].op.query_id == query_id) {
-               break;
-           }
+            if (this._data[i].op.query_id == query_id) {
+                break;
+            }
         }
 
         this._data = this._data.slice(0, i);

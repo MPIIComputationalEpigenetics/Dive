@@ -1,3 +1,5 @@
+import { DataLoadProgressBar } from './deepblue';
+import { DataStack } from '../service/datastack';
 import {
     SimpleChanges,
     Component,
@@ -28,7 +30,9 @@ export class FilteringComponent implements OnInit {
 
     annotationSubscription: Subscription;
 
-    constructor(private fb: FormBuilder, private deepBlueService: DeepBlueService) {
+    @ViewChild('progressbar') progressbar: DataLoadProgressBar;
+
+    constructor(private fb: FormBuilder, private deepBlueService: DeepBlueService, private dataStack: DataStack) {
         this.annotationSubscription = deepBlueService.annotationValue$.subscribe(annotation => {
             console.log(annotation);
         })
@@ -40,9 +44,7 @@ export class FilteringComponent implements OnInit {
     };
 
     save_min_length(form_content: Object) {
-        debugger;
-
-        //todo: this.DeepBlueService.stack.filter_min_length(form_content.min_length)
+        this.dataStack.filter_regions("@LENGTH", ">=", form_content['min_length'], "number", this.progressbar)
     }
 
     ngOnInit() {

@@ -1,3 +1,4 @@
+import { DataLoadProgressBar } from '../view/deepblue';
 import { Injectable } from '@angular/core';
 import {
     Http,
@@ -26,8 +27,9 @@ import {
 import { IKey } from '../domain/interfaces';
 
 import {
-    DeepBlueMultiParametersOperation,
     DeepBlueOperation,
+    DeepBlueParametersOperation,
+    DeepBlueMultiParametersOperation,
     DeepBlueRequest,
     DeepBlueResult
 } from '../domain/operations';
@@ -103,6 +105,7 @@ export class DeepBlueService {
     idNamesQueryCache: DataCache<IdName, DeepBlueOperation> = new DataCache<IdName, DeepBlueOperation>()
     intersectsQueryCache: MultiKeyDataCache<DeepBlueOperation, DeepBlueOperation> = new MultiKeyDataCache<DeepBlueOperation, DeepBlueOperation>()
     overlapsQueryCache: DataCache<IKey, DeepBlueOperation> = new DataCache<IKey, DeepBlueOperation>()
+    filtersQueryCache: DataCache<IKey, DeepBlueOperation> = new DataCache<IKey, DeepBlueOperation>()
     operationCache: DataCache<DeepBlueOperation, DeepBlueOperation> = new DataCache<DeepBlueOperation, DeepBlueOperation>()
     requestCache: DataCache<DeepBlueOperation, DeepBlueRequest> = new DataCache<DeepBlueOperation, DeepBlueRequest>()
     resultCache: DataCache<DeepBlueRequest, DeepBlueResult> = new DataCache<DeepBlueRequest, DeepBlueResult>()
@@ -335,6 +338,39 @@ export class DeepBlueService {
         return Observable.forkJoin(observableBatch);
     }
 
+    filter_region(data: DeepBlueOperation, field: string, operation: string, value: string, type: string, progress_element: ProgressElement, request_count: number) : Observable<DeepBlueOperation> {
+
+
+        let parameters = [field, operation, value, type];
+
+        let cache_key = new DeepBlueParametersOperation(data, parameters, "filter", request_count);
+
+        if (this.filtersQueryCache.get(cache_key, request_count)) {
+            progress_element.increment(request_count);
+            let cached_operation = this.filtersQueryCache.get(cache_key, request_count);
+            return Observable.of(cached_operation)
+        }
+
+        let params: URLSearchParams = new URLSearchParams();
+
+        params.set("query_id", data.query_id);
+        params.set("field", field);
+        params.set("operation", operation);
+        params.set("value", value);
+        params.set("type", type);
+
+        return this.http.get(this.deepBlueUrl + "/filter_regions", { "search": params })
+            .map((res: Response) => {
+                let body = res.json();
+                let response: string = body[1] || "";
+                progress_element.increment(request_count);
+                return new DeepBlueOperation(data.data, response, "filter", request_count);
+            })
+            .do((operation) => this.filtersQueryCache.put(cache_key, operation))
+            .catch(this.handleError);
+
+
+    }
 
     intersectWithSelected(current: DeepBlueOperation, selected_data: DeepBlueOperation[], progress_element: ProgressElement, request_count: number): Observable<DeepBlueOperation[]> {
 
@@ -375,7 +411,7 @@ export class DeepBlueService {
         let amount = "1";
         let amount_type = "bp"
 
-        let parameters = [overlap + amount + amount_type];
+        let parameters = [overlap, amount, amount_type];
 
         let cache_key = new DeepBlueMultiParametersOperation(data_one, data_two, parameters, "overlap", request_count);
 

@@ -20,6 +20,22 @@ export class DeepBlueOperation implements IKey {
     }
 }
 
+export class DeepBlueParametersOperation implements IKey {
+    constructor(public operation: DeepBlueOperation, public parameters: string[], public command: string, public request_count: number, public cached: boolean = false) { }
+
+    clone(request_count: number = -1): DeepBlueParametersOperation {
+        return new DeepBlueParametersOperation(this.operation,this.parameters, this.command, request_count, this.cached);
+    }
+
+    cacheIt(query_id: string): DeepBlueParametersOperation {
+        return new DeepBlueParametersOperation(this.operation, this.parameters, this.command, this.request_count, true);
+    }
+
+    key() : string {
+        return this.operation.key() + this.parameters.join();
+    }
+}
+
 export class DeepBlueMultiParametersOperation implements IKey {
     constructor(public op_one: DeepBlueOperation, public op_two:DeepBlueOperation, public parameters: string[], public command: string, public request_count: number, public cached: boolean = false) { }
 

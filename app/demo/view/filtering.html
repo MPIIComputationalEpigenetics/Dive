@@ -9,8 +9,7 @@
             <div class="ui-g-12 ui-md-12 ui-lg-12">
                 <div class="ui-g form-group">
                     <div class="ui-g-12 ui-md-12">
-
-                        <form novalidate [formGroup]="min_length_form" (ngSubmit)="save_length(min_length_form.value, min_length_form.valid)">
+                        <form novalidate [formGroup]="min_length_form" (ngSubmit)="save_min_length(min_length_form.value, min_length_form.valid)">
                                 <input type="number" formControlName="min_length" pInputText/>
                                 <label>Mininum region length</label>
                         </form>
@@ -21,6 +20,7 @@
                             <label>Maximum region length</label>
                         </span>
                     </div>
+                    <data-load-progress-bar #progressbar></data-load-progress-bar>
                 </div>
             </div>
         </div>
