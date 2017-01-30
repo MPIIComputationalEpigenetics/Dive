@@ -272,6 +272,7 @@ export class HistonesScreen {
 
         this.deepBlueService.selectMultipleExperiments(experiments, this.progressbar, this.current_request).subscribe((selected_experiments: DeepBlueOperation[]) => {
             if (selected_experiments.length == 0) {
+                this.overlapbarchart.setNewData([]);
                 return;
             }
             if (selected_experiments[0].request_count != this.current_request) {
@@ -281,12 +282,13 @@ export class HistonesScreen {
             let current: DeepBlueOperation = this.dataStack.getCurrentOperation();
 
             if (current == null) {
+                this.overlapbarchart.setNewData([]);
                 return;
-                // todo: empty chart
             }
 
             this.deepBlueService.intersectWithSelected(current, selected_experiments, this.progressbar, this.current_request).subscribe((overlap_ids: DeepBlueOperation[]) => {
                 if (overlap_ids.length == 0) {
+                    this.overlapbarchart.setNewData([]);
                     return;
                 }
                 if (overlap_ids[0].request_count != this.current_request) {
@@ -296,9 +298,11 @@ export class HistonesScreen {
                 this.deepBlueService.countRegionsBatch(overlap_ids, this.progressbar, this.current_request).subscribe((datum: DeepBlueResult[]) => {
 
                     if (datum.length == 0) {
+                        this.overlapbarchart.setNewData([]);
                         return;
                     }
                     if (datum[0].request_count != this.current_request) {
+                        this.overlapbarchart.setNewData([]);
                         return;
                     }
 

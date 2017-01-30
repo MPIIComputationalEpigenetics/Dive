@@ -30,8 +30,6 @@ export class BioSourcesScreen {
     sourceBioSources: BioSource[] = [];
     targetBioSources: BioSource[] = [];
 
-    pickList
-
     @ViewChild('picklist') picklist: PickList;
 
     constructor(private deepBlueService: DeepBlueService) {

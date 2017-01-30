@@ -96,6 +96,7 @@ export class DataStackView {
     selector: 'dive-status',
     template: `
             <genome-selector></genome-selector>
+            <filtering></filtering>
             <histone-mark-selector></histone-mark-selector>
             `,
 })
@@ -149,6 +150,9 @@ export class AnnotationListComponent {
                                 this.annotationsDropdown.selectItem(null, l);
                             }
 
+                            if (l.label.toLowerCase().startsWith("blueprint")) {
+                                this.annotationsDropdown.selectItem(null, l);
+                            }
                             return l;
                         });
                     },
