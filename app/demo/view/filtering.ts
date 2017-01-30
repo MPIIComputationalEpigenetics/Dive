@@ -27,6 +27,7 @@ import { DeepBlueService } from '../service/deepblue';
 export class FilteringComponent implements OnInit {
 
     public min_length_form: FormGroup;
+    public max_length_form: FormGroup;
 
     annotationSubscription: Subscription;
 
@@ -38,7 +39,7 @@ export class FilteringComponent implements OnInit {
         })
     }
 
-    validateNumber(c: FormControl) {
+    validateMinNumber(c: FormControl) {
         console.log(c.value)
         return c.value < 1 ? null : { valid: false }
     };
@@ -46,10 +47,18 @@ export class FilteringComponent implements OnInit {
     save_min_length(form_content: Object) {
         this.dataStack.filter_regions("@LENGTH", ">=", form_content['min_length'], "number", this.progressbar)
     }
+1
+    save_max_length(form_content: Object) {
+        this.dataStack.filter_regions("@LENGTH", "<=", form_content['max_length'], "number", this.progressbar)
+    }
 
     ngOnInit() {
         this.min_length_form = this.fb.group({
-            min_length: [1, [this.validateNumber]]
+            min_length: [0, [this.validateMinNumber]]
+        });
+
+        this.max_length_form = this.fb.group({
+            max_length: [0, []]
         });
     }
 

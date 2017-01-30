@@ -14,12 +14,14 @@
                                 <label>Mininum region length</label>
                         </form>
                     </div>
+
                     <div class="ui-g-12 ui-md-12">
-                        <span class="md-inputfield">
-                            <input [(ngModel)]="max_length" pInputText/>
-                            <label>Maximum region length</label>
-                        </span>
+                        <form novalidate [formGroup]="max_length_form" (ngSubmit)="save_max_length(max_length_form.value, max_length_form.valid)">
+                                <input type="number" formControlName="max_length" pInputText/>
+                                <label>Maximum region length</label>
+                        </form>
                     </div>
+
                     <data-load-progress-bar #progressbar></data-load-progress-bar>
                 </div>
             </div>
