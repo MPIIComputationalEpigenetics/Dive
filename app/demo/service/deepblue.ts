@@ -42,7 +42,7 @@ import { ICloneable } from '../domain/interfaces';
 
 export class DataCache<T extends IKey, V extends ICloneable> {
 
-    constructor (private _data: Map<string, V> = new Map()) {}
+    constructor(private _data: Map<string, V> = new Map()) { }
 
     put(key: T, value: V) {
         let cloneValue = value.clone(-1);
@@ -50,8 +50,8 @@ export class DataCache<T extends IKey, V extends ICloneable> {
         console.log(this._data);
     }
 
-    get(key: T, request_count: number) : V {
-        let value : V = this._data.get(key.key());
+    get(key: T, request_count: number): V {
+        let value: V = this._data.get(key.key());
         if (value) {
             console.log("cache hit", value);
             return value.clone(request_count);
@@ -63,7 +63,7 @@ export class DataCache<T extends IKey, V extends ICloneable> {
 
 export class MultiKeyDataCache<T extends IKey, V extends ICloneable> {
 
-    constructor (private _data: Map<string, V> = new Map()) {}
+    constructor(private _data: Map<string, V> = new Map()) { }
 
     put(keys: T[], value: V) {
         let key_value = keys.map((k) => k.key()).join();
@@ -72,9 +72,9 @@ export class MultiKeyDataCache<T extends IKey, V extends ICloneable> {
         console.log(this._data);
     }
 
-    get(keys: T[], request_count: number) : V {
+    get(keys: T[], request_count: number): V {
         let key_value = keys.map((k) => k.key()).join();
-        let value : V = this._data.get(key_value);
+        let value: V = this._data.get(key_value);
         if (value) {
             console.log("multikey cache hit", value);
             return value.clone(request_count);
@@ -150,7 +150,7 @@ export class DeepBlueService {
 
     constructor(private http: Http) {
         console.log("NEW DEEPBLUE SERVICE");
-     }
+    }
 
     // Functions to select data from the Server
 
@@ -339,7 +339,7 @@ export class DeepBlueService {
         return Observable.forkJoin(observableBatch);
     }
 
-    filter_region(data: DeepBlueOperation, field: string, operation: string, value: string, type: string, progress_element: ProgressElement, request_count: number) : Observable<DeepBlueOperation> {
+    filter_region(data: DeepBlueOperation, field: string, operation: string, value: string, type: string, progress_element: ProgressElement, request_count: number): Observable<DeepBlueOperation> {
 
 
         let parameters = [field, operation, value, type];
@@ -391,14 +391,14 @@ export class DeepBlueService {
                 params.set("query_data_id", current.query_id);
                 params.set("query_filter_id", selected.query_id);
                 o = this.http.get(this.deepBlueUrl + "/intersection", { "search": params })
-                        .map((res: Response) => {
-                            let body = res.json();
-                            let response: string = body[1] || "";
-                            progress_element.increment(request_count);
-                            return new DeepBlueOperation(selected.data, response, "intersection", request_count);
-                        })
-                        .do((operation) => this.intersectsQueryCache.put(cache_key, operation) )
-                        .catch(this.handleError);
+                    .map((res: Response) => {
+                        let body = res.json();
+                        let response: string = body[1] || "";
+                        progress_element.increment(request_count);
+                        return new DeepBlueOperation(selected.data, response, "intersection", request_count);
+                    })
+                    .do((operation) => this.intersectsQueryCache.put(cache_key, operation))
+                    .catch(this.handleError);
             }
             observableBatch.push(o);
         });
@@ -466,7 +466,7 @@ export class DeepBlueService {
                 progress_element.increment(request_count);
                 return selected_data.cacheIt(response);
             })
-            .do((operation) => this.operationCache.put(selected_data, operation) )
+            .do((operation) => this.operationCache.put(selected_data, operation))
             .catch(this.handleError);
     }
 
@@ -587,20 +587,17 @@ export class DeepBlueService {
             .map((res: Response) => {
                 let body = res.json();
                 let data = body[1] || [];
-                return data.map((value) => {
-                    if (id[0] == "e") {
-                        return new FullExperiment(value);
-                    } else
-                    if (id[0] == "a") {
-                        return new FullAnnotation(value);
-                    } else {
-                        console.log("UNKNOW TYPE: " + id);
-                        return new FullExperiment(value);
-                    }
 
-                });
-            })
-            .catch(this.handleError);
+                if (id[0] == "e") {
+                    return new FullExperiment(data[0]);
+                } else if (id[0] == "a") {
+                    return new FullAnnotation(data[0]);
+                } else {
+                    console.log("UNKNOW TYPE: " + id);
+                    return new FullExperiment(data[0]);
+                }
+
+            }).catch(this.handleError);
     }
 
 
