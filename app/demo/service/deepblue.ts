@@ -579,6 +579,21 @@ export class DeepBlueService {
             .catch(this.handleError);
     }
 
+    getInfo(id: string): Observable<Object> {
+        let params: URLSearchParams = new URLSearchParams();
+        params.set("id", id);
+        return this.http.get(this.deepBlueUrl + "/info", { "search": params })
+            .map((res: Response) => {
+                let body = res.json();
+                let data = body[1] || [];
+                return data.map((value) => {
+                    return new FullExperiment(value);
+                });
+            })
+            .catch(this.handleError);
+    }
+
+
     private handleError(error: Response | any) {
         let errMsg: string;
         if (error instanceof Response) {

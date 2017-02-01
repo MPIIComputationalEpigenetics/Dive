@@ -11,10 +11,18 @@ import {
     SelectItem
 } from 'primeng/primeng';
 
-import { IdName, Annotation, EpigeneticMark, Experiment, Genome, ProgressElement } from '../domain/deepblue';
+import {
+    Annotation,
+    EpigeneticMark,
+    Experiment,
+    FullMetadata,
+    Genome,
+    IdName,
+    ProgressElement
+} from '../domain/deepblue';
 
-import { DataStack } from '../service/datastack';
-import { DeepBlueService } from '../service/deepblue';
+import { DataStack, DataStackItem } from '../service/datastack';
+import { DataCache, DeepBlueService, MultiKeyDataCache } from '../service/deepblue';
 
 
 @Component({
@@ -69,18 +77,42 @@ export class DataLoadProgressBar extends ProgressElement {
     selector: 'data-stack',
     template: `
     <br/><br/>
-    <div class="ui-g dashboard">
-        <div class="ui-g-12 ui-md-12 ui-lg-12 task-list">
-            <p-panel header="Diving into:">
-                <ul>
-                    <li *ngFor="let data of dataStack.getData() " (click)="removeData($event, data)">
-                        <span class="task-name">{{ data.what }}: <b>{{ data.op.data.name }}</b> ({{ data.count }})</span>
-                        <i class="material-icons">remove</i>
-                    </li>
-                </ul>
-            </p-panel>
-        </div>
-    </div>`
+    <div class="dashboard">
+    <div *ngIf="dataStack.getData().length > 0" class="ui-g-12 ui-md-12">
+        <p-panel [style]="{'height':'100%'}">
+
+            <div class="activity-header dashboard">
+                <div class="ui-g">
+                    <div class="ui-g-10">
+                        <span style="font-weight:bold">{{ dataStack.getData()[0].op.data.name }}</span> - {{ dataStack.getData()[0].count }} regions
+                    </div>
+                    <div class="ui-g-2 button-change">
+                        <button type="button" icon="ui-icon-blur-on" pButton (click)="removeData($event, dataStack.getData()[0])"></button>
+                    </div>
+                </div>
+            </div>
+
+            <ul class="activity-list">
+                <li *ngFor="let data of dataStack.getData() | slice:1" (click)="removeData($event, data)">
+
+                    <div class="ui-g">
+                        <div class="ui-g-10">
+                            <div class="description">{{ data.description }}</div>
+                            <p class="count"> {{data.count}} regions <p>
+                        </div>
+
+                        <div class="ui-g-2 button-change">
+                            <button class="red-btn" type="button" icon="ui-icon-remove" pButton (click)="removeData($event, data)"></button>
+                        </div>
+                    </div>
+
+                </li>
+            </ul>
+        </p-panel>
+    </div>
+</div>
+`
+
 })
 export class DataStackView {
 
@@ -93,9 +125,10 @@ export class DataStackView {
 
 
 @Component({
-    selector: 'dive-status',
+    selector: 'dive-menu',
     template: `
             <genome-selector></genome-selector>
+            <li role="menuitem"><a [routerLink]="['/regions']"><i class="material-icons">dashboard</i><span>Dashboard</span></a></li>
             <filtering></filtering>
             <histone-mark-selector></histone-mark-selector>
             `,
@@ -136,28 +169,28 @@ export class AnnotationListComponent {
 
 
         this.genomeSubscription = deepBlueService.genomeValue$.subscribe(genome => {
-                if (genome.id == null || genome.name == "") {
+            if (genome.id == null || genome.name == "") {
+                return;
+            }
+            this.deepBlueService.getAnnotations(genome).subscribe(annotations => {
+                if (annotations.length == 0) {
                     return;
                 }
-                this.deepBlueService.getAnnotations(genome).subscribe(annotations => {
-                        if (annotations.length == 0) {
-                            return;
-                        }
-                        this.annotations = annotations;
-                        this.menuAnnotations = annotations.map((annotation: Annotation) => {
-                            let l = { label: annotation.name, value: annotation };
-                            if (l.label.toLowerCase().startsWith("cpg islands")) {
-                                this.annotationsDropdown.selectItem(null, l);
-                            }
+                this.annotations = annotations;
+                this.menuAnnotations = annotations.map((annotation: Annotation) => {
+                    let l = { label: annotation.name, value: annotation };
+                    if (l.label.toLowerCase().startsWith("cpg islands")) {
+                        this.annotationsDropdown.selectItem(null, l);
+                    }
 
-                            if (l.label.toLowerCase().startsWith("blueprint")) {
-                                this.annotationsDropdown.selectItem(null, l);
-                            }
-                            return l;
-                        });
-                    },
-                    error => this.errorMessage = <any>error);
-            }
+                    if (l.label.toLowerCase().startsWith("blueprint")) {
+                        this.annotationsDropdown.selectItem(null, l);
+                    }
+                    return l;
+                });
+            },
+                error => this.errorMessage = <any>error);
+        }
         );
     }
 
@@ -189,7 +222,7 @@ export class HistoneExperimentsMenu {
             this.deepBlueService.getHistones().subscribe(histones => {
                 this.selectHistones = histones;
             },
-            error => this.errorMessage = <any>error);
+                error => this.errorMessage = <any>error);
         });
     }
 
