@@ -254,10 +254,12 @@ export class HistonesScreen {
         let experiments = this.selectedExperimentsSource.getValue();
 
         if (experiments.length == 0) {
+            this.reloadPlot([]);
             return;
         }
 
         if (experiments != this.selectedExperimentsSource.getValue()) {
+            this.reloadPlot([]);
             return;
         }
 
@@ -272,7 +274,7 @@ export class HistonesScreen {
 
         this.deepBlueService.selectMultipleExperiments(experiments, this.progressbar, this.current_request).subscribe((selected_experiments: DeepBlueOperation[]) => {
             if (selected_experiments.length == 0) {
-                this.overlapbarchart.setNewData([]);
+                this.reloadPlot([]);
                 return;
             }
             if (selected_experiments[0].request_count != this.current_request) {
@@ -282,13 +284,13 @@ export class HistonesScreen {
             let current: DeepBlueOperation = this.dataStack.getCurrentOperation();
 
             if (current == null) {
-                this.overlapbarchart.setNewData([]);
+                this.reloadPlot([]);
                 return;
             }
 
             this.deepBlueService.intersectWithSelected(current, selected_experiments, this.progressbar, this.current_request).subscribe((overlap_ids: DeepBlueOperation[]) => {
                 if (overlap_ids.length == 0) {
-                    this.overlapbarchart.setNewData([]);
+                    this.reloadPlot([]);
                     return;
                 }
                 if (overlap_ids[0].request_count != this.current_request) {
@@ -298,11 +300,10 @@ export class HistonesScreen {
                 this.deepBlueService.countRegionsBatch(overlap_ids, this.progressbar, this.current_request).subscribe((datum: DeepBlueResult[]) => {
 
                     if (datum.length == 0) {
-                        this.overlapbarchart.setNewData([]);
+                        this.reloadPlot([]);
                         return;
                     }
                     if (datum[0].request_count != this.current_request) {
-                        this.overlapbarchart.setNewData([]);
                         return;
                     }
 
@@ -314,7 +315,6 @@ export class HistonesScreen {
     }
 
     selectBiosources(event) {
-        console.log(this.selectedMultiSelectBiosources);
         let experiments: IdName[] = [];
         let selected_data = event.value;
         let biosources = event.value.map((x) => x.name);
