@@ -433,28 +433,19 @@
   padding: 0;
   margin: 0; }
   .dashboard .activity-list li {
-    border-bottom: 1px solid #bdbdbd;
-    padding: 15px 0 9px 9px; }
-    .dashboard .activity-list li .count {
-      font-size: 24px;
-      color: #ffffff;
-      background-color: #03A9F4;
+    border-top: 1px solid #bdbdbd;
+    padding: 2px 0px 0px 0px; }
+    .dashboard .activity-list li .description {
+      font-size: 14px;
       font-weight: bold;
-      width: 60px;
-      padding: 5px;
-      -moz-border-radius: 2px;
-      -webkit-border-radius: 2px;
-      border-radius: 2px; }
-    .dashboard .activity-list li:first-child {
-      border-top: 1px solid #bdbdbd; }
-    .dashboard .activity-list li:last-child {
-      border: 0; }
-    .dashboard .activity-list li .ui-g-6:first-child {
-      font-size: 18px;
-      padding-left: 0; }
-    .dashboard .activity-list li .ui-g-6:last-child {
+      padding: 2px; }
+    .dashboard .activity-list li .count {
+      font-size: 14px;
+      padding-left: 0;
+      margin: 0px; }
+    .dashboard .activity-list li .button-change {
       text-align: right;
-      color: #757575; }
+      font-size: 6px; }
 .dashboard .timeline {
   height: 100%;
   box-sizing: border-box; }
