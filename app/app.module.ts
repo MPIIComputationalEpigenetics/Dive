@@ -86,6 +86,8 @@ import { FilteringComponent } from './demo/view/filtering';
 
 import { SummaryScreen } from './demo/view/summary.screen';
 
+import { RegionsScreen } from './demo/view/regions.screen';
+
 import { BioSourcesScreen } from './demo/view/biosources.screen';
 
 import {
@@ -181,6 +183,7 @@ import {
         FilteringComponent,
         DataInfoBox,
         SummaryScreen,
+        RegionsScreen,
         BioSourcesScreen
     ],
     providers: [

@@ -1,3 +1,4 @@
+import { RegionsScreen } from './demo/view/regions.screen';
 import { GenomeSelectorComponent } from './demo/view/deepblue';
 import {Routes,RouterModule} from '@angular/router';
 import {ModuleWithProviders} from '@angular/core';
@@ -8,6 +9,7 @@ import {HistonesScreen} from './demo/view/histones.screen';
 
 export const routes: Routes = [
     {path: '', component: SummaryScreen},
+    {path: 'regions', component: RegionsScreen},
     {path: 'histonemark', component: HistonesScreen}
 ];
 
