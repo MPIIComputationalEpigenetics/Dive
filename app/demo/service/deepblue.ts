@@ -17,6 +17,7 @@ import {
     BioSource,
     EpigeneticMark,
     Experiment,
+    FullAnnotation,
     FullExperiment,
     FullMetadata,
     Genome,
@@ -587,7 +588,16 @@ export class DeepBlueService {
                 let body = res.json();
                 let data = body[1] || [];
                 return data.map((value) => {
-                    return new FullExperiment(value);
+                    if (id[0] == "e") {
+                        return new FullExperiment(value);
+                    } else
+                    if (id[0] == "a") {
+                        return new FullAnnotation(value);
+                    } else {
+                        console.log("UNKNOW TYPE: " + id);
+                        return new FullExperiment(value);
+                    }
+
                 });
             })
             .catch(this.handleError);
