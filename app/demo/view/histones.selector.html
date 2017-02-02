@@ -1,14 +1,14 @@
 <li role="menuitem">
     <a href="#" class="ripplelink">
-        <i class="material-icons">list</i>
-        <span>Epigenetic Mark: {{ this.deepBlueService.getEpigeneticMark().name }} </span>
+        <i class="material-icons">change_history</i>
+        <span>Histone Modification</span>
         <i class="material-icons">keyboard_arrow_down</i>
     </a>
     <ul role="menu">
-        <li *ngFor="let histone of selectHistones" [routerLink]="['/histonemark']" role="menuitem" (click)="changeHistone($event, histone)">        
+        <li *ngFor="let histone of selectHistones" [routerLink]="['/histonemark']" role="menuitem" (click)="changeHistone($event, histone)">
             <a href="#" class="ripplelink">
                 <i class="material-icons">{{ getStyle(histone) }}</i><span> {{ histone.name }}</span>
             </a>
-        </li>            
+        </li>
     </ul>
-</li>    
+</li>
