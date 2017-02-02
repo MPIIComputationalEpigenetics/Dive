@@ -69,6 +69,8 @@ import { TooltipModule } from 'primeng/primeng';
 import { TreeModule } from 'primeng/primeng';
 import { TreeTableModule } from 'primeng/primeng';
 
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+
 import { Application } from './application';
 
 import { ChartModule } from 'angular2-highcharts';
@@ -168,7 +170,8 @@ import {
         TooltipModule,
         TreeModule,
         TreeTableModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        NgxDatatableModule
     ],
     declarations: [
         Application,
