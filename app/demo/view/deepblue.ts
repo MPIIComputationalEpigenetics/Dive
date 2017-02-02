@@ -128,7 +128,7 @@ export class DataStackView {
     selector: 'dive-menu',
     template: `
             <genome-selector></genome-selector>
-            <li role="menuitem"><a [routerLink]="['/regions']"><i class="material-icons">dashboard</i><span>Dashboard</span></a></li>
+            <li role="menuitem"><a [routerLink]="['/regions']"><i class="material-icons">dehaze</i><span>Get regions</span></a></li>
             <filtering></filtering>
             <histone-mark-selector></histone-mark-selector>
             `,

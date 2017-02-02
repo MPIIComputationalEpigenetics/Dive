@@ -1,8 +1,20 @@
 <div class="ui-g ui-fluid">
-    <div [ngClass]="ui-g-12">
+    <div ngClass="ui-g-12">
         <div class="card card-w-title">
-            <h1>Regions</h1>
-            <p>Coisa</p>
+            <h1>Selected regions</h1>
+
+                <ngx-datatable
+                  class='material'
+                  [rows]='rows'
+                  [columns]="columns"
+                  [columnMode]="'force'"
+                  [headerHeight]="50"
+                  [footerHeight]="50"
+                  [rowHeight]="'auto'"
+                    [limit]="10">
+                </ngx-datatable>
+
+                <data-load-progress-bar #progressbar></data-load-progress-bar>
         </div>
     </div>
 </div>
