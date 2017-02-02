@@ -91,7 +91,7 @@ export class RegionsScreen {
         }
 
         this.deepBlueService.getInfo(actualData.data.id).subscribe((info: FullMetadata) => {
-            this.progressbar.reset(2, 0);
+            this.progressbar.reset(4, 0);
 
             let format = info.format();
             let columns_types = info.columns();
@@ -125,6 +125,8 @@ export class RegionsScreen {
 
     ngOnDestroy() {
         this.topStackSubscription.unsubscribe();
+        this.columns = [];
+        this.rows = [];
     }
 }
 
