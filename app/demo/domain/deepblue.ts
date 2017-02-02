@@ -62,6 +62,22 @@ export class FullMetadata extends IdName {
     get(key: string) : any {
         return this.values[key];
     }
+
+    genome() : string {
+        return this.values["genome"];
+    }
+
+    description() : string {
+        return this.values["description"];
+    }
+
+    format() : string {
+        return this.values["format"];
+    }
+
+    columns() : Object {
+        return this.values["columns"];
+    }
 }
 
 
@@ -69,28 +85,12 @@ export class FullAnnotation extends FullMetadata {
     constructor (data: Object) {
         super(data);
     }
-
-    genome() : string {
-        return this.values["genome"];
-    }
-
-    description() : string {
-        return this.values["description"];
-    }
 }
 
 
 export class FullExperiment extends FullMetadata {
     constructor (data: Object) {
         super(data);
-    }
-
-    description() : string {
-        return this.values["description"];
-    }
-
-    genome() : string {
-        return this.values["genome"];
     }
 
     sample_info(): Object {
