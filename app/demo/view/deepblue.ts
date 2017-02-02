@@ -28,7 +28,7 @@ import { DataCache, DeepBlueService, MultiKeyDataCache } from '../service/deepbl
 @Component({
     selector: 'data-info-box',
     template: `
-        <div class="card card-w-title">
+        <div class="card card-w-title" style="word-wrap: break-word">
             <h2>Data information</h2>
             {{ data.name }}
             {{ data     }}
@@ -78,7 +78,7 @@ export class DataLoadProgressBar extends ProgressElement {
     template: `
     <br/><br/>
     <div class="dashboard">
-    <div *ngIf="dataStack.getData().length > 0" class="ui-g-12 ui-md-12">
+    <div *ngIf="dataStack.getData().length > 0" class="ui-g-12 ui-md-12" style="word-wrap: break-word">
         <p-panel [style]="{'height':'100%'}">
 
             <div class="activity-header dashboard">
