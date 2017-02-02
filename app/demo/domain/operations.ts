@@ -70,4 +70,8 @@ export class DeepBlueResult  implements ICloneable {
     clone(request_count: number = -1) : DeepBlueResult {
         return new DeepBlueResult(this.data, this.result, request_count);
     }
+
+    resultAsString() : string {
+        return <string> this.result;
+    }
 }
