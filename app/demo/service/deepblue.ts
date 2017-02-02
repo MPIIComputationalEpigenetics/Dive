@@ -511,7 +511,6 @@ export class DeepBlueService {
         params.set("query_id", op_exp.query_id);
 
         if (this.requestCache.get(op_exp, request_count)) {
-            console.log("getResult hit");
             progress_element.increment(request_count);
             let cached_result = this.requestCache.get(op_exp, request_count);
             return this.getResult(cached_result, progress_element, request_count);
@@ -531,6 +530,26 @@ export class DeepBlueService {
 
             return request;
         }
+    }
+
+
+    getRegions(data: DeepBlueOperation, format: string, progress_element: ProgressElement, request_count: number): Observable<DeepBlueResult> {
+        let params: URLSearchParams = new URLSearchParams();
+        params.set("query_id", data.query_id);
+        params.set("output_format", format);
+
+        let request: Observable<DeepBlueResult> = this.http.get(this.deepBlueUrl + "/get_regions", { "search": params })
+            .map((res: Response) => {
+                let body = res.json();
+                progress_element.increment(request_count);
+                let request = new DeepBlueRequest(data.data, body[1] || "", request_count);
+                return request;
+            })
+            .flatMap((request_id) => {
+                return this.getResult(request_id, progress_element, request_count);
+            })
+
+        return request;
     }
 
     getResultBatch(op_requests: DeepBlueRequest[], progress_element: ProgressElement, request_count: number): Observable<DeepBlueResult[]> {
