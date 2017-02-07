@@ -132,7 +132,7 @@ export class OverlapsBarChart {
 })
 export class HistonesScreen {
     errorMessage: string;
-    experiments: Object[];
+    experiments: FullExperiment[];
     segregated_data: Object;
 
     biosourcesItems: SelectItem[] = [];
@@ -235,9 +235,9 @@ export class HistonesScreen {
         this.epigeneticMarkSubscription = deepBlueService.epigeneticMarkValue$.subscribe(selected_epigenetic_mark => {
             this.deepBlueService.getExperiments(deepBlueService.getGenome(), selected_epigenetic_mark).subscribe(experiments_ids => {
                 var ids = experiments_ids.map((e) => e.id);
-                this.deepBlueService.getExperimentsInfos(ids).subscribe(full_info => {
-                    this.experiments = full_info;
-                    this.segregated_data = this.segregate(full_info);
+                this.deepBlueService.getInfos(ids).subscribe(full_info => {
+                    this.experiments = <FullExperiment[]>full_info;
+                    this.segregated_data = this.segregate(<FullExperiment[]>full_info);
                 });
             },
                 error => this.errorMessage = <any>error);
