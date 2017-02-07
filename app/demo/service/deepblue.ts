@@ -19,7 +19,9 @@ import {
     Experiment,
     FullAnnotation,
     FullExperiment,
+    FullGeneModel,
     FullMetadata,
+    GeneModel,
     Genome,
     IdName,
     ProgressElement
@@ -611,6 +613,8 @@ export class DeepBlueService {
                     return new FullExperiment(data[0]);
                 } else if (id[0] == "a") {
                     return new FullAnnotation(data[0]);
+                } else if (id[0] == "g" && id[1] == "s") {
+                    return new FullGeneModel(data[0]);
                 } else {
                     console.log("UNKNOW TYPE: " + id);
                     return new FullExperiment(data[0]);
@@ -632,4 +636,6 @@ export class DeepBlueService {
         console.log(errMsg);
         return Observable.throw(errMsg);
     }
+
+
 }

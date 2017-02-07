@@ -51,6 +51,13 @@ export class Genome extends IdName {
     }
 }
 
+
+export class GeneModel extends IdName {
+    constructor (data: string[] ) {
+        super(data[0], data[1])
+    }
+}
+
 export class FullMetadata extends IdName {
     values: Object;
 
@@ -87,6 +94,11 @@ export class FullAnnotation extends FullMetadata {
     }
 }
 
+export class FullGeneModel extends FullMetadata {
+    constructor(data: Object) {
+        super(data);
+    }
+}
 
 export class FullExperiment extends FullMetadata {
     constructor (data: Object) {
