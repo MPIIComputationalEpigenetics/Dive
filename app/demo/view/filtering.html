@@ -22,6 +22,14 @@
                         </form>
                     </div>
 
+                    <p-multiSelect
+                        #multiselect
+                        [defaultLabel]="defaultSelectBiosourcesLabel"
+                        [options]="availableChromosomes"
+                        [(ngModel)]="selectedChromosomes"
+                        (onChange)="selectChromosomes($event)">
+                    </p-multiSelect>
+
                     <data-load-progress-bar #progressbar></data-load-progress-bar>
                 </div>
             </div>

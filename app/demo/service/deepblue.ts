@@ -624,6 +624,37 @@ export class DeepBlueService {
     }
 
 
+    getGeneModelsInfo(ids: string[]): Observable<FullGeneModel[]> {
+        let params: URLSearchParams = new URLSearchParams();
+        for (let id of ids) {
+            params.append('id', id);
+        }
+
+        return this.http.get(this.deepBlueUrl + "/info", { "search": params })
+            .map((res: Response) => {
+                let body = res.json();
+                let data = body[1] || [];
+                return data.map((value) => {
+                    return new FullGeneModel(value);
+                });
+            })
+            .catch(this.handleError);
+    }
+
+    getGeneModels(): Observable<FullGeneModel[]> {
+        return this.http.get(this.deepBlueUrl + "/list_gene_models")
+            .map((res: Response) => {
+                let body = res.json();
+                let data = body[1] || [];
+                debugger;
+                return data.map((value) => {
+                    return new Experiment(value);
+                });
+            })
+            .catch(this.handleError);
+    }
+
+
     private handleError(error: Response | any) {
         let errMsg: string;
         if (error instanceof Response) {

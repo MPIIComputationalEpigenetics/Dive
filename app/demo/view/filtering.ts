@@ -30,13 +30,22 @@ export class FilteringComponent implements OnInit {
     public max_length_form: FormGroup;
 
     annotationSubscription: Subscription;
+    genomeSubscription: Subscription;
 
     @ViewChild('progressbar') progressbar: DataLoadProgressBar;
 
     constructor(private fb: FormBuilder, private deepBlueService: DeepBlueService, private dataStack: DataStack) {
         this.annotationSubscription = deepBlueService.annotationValue$.subscribe(annotation => {
             console.log(annotation);
+        });
+
+        this.genomeSubscription = deepBlueService.genomeValue$.subscribe(genome => {
+            if (genome.id == null || genome.name == "") {
+                return;
+            }
         })
+
+        this.deepBlueService.getGeneModels().subscribe((x) => console.log(x));
     }
 
     validateMinNumber(c: FormControl) {
@@ -60,6 +69,9 @@ export class FilteringComponent implements OnInit {
         this.max_length_form = this.fb.group({
             max_length: [0, []]
         });
+
+        this.genomeSubscription.unsubscribe();
+        this.annotationSubscription.unsubscribe();
     }
 
 }

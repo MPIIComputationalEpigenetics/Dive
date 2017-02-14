@@ -84,7 +84,8 @@ export class DataLoadProgressBar extends ProgressElement {
             <div class="activity-header dashboard">
                 <div class="ui-g">
                     <div class="ui-g-10">
-                        <span style="font-weight:bold">{{ dataStack.getData()[0].op.data.name }}</span> - {{ dataStack.getData()[0].count }} regions
+                        <div style="font-weight:bold" class="description">{{ dataStack.getData()[0].op.data.name }}</div>
+                        <p class="count"> {{ dataStack.getData()[0].count }} regions</p>
                     </div>
                     <div class="ui-g-2 button-change">
                         <button type="button" icon="ui-icon-blur-on" pButton (click)="removeData($event, dataStack.getData()[0])"></button>

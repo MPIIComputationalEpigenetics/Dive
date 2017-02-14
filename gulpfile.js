@@ -3,7 +3,7 @@
 var gulp = require('gulp'),
     flatten = require('gulp-flatten'),
     zip = require('gulp-zip');
-    
+
 gulp.task('build', function() {
     return gulp.src([
         '!./node_modules/**',
@@ -17,6 +17,6 @@ gulp.task('build', function() {
         '!login/**/*.map',
         '!login/**/*.d.ts',
         '**'
-    ]).pipe(zip('ultima.zip'))
+    ]).pipe(zip('deepblue-dive.zip'))
       .pipe(gulp.dest('.'));
 });

@@ -235,7 +235,7 @@ export class HistonesScreen {
         this.epigeneticMarkSubscription = deepBlueService.epigeneticMarkValue$.subscribe(selected_epigenetic_mark => {
             this.deepBlueService.getExperiments(deepBlueService.getGenome(), selected_epigenetic_mark).subscribe(experiments_ids => {
                 var ids = experiments_ids.map((e) => e.id);
-                this.deepBlueService.getInfos(ids).subscribe(full_info => {
+                this.deepBlueService.getExperimentsInfos(ids).subscribe(full_info => {
                     this.experiments = <FullExperiment[]>full_info;
                     this.segregated_data = this.segregate(<FullExperiment[]>full_info);
                 });

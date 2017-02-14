@@ -2,22 +2,22 @@
     background-color: #FFFFFF;
     height: 100%;
     padding-top: 200px;
-    
+
     .splash-container {
         width: 383px;
         margin: 0 auto;
         text-align: center
     }
-    
+
     .logo {
         display: inline-block;
         vertical-align: middle;
         width: 383px;
         height: 383px;
-        background: url("../images/logo-dive.jpg") top left no-repeat;
-        background-size: 383 383px;
+        background: url("../images/DB_Dive_Cover_resized.png") top left no-repeat;
+        background-size: 500 147px;
     }
-    
+
     .load-bar {
       position: relative;
       margin-top: 20px;
@@ -25,7 +25,7 @@
       height: 6px;
       background-color: #ffffff;
     }
-    
+
     .bar {
       content: "";
       display: inline;

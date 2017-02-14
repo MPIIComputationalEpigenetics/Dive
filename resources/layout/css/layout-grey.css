@@ -259,8 +259,8 @@
     vertical-align: middle;
     width: 383px;
     height: 383px;
-    background: url("../images/logo-dive.jpg") top left no-repeat;
-    background-size: 383 383px; }
+    background: url("../images/DB_Dive_Cover_resized.png") top left no-repeat;
+    background-size: 500 147px; }
   .splash-screen .load-bar {
     position: relative;
     margin-top: 20px;
@@ -592,7 +592,7 @@
       vertical-align: middle;
       width: 200px;
       height: 30px;
-      background: url("../images/logo.png") top left no-repeat; }
+      background: url("../images/DB_Dive_Cover_WBG.png") top left no-repeat; }
     .landing-wrapper #header .header-top #menu {
       float: right;
       list-style: none;
@@ -860,7 +860,7 @@
       padding: 0; } }
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
   .landing-wrapper .header .header-top .logo {
-    background: url("../images/deepblue_alt.pnglogo2x.png") top left no-repeat;
+    background: url("../images/DB_Dive_Cover_WBG.png") top left no-repeat;
     background-size: 200px 30px; } }
 html {
   height: 100%; }
@@ -900,16 +900,16 @@ body {
   .layout-container .topbar .logo {
     display: inline-block;
     vertical-align: middle;
-    width: 300px;
-    height: 83px;
-    background: url("../images/deepblue_alt.png") top left no-repeat;
-    background-size: 250px 83px;
+    width: 400px;
+    height: 118px;
+    background: url("../images/DB_Dive_Cover_resized.png") top left no-repeat;
+    background-size: 400px 118px;
     background-position: center; }
   .layout-container .topbar .topbar-left {
     box-sizing: border-box;
     padding: 5px;
-    height: 90px;
-    width: 300px;
+    height: 118px;
+    width: 400px;
     background-color: #FFFFFF;
     float: left;
     -webkit-box-shadow: 3px 0 6px rgba(0, 0, 0, 0.3);
@@ -1023,9 +1023,9 @@ body {
 .layout-container .layout-menu {
   overflow: auto;
   position: fixed;
-  width: 300px;
+  width: 400px;
   z-index: 99;
-  top: 75px;
+  top: 118px;
   height: 100%;
   background-color: #ffffff;
   -webkit-box-shadow: 3px 0 6px rgba(0, 0, 0, 0.3);
@@ -1048,47 +1048,6 @@ body {
     background-color: #aaaaaa;
     opacity: 0.3;
     filter: alpha(opacity=30); }
-  .layout-container .layout-menu .profile {
-    box-sizing: border-box;
-    padding-top: 30px;
-    width: 300px;
-    height: 145px;
-    text-align: center;
-    background: url("../images/profile-bg.png") top left no-repeat;
-    background-size: 300px 145px;
-    -webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16);
-    -moz-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16);
-    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16); }
-    .layout-container .layout-menu .profile .profile-image {
-      width: 60px;
-      height: 60px;
-      margin: 0 auto 5px auto;
-      background: url("../images/avatar.png") top left no-repeat;
-      background-size: 60px 60px; }
-    .layout-container .layout-menu .profile .profile-name {
-      display: inline-block;
-      color: #212121;
-      vertical-align: middle;
-      font-size: 16px; }
-    .layout-container .layout-menu .profile i {
-      color: #212121;
-      vertical-align: middle;
-      -moz-transition: transform 0.3s;
-      -o-transition: transform 0.3s;
-      -webkit-transition: transform 0.3s;
-      transition: transform 0.3s; }
-    .layout-container .layout-menu .profile.profile-expanded i {
-      -webkit-transform: rotate(-180deg);
-      -moz-transform: rotate(-180deg);
-      -o-transform: rotate(-180deg);
-      -ms-transform: rotate(-180deg);
-      transform: rotate(-180deg); }
-  .layout-container .layout-menu #profile-menu {
-    margin-top: 16px;
-    border-bottom: 1px solid #d6d5d5;
-    display: none; }
-    .layout-container .layout-menu #profile-menu li:last-child {
-      margin-bottom: 16px; }
   .layout-container .layout-menu.layout-menu-dark {
     background-color: #424242; }
     .layout-container .layout-menu.layout-menu-dark .profile {
@@ -1109,7 +1068,7 @@ body {
       color: #ffffff;
       background-color: #FF5722; }
 .layout-container.menu-layout-overlay .layout-menu {
-  margin-left: -300px; }
+  margin-left: -400px; }
 .layout-container.menu-layout-overlay .layout-main {
   margin-left: 0px; }
 .layout-container.menu-layout-overlay.layout-menu-overlay-active .layout-menu {
@@ -1279,7 +1238,7 @@ body {
         top: 55px;
         right: 5px;
         display: none;
-        width: 300px;
+        width: 400px;
         background-color: #ffffff;
         -webkit-box-shadow: 0 6px 20px 0 rgba(0, 0, 0, 0.19), 0 8px 17px 0 rgba(0, 0, 0, 0.2);
         -moz-box-shadow: 0 6px 20px 0 rgba(0, 0, 0, 0.19), 0 8px 17px 0 rgba(0, 0, 0, 0.2);
@@ -1296,9 +1255,9 @@ body {
   .layout-container.menu-layout-static .layout-menu {
     margin-left: 0; }
   .layout-container.menu-layout-static .layout-main {
-    margin-left: 300px; }
+    margin-left: 400px; }
   .layout-container.menu-layout-static.layout-menu-static-inactive .layout-menu {
-    margin-left: -300px; }
+    margin-left: -400px; }
   .layout-container.menu-layout-static.layout-menu-static-inactive .layout-main {
     margin-left: 0px; }
   .layout-container.menu-layout-static .layout-mask {
@@ -1357,7 +1316,7 @@ body {
         top: 45px;
         left: 0px;
         display: none;
-        width: 300px;
+        width: 400px;
         background-color: #ffffff;
         -webkit-box-shadow: 0 6px 20px 0 rgba(0, 0, 0, 0.19), 0 8px 17px 0 rgba(0, 0, 0, 0.2);
         -moz-box-shadow: 0 6px 20px 0 rgba(0, 0, 0, 0.19), 0 8px 17px 0 rgba(0, 0, 0, 0.2);
@@ -1416,7 +1375,7 @@ body {
     -ms-transform: rotate(0deg);
     transform: rotate(0deg); }
   .layout-container.menu-layout-static .layout-menu {
-    margin-left: -265px; }
+    margin-left: -400px; }
   .layout-container.menu-layout-static .layout-main {
     margin-left: 0px; }
   .layout-container.menu-layout-static.layout-menu-static-active .layout-menu {

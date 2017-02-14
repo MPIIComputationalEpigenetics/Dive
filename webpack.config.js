@@ -4,8 +4,7 @@ module.exports = {
     entry: {
         'polyfills': './app/polyfills.ts',
         'vendor': './app/vendor.ts',
-        'app': './app/boot.ts',
-        'login.app': './login/login.ts'
+        'app': './app/boot.ts'
     },
 
     output: {
