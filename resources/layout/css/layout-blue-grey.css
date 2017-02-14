@@ -251,16 +251,16 @@
   height: 100%;
   padding-top: 200px; }
   .splash-screen .splash-container {
-    width: 383px;
+    width: 400px;
     margin: 0 auto;
     text-align: center; }
   .splash-screen .logo {
     display: inline-block;
     vertical-align: middle;
-    width: 383px;
-    height: 383px;
+    width: 400px;
+    height: 118px;
     background: url("../images/DB_Dive_Cover_resized.png") top left no-repeat;
-    background-size: 500 147px; }
+    background-size: 400 118px; }
   .splash-screen .load-bar {
     position: relative;
     margin-top: 20px;
@@ -279,7 +279,7 @@
     background-color: #3F4A9F;
     animation: loading 3s linear infinite; }
   .splash-screen .bar:nth-child(2) {
-    background-color: #FFFFFF;
+    background-color: red;
     animation: loading 3s linear 1s infinite; }
   .splash-screen .bar:nth-child(3) {
     background-color: #005DAC;
