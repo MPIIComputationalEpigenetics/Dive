@@ -646,7 +646,6 @@ export class DeepBlueService {
             .map((res: Response) => {
                 let body = res.json();
                 let data = body[1] || [];
-                debugger;
                 return data.map((value) => {
                     return new Experiment(value);
                 });

@@ -71,13 +71,11 @@ import { TooltipModule } from 'primeng/primeng';
 import { TreeModule } from 'primeng/primeng';
 import { TreeTableModule } from 'primeng/primeng';
 
-import { AppComponent } from './app.component';
 import { AppMenuComponent, AppSubMenu } from './app.menu.component';
 import { AppTopBar } from './app.topbar.component';
 import { AppFooter } from './app.footer.component';
 import { InlineProfileComponent } from './app.profile.component';
 
-import { ChartModule } from 'angular2-highcharts';
 
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
@@ -96,9 +94,18 @@ import { BioSourcesScreen } from './demo/view/biosources.screen';
 
 import { AnnotationListComponent, DiveStatus, DataStackView, GenomeSelectorComponent, DataLoadProgressBar, HistoneExperimentsMenu, DataInfoBox } from './demo/view/deepblue';
 
+import {HighchartsStatic} from 'angular2-highcharts/dist/HighchartsService';
+import {ChartModule} from "angular2-highcharts";
+
+export function highchartsFactory() {
+  return require('highcharts');
+}
+
+import { AppComponent } from './app.component';
 
 @NgModule({
     imports: [
+        ChartModule,
         BrowserModule,
         FormsModule,
         AppRoutes,
@@ -192,6 +199,10 @@ import { AnnotationListComponent, DiveStatus, DataStackView, GenomeSelectorCompo
     ],
     providers: [
         { provide: LocationStrategy, useClass: HashLocationStrategy },
+            {
+      provide: HighchartsStatic,
+      useFactory: highchartsFactory
+    },
         DeepBlueService,
         DataStack
     ],
