@@ -129,9 +129,8 @@ export class DataStackView {
 @Component({
     selector: 'dive-menu',
     template: `
-            <genome-selector></genome-selector>
-            <li role="menuitem"><a [routerLink]="['/regions']"><i class="material-icons">dehaze</i><span>Get regions</span></a></li>
             <filtering></filtering>
+            <genome-selector></genome-selector>
             <histone-mark-selector></histone-mark-selector>
             `,
 })

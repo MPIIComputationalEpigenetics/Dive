@@ -39,18 +39,25 @@ export class AppMenuComponent {
     template: `
         <template ngFor let-child let-i="index" [ngForOf]="(root ? item : item.items)">
             <li [ngClass]="{'active-menuitem': isActive(i)}" *ngIf="child.visible === false ? false : true">
-                <a [href]="child.url||'#'" (click)="itemClick($event,child,i)" class="ripplelink" *ngIf="!child.routerLink" [attr.tabindex]="!visible ? '-1' : null">
+
+                <a [href]="child.url||'#'" (click)="itemClick($event,child,i)" class="ripplelink" *ngIf="!child.type && !child.routerLink" [attr.tabindex]="!visible ? '-1' : null">
                     <i class="material-icons">{{child.icon}}</i>
                     <span>{{child.label}}</span>
                     <i class="material-icons" *ngIf="child.items">keyboard_arrow_down</i>
                 </a>
 
-                <a (click)="itemClick($event,child,i)" class="ripplelink" *ngIf="child.routerLink"
+                <a (click)="itemClick($event,child,i)" class="ripplelink" *ngIf="!child.type && child.routerLink"
                     [routerLink]="child.routerLink" routerLinkActive="active-menuitem-routerlink" [routerLinkActiveOptions]="{exact: true}" [attr.tabindex]="!visible ? '-1' : null">
                     <i class="material-icons">{{child.icon}}</i>
                     <span>{{child.label}}</span>
                     <i class="material-icons" *ngIf="child.items">keyboard_arrow_down</i>
                 </a>
+
+                <form novalidate *ngIf="child.type == 'number'" [formGroup]=child.group (ngSubmit)="child.submit()">
+                    <input type="{{ child.type }}" [formControlName]="child.control_name" pInputText/>
+                    <label>{{ child.label }}</label>
+                </form>
+
                 <ul app-submenu [item]="child" *ngIf="child.items" [@children]="isActive(i) ? 'visible' : 'hidden'" [visible]="isActive(i)" [reset]="reset"></ul>
             </li>
         </template>
