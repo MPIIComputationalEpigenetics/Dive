@@ -16,8 +16,6 @@ import {
     ProgressElement
 } from '../domain/deepblue';
 
-import { PickList } from 'primeng/primeng';
-
 import { DeepBlueService } from '../service/deepblue';
 
 @Component({
@@ -30,11 +28,13 @@ export class BioSourcesScreen {
     sourceBioSources: BioSource[] = [];
     targetBioSources: BioSource[] = [];
 
-    @ViewChild('picklist') picklist: PickList;
-
     constructor(private deepBlueService: DeepBlueService) {
         this.genomeSubscription = deepBlueService.genomeValue$.subscribe(genome => {
+            if (genome.id == "") {
+                return;
+            }
             this.deepBlueService.getBioSources().subscribe(biosources => {
+                debugger;
                 this.targetBioSources = biosources;
                 this.deepBlueService.setSelectedBioSources(this.targetBioSources);
             })
@@ -42,13 +42,11 @@ export class BioSourcesScreen {
     }
 
     onMoveToSource($event) {
-        console.log(this.targetBioSources);
         this.deepBlueService.setSelectedBioSources(this.targetBioSources);
     }
 
 
     onMoveToTarget($event) {
-        console.log(this.targetBioSources);
         this.deepBlueService.setSelectedBioSources(this.targetBioSources);
     }
 

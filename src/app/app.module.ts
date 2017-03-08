@@ -94,11 +94,11 @@ import { BioSourcesScreen } from './demo/view/biosources.screen';
 
 import { AnnotationListComponent, DiveStatus, DataStackView, GenomeSelectorComponent, DataLoadProgressBar, HistoneExperimentsMenu, DataInfoBox } from './demo/view/deepblue';
 
-import {HighchartsStatic} from 'angular2-highcharts/dist/HighchartsService';
-import {ChartModule} from "angular2-highcharts";
+import { HighchartsStatic } from 'angular2-highcharts/dist/HighchartsService';
+import { ChartModule } from "angular2-highcharts";
 
 export function highchartsFactory() {
-  return require('highcharts');
+    return require('highcharts');
 }
 
 import { AppComponent } from './app.component';
@@ -199,10 +199,10 @@ import { AppComponent } from './app.component';
     ],
     providers: [
         { provide: LocationStrategy, useClass: HashLocationStrategy },
-            {
-      provide: HighchartsStatic,
-      useFactory: highchartsFactory
-    },
+        {
+            provide: HighchartsStatic,
+            useFactory: highchartsFactory
+        },
         DeepBlueService,
         DataStack
     ],
