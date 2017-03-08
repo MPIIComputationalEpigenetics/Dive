@@ -6,7 +6,7 @@ import {AppComponent} from './app.component';
     template: `
         <div class="footer">
             <div class="card clearfix">
-                <span class="footer-text-left">PrimeNG ULTIMA for Angular 2</span>
+                <span class="footer-text-left">Max Planck Institute for Informatics - Computational Biology and Applied Algorithmics Department</span>
                 <span class="footer-text-right"><span class="ui-icon ui-icon-copyright"></span>  <span>All Rights Reserved</span></span>
             </div>
         </div>

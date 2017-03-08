@@ -34,7 +34,6 @@ export class BioSourcesScreen {
                 return;
             }
             this.deepBlueService.getBioSources().subscribe(biosources => {
-                debugger;
                 this.targetBioSources = biosources;
                 this.deepBlueService.setSelectedBioSources(this.targetBioSources);
             })

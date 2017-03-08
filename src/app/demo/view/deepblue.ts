@@ -1,3 +1,4 @@
+import { MenuService } from '../service/menu';
 import {
     Component,
     ViewChild,
@@ -204,8 +205,6 @@ export class AnnotationListComponent {
     }
 }
 
-//
-
 @Component({
     selector: 'histone-mark-selector',
     templateUrl: './histones.selector.html'
@@ -246,38 +245,35 @@ export class HistoneExperimentsMenu {
 
 
 // Building Menu Items with Genome names
-
+// TODO: This component must be moved to a 'Dive main component', since it is not a visual component anymore
 @Component({
     selector: 'genome-selector',
-    templateUrl: './genome.selector.html'
+    template: ''
 })
 export class GenomeSelectorComponent implements OnInit {
 
     errorMessage: string;
-    selectGenomes: Genome[];
 
-    constructor(private deepBlueService: DeepBlueService) { }
+    constructor(private deepBlueService: DeepBlueService, private menuService: MenuService) { }
 
     ngOnInit() {
         this.deepBlueService.getGenomes()
-            .subscribe(
-            genomes => {
-                this.selectGenomes = genomes;
+            .subscribe(genomes => {
                 this.deepBlueService.setGenome(genomes[0]);
+
+                for (let genome of genomes) {
+                    this.menuService.includeItem('genomes', genome.name, 'fiber_manual_record',
+                        (event) => {this.changeGenome(genome)},
+                        null, /* router link */
+                        null /* url */
+                    );
+                }
             },
             error => this.errorMessage = <any>error
             );
     }
 
-    changeGenome(event, genome) {
+    changeGenome(genome) {
         this.deepBlueService.setGenome(genome);
-    }
-
-    getStyle(genome): string {
-        if (genome.id == this.deepBlueService.getGenome().id) {
-            return "check circle";
-        } else {
-            return "alarm on";
-        }
     }
 }

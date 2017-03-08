@@ -24,7 +24,6 @@ import { Subject } from 'rxjs/Subject'
 import { DeepBlueOperation } from '../domain/operations'
 
 
-
 export class DataStackItem {
     constructor(public op: DeepBlueOperation, public what: string, public description: string, public count: number) { }
 }

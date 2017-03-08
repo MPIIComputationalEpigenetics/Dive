@@ -74,11 +74,10 @@ import { TreeTableModule } from 'primeng/primeng';
 import { AppMenuComponent, AppSubMenu } from './app.menu.component';
 import { AppTopBar } from './app.topbar.component';
 import { AppFooter } from './app.footer.component';
-import { InlineProfileComponent } from './app.profile.component';
-
 
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
+import { MenuService } from './demo/service/menu';
 import { DataStack } from './demo/service/datastack';
 import { DeepBlueService } from './demo/service/deepblue';
 
@@ -182,7 +181,6 @@ import { AppComponent } from './app.component';
         AppSubMenu,
         AppTopBar,
         AppFooter,
-        InlineProfileComponent,
         DiveStatus,
         HistonesScreen,
         DataStackView,
@@ -203,6 +201,7 @@ import { AppComponent } from './app.component';
             provide: HighchartsStatic,
             useFactory: highchartsFactory
         },
+        MenuService,
         DeepBlueService,
         DataStack
     ],
