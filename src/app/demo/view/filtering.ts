@@ -1,5 +1,4 @@
 import { MenuService } from '../service/menu';
-import { DataLoadProgressBar } from './deepblue';
 import { DataStack } from '../service/datastack';
 import {
     SimpleChanges,
@@ -33,8 +32,6 @@ export class FilteringComponent implements OnInit {
     annotationSubscription: Subscription;
     genomeSubscription: Subscription;
 
-    @ViewChild('progressbar') progressbar: DataLoadProgressBar;
-
     constructor(private fb: FormBuilder, private deepBlueService: DeepBlueService, private dataStack: DataStack, private menuService: MenuService) {
         this.annotationSubscription = deepBlueService.annotationValue$.subscribe(annotation => {
             console.log(annotation);
@@ -56,14 +53,14 @@ export class FilteringComponent implements OnInit {
         console.log("save_min_length");
         console.log(form_content);
         event.preventDefault();
-        this.dataStack.filter_regions("@LENGTH", ">=", form_content['min_length'], "number", this.progressbar)
+        this.dataStack.filter_regions("@LENGTH", ">=", form_content['min_length'], "number")
     }
     1
     save_max_length(form_content: Object) {
         console.log("save_max_length");
         console.log(form_content);
         event.preventDefault();
-        this.dataStack.filter_regions("@LENGTH", "<=", form_content['max_length'], "number", this.progressbar)
+        this.dataStack.filter_regions("@LENGTH", "<=", form_content['max_length'], "number")
     }
 
     ngOnInit() {
@@ -80,7 +77,7 @@ export class FilteringComponent implements OnInit {
 
         this.menuService.includeObject('filtering',
             { label: 'Mininum region length', type: 'number', group: this.min_length_form, control_name: 'min_length',
-                submit: (event) => { this.save_min_length(this.min_length_form.value)}
+            submit: (event) => { this.save_min_length(this.min_length_form.value)}
             })
 
         this.menuService.includeObject('filtering',

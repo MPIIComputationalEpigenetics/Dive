@@ -1,3 +1,4 @@
+import { ProgressElement } from '../service/progresselement';
 import { DataStack, DataStackItem } from '../service/datastack';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
@@ -17,8 +18,6 @@ import {
     Genome,
     IdName
 } from '../domain/deepblue';
-
-import { DataLoadProgressBar } from '../view/deepblue';
 
 import { DeepBlueService } from '../service/deepblue';
 
@@ -44,14 +43,13 @@ export class RegionsScreen {
     columns = []
     rows = []
 
-    @ViewChild('progressbar') progressbar: DataLoadProgressBar;
-
-    constructor(private deepBlueService: DeepBlueService, private dataStack: DataStack) {
+    constructor(private deepBlueService: DeepBlueService,
+        public progress_element: ProgressElement, private dataStack: DataStack) {
         this.topStackSubscription = this.dataStack.topStackValue$.subscribe((dataStackItem: DataStackItem) => this.processRegions())
         this.processRegions();
     }
 
-    isInteger(column_name: string) : boolean {
+    isInteger(column_name: string): boolean {
         if (column_name == "CHROMOSOME") {
             return false;
         }
@@ -66,8 +64,8 @@ export class RegionsScreen {
         return false;
     }
 
-    convert(value: string, column_type: string) : Object {
-        if ((column_type =="string") || (column_type == "category")) {
+    convert(value: string, column_type: string): Object {
+        if ((column_type == "string") || (column_type == "category")) {
             return value;
         }
 
@@ -90,13 +88,13 @@ export class RegionsScreen {
         }
 
         this.deepBlueService.getInfo(actualData.data.id).subscribe((info: FullMetadata) => {
-            this.progressbar.reset(4, 0);
+            this.progress_element.reset(4, 0);
 
             let format = info.format();
             let columns_types = info.columns();
 
-            this.deepBlueService.getRegions(actualData, format, this.progressbar, 0).subscribe((regions: DeepBlueResult) => {
-                this.progressbar.increment(0);
+            this.deepBlueService.getRegions(actualData, format, this.progress_element, 0).subscribe((regions: DeepBlueResult) => {
+                this.progress_element.increment(0);
 
                 this.columns = format.split(",").map((c) => {
                     return { 'name': c, 'prop': c.toLowerCase().replace("_", "") }
@@ -116,7 +114,7 @@ export class RegionsScreen {
                     return row;
                 })
 
-                this.progressbar.increment(0);
+                this.progress_element.increment(0);
             })
         });
 

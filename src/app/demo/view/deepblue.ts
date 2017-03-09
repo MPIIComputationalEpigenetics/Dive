@@ -19,7 +19,6 @@ import {
     FullMetadata,
     Genome,
     IdName,
-    ProgressElement
 } from '../domain/deepblue';
 
 import { DataStack, DataStackItem } from '../service/datastack';
@@ -36,14 +35,12 @@ import { DataCache, DeepBlueService, MultiKeyDataCache } from '../service/deepbl
 
             <button pButton type="button" (click)="filterOverlapping()" label="Filter overlapping"></button>
             <button pButton type="button" (click)="filterNonOverlapping()" label="Filter not-overlapping"></button>
-            <data-load-progress-bar #progressbar></data-load-progress-bar>
         </div>
     `
 })
 export class DataInfoBox {
     dataSelectedSubscription: Subscription;
     data: IdName = null;
-    @ViewChild('progressbar') progressbar: DataLoadProgressBar;
 
     constructor(private deepBlueService: DeepBlueService, private dataStack: DataStack) {
         this.dataSelectedSubscription = deepBlueService.dataInfoSelectedValue$.subscribe((data: any) => {
@@ -53,24 +50,12 @@ export class DataInfoBox {
 
     filterOverlapping() {
         console.log("filter overlapping");
-        this.dataStack.overlap(this.data, this.progressbar);
+        this.dataStack.overlap(this.data);
     }
 
     filterNonOverlapping() {
         console.log("filter non overlapping");
-        this.dataStack.non_overlap(this.data, this.progressbar);
-    }
-}
-
-@Component({
-    selector: 'data-load-progress-bar',
-    template: `
-        <p-progressBar *ngIf="progress_value > -1 && progress_value < 100" [value]="progress_value" [showValue]="true"></p-progressBar>
-    `
-})
-export class DataLoadProgressBar extends ProgressElement {
-    constructor() {
-        super()
+        this.dataStack.non_overlap(this.data);
     }
 }
 

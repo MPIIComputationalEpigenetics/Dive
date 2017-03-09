@@ -1,3 +1,4 @@
+import { ProgressElement } from '../service/progresselement';
 import { DataStack, DataStackItem } from '../service/datastack';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
@@ -11,8 +12,6 @@ import { MultiSelect } from 'primeng/primeng';
 
 
 import { BioSource, EpigeneticMark, FullExperiment, Genome, IdName } from '../domain/deepblue';
-
-import { DataLoadProgressBar } from '../view/deepblue';
 
 import { DeepBlueService } from '../service/deepblue';
 
@@ -156,7 +155,6 @@ export class HistonesScreen {
 
     hasData: boolean = false;
 
-    @ViewChild('progressbar') progressbar: DataLoadProgressBar;
     @ViewChild('overlapbarchart') overlapbarchart: OverlapsBarChart;
     @ViewChild('multiselect') multiselect: MultiSelect;
 
@@ -183,13 +181,13 @@ export class HistonesScreen {
 
             if (!(experiment_biosource in biosources)) {
                 biosources[experiment_biosource] = []
-                let l = { label: experiment_biosource, value: {name: experiment_biosource, experiments: biosources[experiment_biosource]}}
+                let l = { label: experiment_biosource, value: { name: experiment_biosource, experiments: biosources[experiment_biosource] } }
                 this.biosourcesItems.push(l);
 
                 console.log(l.label);
                 console.log(pre_selected_biosources);
 
-                if (pre_selected_biosources.indexOf(l.label) > -1 ) {
+                if (pre_selected_biosources.indexOf(l.label) > -1) {
                     event_items.push(l.value);
                     this.selectedMultiSelectBiosources.push(l.value);
                 }
@@ -218,7 +216,7 @@ export class HistonesScreen {
             projects[experiment_project].push(experiment);
         }
 
-        this.selectBiosources({value: event_items});
+        this.selectBiosources({ value: event_items });
 
         return {
             "biosources": biosources,
@@ -229,7 +227,8 @@ export class HistonesScreen {
         }
     }
 
-    constructor(private deepBlueService: DeepBlueService, private dataStack: DataStack) {
+    constructor(private deepBlueService: DeepBlueService,
+        public progress_element: ProgressElement, private dataStack: DataStack) {
 
         this.epigeneticMarkSubscription = deepBlueService.epigeneticMarkValue$.subscribe(selected_epigenetic_mark => {
             this.deepBlueService.getExperiments(deepBlueService.getGenome(), selected_epigenetic_mark).subscribe(experiments_ids => {
@@ -245,7 +244,7 @@ export class HistonesScreen {
 
         this.selectedExperimentsValue$.debounceTime(250).subscribe(() => this.processOverlaps());
 
-        this.dataStack.topStackValue$.subscribe((dataStackItem : DataStackItem) => this.processOverlaps())
+        this.dataStack.topStackValue$.subscribe((dataStackItem: DataStackItem) => this.processOverlaps())
     }
 
 
@@ -268,10 +267,10 @@ export class HistonesScreen {
         this.current_request++;
 
         // Each experiment is started, selected, overlaped, count, get request data (4 times each)
-        this.progressbar.reset(experiments.length * 5, this.current_request);
+        this.progress_element.reset(experiments.length * 5, this.current_request);
         this.currentlyProcessing = experiments;
 
-        this.deepBlueService.selectMultipleExperiments(experiments, this.progressbar, this.current_request).subscribe((selected_experiments: DeepBlueOperation[]) => {
+        this.deepBlueService.selectMultipleExperiments(experiments, this.progress_element, this.current_request).subscribe((selected_experiments: DeepBlueOperation[]) => {
             if (selected_experiments.length == 0) {
                 this.reloadPlot([]);
                 return;
@@ -287,7 +286,7 @@ export class HistonesScreen {
                 return;
             }
 
-            this.deepBlueService.intersectWithSelected(current, selected_experiments, this.progressbar, this.current_request).subscribe((overlap_ids: DeepBlueOperation[]) => {
+            this.deepBlueService.intersectWithSelected(current, selected_experiments, this.progress_element, this.current_request).subscribe((overlap_ids: DeepBlueOperation[]) => {
                 if (overlap_ids.length == 0) {
                     this.reloadPlot([]);
                     return;
@@ -296,7 +295,7 @@ export class HistonesScreen {
                     return;
                 }
 
-                this.deepBlueService.countRegionsBatch(overlap_ids, this.progressbar, this.current_request).subscribe((datum: DeepBlueResult[]) => {
+                this.deepBlueService.countRegionsBatch(overlap_ids, this.progress_element, this.current_request).subscribe((datum: DeepBlueResult[]) => {
 
                     if (datum.length == 0) {
                         this.reloadPlot([]);

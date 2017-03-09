@@ -20,7 +20,9 @@ export class AppMenuComponent {
 
     model: any[];
 
-    constructor( public menuService: MenuService, @Inject(forwardRef(() => AppComponent)) public app: AppComponent) {
+    constructor( @Inject(forwardRef(() => AppComponent)) public app: AppComponent,
+        public menuService: MenuService) {
+
         menuService.genomeValue$.subscribe((menuItems: Object[]) => this.model = menuItems);
     }
 
@@ -89,7 +91,7 @@ export class AppSubMenu {
 
     constructor( @Inject(forwardRef(() => AppComponent)) public app: AppComponent, public router: Router, public location: Location) { }
 
-    itemClick(event: Event, item: MenuItem, index: number)  {
+    itemClick(event: Event, item: MenuItem, index: number) {
         //avoid processing disabled items
         if (item.disabled) {
             event.preventDefault();

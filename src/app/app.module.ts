@@ -80,6 +80,7 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { MenuService } from './demo/service/menu';
 import { DataStack } from './demo/service/datastack';
 import { DeepBlueService } from './demo/service/deepblue';
+import { ProgressElement } from './demo/service/progresselement';
 
 import { HistonesScreen, OverlapsBarChart } from './demo/view/histones.screen';
 
@@ -91,7 +92,9 @@ import { RegionsScreen } from './demo/view/regions.screen';
 
 import { BioSourcesScreen } from './demo/view/biosources.screen';
 
-import { AnnotationListComponent, DiveStatus, DataStackView, GenomeSelectorComponent, DataLoadProgressBar, HistoneExperimentsMenu, DataInfoBox } from './demo/view/deepblue';
+import { AnnotationListComponent, DiveStatus, DataStackView, GenomeSelectorComponent, HistoneExperimentsMenu, DataInfoBox } from './demo/view/deepblue';
+
+import { DataLoadProgressBar } from './demo/view/progressbar';
 
 import { HighchartsStatic } from 'angular2-highcharts/dist/HighchartsService';
 import { ChartModule } from "angular2-highcharts";
@@ -203,6 +206,7 @@ import { AppComponent } from './app.component';
         },
         MenuService,
         DeepBlueService,
+        ProgressElement,
         DataStack
     ],
     bootstrap: [AppComponent]

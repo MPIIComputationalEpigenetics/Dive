@@ -1,4 +1,3 @@
-import { DataLoadProgressBar } from '../view/deepblue';
 import { Injectable } from '@angular/core';
 import {
     Http,

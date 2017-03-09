@@ -1,5 +1,7 @@
 import {Component,AfterViewInit,ElementRef,Renderer,ViewChild} from '@angular/core';
 
+import { DataLoadProgressBar } from './demo/view/progressbar';
+
 enum MenuOrientation {
     STATIC,
     OVERLAY,
@@ -14,13 +16,13 @@ declare var jQuery: any;
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements AfterViewInit {
-    
+
     layoutCompact: boolean = false;
 
     layoutMode: MenuOrientation = MenuOrientation.STATIC;
-    
+
     darkMenu: boolean = false;
-    
+
     profileMode: string = 'inline';
 
     rotateMenuButton: boolean;
@@ -58,7 +60,7 @@ export class AppComponent implements AfterViewInit {
         this.layoutMenuScroller = <HTMLDivElement> this.layoutMenuScrollerViewChild.nativeElement;
 
         //hides the horizontal submenus or top menu if outside is clicked
-        this.documentClickListener = this.renderer.listenGlobal('body', 'click', (event) => {            
+        this.documentClickListener = this.renderer.listenGlobal('body', 'click', (event) => {
             if(!this.topbarItemClick) {
                 this.activeTopbarItem = null;
                 this.topbarMenuActive = false;
@@ -71,7 +73,7 @@ export class AppComponent implements AfterViewInit {
             this.topbarItemClick = false;
             this.menuClick = false;
         });
-        
+
         setTimeout(() => {
             jQuery(this.layoutMenuScroller).nanoScroller({flash:true});
         }, 10);
@@ -108,13 +110,13 @@ export class AppComponent implements AfterViewInit {
     onTopbarMenuButtonClick(event) {
         this.topbarItemClick = true;
         this.topbarMenuActive = !this.topbarMenuActive;
-        
+
         if(this.overlayMenuActive || this.staticMenuMobileActive) {
             this.rotateMenuButton = false;
             this.overlayMenuActive = false;
             this.staticMenuMobileActive = false;
         }
-        
+
         event.preventDefault();
     }
 
@@ -165,9 +167,8 @@ export class AppComponent implements AfterViewInit {
     ngOnDestroy() {
         if(this.documentClickListener) {
             this.documentClickListener();
-        }  
+        }
 
         jQuery(this.layoutMenuScroller).nanoScroller({flash:true});
     }
-
 }
