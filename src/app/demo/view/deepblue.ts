@@ -191,35 +191,33 @@ export class AnnotationListComponent {
 
 @Component({
     selector: 'histone-mark-selector',
-    templateUrl: './histones.selector.html'
+    template: ''
 })
 export class HistoneExperimentsMenu {
     errorMessage: string;
     selectHistones: EpigeneticMark[];
     genomeSubscription: Subscription;
 
-    constructor(private deepBlueService: DeepBlueService) {
+    constructor(private deepBlueService: DeepBlueService, private menuService: MenuService) {
         this.genomeSubscription = deepBlueService.genomeValue$.subscribe(genome => {
             if (!(genome.id)) {
                 return;
             }
             this.deepBlueService.getHistones().subscribe(histones => {
-                this.selectHistones = histones;
+                for (let histone of histones) {
+                    this.menuService.includeItem('histones', histone.name, 'fiber_manual_record',
+                        (event) => {this.changeHistone(histone)},
+                        ['/histonemark'], /* router link */
+                        null /* url */
+                    );
+                }
             },
                 error => this.errorMessage = <any>error);
         });
     }
 
-    changeHistone(event, histone) {
+    changeHistone(histone) {
         this.deepBlueService.setEpigeneticMark(histone);
-    }
-
-    getStyle(histone): string {
-        if (histone.id == this.deepBlueService.getEpigeneticMark().id) {
-            return "check circle";
-        } else {
-            return "alarm on";
-        }
     }
 
     ngOnDestroy() {
@@ -241,14 +239,13 @@ export class GenomeSelectorComponent implements OnInit {
     constructor(private deepBlueService: DeepBlueService, private menuService: MenuService) { }
 
     ngOnInit() {
-        this.deepBlueService.getGenomes()
-            .subscribe(genomes => {
+        this.deepBlueService.getGenomes().subscribe(genomes => {
                 this.deepBlueService.setGenome(genomes[0]);
 
                 for (let genome of genomes) {
                     this.menuService.includeItem('genomes', genome.name, 'fiber_manual_record',
                         (event) => {this.changeGenome(genome)},
-                        null, /* router link */
+                        ['/'], /* router link */
                         null /* url */
                     );
                 }
