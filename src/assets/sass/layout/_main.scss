@@ -3,7 +3,7 @@ html {
 }
 
 body {
-    font-family: Roboto,"Helvetica Neue",sans-serif;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
     font-size: $fontSize;
     line-height: $lineHeight;
     color: $textColor;
@@ -12,7 +12,6 @@ body {
     margin: 0;
     background-color: #f7f7f7;
     height: 100%;
-
     a {
         text-decoration: none;
     }
@@ -30,43 +29,37 @@ body {
 }
 
 .layout-container {
-
     .topbar {
         position: fixed;
         z-index: 100;
         width: 100%;
-        height: 100px;
+        height: 80px;
         background-color: $primaryColor;
-        -webkit-box-shadow: 0 2px 5px 0 rgba(0,0,0,0.26);
-        -moz-box-shadow: 0 2px 5px 0 rgba(0,0,0,0.26);
-    	box-shadow: 0 2px 5px 0 rgba(0,0,0,0.26);
-
+        -webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+        -moz-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+        box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
         .logo {
             display: inline-block;
             vertical-align: middle;
             width: 300px;
-            height: 83px;
+            height: 80px;
             background: url("../images/deepblue_alt.png") top left no-repeat;
-            background-size: 300px 83px;
+            background-size: 250px 75px;
             background-position: center;
         }
-
         .topbar-left {
             box-sizing: border-box;
-            padding: 5px;
-            height: 90px;
+            height: 80px;
             width: 300px;
-            background-color: $primaryDarkColor;
             float: left;
-            -webkit-box-shadow: 3px 0 6px rgba(0,0,0,0.3);
-            -moz-box-shadow: 3px 0 6px rgba(0,0,0,0.3);
-            box-shadow: 3px 0 6px rgba(0,0,0,0.3);
+            background-color: $accentTextColor;
+            -webkit-box-shadow: 3px 0 6px rgba(0, 0, 0, 0.3);
+            -moz-box-shadow: 3px 0 6px rgba(0, 0, 0, 0.3);
+            box-shadow: 3px 0 6px rgba(0, 0, 0, 0.3);
         }
-
         .topbar-right {
             padding: 15px;
             position: relative;
-
             #menu-button {
                 color: $accentTextColor;
                 display: inline-block;
@@ -77,24 +70,20 @@ body {
                 left: -16px;
                 top: 3px;
                 background-color: $accentColor;
-
                 @include border-radius(50%);
                 @include transition(all .3s);
-                -webkit-box-shadow: 0 3px 10px rgba(0,0,0,0.23),0 3px 10px rgba(0,0,0,0.16);
-                -moz-box-shadow: 0 3px 10px rgba(0,0,0,0.23),0 3px 10px rgba(0,0,0,0.16);
-                box-shadow: 0 3px 10px rgba(0,0,0,0.23),0 3px 10px rgba(0,0,0,0.16);
-
+                -webkit-box-shadow: 0 3px 10px rgba(0, 0, 0, 0.23), 0 3px 10px rgba(0, 0, 0, 0.16);
+                -moz-box-shadow: 0 3px 10px rgba(0, 0, 0, 0.23), 0 3px 10px rgba(0, 0, 0, 0.16);
+                box-shadow: 0 3px 10px rgba(0, 0, 0, 0.23), 0 3px 10px rgba(0, 0, 0, 0.16);
                 &:hover {
                     @include scale(1.2);
                 }
-
                 i {
                     @include material-icon("chevron_left");
                     @include transition(all .3s);
                     font-size: 36px;
                 }
             }
-
             #topbar-menu-button {
                 display: none;
                 color: #ffffff;
@@ -103,15 +92,12 @@ body {
                 position: absolute;
                 top: 20px;
                 right: 25px;
-
                 @include transition(all .3s);
-
                 i {
                     @include transition(color .5s);
                     font-size: 36px;
                 }
             }
-
             .topbar-items {
                 .search-item {
                     input {
@@ -123,23 +109,19 @@ body {
                         padding: 2px 2px 1px 2px;
                         border-color: #ffffff;
                         color: #ffffff;
-
                         &:focus {
                             outline: 0 none;
                             border-bottom-width: 2px;
                         }
                     }
-
-                    input:focus ~ label {
-                      top:-5px;
-                      font-size:12px;
-                      color: $primaryColor;
+                    input:focus~label {
+                        top: -5px;
+                        font-size: 12px;
+                        color: $primaryColor;
                     }
-
-                    input.ui-state-filled ~ label {
+                    input.ui-state-filled~label {
                         display: none;
                     }
-
                     label {
                         color: #ffffff;
                         top: 8px;
@@ -148,7 +130,6 @@ body {
             }
         }
     }
-
     .layout-menu {
         overflow: auto;
         position: fixed;
@@ -157,13 +138,12 @@ body {
         top: 75px;
         height: 100%;
         background-color: #ffffff;
-        -webkit-box-shadow: 3px 0 6px rgba(0,0,0,0.3);
-        -moz-box-shadow: 3px 0 6px rgba(0,0,0,0.3);
-        box-shadow: 3px 0 6px rgba(0,0,0,0.3);
+        -webkit-box-shadow: 3px 0 6px rgba(0, 0, 0, 0.3);
+        -moz-box-shadow: 3px 0 6px rgba(0, 0, 0, 0.3);
+        box-shadow: 3px 0 6px rgba(0, 0, 0, 0.3);
         @include transition(margin-left .3s);
-
-        > .nano {
-            > .nano-content {
+        >.nano {
+            >.nano-content {
                 &.menu-scroll-content {
                     display: block;
                     height: 100%;
@@ -171,7 +151,6 @@ body {
                     overflow: scroll;
                     overflow-x: hidden;
                 }
-
                 ul.ultima-menu {
                     &.ultima-main-menu {
                         margin-top: 16px;
@@ -179,17 +158,14 @@ body {
                     }
                 }
             }
-
             .nano-pane {
                 background: transparent;
-
                 .nano-slider {
                     background-color: #aaaaaa;
                     @include opacity(.3);
                 }
             }
         }
-
         .profile {
             box-sizing: border-box;
             padding-top: 2em;
@@ -198,10 +174,9 @@ body {
             text-align: center;
             background: url("../images/profile-bg.png") top left no-repeat;
             background-size: 300px 145px;
-            -webkit-box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16);
-            -moz-box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16);
-        	box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16);
-
+            -webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16);
+            -moz-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16);
+            box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16);
             .profile-image {
                 width: 60px;
                 height: 60px;
@@ -209,91 +184,72 @@ body {
                 background: url("../images/avatar.png") top left no-repeat;
                 background-size: 60px 60px;
             }
-
             .profile-name {
                 display: inline-block;
                 color: $textColor;
                 vertical-align: middle;
                 font-size: 1em;
             }
-
             i {
                 color: $textColor;
                 vertical-align: middle;
                 @include transition(transform .3s);
             }
-
             &.profile-expanded {
                 i {
                     @include rotate(-180deg);
                 }
             }
         }
-
         .profile-menu {
             border-bottom: 1px solid #d6d5d5;
             overflow: hidden;
-
             li:first-child {
                 margin-top: 1em;
             }
-
             li:last-child {
                 margin-bottom: 1em;
             }
         }
-
         &.layout-menu-dark {
             background-color: $darkMenuBgColor;
-
             .profile {
                 background-image: url("../images/profile-bg-dark.png");
-
                 .profile-name {
                     color: #ffffff;
                 }
-
                 i {
-                    color:  #ffffff;
+                    color: #ffffff;
                 }
             }
-
             .profile-menu {
                 border-bottom: 1px solid $darkMenuHoverColor;
             }
-
             ul.ultima-menu {
                 li {
                     a {
                         color: #ffffff;
-
                         i {
                             color: #ffffff;
                         }
-
                         &:hover {
                             background-color: $darkMenuHoverColor;
                         }
-
-                         &.active-menuitem-routerlink {
+                        &.active-menuitem-routerlink {
                             color: $darkMenuRouterLinkActiveColor;
-
                             i {
                                 color: $darkMenuRouterLinkActiveColor;
                             }
-
                             &:hover {
                                 color: #ffffff;
-
-                                > i {
+                                >i {
                                     color: #ffffff;
                                 }
                             }
-                         }
+                        }
                     }
-
                     &.active-menuitem {
-                        > a {
+                        >a {
                             color: $accentTextColor;
                             background-color: $accentColor;
                         }
@@ -302,26 +258,21 @@ body {
             }
         }
     }
-
     &.menu-layout-overlay {
         .layout-menu {
             margin-left: -300px;
         }
-
         .layout-main {
             margin-left: 300px;
         }
-
         &.layout-menu-overlay-active {
             .layout-menu {
                 z-index: 999999999;
                 margin-left: 0px;
             }
-
             .layout-mask {
                 display: block;
             }
-
             .topbar {
                 .topbar-right {
                     #menu-button {
@@ -332,10 +283,8 @@ body {
                 }
             }
         }
-
         .topbar {
             z-index: 999999998;
-
             .topbar-right {
                 #menu-button {
                     i {
@@ -344,24 +293,19 @@ body {
                     }
                 }
             }
-
         }
     }
-
     .layout-main {
         padding: 96px 16px 16px 16px;
         @include transition(margin-left .3s);
     }
-
     .layout-mask {
         display: none;
     }
-
     .ultima-menu {
         margin: 0;
         padding: 0;
         list-style: none;
-
         li {
             a {
                 font-size: 1em;
@@ -372,18 +316,15 @@ body {
                 box-sizing: border-box;
                 @include transition(background-color .3s);
                 overflow: hidden;
-
                 i {
                     color: #757575;
                 }
-
                 i:first-child {
                     display: inline-block;
                     vertical-align: middle;
                     margin-right: .5em;
                     font-size: 1.5em;
                 }
-
                 i:last-child {
                     float: right;
                     font-size: $fontSize + 4;
@@ -391,58 +332,46 @@ body {
                     margin-right: -.15em;
                     @include transition(transform .3s);
                 }
-
                 &:hover {
                     background-color: $hoverBgColor;
                 }
-
                 span {
                     display: inline-block;
                     vertical-align: middle;
                 }
-
                 &.active-menuitem-routerlink {
                     color: $lightMenuRouterLinkActiveColor;
-
-                    > i {
+                    >i {
                         color: $lightMenuRouterLinkActiveColor;
                     }
-
                     &:hover {
                         color: $textColor;
-
-                        > i {
+                        >i {
                             color: #757575;
                         }
                     }
                 }
             }
-
             &.active-menuitem {
-                > a {
+                >a {
                     color: $primaryColor;
                     background-color: #e8e8e8;
-
                     i:last-child {
                         @include rotate(-180deg);
                     }
                 }
             }
-
             ul {
                 padding: 0;
                 margin: 0;
                 list-style: none;
                 overflow: hidden;
-
                 li {
                     a {
                         padding: .5em 1em .5em 2em;
-
-                        > span {
+                        >span {
                             font-size: $fontSize - 1;
                         }
-
                         i:first-child {
                             display: inline-block;
                             vertical-align: middle;
@@ -450,28 +379,24 @@ body {
                             font-size: 1.250em;
                         }
                     }
-
                     ul {
                         li {
                             a {
                                 padding-left: 3em;
                             }
                         }
-
                         ul {
                             li {
                                 a {
                                     padding-left: 4em;
                                 }
                             }
-
                             ul {
                                 li {
                                     a {
                                         padding-left: 5em;
                                     }
                                 }
-
                                 ul {
                                     li {
                                         a {
@@ -486,18 +411,14 @@ body {
             }
         }
     }
-
     .footer {
         padding: .5em;
-
         .footer-text-left {
             float: left;
         }
-
         .footer-text-right {
             color: $textSecondaryColor;
             float: right;
-
             span {
                 vertical-align: middle;
                 display: inline-block;
@@ -512,28 +433,22 @@ body {
 }
 
 @media (min-width: 1025px) {
-
     .layout-container {
-
         .topbar-items {
             float: right;
             margin: 0;
             padding: 5px 0 0 0;
             list-style-type: none;
-
-            > li {
+            >li {
                 float: right;
                 position: relative;
                 margin-left: 8px;
-
-                > a {
+                >a {
                     position: relative;
                     display: block;
-
                     .topbar-item-name {
                         display: none;
                     }
-
                     .topbar-badge {
                         position: absolute;
                         right: -5px;
@@ -547,17 +462,14 @@ body {
                         line-height: 12px;
                     }
                 }
-
                 .topbar-icon {
                     font-size: 36px;
                     color: #ffffff;
                     @include transition(color .3s);
-
                     &:hover {
                         color: #e8e8e8;
                     }
                 }
-
                 &.profile-item {
                     .profile-image {
                         width: 36px;
@@ -566,8 +478,7 @@ body {
                         background-size: 36px 36px;
                     }
                 }
-
-                > ul {
+                >ul {
                     position: absolute;
                     top: 55px;
                     right: 5px;
@@ -581,13 +492,11 @@ body {
                     -moz-animation-duration: .5s;
                     animation-duration: .5s;
                 }
-
                 &.active-top-menu {
-                    > ul {
+                    >ul {
                         display: block;
                     }
                 }
-
                 .topbar-message {
                     img {
                         display: inline-block;
@@ -597,16 +506,13 @@ body {
                 }
             }
         }
-
         &.menu-layout-static {
             .layout-menu {
                 margin-left: 0;
             }
-
             .layout-main {
                 margin-left: 300px;
             }
-
             &.layout-menu-static-inactive {
                 .topbar {
                     .topbar-right {
@@ -617,37 +523,30 @@ body {
                         }
                     }
                 }
-
                 .layout-menu {
                     margin-left: -300px;
                 }
-
                 .layout-main {
                     margin-left: 0px;
                 }
             }
-
             .layout-mask {
                 display: none;
             }
         }
-
         &.menu-layout-horizontal {
             .topbar {
                 @include no-shadow();
-
                 .topbar-left {
                     background-color: $primaryColor;
                     @include no-shadow();
                 }
-
                 .topbar-right {
                     #menu-button {
                         display: none;
                     }
                 }
             }
-
             .layout-menu {
                 overflow: visible;
                 position: fixed;
@@ -655,13 +554,11 @@ body {
                 top: 75px;
                 height: auto;
                 background-color: $primaryDarkColor;
-                -webkit-box-shadow: 0 2px 5px 0 rgba(0,0,0,0.26);
-                -moz-box-shadow: 0 2px 5px 0 rgba(0,0,0,0.26);
-                box-shadow: 0 2px 5px 0 rgba(0,0,0,0.26);
-
-                > .nano {
+                -webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+                -moz-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+                box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+                >.nano {
                     overflow: visible;
-
                     .nano-content {
                         &.menu-scroll-content {
                             display: inherit;
@@ -670,7 +567,6 @@ body {
                             overflow: visible;
                             overflow-x: visible;
                         }
-
                         ul.ultima-menu {
                             &.ultima-main-menu {
                                 margin-top: 0px;
@@ -678,55 +574,43 @@ body {
                             }
                         }
                     }
-
                     .nano-pane {
                         display: none !important;
                     }
                 }
-
                 ul.ultima-menu {
                     &.ultima-main-menu {
                         margin-top: 0;
                     }
-
-                    > li {
+                    >li {
                         float: left;
                         position: relative;
-
-                        > a {
+                        >a {
                             color: #ffffff;
-
                             i {
                                 color: #ffffff;
                             }
-
                             &:hover {
                                 background-color: #e8e8e8;
                                 color: $textColor;
-
                                 i {
                                     color: $textColor;
                                 }
                             }
-
                             &.active-menuitem-routerlink {
                                 color: $horizontalLightMenuRouterLinkActiveColor;
-
-                                > i {
+                                >i {
                                     color: $horizontalLightMenuRouterLinkActiveColor;
                                 }
-
                                 &:hover {
                                     color: $textColor;
-
                                     i {
                                         color: $textColor;
                                     }
                                 }
                             }
                         }
-
-                        > ul {
+                        >ul {
                             z-index: 100;
                             position: absolute;
                             top: 41px;
@@ -736,42 +620,35 @@ body {
                             -webkit-box-shadow: 0 6px 20px 0 rgba(0, 0, 0, 0.19), 0 8px 17px 0 rgba(0, 0, 0, 0.2);
                             -moz-box-shadow: 0 6px 20px 0 rgba(0, 0, 0, 0.19), 0 8px 17px 0 rgba(0, 0, 0, 0.2);
                             box-shadow: 0 6px 20px 0 rgba(0, 0, 0, 0.19), 0 8px 17px 0 rgba(0, 0, 0, 0.2);
-
                             li {
                                 a {
                                     padding: 10px 16px;
                                 }
-
                                 ul {
                                     position: static;
-
                                     li {
                                         a {
                                             padding-left: 32px;
                                         }
                                     }
-
                                     ul {
                                         li {
                                             a {
                                                 padding-left: 48px;
                                             }
                                         }
-
                                         ul {
                                             li {
                                                 a {
                                                     padding-left: 64px;
                                                 }
                                             }
-
                                             ul {
                                                 li {
                                                     a {
                                                         padding-left: 80px;
                                                     }
                                                 }
-
                                                 ul {
                                                     li {
                                                         a {
@@ -783,78 +660,63 @@ body {
                                         }
                                     }
                                 }
-
                                 &.active-menuitem {
-                                    > a {
+                                    >a {
                                         color: $primaryColor;
                                         background-color: #e8e8e8;
                                     }
-
-                                     > ul {
+                                    >ul {
                                         display: block;
                                     }
                                 }
                             }
                         }
-
                         &.active-menuitem {
-                            > a {
+                            >a {
                                 color: $accentTextColor;
                                 background-color: $accentColor;
-
                                 i {
                                     color: $accentTextColor;
                                 }
                             }
-
-                            > ul {
+                            >ul {
                                 display: block;
                             }
                         }
                     }
                 }
-
                 &.layout-menu-dark {
                     background-color: $darkMenuBgColor;
-
                     ul.ultima-menu {
                         li {
                             a {
                                 color: #ffffff;
-
                                 &:hover {
                                     background-color: $darkMenuHoverColor;
                                     color: #ffffff;
-
                                     i {
                                         color: #ffffff;
                                     }
                                 }
-
                                 &.active-menuitem-routerlink {
-                                   color: $darkMenuRouterLinkActiveColor;
-
-                                   i {
-                                       color: $darkMenuRouterLinkActiveColor;
-                                   }
-
-                                   &:hover {
-                                       color: #ffffff;
-
-                                       i {
-                                           color: #ffffff;
-                                       }
-                                   }
+                                    color: $darkMenuRouterLinkActiveColor;
+                                    i {
+                                        color: $darkMenuRouterLinkActiveColor;
+                                    }
+                                    &:hover {
+                                        color: #ffffff;
+                                        i {
+                                            color: #ffffff;
+                                        }
+                                    }
                                 }
                             }
-
                             &.active-menuitem {
-                                > a {
+                                >a {
                                     color: $accentTextColor;
                                     background-color: $accentColor;
                                 }
                             }
-
                             ul {
                                 background-color: $darkMenuBgColor;
                             }
@@ -862,12 +724,10 @@ body {
                     }
                 }
             }
-
             .layout-main {
                 padding-top: 140px;
                 margin-left: 0px;
             }
-
             .layout-mask {
                 display: none;
             }
@@ -877,7 +737,6 @@ body {
 
 @media (max-width: 1024px) {
     .layout-container {
-
         &.menu-layout-static {
             .topbar {
                 .topbar-right {
@@ -891,20 +750,16 @@ body {
             .layout-menu {
                 margin-left: -265px;
             }
-
             .layout-main {
                 margin-left: 0px;
             }
-
             &.layout-menu-static-active {
                 .layout-menu {
                     margin-left: 0;
                     z-index: 999999999;
                 }
-
                 .topbar {
                     z-index: 999999998;
-
                     .topbar-right {
                         #menu-button {
                             i {
@@ -913,23 +768,19 @@ body {
                         }
                     }
                 }
-
                 .layout-main {
                     margin-left: 0;
                 }
-
                 .layout-mask {
                     display: block;
                 }
             }
         }
-
         .topbar {
             .topbar-right {
                 #topbar-menu-button {
                     display: block;
                 }
-
                 .topbar-items {
                     position: absolute;
                     top: 75px;
@@ -946,9 +797,8 @@ body {
                     list-style-type: none;
                     margin: 0;
                     padding: 0;
-
-                    > li {
-                        > a {
+                    >li {
+                        >a {
                             width: 100%;
                             display: block;
                             box-sizing: border-box;
@@ -956,23 +806,19 @@ body {
                             padding: 16px 16px;
                             color: $textColor;
                             position: relative;
-
                             i {
                                 display: inline-block;
                                 vertical-align: middle;
                                 margin-right: 12px;
                                 font-size: 24px;
                             }
-
                             &:hover {
                                 background-color: #e8e8e8;
                             }
-
                             .topbar-item-name {
                                 display: inline-block;
                                 vertical-align: middle;
                             }
-
                             .topbar-badge {
                                 position: absolute;
                                 left: 30px;
@@ -986,28 +832,25 @@ body {
                                 line-height: 12px;
                             }
                         }
-
-                        > ul {
+                        >ul {
                             display: none;
-
                             li {
                                 a {
-                                    span, img, i {
+                                    span,
+                                    img,
+                                    i {
                                         display: inline-block;
                                         vertical-align: middle;
                                     }
                                 }
                             }
                         }
-
                         &.active-top-menu {
-                            > a {
+                            >a {
                                 color: $primaryColor;
                             }
-
-                            > ul {
+                            >ul {
                                 display: block;
-
                                 li {
                                     a {
                                         padding-left: 32px;
@@ -1015,7 +858,6 @@ body {
                                 }
                             }
                         }
-
                         &.search-item {
                             text-align: center;
                             width: 100%;
@@ -1024,39 +866,34 @@ body {
                             font-size: 16px;
                             padding: 16px 16px;
                             position: relative;
-
                             input {
                                 top: 0;
                                 width: 100%;
                                 box-sizing: border-box;
-                                padding-right:16px;
+                                padding-right: 16px;
                                 border-color: $dividerColor;
                                 color: $textColor;
-
                                 &:focus {
                                     margin-bottom: -1px;
                                     border-color: $dividerColor;
                                 }
                             }
-
-                            input:focus ~ label,
-                            input.ui-state-filled ~ label  {
+                            input:focus~label,
+                            input.ui-state-filled~label {
                                 top: -20px;
                                 color: $primaryColor;
                             }
-
                             label {
                                 top: 1px;
                                 color: $textColor;
                             }
-
                             i {
-                                position: absolute;;
+                                position: absolute;
+                                ;
                                 right: 5px;
                                 top: -2px;
                             }
                         }
-
                         &.profile-item {
                             .profile-image {
                                 display: inline-block;
@@ -1067,14 +904,12 @@ body {
                                 background-size: 24px 24px;
                                 margin-right: 14px;
                             }
-
                             span {
                                 vertical-align: middle;
                                 display: inline-block;
                             }
                         }
                     }
-
                     &.topbar-items-visible {
                         display: block;
                     }
