@@ -81,10 +81,6 @@ export class GenesScreen {
                 biosources[experiment_biosource] = []
                 let l = { label: experiment_biosource, value: { name: experiment_biosource, experiments: biosources[experiment_biosource] } }
                 this.biosourcesItems.push(l);
-
-                console.log(l.label);
-                console.log(pre_selected_biosources);
-
                 if (pre_selected_biosources.indexOf(l.label) > -1) {
                     event_items.push(l.value);
                     this.selectedMultiSelectBiosources.push(l.value);

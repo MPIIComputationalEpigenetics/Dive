@@ -13,7 +13,6 @@ import {
     Experiment,
     Genome,
     IdName,
-    ProgressElement
 } from '../domain/deepblue';
 
 import { DeepBlueService } from '../service/deepblue';
