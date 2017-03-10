@@ -1,7 +1,7 @@
 html {
     height: 100%;
 }
- 
+
 body {
     font-family: Roboto,"Helvetica Neue",sans-serif;
     font-size: $fontSize;
@@ -12,7 +12,7 @@ body {
     margin: 0;
     background-color: #f7f7f7;
     height: 100%;
-    
+
     a {
         text-decoration: none;
     }
@@ -30,42 +30,43 @@ body {
 }
 
 .layout-container {
-    
+
     .topbar {
         position: fixed;
         z-index: 100;
         width: 100%;
-        height: 75px;
+        height: 100px;
         background-color: $primaryColor;
         -webkit-box-shadow: 0 2px 5px 0 rgba(0,0,0,0.26);
         -moz-box-shadow: 0 2px 5px 0 rgba(0,0,0,0.26);
     	box-shadow: 0 2px 5px 0 rgba(0,0,0,0.26);
-        
+
         .logo {
             display: inline-block;
             vertical-align: middle;
-            width: 200px;
-            height: 30px;
-            background: url("../images/logo2x.png") top left no-repeat;
-            background-size: 200px 30px;
+            width: 300px;
+            height: 83px;
+            background: url("../images/deepblue_alt.png") top left no-repeat;
+            background-size: 300px 83px;
+            background-position: center;
         }
-        
+
         .topbar-left {
             box-sizing: border-box;
-            padding: 20px;
-            height: 75px;
-            width: 250px;
+            padding: 5px;
+            height: 90px;
+            width: 300px;
             background-color: $primaryDarkColor;
             float: left;
             -webkit-box-shadow: 3px 0 6px rgba(0,0,0,0.3);
             -moz-box-shadow: 3px 0 6px rgba(0,0,0,0.3);
             box-shadow: 3px 0 6px rgba(0,0,0,0.3);
         }
-        
+
         .topbar-right {
             padding: 15px;
             position: relative;
-            
+
             #menu-button {
                 color: $accentTextColor;
                 display: inline-block;
@@ -76,24 +77,24 @@ body {
                 left: -16px;
                 top: 3px;
                 background-color: $accentColor;
-                
+
                 @include border-radius(50%);
                 @include transition(all .3s);
                 -webkit-box-shadow: 0 3px 10px rgba(0,0,0,0.23),0 3px 10px rgba(0,0,0,0.16);
                 -moz-box-shadow: 0 3px 10px rgba(0,0,0,0.23),0 3px 10px rgba(0,0,0,0.16);
                 box-shadow: 0 3px 10px rgba(0,0,0,0.23),0 3px 10px rgba(0,0,0,0.16);
-                
+
                 &:hover {
                     @include scale(1.2);
                 }
-                
+
                 i {
                     @include material-icon("chevron_left");
                     @include transition(all .3s);
                     font-size: 36px;
                 }
             }
-            
+
             #topbar-menu-button {
                 display: none;
                 color: #ffffff;
@@ -104,15 +105,15 @@ body {
                 right: 25px;
 
                 @include transition(all .3s);
-                
+
                 i {
                     @include transition(color .5s);
                     font-size: 36px;
                 }
             }
-            
+
             .topbar-items {
-                .search-item {                    
+                .search-item {
                     input {
                         position: relative;
                         top: -10px;
@@ -122,23 +123,23 @@ body {
                         padding: 2px 2px 1px 2px;
                         border-color: #ffffff;
                         color: #ffffff;
-                        
+
                         &:focus {
                             outline: 0 none;
                             border-bottom-width: 2px;
                         }
                     }
-                    
+
                     input:focus ~ label {
                       top:-5px;
                       font-size:12px;
                       color: $primaryColor;
                     }
-                    
+
                     input.ui-state-filled ~ label {
                         display: none;
                     }
-                    
+
                     label {
                         color: #ffffff;
                         top: 8px;
@@ -147,11 +148,11 @@ body {
             }
         }
     }
-    
+
     .layout-menu {
         overflow: auto;
         position: fixed;
-        width: 250px;
+        width: 300px;
         z-index: 99;
         top: 75px;
         height: 100%;
@@ -160,8 +161,8 @@ body {
         -moz-box-shadow: 3px 0 6px rgba(0,0,0,0.3);
         box-shadow: 3px 0 6px rgba(0,0,0,0.3);
         @include transition(margin-left .3s);
-                
-        > .nano {            
+
+        > .nano {
             > .nano-content {
                 &.menu-scroll-content {
                     display: block;
@@ -169,8 +170,8 @@ body {
                     position: relative;
                     overflow: scroll;
                     overflow-x: hidden;
-                }  
-                
+                }
+
                 ul.ultima-menu {
                     &.ultima-main-menu {
                         margin-top: 16px;
@@ -178,29 +179,29 @@ body {
                     }
                 }
             }
-            
+
             .nano-pane {
                 background: transparent;
-                
+
                 .nano-slider {
                     background-color: #aaaaaa;
                     @include opacity(.3);
                 }
             }
         }
-                
+
         .profile {
             box-sizing: border-box;
             padding-top: 2em;
-            width: 250px;
+            width: 300px;
             height: 145px;
             text-align: center;
             background: url("../images/profile-bg.png") top left no-repeat;
-            background-size: 250px 145px;
+            background-size: 300px 145px;
             -webkit-box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16);
             -moz-box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16);
         	box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16);
-            
+
             .profile-image {
                 width: 60px;
                 height: 60px;
@@ -208,27 +209,27 @@ body {
                 background: url("../images/avatar.png") top left no-repeat;
                 background-size: 60px 60px;
             }
-            
+
             .profile-name {
                 display: inline-block;
                 color: $textColor;
                 vertical-align: middle;
                 font-size: 1em;
             }
-            
+
             i {
                 color: $textColor;
                 vertical-align: middle;
                 @include transition(transform .3s);
             }
-            
+
             &.profile-expanded {
                 i {
                     @include rotate(-180deg);
                 }
             }
         }
-        
+
         .profile-menu {
             border-bottom: 1px solid #d6d5d5;
             overflow: hidden;
@@ -236,61 +237,61 @@ body {
             li:first-child {
                 margin-top: 1em;
             }
-            
+
             li:last-child {
                 margin-bottom: 1em;
             }
         }
-                        
+
         &.layout-menu-dark {
             background-color: $darkMenuBgColor;
-            
+
             .profile {
                 background-image: url("../images/profile-bg-dark.png");
-            
+
                 .profile-name {
                     color: #ffffff;
                 }
-                
+
                 i {
                     color:  #ffffff;
-                }    
+                }
             }
-            
+
             .profile-menu {
                 border-bottom: 1px solid $darkMenuHoverColor;
             }
-            
-            ul.ultima-menu {                
+
+            ul.ultima-menu {
                 li {
                     a {
                         color: #ffffff;
-                        
+
                         i {
                             color: #ffffff;
                         }
-                        
+
                         &:hover {
                             background-color: $darkMenuHoverColor;
                         }
 
                          &.active-menuitem-routerlink {
                             color: $darkMenuRouterLinkActiveColor;
-                            
+
                             i {
                                 color: $darkMenuRouterLinkActiveColor;
                             }
-                            
+
                             &:hover {
                                 color: #ffffff;
-                                
+
                                 > i {
                                     color: #ffffff;
                                 }
                             }
                          }
                     }
-                    
+
                     &.active-menuitem {
                         > a {
                             color: $accentTextColor;
@@ -298,43 +299,43 @@ body {
                         }
                     }
                 }
-            }                    
+            }
         }
     }
-        
+
     &.menu-layout-overlay {
         .layout-menu {
-            margin-left: -250px;
+            margin-left: -300px;
         }
-        
+
         .layout-main {
-            margin-left: 0px;
+            margin-left: 300px;
         }
-        
+
         &.layout-menu-overlay-active {
             .layout-menu {
                 z-index: 999999999;
                 margin-left: 0px;
             }
-            
+
             .layout-mask {
                 display: block;
             }
-            
-            .topbar {                
-                .topbar-right {                
+
+            .topbar {
+                .topbar-right {
                     #menu-button {
                         i {
                             @include rotate(0deg);
                         }
                     }
                 }
-            } 
-        }  
-        
+            }
+        }
+
         .topbar {
             z-index: 999999998;
-            
+
             .topbar-right {
                 #menu-button {
                     i {
@@ -343,24 +344,24 @@ body {
                     }
                 }
             }
-            
-        }      
+
+        }
     }
 
     .layout-main {
         padding: 96px 16px 16px 16px;
         @include transition(margin-left .3s);
     }
-    
+
     .layout-mask {
         display: none;
     }
-    
+
     .ultima-menu {
         margin: 0;
         padding: 0;
         list-style: none;
-        
+
         li {
             a {
                 font-size: 1em;
@@ -371,18 +372,18 @@ body {
                 box-sizing: border-box;
                 @include transition(background-color .3s);
                 overflow: hidden;
-                
+
                 i {
                     color: #757575;
                 }
-                
+
                 i:first-child {
                     display: inline-block;
                     vertical-align: middle;
                     margin-right: .5em;
                     font-size: 1.5em;
                 }
-                
+
                 i:last-child {
                     float: right;
                     font-size: $fontSize + 4;
@@ -390,11 +391,11 @@ body {
                     margin-right: -.15em;
                     @include transition(transform .3s);
                 }
-                
+
                 &:hover {
                     background-color: $hoverBgColor;
                 }
-                
+
                 span {
                     display: inline-block;
                     vertical-align: middle;
@@ -402,26 +403,26 @@ body {
 
                 &.active-menuitem-routerlink {
                     color: $lightMenuRouterLinkActiveColor;
-                    
+
                     > i {
                         color: $lightMenuRouterLinkActiveColor;
                     }
-                    
+
                     &:hover {
                         color: $textColor;
-                        
+
                         > i {
                             color: #757575;
                         }
                     }
                 }
             }
-            
+
             &.active-menuitem {
                 > a {
                     color: $primaryColor;
                     background-color: #e8e8e8;
-                    
+
                     i:last-child {
                         @include rotate(-180deg);
                     }
@@ -433,15 +434,15 @@ body {
                 margin: 0;
                 list-style: none;
                 overflow: hidden;
-                
+
                 li {
                     a {
                         padding: .5em 1em .5em 2em;
-                        
+
                         > span {
                             font-size: $fontSize - 1;
                         }
-                        
+
                         i:first-child {
                             display: inline-block;
                             vertical-align: middle;
@@ -449,28 +450,28 @@ body {
                             font-size: 1.250em;
                         }
                     }
-                    
+
                     ul {
                         li {
                             a {
                                 padding-left: 3em;
                             }
                         }
-                        
+
                         ul {
                             li {
                                 a {
                                     padding-left: 4em;
                                 }
                             }
-                            
+
                             ul {
                                 li {
                                     a {
                                         padding-left: 5em;
                                     }
                                 }
-                                
+
                                 ul {
                                     li {
                                         a {
@@ -485,18 +486,18 @@ body {
             }
         }
     }
-    
+
     .footer {
         padding: .5em;
-        
+
         .footer-text-left {
             float: left;
         }
-        
+
         .footer-text-right {
             color: $textSecondaryColor;
             float: right;
-            
+
             span {
                 vertical-align: middle;
                 display: inline-block;
@@ -511,28 +512,28 @@ body {
 }
 
 @media (min-width: 1025px) {
-    
+
     .layout-container {
-        
+
         .topbar-items {
             float: right;
             margin: 0;
             padding: 5px 0 0 0;
             list-style-type: none;
-            
+
             > li {
                 float: right;
                 position: relative;
                 margin-left: 8px;
-                
+
                 > a {
                     position: relative;
                     display: block;
-                    
+
                     .topbar-item-name {
                         display: none;
                     }
-                    
+
                     .topbar-badge {
                         position: absolute;
                         right: -5px;
@@ -551,12 +552,12 @@ body {
                     font-size: 36px;
                     color: #ffffff;
                     @include transition(color .3s);
-                    
+
                     &:hover {
                         color: #e8e8e8;
                     }
                 }
-                
+
                 &.profile-item {
                     .profile-image {
                         width: 36px;
@@ -565,13 +566,13 @@ body {
                         background-size: 36px 36px;
                     }
                 }
-                
+
                 > ul {
                     position: absolute;
                     top: 55px;
                     right: 5px;
                     display: none;
-                    width: 250px;
+                    width: 300px;
                     background-color: #ffffff;
                     -webkit-box-shadow: 0 6px 20px 0 rgba(0, 0, 0, 0.19), 0 8px 17px 0 rgba(0, 0, 0, 0.2);
                     -moz-box-shadow: 0 6px 20px 0 rgba(0, 0, 0, 0.19), 0 8px 17px 0 rgba(0, 0, 0, 0.2);
@@ -580,13 +581,13 @@ body {
                     -moz-animation-duration: .5s;
                     animation-duration: .5s;
                 }
-                
+
                 &.active-top-menu {
                     > ul {
                         display: block;
                     }
                 }
-                
+
                 .topbar-message {
                     img {
                         display: inline-block;
@@ -596,58 +597,58 @@ body {
                 }
             }
         }
-        
+
         &.menu-layout-static {
             .layout-menu {
                 margin-left: 0;
             }
-            
+
             .layout-main {
-                margin-left: 250px;
+                margin-left: 300px;
             }
-            
+
             &.layout-menu-static-inactive {
                 .topbar {
-                    .topbar-right {                
-                        #menu-button {                            
+                    .topbar-right {
+                        #menu-button {
                             i {
                                 @include rotate(180deg);
                             }
                         }
                     }
                 }
-                
+
                 .layout-menu {
-                    margin-left: -250px;
+                    margin-left: -300px;
                 }
-                
+
                 .layout-main {
                     margin-left: 0px;
                 }
             }
-            
+
             .layout-mask {
                 display: none;
             }
         }
-        
+
         &.menu-layout-horizontal {
             .topbar {
                 @include no-shadow();
-                
+
                 .topbar-left {
                     background-color: $primaryColor;
                     @include no-shadow();
                 }
-                
+
                 .topbar-right {
                     #menu-button {
                         display: none;
                     }
                 }
             }
-            
-            .layout-menu {            
+
+            .layout-menu {
                 overflow: visible;
                 position: fixed;
                 width: 100%;
@@ -657,10 +658,10 @@ body {
                 -webkit-box-shadow: 0 2px 5px 0 rgba(0,0,0,0.26);
                 -moz-box-shadow: 0 2px 5px 0 rgba(0,0,0,0.26);
                 box-shadow: 0 2px 5px 0 rgba(0,0,0,0.26);
-                
-                > .nano {  
+
+                > .nano {
                     overflow: visible;
-                                                                             
+
                     .nano-content {
                         &.menu-scroll-content {
                             display: inherit;
@@ -668,8 +669,8 @@ body {
                             position: static;
                             overflow: visible;
                             overflow-x: visible;
-                        }  
-                        
+                        }
+
                         ul.ultima-menu {
                             &.ultima-main-menu {
                                 margin-top: 0px;
@@ -677,100 +678,100 @@ body {
                             }
                         }
                     }
-                    
+
                     .nano-pane {
                         display: none !important;
                     }
                 }
-                
+
                 ul.ultima-menu {
                     &.ultima-main-menu {
                         margin-top: 0;
                     }
-                    
+
                     > li {
                         float: left;
                         position: relative;
-                        
+
                         > a {
                             color: #ffffff;
-                            
+
                             i {
                                 color: #ffffff;
                             }
-                            
+
                             &:hover {
                                 background-color: #e8e8e8;
                                 color: $textColor;
-                                
+
                                 i {
                                     color: $textColor;
                                 }
                             }
-                            
+
                             &.active-menuitem-routerlink {
                                 color: $horizontalLightMenuRouterLinkActiveColor;
-                                
+
                                 > i {
                                     color: $horizontalLightMenuRouterLinkActiveColor;
                                 }
-                                
+
                                 &:hover {
                                     color: $textColor;
-                                    
+
                                     i {
                                         color: $textColor;
                                     }
                                 }
                             }
                         }
-                        
+
                         > ul {
                             z-index: 100;
                             position: absolute;
                             top: 41px;
                             left: 0px;
-                            width: 250px;
+                            width: 300px;
                             background-color: #ffffff;
                             -webkit-box-shadow: 0 6px 20px 0 rgba(0, 0, 0, 0.19), 0 8px 17px 0 rgba(0, 0, 0, 0.2);
                             -moz-box-shadow: 0 6px 20px 0 rgba(0, 0, 0, 0.19), 0 8px 17px 0 rgba(0, 0, 0, 0.2);
                             box-shadow: 0 6px 20px 0 rgba(0, 0, 0, 0.19), 0 8px 17px 0 rgba(0, 0, 0, 0.2);
-                            
+
                             li {
                                 a {
                                     padding: 10px 16px;
                                 }
-                                
+
                                 ul {
                                     position: static;
-                                    
+
                                     li {
                                         a {
                                             padding-left: 32px;
                                         }
                                     }
-                                    
+
                                     ul {
                                         li {
                                             a {
                                                 padding-left: 48px;
                                             }
                                         }
-                                        
+
                                         ul {
                                             li {
                                                 a {
                                                     padding-left: 64px;
                                                 }
                                             }
-                                            
+
                                             ul {
                                                 li {
                                                     a {
                                                         padding-left: 80px;
                                                     }
                                                 }
-                                                
+
                                                 ul {
                                                     li {
                                                         a {
@@ -782,7 +783,7 @@ body {
                                         }
                                     }
                                 }
-                                
+
                                 &.active-menuitem {
                                     > a {
                                         color: $primaryColor;
@@ -795,12 +796,12 @@ body {
                                 }
                             }
                         }
-                        
+
                         &.active-menuitem {
                             > a {
                                 color: $accentTextColor;
                                 background-color: $accentColor;
-                                
+
                                 i {
                                     color: $accentTextColor;
                                 }
@@ -812,61 +813,61 @@ body {
                         }
                     }
                 }
-                
+
                 &.layout-menu-dark {
                     background-color: $darkMenuBgColor;
-                                        
-                    ul.ultima-menu {            
+
+                    ul.ultima-menu {
                         li {
                             a {
                                 color: #ffffff;
-                                
+
                                 &:hover {
                                     background-color: $darkMenuHoverColor;
                                     color: #ffffff;
-                                    
+
                                     i {
                                         color: #ffffff;
                                     }
                                 }
-                                
+
                                 &.active-menuitem-routerlink {
                                    color: $darkMenuRouterLinkActiveColor;
-                                   
+
                                    i {
                                        color: $darkMenuRouterLinkActiveColor;
                                    }
-                                   
+
                                    &:hover {
                                        color: #ffffff;
-                                       
+
                                        i {
                                            color: #ffffff;
                                        }
                                    }
                                 }
                             }
-                            
+
                             &.active-menuitem {
                                 > a {
                                     color: $accentTextColor;
                                     background-color: $accentColor;
                                 }
                             }
-                            
+
                             ul {
                                 background-color: $darkMenuBgColor;
                             }
                         }
-                    }                    
+                    }
                 }
             }
-            
+
             .layout-main {
                 padding-top: 140px;
                 margin-left: 0px;
             }
-            
+
             .layout-mask {
                 display: none;
             }
@@ -876,7 +877,7 @@ body {
 
 @media (max-width: 1024px) {
     .layout-container {
-        
+
         &.menu-layout-static {
             .topbar {
                 .topbar-right {
@@ -890,33 +891,33 @@ body {
             .layout-menu {
                 margin-left: -265px;
             }
-            
+
             .layout-main {
                 margin-left: 0px;
             }
-            
+
             &.layout-menu-static-active {
                 .layout-menu {
                     margin-left: 0;
                     z-index: 999999999;
                 }
-                
+
                 .topbar {
                     z-index: 999999998;
-                    
+
                     .topbar-right {
-                        #menu-button {                            
+                        #menu-button {
                             i {
                                 @include rotate(0);
                             }
                         }
                     }
                 }
-                
+
                 .layout-main {
                     margin-left: 0;
                 }
-                
+
                 .layout-mask {
                     display: block;
                 }
@@ -928,7 +929,7 @@ body {
                 #topbar-menu-button {
                     display: block;
                 }
-                
+
                 .topbar-items {
                     position: absolute;
                     top: 75px;
@@ -945,7 +946,7 @@ body {
                     list-style-type: none;
                     margin: 0;
                     padding: 0;
-                    
+
                     > li {
                         > a {
                             width: 100%;
@@ -955,23 +956,23 @@ body {
                             padding: 16px 16px;
                             color: $textColor;
                             position: relative;
-                            
+
                             i {
                                 display: inline-block;
                                 vertical-align: middle;
                                 margin-right: 12px;
                                 font-size: 24px;
                             }
-                            
+
                             &:hover {
                                 background-color: #e8e8e8;
                             }
-                            
+
                             .topbar-item-name {
                                 display: inline-block;
                                 vertical-align: middle;
                             }
-                                            
+
                             .topbar-badge {
                                 position: absolute;
                                 left: 30px;
@@ -985,10 +986,10 @@ body {
                                 line-height: 12px;
                             }
                         }
-                        
+
                         > ul {
                             display: none;
-                            
+
                             li {
                                 a {
                                     span, img, i {
@@ -998,15 +999,15 @@ body {
                                 }
                             }
                         }
-                        
+
                         &.active-top-menu {
                             > a {
                                 color: $primaryColor;
                             }
-                            
+
                             > ul {
                                 display: block;
-                                
+
                                 li {
                                     a {
                                         padding-left: 32px;
@@ -1014,7 +1015,7 @@ body {
                                 }
                             }
                         }
-                        
+
                         &.search-item {
                             text-align: center;
                             width: 100%;
@@ -1023,7 +1024,7 @@ body {
                             font-size: 16px;
                             padding: 16px 16px;
                             position: relative;
-                            
+
                             input {
                                 top: 0;
                                 width: 100%;
@@ -1031,31 +1032,31 @@ body {
                                 padding-right:16px;
                                 border-color: $dividerColor;
                                 color: $textColor;
-                                
+
                                 &:focus {
                                     margin-bottom: -1px;
                                     border-color: $dividerColor;
                                 }
                             }
-                            
+
                             input:focus ~ label,
                             input.ui-state-filled ~ label  {
                                 top: -20px;
                                 color: $primaryColor;
                             }
-                            
+
                             label {
                                 top: 1px;
                                 color: $textColor;
                             }
-                            
+
                             i {
                                 position: absolute;;
                                 right: 5px;
                                 top: -2px;
                             }
                         }
-                        
+
                         &.profile-item {
                             .profile-image {
                                 display: inline-block;
@@ -1066,14 +1067,14 @@ body {
                                 background-size: 24px 24px;
                                 margin-right: 14px;
                             }
-                            
+
                             span {
                                 vertical-align: middle;
                                 display: inline-block;
                             }
                         }
                     }
-                    
+
                     &.topbar-items-visible {
                         display: block;
                     }

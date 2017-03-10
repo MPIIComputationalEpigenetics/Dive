@@ -193,20 +193,20 @@
     opacity: 0;
     transform: scale(2.5); } }
 .splash-screen {
-  background-color: #3F51B5;
-  height: 100%; }
+  background-color: #FFFFFF;
+  height: 100%;
+  padding-top: 200px; }
   .splash-screen .splash-container {
-    padding-top: 250px;
-    width: 250px;
+    width: 383px;
     margin: 0 auto;
     text-align: center; }
   .splash-screen .logo {
     display: inline-block;
     vertical-align: middle;
-    width: 200px;
-    height: 30px;
-    background: url("../images/logo2x.png") top left no-repeat;
-    background-size: 200px 30px; }
+    width: 383px;
+    height: 383px;
+    background: url("../images/DB_Dive_Cover.png") top left no-repeat;
+    background-size: 383 383px; }
   .splash-screen .load-bar {
     position: relative;
     margin-top: 20px;
@@ -222,13 +222,13 @@
     left: 50%;
     text-align: center; }
   .splash-screen .bar:nth-child(1) {
-    background-color: #E91E63;
+    background-color: #3F4A9F;
     animation: loading 3s linear infinite; }
   .splash-screen .bar:nth-child(2) {
-    background-color: #8BC34A;
+    background-color: #FFFFFF;
     animation: loading 3s linear 1s infinite; }
   .splash-screen .bar:nth-child(3) {
-    background-color: #FFC107;
+    background-color: #005DAC;
     animation: loading 3s linear 2s infinite; }
 @keyframes loading {
   from {
@@ -854,7 +854,7 @@ body {
   position: fixed;
   z-index: 100;
   width: 100%;
-  height: 75px;
+  height: 100px;
   background-color: #3e464c;
   -webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
   -moz-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
@@ -862,15 +862,16 @@ body {
   .layout-container .topbar .logo {
     display: inline-block;
     vertical-align: middle;
-    width: 200px;
-    height: 30px;
-    background: url("../images/logo2x.png") top left no-repeat;
-    background-size: 200px 30px; }
+    width: 300px;
+    height: 83px;
+    background: url("../images/deepblue_alt.png") top left no-repeat;
+    background-size: 300px 83px;
+    background-position: center; }
   .layout-container .topbar .topbar-left {
     box-sizing: border-box;
-    padding: 20px;
-    height: 75px;
-    width: 250px;
+    padding: 5px;
+    height: 90px;
+    width: 300px;
     background-color: #2b3135;
     float: left;
     -webkit-box-shadow: 3px 0 6px rgba(0, 0, 0, 0.3);
@@ -978,7 +979,7 @@ body {
 .layout-container .layout-menu {
   overflow: auto;
   position: fixed;
-  width: 250px;
+  width: 300px;
   z-index: 99;
   top: 75px;
   height: 100%;
@@ -1008,11 +1009,11 @@ body {
   .layout-container .layout-menu .profile {
     box-sizing: border-box;
     padding-top: 2em;
-    width: 250px;
+    width: 300px;
     height: 145px;
     text-align: center;
     background: url("../images/profile-bg.png") top left no-repeat;
-    background-size: 250px 145px;
+    background-size: 300px 145px;
     -webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16);
     -moz-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16);
     box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16); }
@@ -1075,9 +1076,9 @@ body {
       color: #ffffff;
       background-color: #5180ce; }
 .layout-container.menu-layout-overlay .layout-menu {
-  margin-left: -250px; }
+  margin-left: -300px; }
 .layout-container.menu-layout-overlay .layout-main {
-  margin-left: 0px; }
+  margin-left: 300px; }
 .layout-container.menu-layout-overlay.layout-menu-overlay-active .layout-menu {
   z-index: 999999999;
   margin-left: 0px; }
@@ -1244,7 +1245,7 @@ body {
         top: 55px;
         right: 5px;
         display: none;
-        width: 250px;
+        width: 300px;
         background-color: #ffffff;
         -webkit-box-shadow: 0 6px 20px 0 rgba(0, 0, 0, 0.19), 0 8px 17px 0 rgba(0, 0, 0, 0.2);
         -moz-box-shadow: 0 6px 20px 0 rgba(0, 0, 0, 0.19), 0 8px 17px 0 rgba(0, 0, 0, 0.2);
@@ -1261,7 +1262,7 @@ body {
   .layout-container.menu-layout-static .layout-menu {
     margin-left: 0; }
   .layout-container.menu-layout-static .layout-main {
-    margin-left: 250px; }
+    margin-left: 300px; }
   .layout-container.menu-layout-static.layout-menu-static-inactive .topbar .topbar-right #menu-button i {
     -webkit-transform: rotate(180deg);
     -moz-transform: rotate(180deg);
@@ -1269,7 +1270,7 @@ body {
     -ms-transform: rotate(180deg);
     transform: rotate(180deg); }
   .layout-container.menu-layout-static.layout-menu-static-inactive .layout-menu {
-    margin-left: -250px; }
+    margin-left: -300px; }
   .layout-container.menu-layout-static.layout-menu-static-inactive .layout-main {
     margin-left: 0px; }
   .layout-container.menu-layout-static .layout-mask {
@@ -1335,7 +1336,7 @@ body {
         position: absolute;
         top: 41px;
         left: 0px;
-        width: 250px;
+        width: 300px;
         background-color: #ffffff;
         -webkit-box-shadow: 0 6px 20px 0 rgba(0, 0, 0, 0.19), 0 8px 17px 0 rgba(0, 0, 0, 0.2);
         -moz-box-shadow: 0 6px 20px 0 rgba(0, 0, 0, 0.19), 0 8px 17px 0 rgba(0, 0, 0, 0.2);
