@@ -8,74 +8,24 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 @Injectable()
 export class MenuService {
   model = [
-    { label: 'Dashboard', icon: 'dashboard', routerLink: ['/'] },
     {
-      name: 'genomes', label: 'Genomes: ', icon: 'lens',
+      label: 'Dashboard', icon: 'dashboard', routerLink: ['/']
+    },
+    {
+      name: 'genomes', label: 'Genomes', icon: 'lens',
       items: [ ]
     },
-    { label: 'Get regions', icon: 'dehaze', routerLink: ['/regions'] },
-
-    { name: 'filtering', label: 'Filtering', icon: 'filter_list',
+    {
+      label: 'Get regions', icon: 'dehaze', routerLink: ['/regions']
+    },
+    {
+      name: 'filtering', label: 'Filtering', icon: 'filter_list',
       items: [  ]
     },
     {
-      label: 'Template Pages', icon: 'get_app',
-      items: [
-        { label: 'Empty Page', icon: 'hourglass_empty', routerLink: ['/empty'] },
-        { label: 'Landing Page', icon: 'flight_land', url: 'landing.html' },
-        { label: 'Login Page', icon: 'verified_user', url: 'login.html' },
-        { label: 'Error Page', icon: 'error', url: 'error.html' },
-        { label: '404 Page', icon: 'error_outline', url: '404.html' },
-        { label: 'Access Denied Page', icon: 'security', url: 'access.html' }
-      ]
-    },
-    {
-      label: 'Menu Hierarchy', icon: 'menu',
-      items: [
-        {
-          label: 'Submenu 1', icon: 'subject',
-          items: [
-            {
-              label: 'Submenu 1.1', icon: 'subject',
-              items: [
-                { label: 'Submenu 1.1.1', icon: 'subject' },
-                { label: 'Submenu 1.1.2', icon: 'subject' },
-                { label: 'Submenu 1.1.3', icon: 'subject' },
-              ]
-            },
-            {
-              label: 'Submenu 1.2', icon: 'subject',
-              items: [
-                { label: 'Submenu 1.2.1', icon: 'subject' },
-                { label: 'Submenu 1.2.2', icon: 'subject' }
-              ]
-            },
-          ]
-        },
-        {
-          label: 'Submenu 2', icon: 'subject',
-          items: [
-            {
-              label: 'Submenu 2.1', icon: 'subject',
-              items: [
-                { label: 'Submenu 2.1.1', icon: 'subject' },
-                { label: 'Submenu 2.1.2', icon: 'subject' },
-                { label: 'Submenu 2.1.3', icon: 'subject' },
-              ]
-            },
-            {
-              label: 'Submenu 2.2', icon: 'subject',
-              items: [
-                { label: 'Submenu 2.2.1', icon: 'subject' },
-                { label: 'Submenu 2.2.2', icon: 'subject' }
-              ]
-            },
-          ]
-        }
-      ]
-    },
-    { label: 'Utils', icon: 'build', routerLink: ['/utils'] },
-    { label: 'Documentation', icon: 'find_in_page', routerLink: ['/documentation'] }
+      name: 'histones', label: 'Histone Modification ', icon: 'change_history',
+      items: [ ]
+    }
   ];
 
   public menuItems = new BehaviorSubject<Object[]>(this.model);
