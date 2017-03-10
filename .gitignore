@@ -41,4 +41,4 @@ jspm_packages
 app/**/*.js
 out/chrome
 src/assets/layout/.sass-cache/
-
+src/assets/.sass-cache
