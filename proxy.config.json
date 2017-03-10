@@ -1,0 +1,14 @@
+{
+  "/api": {
+    "target": "http://deepblue.mpi-inf.mpg.de/",
+    "changeOrigin": true
+  },
+
+  "/local": {
+    "target": "http://localhost:5000/",
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/api": ""
+    }
+  }
+}

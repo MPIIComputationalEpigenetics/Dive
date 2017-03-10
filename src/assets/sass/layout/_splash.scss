@@ -1,0 +1,55 @@
+.splash-screen {
+    background-color: #FFFFFF;
+    height: 100%;
+    padding-top: 200px;
+
+    .splash-container {
+        width: 383px;
+        margin: 0 auto;
+        text-align: center
+    }
+
+    .logo {
+        display: inline-block;
+        vertical-align: middle;
+        width: 383px;
+        height: 383px;
+        background: url("../images/DB_Dive_Cover.png") top left no-repeat;
+        background-size: 383 383px;
+    }
+
+    .load-bar {
+      position: relative;
+      margin-top: 20px;
+      width: 100%;
+      height: 6px;
+      background-color: #ffffff;
+    }
+
+    .bar {
+      content: "";
+      display: inline;
+      position: absolute;
+      width: 0;
+      height: 100%;
+      left: 50%;
+      text-align: center;
+    }
+    .bar:nth-child(1) {
+      background-color: #3F4A9F;
+      animation: loading 3s linear infinite;
+    }
+    .bar:nth-child(2) {
+      background-color: #FFFFFF;
+      animation: loading 3s linear 1s infinite;
+    }
+    .bar:nth-child(3) {
+      background-color: #005DAC;
+      animation: loading 3s linear 2s infinite;
+    }
+    @keyframes loading {
+        from {left: 50%; width: 0;z-index:100;}
+        33.3333% {left: 0; width: 100%;z-index: 10;}
+        to {left: 0; width: 100%;}
+    }
+}
