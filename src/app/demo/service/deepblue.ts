@@ -22,8 +22,7 @@ import {
     FullMetadata,
     GeneModel,
     Genome,
-    IdName,
-    ProgressElement
+    IdName
 } from '../domain/deepblue';
 
 import { IKey } from '../domain/interfaces';
@@ -36,7 +35,7 @@ import {
     DeepBlueResult
 } from '../domain/operations';
 
-
+import { ProgressElement } from '../service/progresselement';
 
 import { ICloneable } from '../domain/interfaces';
 
@@ -149,7 +148,7 @@ export class DeepBlueService {
 
     //
 
-    constructor(private http: Http) {
+    constructor(private http: Http, public progress_element: ProgressElement) {
         console.log("NEW DEEPBLUE SERVICE");
     }
 
