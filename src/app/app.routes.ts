@@ -1,8 +1,8 @@
 import {Routes,RouterModule} from '@angular/router';
 import {ModuleWithProviders} from '@angular/core';
-import {SummaryScreen} from './demo/view/summary.screen';
-import {RegionsScreen} from './demo/view/regions.screen' ;
-import {HistonesScreen} from './demo/view/histones.screen';
+import {SummaryScreen} from './dive/view/summary.screen';
+import {RegionsScreen} from './dive/view/regions.screen' ;
+import {HistonesScreen} from './dive/view/histones.screen';
 
 export const routes: Routes = [
     {path: '', component: SummaryScreen},

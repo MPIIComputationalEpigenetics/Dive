@@ -77,24 +77,24 @@ import { AppFooter } from './app.footer.component';
 
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
-import { MenuService } from './demo/service/menu';
-import { DataStack } from './demo/service/datastack';
-import { DeepBlueService } from './demo/service/deepblue';
-import { ProgressElement } from './demo/service/progresselement';
+import { MenuService } from './dive/service/menu';
+import { DataStack } from './dive/service/datastack';
+import { DeepBlueService } from './dive/service/deepblue';
+import { ProgressElement } from './dive/service/progresselement';
 
-import { HistonesScreen, OverlapsBarChart } from './demo/view/histones.screen';
+import { HistonesScreen, OverlapsBarChart } from './dive/view/histones.screen';
 
-import { FilteringComponent } from './demo/view/filtering';
+import { FilteringComponent } from './dive/view/filtering';
 
-import { SummaryScreen } from './demo/view/summary.screen';
+import { SummaryScreen } from './dive/view/summary.screen';
 
-import { RegionsScreen } from './demo/view/regions.screen';
+import { RegionsScreen } from './dive/view/regions.screen';
 
-import { BioSourcesScreen } from './demo/view/biosources.screen';
+import { BioSourcesScreen } from './dive/view/biosources.screen';
 
-import { AnnotationListComponent, DiveStatus, DataStackView, GenomeSelectorComponent, HistoneExperimentsMenu, DataInfoBox } from './demo/view/deepblue';
+import { AnnotationListComponent, DiveStatus, DataStackView, GenomeSelectorComponent, HistoneExperimentsMenu, DataInfoBox } from './dive/view/deepblue';
 
-import { DataLoadProgressBar } from './demo/view/progressbar';
+import { DataLoadProgressBar } from './dive/view/progressbar';
 
 import { HighchartsStatic } from 'angular2-highcharts/dist/HighchartsService';
 import { ChartModule } from "angular2-highcharts";

@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { MenuItem } from 'primeng/primeng';
 import { AppComponent } from './app.component';
 
-import { MenuService } from 'app/demo/service/menu';
+import { MenuService } from 'app/dive/service/menu';
 
 @Component({
     selector: 'app-menu',
