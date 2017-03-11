@@ -639,14 +639,41 @@ export class DeepBlueService {
             .catch(this.handleError);
     }
 
-    getGeneModels(): Observable<FullGeneModel[]> {
+    getGeneModels(): Observable<GeneModel[]> {
         return this.http.get(this.deepBlueUrl + "/list_gene_models")
             .map((res: Response) => {
                 let body = res.json();
                 let data = body[1] || [];
                 return data.map((value) => {
-                    return new Experiment(value);
+                    return new GeneModel(value);
                 });
+            })
+            .catch(this.handleError);
+    }
+
+    selectGenes(gene_model: IdName, progress_element: ProgressElement, request_count: number): Observable<DeepBlueOperation> {
+        if (!gene_model) {
+            return Observable.empty<DeepBlueOperation>();
+        }
+
+        if (this.idNamesQueryCache.get(gene_model, request_count)) {
+            console.log("selectGene hit");
+            progress_element.increment(request_count);
+            let cached_operation = this.idNamesQueryCache.get(gene_model, request_count);
+            return Observable.of(cached_operation);
+        }
+
+        let params: URLSearchParams = new URLSearchParams();
+        params.set("gene_model", gene_model.name);
+        return this.http.get(this.deepBlueUrl + "/select_genes", { "search": params })
+            .map((res: Response) => {
+                let body = res.json();
+                let response: string = body[1] || "";
+                progress_element.increment(request_count);
+                return new DeepBlueOperation(gene_model, response, "select_genes", request_count);
+            })
+            .do((operation) => {
+                this.idNamesQueryCache.put(gene_model, operation)
             })
             .catch(this.handleError);
     }

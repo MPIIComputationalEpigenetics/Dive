@@ -4,14 +4,14 @@ import { DataStack, DataStackItem } from '../service/datastack';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 
-import { SelectItem } from 'primeng/primeng';
+import { Dropdown, SelectItem } from 'primeng/primeng';
 
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable'
 
 import { MultiSelect } from 'primeng/primeng';
 
-import { BioSource, EpigeneticMark, FullExperiment, Genome, IdName } from '../domain/deepblue';
+import { BioSource, EpigeneticMark, FullExperiment, Genome, GeneModel } from '../domain/deepblue';
 
 import { DeepBlueService } from '../service/deepblue';
 import { ProgressElement } from '../service/progresselement'
@@ -23,153 +23,81 @@ import {
 
 
 @Component({
-    selector: 'histones-summary',
-    templateUrl: './histones.screen.html'
+    templateUrl: './genes.screen.html'
 })
 export class GenesScreen {
     errorMessage: string;
-    experiments: FullExperiment[];
-    segregated_data: Object;
+    geneModels: GeneModel[];
+    menuGeneModel: SelectItem[];
+    selectedGeneModel:  SelectItem[];
 
-    biosourcesItems: SelectItem[] = [];
-    selectedMultiSelectBiosources: Object[] = [];
-
-    epigeneticMarkSubscription: Subscription;
-
-    defaultSelectBiosourcesLabel: string = "Select the Biosource"
-
-    selectedExperimentsSource = new BehaviorSubject<IdName[]>([]);
-    selectedExperimentsValue$: Observable<IdName[]> = this.selectedExperimentsSource.asObservable();
-
-
-    selectedBioSourcesSource = new BehaviorSubject<IdName[]>([]);
-    selectedBioSourcesValue$: Observable<IdName[]> = this.selectedBioSourcesSource.asObservable();
-
-    currentlyProcessing: Object[] = [];
-
-    current_request: number = 0;
-
-    data: any;
-
-    hasData: boolean = false;
+    genomeSubscription: Subscription;
 
     @ViewChild('overlapbarchart') overlapbarchart: OverlapsBarChart;
-    @ViewChild('multiselect') multiselect: MultiSelect;
+    @ViewChild('geneModelDropdown') geneModelDropdown: Dropdown;
 
-    segregate(experiments: FullExperiment[]) {
+    selectedGeneModelSource = new BehaviorSubject<GeneModel>(null);
+    selectedGeneModelValue$: Observable<GeneModel> = this.selectedGeneModelSource.asObservable();
 
-        let biosources = {}
-        let samples = {}
-        let epigenetic_marks = {}
-        let techniques = {}
-        let projects = {}
-
-        let event_items = [];
-        let pre_selected_biosources = this.deepBlueService.selectedBioSources.getValue().map((x: BioSource) => x.name);
-
-        this.biosourcesItems = [];
-        this.selectedMultiSelectBiosources = [];
-
-        for (let experiment of experiments) {
-            let experiment_biosource = experiment.sample_info()['biosource_name'];
-            let experiment_sample_id = experiment.sample_id();
-            let experiment_epigenetic_mark = experiment.epigenetic_mark();
-            let experiment_technique = experiment.technique();
-            let experiment_project = experiment.project();
-
-            if (!(experiment_biosource in biosources)) {
-                biosources[experiment_biosource] = []
-                let l = { label: experiment_biosource, value: { name: experiment_biosource, experiments: biosources[experiment_biosource] } }
-                this.biosourcesItems.push(l);
-                if (pre_selected_biosources.indexOf(l.label) > -1) {
-                    event_items.push(l.value);
-                    this.selectedMultiSelectBiosources.push(l.value);
-                }
-            }
-
-            if (!(experiment_sample_id in samples)) {
-                samples[experiment_sample_id] = []
-            }
-
-            if (!(experiment_epigenetic_mark in epigenetic_marks)) {
-                epigenetic_marks[experiment_epigenetic_mark] = []
-            }
-
-            if (!(experiment_technique in techniques)) {
-                techniques[experiment_technique] = []
-            }
-
-            if (!(experiment_project in projects)) {
-                projects[experiment_project] = []
-            }
-
-            biosources[experiment_biosource].push(experiment);
-            samples[experiment_sample_id].push(experiment);
-            epigenetic_marks[experiment_epigenetic_mark].push(experiment);
-            techniques[experiment_technique].push(experiment);
-            projects[experiment_project].push(experiment);
-        }
-
-        this.selectBiosources({ value: event_items });
-
-        return {
-            "biosources": biosources,
-            "samples": samples,
-            "epigenetic_marks": epigenetic_marks,
-            "techniques": techniques,
-            "projects": projects
-        }
-    }
+    currentlyProcessing: GeneModel = null;
+    current_request: number = 0;
+    data: any;
+    hasData: boolean = false;
 
     constructor(private deepBlueService: DeepBlueService,
         public progress_element: ProgressElement, private dataStack: DataStack) {
 
-        this.epigeneticMarkSubscription = deepBlueService.epigeneticMarkValue$.subscribe(selected_epigenetic_mark => {
-            this.deepBlueService.getExperiments(deepBlueService.getGenome(), selected_epigenetic_mark).subscribe(experiments_ids => {
-                var ids = experiments_ids.map((e) => e.id);
-                this.deepBlueService.getExperimentsInfos(ids).subscribe(full_info => {
-                    this.experiments = <FullExperiment[]>full_info;
-                    this.segregated_data = this.segregate(<FullExperiment[]>full_info);
+        this.genomeSubscription = deepBlueService.genomeValue$.subscribe(genome => {
+            if (genome.id == "") {
+                return;
+            }
+            this.deepBlueService.getGeneModels().subscribe((geneModels: GeneModel[]) => {
+                if (geneModels.length == 0) {
+                    return;
+                }
+                this.geneModels = geneModels;
+                this.menuGeneModel = geneModels.map((geneModel: GeneModel) => {
+                    let l = { label: geneModel.name, value: geneModel };
+                    this.geneModelDropdown.selectItem(null, l);
+                    return l;
                 });
             },
                 error => this.errorMessage = <any>error);
-        }
-        );
+        });
 
-        this.selectedExperimentsValue$.debounceTime(250).subscribe(() => this.processOverlaps());
-
+        this.selectedGeneModelValue$.debounceTime(250).subscribe(() => this.processOverlaps());
         this.dataStack.topStackValue$.subscribe((dataStackItem: DataStackItem) => this.processOverlaps())
     }
 
+    selectGeneModel(event) {
+        console.log(event.value);
+        this.selectedGeneModelSource.next(event.value)
+    }
 
     processOverlaps() {
-        let experiments = this.selectedExperimentsSource.getValue();
+        this.progress_element.reset(3, this.current_request);
 
-        if (experiments.length == 0) {
+        let gene_model = this.selectedGeneModelSource.getValue();
+
+        if (gene_model == null) {
             this.reloadPlot([]);
             return;
         }
 
-        if (experiments != this.selectedExperimentsSource.getValue()) {
+        if (gene_model != this.selectedGeneModelSource.getValue()) {
             this.reloadPlot([]);
             return;
         }
 
-        if (experiments == this.currentlyProcessing) {
+        if (gene_model == this.currentlyProcessing) {
             return;
         }
         this.current_request++;
+        this.currentlyProcessing = gene_model;
 
-        // Each experiment is started, selected, overlaped, count, get request data (4 times each)
-        this.progress_element.reset(experiments.length * 5, this.current_request);
-        this.currentlyProcessing = experiments;
 
-        this.deepBlueService.selectMultipleExperiments(experiments, this.progress_element, this.current_request).subscribe((selected_experiments: DeepBlueOperation[]) => {
-            if (selected_experiments.length == 0) {
-                this.reloadPlot([]);
-                return;
-            }
-            if (selected_experiments[0].request_count != this.current_request) {
+        this.deepBlueService.selectGenes(gene_model, this.progress_element, this.current_request).subscribe((selected_genes: DeepBlueOperation) => {
+            if (selected_genes.request_count != this.current_request) {
                 return;
             }
 
@@ -180,7 +108,7 @@ export class GenesScreen {
                 return;
             }
 
-            this.deepBlueService.intersectWithSelected(current, selected_experiments, this.progress_element, this.current_request).subscribe((overlap_ids: DeepBlueOperation[]) => {
+            this.deepBlueService.intersectWithSelected(current, [selected_genes], this.progress_element, this.current_request).subscribe((overlap_ids: DeepBlueOperation[]) => {
                 if (overlap_ids.length == 0) {
                     this.reloadPlot([]);
                     return;
@@ -199,23 +127,11 @@ export class GenesScreen {
                         return;
                     }
 
-                    this.currentlyProcessing = [];
+                    this.currentlyProcessing = null;
                     this.reloadPlot(datum);
                 })
             });
         });
-    }
-
-    selectBiosources(event) {
-        let experiments: IdName[] = [];
-        let selected_data = event.value;
-        let biosources = event.value.map((x) => x.name);
-
-        let exp_arrays = event.value.map((x) => x.experiments)
-        experiments = experiments.concat.apply([], exp_arrays);
-
-        this.selectedExperimentsSource.next(experiments);
-        this.selectedBioSourcesSource.next(biosources);
     }
 
     reloadPlot(datum: Object[]) {
@@ -229,19 +145,11 @@ export class GenesScreen {
         this.overlapbarchart.setNewData(newdata);
     }
 
-    selectExperimentBar(e) {
-        let dataset = e.dataset;
-        let element = e.element;
-        let position = element._index;
-
-        console.log(dataset[position]);
-    }
-
     hasDataDetail(): boolean {
         return this.deepBlueService.getDataInfoSelected() != null;
     }
 
     ngOnDestroy() {
-        this.epigeneticMarkSubscription.unsubscribe();
+        this.genomeSubscription.unsubscribe();
     }
 }

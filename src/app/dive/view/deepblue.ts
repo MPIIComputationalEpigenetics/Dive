@@ -30,8 +30,9 @@ import { DataCache, DeepBlueService, MultiKeyDataCache } from '../service/deepbl
     template: `
         <div class="card card-w-title" style="word-wrap: break-word">
             <h2>Data information</h2>
+
             {{ data.name }}
-            {{ data     }}
+
 
             <button pButton type="button" (click)="filterOverlapping()" label="Filter overlapping"></button>
             <button pButton type="button" (click)="filterNonOverlapping()" label="Filter not-overlapping"></button>

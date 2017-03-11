@@ -125,7 +125,6 @@ export class OverlapsBarChart {
 
 
 @Component({
-    selector: 'histones-summary',
     templateUrl: './histones.screen.html'
 })
 export class HistonesScreen {
@@ -239,14 +238,11 @@ export class HistonesScreen {
                 });
             },
                 error => this.errorMessage = <any>error);
-        }
-        );
+        });
 
         this.selectedExperimentsValue$.debounceTime(250).subscribe(() => this.processOverlaps());
-
         this.dataStack.topStackValue$.subscribe((dataStackItem: DataStackItem) => this.processOverlaps())
     }
-
 
     processOverlaps() {
         let experiments = this.selectedExperimentsSource.getValue();

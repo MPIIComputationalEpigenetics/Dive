@@ -92,6 +92,8 @@ import { RegionsScreen } from './dive/view/regions.screen';
 
 import { BioSourcesScreen } from './dive/view/biosources.screen';
 
+import { GenesScreen } from './dive/view/genes.screen';
+
 import { AnnotationListComponent, DiveStatus, DataStackView, GenomeSelectorComponent, HistoneExperimentsMenu, DataInfoBox } from './dive/view/deepblue';
 
 import { DataLoadProgressBar } from './dive/view/progressbar';
@@ -185,7 +187,6 @@ import { AppComponent } from './app.component';
         AppTopBar,
         AppFooter,
         DiveStatus,
-        HistonesScreen,
         DataStackView,
         DataLoadProgressBar,
         OverlapsBarChart,
@@ -196,7 +197,9 @@ import { AppComponent } from './app.component';
         DataInfoBox,
         SummaryScreen,
         RegionsScreen,
-        BioSourcesScreen
+        BioSourcesScreen,
+        HistonesScreen,
+        GenesScreen
     ],
     providers: [
         { provide: LocationStrategy, useClass: HashLocationStrategy },

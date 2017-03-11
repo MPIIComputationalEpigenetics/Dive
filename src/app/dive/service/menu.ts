@@ -13,18 +13,21 @@ export class MenuService {
     },
     {
       name: 'genomes', label: 'Genomes', icon: 'lens',
-      items: [ ]
+      items: []
     },
     {
       label: 'Get regions', icon: 'dehaze', routerLink: ['/regions']
     },
     {
       name: 'filtering', label: 'Filtering', icon: 'filter_list',
-      items: [  ]
+      items: []
     },
     {
       name: 'histones', label: 'Histone Modification ', icon: 'change_history',
-      items: [ ]
+      items: []
+    },
+    {
+      name: 'genes', label: 'Genes', icon: 'lens', routerLink: ['/genes']
     }
   ];
 
