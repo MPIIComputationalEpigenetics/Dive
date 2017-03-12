@@ -1,11 +1,11 @@
-import {Component,Inject,forwardRef} from '@angular/core';
-import {AppComponent} from './app.component';
+import { Component, Inject, forwardRef } from '@angular/core';
+import { AppComponent } from './app.component';
 
 @Component({
     selector: 'app-topbar',
     template: `
         <div class="topbar clearfix">
-            <div class="topbar-left">            
+            <div class="topbar-left">
                 <div class="logo"></div>
             </div>
 
@@ -13,7 +13,7 @@ import {AppComponent} from './app.component';
                 <a id="menu-button" href="#" (click)="app.onMenuButtonClick($event)">
                     <i></i>
                 </a>
-                
+
                 <a id="topbar-menu-button" href="#" (click)="app.onTopbarMenuButtonClick($event)">
                     <i class="material-icons">menu</i>
                 </a>
@@ -21,11 +21,11 @@ import {AppComponent} from './app.component';
                     <li #profile class="profile-item" *ngIf="app.profileMode==='top'||app.isHorizontal()"
                         [ngClass]="{'active-top-menu':app.activeTopbarItem === profile}">
 
-                        <a href="#" (click)="app.onTopbarItemClick($event,profile)">                            
+                        <a href="#" (click)="app.onTopbarItemClick($event,profile)">
                             <div class="profile-image"></div>
                             <span class="topbar-item-name">Jane Williams</span>
                         </a>
-                        
+
                         <ul class="ultima-menu animated fadeInDown">
                             <li role="menuitem">
                                 <a href="#">
@@ -54,7 +54,7 @@ import {AppComponent} from './app.component';
                         </ul>
                     </li>
                     <li #settings [ngClass]="{'active-top-menu':app.activeTopbarItem === settings}">
-                        <a href="#" (click)="app.onTopbarItemClick($event,settings)"> 
+                        <a href="#" (click)="app.onTopbarItemClick($event,settings)">
                             <i class="topbar-icon material-icons">settings</i>
                             <span class="topbar-item-name">Settings</span>
                         </a>
@@ -86,7 +86,7 @@ import {AppComponent} from './app.component';
                         </ul>
                     </li>
                     <li #messages [ngClass]="{'active-top-menu':app.activeTopbarItem === messages}">
-                        <a href="#" (click)="app.onTopbarItemClick($event,messages)"> 
+                        <a href="#" (click)="app.onTopbarItemClick($event,messages)">
                             <i class="topbar-icon material-icons animated swing">message</i>
                             <span class="topbar-badge animated rubberBand">5</span>
                             <span class="topbar-item-name">Messages</span>
@@ -125,7 +125,7 @@ import {AppComponent} from './app.component';
                         </ul>
                     </li>
                     <li #notifications [ngClass]="{'active-top-menu':app.activeTopbarItem === notifications}">
-                        <a href="#" (click)="app.onTopbarItemClick($event,notifications)"> 
+                        <a href="#" (click)="app.onTopbarItemClick($event,notifications)">
                             <i class="topbar-icon material-icons">timer</i>
                             <span class="topbar-badge animated rubberBand">4</span>
                             <span class="topbar-item-name">Notifications</span>
@@ -168,10 +168,11 @@ import {AppComponent} from './app.component';
                 </ul>
             </div>
         </div>
+
     `
 })
 export class AppTopBar {
 
-    constructor(@Inject(forwardRef(() => AppComponent)) public app:AppComponent) {}
+    constructor( @Inject(forwardRef(() => AppComponent)) public app: AppComponent) { }
 
 }

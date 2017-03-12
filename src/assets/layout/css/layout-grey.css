@@ -975,11 +975,29 @@ body {
     .layout-container .topbar .topbar-right .topbar-items .search-item label {
       color: #ffffff;
       top: 8px; }
+.layout-container .topmenu {
+  padding: 1px;
+  overflow: auto;
+  position: fixed;
+  top: 81px;
+  width: 100%;
+  height: 38px;
+  z-index: 99;
+  float: right;
+  background-color: #FFAB91;
+  -webkit-box-shadow: 3px 0 6px rgba(0, 0, 0, 0.6);
+  -moz-box-shadow: 3px 0 6px rgba(0, 0, 0, 0.6);
+  box-sizing: border-box;
+  box-shadow: 3px 0 6px rgba(0, 0, 0, 0.6); }
+.layout-container .topmenu-partial {
+  margin-left: 300px; }
+.layout-container .topmenu-full {
+  margin-left: 0px; }
 .layout-container .layout-menu {
   overflow: auto;
   position: fixed;
   width: 300px;
-  z-index: 99;
+  z-index: 98;
   top: 75px;
   height: 100%;
   background-color: #ffffff;
@@ -1005,58 +1023,8 @@ body {
       background-color: #aaaaaa;
       opacity: 0.3;
       filter: alpha(opacity=30); }
-  .layout-container .layout-menu .profile {
-    box-sizing: border-box;
-    padding-top: 2em;
-    width: 300px;
-    height: 145px;
-    text-align: center;
-    background: url("../images/profile-bg.png") top left no-repeat;
-    background-size: 300px 145px;
-    -webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16);
-    -moz-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16);
-    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16); }
-    .layout-container .layout-menu .profile .profile-image {
-      width: 60px;
-      height: 60px;
-      margin: 0 auto 5px auto;
-      background: url("../images/avatar.png") top left no-repeat;
-      background-size: 60px 60px; }
-    .layout-container .layout-menu .profile .profile-name {
-      display: inline-block;
-      color: #212121;
-      vertical-align: middle;
-      font-size: 1em; }
-    .layout-container .layout-menu .profile i {
-      color: #212121;
-      vertical-align: middle;
-      -moz-transition: transform 0.3s;
-      -o-transition: transform 0.3s;
-      -webkit-transition: transform 0.3s;
-      transition: transform 0.3s; }
-    .layout-container .layout-menu .profile.profile-expanded i {
-      -webkit-transform: rotate(-180deg);
-      -moz-transform: rotate(-180deg);
-      -o-transform: rotate(-180deg);
-      -ms-transform: rotate(-180deg);
-      transform: rotate(-180deg); }
-  .layout-container .layout-menu .profile-menu {
-    border-bottom: 1px solid #d6d5d5;
-    overflow: hidden; }
-    .layout-container .layout-menu .profile-menu li:first-child {
-      margin-top: 1em; }
-    .layout-container .layout-menu .profile-menu li:last-child {
-      margin-bottom: 1em; }
   .layout-container .layout-menu.layout-menu-dark {
     background-color: #424242; }
-    .layout-container .layout-menu.layout-menu-dark .profile {
-      background-image: url("../images/profile-bg-dark.png"); }
-      .layout-container .layout-menu.layout-menu-dark .profile .profile-name {
-        color: #ffffff; }
-      .layout-container .layout-menu.layout-menu-dark .profile i {
-        color: #ffffff; }
-    .layout-container .layout-menu.layout-menu-dark .profile-menu {
-      border-bottom: 1px solid #676767; }
     .layout-container .layout-menu.layout-menu-dark ul.ultima-menu li a {
       color: #ffffff; }
       .layout-container .layout-menu.layout-menu-dark ul.ultima-menu li a i {
@@ -1099,7 +1067,7 @@ body {
     -ms-transform: rotate(180deg);
     transform: rotate(180deg); }
 .layout-container .layout-main {
-  padding: 96px 16px 16px 16px;
+  padding: 115px 1px 1px 1px;
   -moz-transition: margin-left 0.3s;
   -o-transition: margin-left 0.3s;
   -webkit-transition: margin-left 0.3s;
@@ -1234,11 +1202,6 @@ body {
         transition: color 0.3s; }
         .layout-container .topbar-items > li .topbar-icon:hover {
           color: #e8e8e8; }
-      .layout-container .topbar-items > li.profile-item .profile-image {
-        width: 36px;
-        height: 36px;
-        background: url("../images/avatar.png") top left no-repeat;
-        background-size: 36px 36px; }
       .layout-container .topbar-items > li > ul {
         position: absolute;
         top: 55px;
@@ -1510,17 +1473,6 @@ body {
         position: absolute;
         right: 5px;
         top: -2px; }
-    .layout-container .topbar .topbar-right .topbar-items > li.profile-item .profile-image {
-      display: inline-block;
-      vertical-align: middle;
-      width: 24px;
-      height: 24px;
-      background: url("../images/avatar.png") top left no-repeat;
-      background-size: 24px 24px;
-      margin-right: 14px; }
-    .layout-container .topbar .topbar-right .topbar-items > li.profile-item span {
-      vertical-align: middle;
-      display: inline-block; }
     .layout-container .topbar .topbar-right .topbar-items.topbar-items-visible {
       display: block; } }
 @media (max-width: 399px) {
