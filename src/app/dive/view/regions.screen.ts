@@ -1,5 +1,5 @@
+import { SelectedData } from '../service/selecteddata';
 import { ProgressElement } from '../service/progresselement';
-import { DataStack, DataStackItem } from '../service/datastack';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -44,8 +44,8 @@ export class RegionsScreen {
     rows = []
 
     constructor(private deepBlueService: DeepBlueService,
-        public progress_element: ProgressElement, private dataStack: DataStack) {
-        this.topStackSubscription = this.dataStack.topStackValue$.subscribe((dataStackItem: DataStackItem) => this.processRegions())
+        public progress_element: ProgressElement, private selectedData: SelectedData) {
+        this.topStackSubscription = this.selectedData.getActiveStack().topStackValue$.subscribe((dataStackItem) => this.processRegions())
         this.processRegions();
     }
 
@@ -82,7 +82,7 @@ export class RegionsScreen {
 
     processRegions() {
 
-        let actualData: DeepBlueOperation = this.dataStack.getCurrentOperation();
+        let actualData: DeepBlueOperation = this.selectedData.getCurrentOperation();
         if (actualData == null) {
             return;
         }

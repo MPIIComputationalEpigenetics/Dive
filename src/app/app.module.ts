@@ -1,3 +1,4 @@
+import { SelectedData } from './dive/service/selecteddata';
 import { NgModule } from '@angular/core';
 import { FormsModule, FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
@@ -78,7 +79,6 @@ import { AppFooter } from './app.footer.component';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
 import { MenuService } from './dive/service/menu';
-import { DataStack } from './dive/service/datastack';
 import { DeepBlueService } from './dive/service/deepblue';
 import { ProgressElement } from './dive/service/progresselement';
 
@@ -210,7 +210,7 @@ import { AppComponent } from './app.component';
         MenuService,
         DeepBlueService,
         ProgressElement,
-        DataStack
+        SelectedData
     ],
     bootstrap: [AppComponent]
 })

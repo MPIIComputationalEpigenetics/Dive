@@ -1,5 +1,5 @@
+import { SelectedData } from '../service/selecteddata';
 import { MenuService } from '../service/menu';
-import { DataStack } from '../service/datastack';
 import {
     SimpleChanges,
     Component,
@@ -32,7 +32,7 @@ export class FilteringComponent implements OnInit {
     annotationSubscription: Subscription;
     genomeSubscription: Subscription;
 
-    constructor(private fb: FormBuilder, private deepBlueService: DeepBlueService, private dataStack: DataStack, private menuService: MenuService) {
+    constructor(private fb: FormBuilder, private deepBlueService: DeepBlueService, private selectedData: SelectedData, private menuService: MenuService) {
         this.annotationSubscription = deepBlueService.annotationValue$.subscribe(annotation => {
             console.log(annotation);
         });
@@ -53,14 +53,14 @@ export class FilteringComponent implements OnInit {
         console.log("save_min_length");
         console.log(form_content);
         event.preventDefault();
-        this.dataStack.filter_regions("@LENGTH", ">=", form_content['min_length'], "number")
+        this.selectedData.getActiveStack().filter_regions("@LENGTH", ">=", form_content['min_length'], "number")
     }
     1
     save_max_length(form_content: Object) {
         console.log("save_max_length");
         console.log(form_content);
         event.preventDefault();
-        this.dataStack.filter_regions("@LENGTH", "<=", form_content['max_length'], "number")
+        this.selectedData.getActiveStack().filter_regions("@LENGTH", "<=", form_content['max_length'], "number")
     }
 
     ngOnInit() {

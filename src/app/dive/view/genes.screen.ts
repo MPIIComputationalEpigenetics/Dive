@@ -1,20 +1,20 @@
-import { OverlapsBarChart } from './histones.screen';
-
-import { DataStack, DataStackItem } from '../service/datastack';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
+
+import { MultiSelect } from 'primeng/primeng';
 
 import { Dropdown, SelectItem } from 'primeng/primeng';
 
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable'
 
-import { MultiSelect } from 'primeng/primeng';
-
 import { BioSource, EpigeneticMark, FullExperiment, Genome, GeneModel } from '../domain/deepblue';
 
+import { DataStackItem } from '../service/datastack';
 import { DeepBlueService } from '../service/deepblue';
+import { SelectedData } from '../service/selecteddata';
 import { ProgressElement } from '../service/progresselement'
+import { OverlapsBarChart } from './histones.screen';
 
 import {
     DeepBlueOperation,
@@ -45,7 +45,7 @@ export class GenesScreen {
     hasData: boolean = false;
 
     constructor(private deepBlueService: DeepBlueService,
-        public progress_element: ProgressElement, private dataStack: DataStack) {
+        public progress_element: ProgressElement, private selectedData: SelectedData) {
 
         this.genomeSubscription = deepBlueService.genomeValue$.subscribe(genome => {
             if (genome.id == "") {
@@ -66,7 +66,7 @@ export class GenesScreen {
         });
 
         this.selectedGeneModelValue$.debounceTime(250).subscribe(() => this.processOverlaps());
-        this.dataStack.topStackValue$.subscribe((dataStackItem: DataStackItem) => this.processOverlaps())
+        this.selectedData.topStackValue$.subscribe((dataStackItem: DataStackItem) => this.processOverlaps())
     }
 
     selectGeneModel(event) {
@@ -101,7 +101,8 @@ export class GenesScreen {
                 return;
             }
 
-            let current: DeepBlueOperation = this.dataStack.getCurrentOperation();
+            // Aqui eu mudo, pego todos os current operations das stacks
+            let current: DeepBlueOperation = this.selectedData.getCurrentOperation();
 
             if (current == null) {
                 this.reloadPlot([]);

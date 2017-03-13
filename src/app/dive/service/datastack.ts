@@ -1,41 +1,29 @@
-import {
-    IdName,
-    EpigeneticMark,
-    Experiment,
-    Genome,
-    Annotation,
-} from '../domain/deepblue';
 
 import { Injectable } from '@angular/core';
 
 import { Router } from '@angular/router';
 
-import { DeepBlueService } from '../service/deepblue';
-
 import { Observable } from 'rxjs/Observable'
-
 import { Subscription } from 'rxjs/Subscription';
-
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Subject } from 'rxjs/Subject';
 
-import { Subject } from 'rxjs/Subject'
-
+import { IdName, EpigeneticMark, Experiment, Genome, Annotation } from '../domain/deepblue';
 import { DeepBlueOperation } from '../domain/operations'
 
+import { DeepBlueService } from '../service/deepblue';
 import { ProgressElement } from '../service/progresselement'
 
 export class DataStackItem {
     constructor(public op: DeepBlueOperation, public what: string, public description: string, public count: number) { }
 }
 
-@Injectable()
 export class DataStack {
 
     _data: DataStackItem[] = [];
     epigeneticMarkSubscription: Subscription;
 
     public topStackSubject = new Subject<DataStackItem>();
-
     public topStackValue$: Observable<DataStackItem> = this.topStackSubject.asObservable();
 
     constructor(private deepBlueService: DeepBlueService,

@@ -1,3 +1,4 @@
+
 import { MenuService } from '../service/menu';
 import {
     Component,
@@ -21,9 +22,8 @@ import {
     IdName,
 } from '../domain/deepblue';
 
-import { DataStack, DataStackItem } from '../service/datastack';
 import { DataCache, DeepBlueService, MultiKeyDataCache } from '../service/deepblue';
-
+import { SelectedData } from '../service/selecteddata';
 
 @Component({
     selector: 'data-info-box',
@@ -43,7 +43,7 @@ export class DataInfoBox {
     dataSelectedSubscription: Subscription;
     data: IdName = null;
 
-    constructor(private deepBlueService: DeepBlueService, private dataStack: DataStack) {
+    constructor(private deepBlueService: DeepBlueService, private selectedData: SelectedData) {
         this.dataSelectedSubscription = deepBlueService.dataInfoSelectedValue$.subscribe((data: any) => {
             this.data = data || {};
         });
@@ -51,12 +51,12 @@ export class DataInfoBox {
 
     filterOverlapping() {
         console.log("filter overlapping");
-        this.dataStack.overlap(this.data);
+        this.selectedData.getActiveStack().overlap(this.data);
     }
 
     filterNonOverlapping() {
         console.log("filter non overlapping");
-        this.dataStack.non_overlap(this.data);
+        this.selectedData.getActiveStack().non_overlap(this.data);
     }
 }
 
@@ -65,23 +65,23 @@ export class DataInfoBox {
     template: `
     <br/><br/>
     <div class="dashboard">
-    <div *ngIf="dataStack.getData().length > 0" class="ui-g-12 ui-md-12" style="word-wrap: break-word">
+    <div *ngIf="selectedData.getActiveStack().getData().length > 0" class="ui-g-12 ui-md-12" style="word-wrap: break-word">
         <p-panel [style]="{'height':'100%'}">
 
             <div class="activity-header dashboard">
                 <div class="ui-g">
                     <div class="ui-g-10">
-                        <div style="font-weight:bold" class="description">{{ dataStack.getData()[0].op.data.name }}</div>
-                        <p class="count"> {{ dataStack.getData()[0].count }} regions</p>
+                        <div style="font-weight:bold" class="description">{{ selectedData.getActiveStack().getData()[0].op.data.name }}</div>
+                        <p class="count"> {{ selectedData.getActiveStack().getData()[0].count }} regions</p>
                     </div>
                     <div class="ui-g-2 button-change">
-                        <button type="button" icon="ui-icon-blur-on" pButton (click)="removeData($event, dataStack.getData()[0])"></button>
+                        <button type="button" icon="ui-icon-blur-on" pButton (click)="removeData($event, selectedData.getActiveStack().getData()[0])"></button>
                     </div>
                 </div>
             </div>
 
             <ul class="activity-list">
-                <li *ngFor="let data of dataStack.getData() | slice:1" (click)="removeData($event, data)">
+                <li *ngFor="let data of selectedData.getActiveStack().getData() | slice:1" (click)="removeData($event, data)">
 
                     <div class="ui-g">
                         <div class="ui-g-10">
@@ -104,10 +104,10 @@ export class DataInfoBox {
 })
 export class DataStackView {
 
-    constructor(private deepBlueService: DeepBlueService, private dataStack: DataStack) { }
+    constructor(private deepBlueService: DeepBlueService, private selectedData: SelectedData) { }
 
     removeData(event, data) {
-        this.dataStack.remove(data);
+        this.selectedData.getActiveStack().remove(data);
     }
 }
 

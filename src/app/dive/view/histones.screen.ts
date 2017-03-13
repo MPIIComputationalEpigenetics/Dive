@@ -1,5 +1,5 @@
+import { SelectedData } from '../service/selecteddata';
 import { ProgressElement } from '../service/progresselement';
-import { DataStack, DataStackItem } from '../service/datastack';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -227,7 +227,7 @@ export class HistonesScreen {
     }
 
     constructor(private deepBlueService: DeepBlueService,
-        public progress_element: ProgressElement, private dataStack: DataStack) {
+        public progress_element: ProgressElement, private selectedData: SelectedData) {
 
         this.epigeneticMarkSubscription = deepBlueService.epigeneticMarkValue$.subscribe(selected_epigenetic_mark => {
             this.deepBlueService.getExperiments(deepBlueService.getGenome(), selected_epigenetic_mark).subscribe(experiments_ids => {
@@ -239,9 +239,9 @@ export class HistonesScreen {
             },
                 error => this.errorMessage = <any>error);
         });
-
+selectedData
         this.selectedExperimentsValue$.debounceTime(250).subscribe(() => this.processOverlaps());
-        this.dataStack.topStackValue$.subscribe((dataStackItem: DataStackItem) => this.processOverlaps())
+        this.selectedData.getActiveStack().topStackValue$.subscribe((dataStackItem) => this.processOverlaps())
     }
 
     processOverlaps() {
@@ -275,7 +275,7 @@ export class HistonesScreen {
                 return;
             }
 
-            let current: DeepBlueOperation = this.dataStack.getCurrentOperation();
+            let current: DeepBlueOperation = this.selectedData.getCurrentOperation();
 
             if (current == null) {
                 this.reloadPlot([]);
