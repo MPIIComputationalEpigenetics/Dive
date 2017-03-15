@@ -26,6 +26,10 @@ export class DataStackFactory {
 
 export class DataStackItem {
     constructor(public op: DeepBlueOperation, public what: string, public description: string, public count: number) { }
+
+    clone(): DataStackItem {
+        return new DataStackItem(this.op, this.what, this.description, this.count);
+    }
 }
 
 export class DataStack {
@@ -58,6 +62,10 @@ export class DataStack {
                 });
             })
         });
+    }
+
+    setInitialDataArray(data : DataStackItem[]) {
+        this._data = data;
     }
 
     overlap(data: IdName) {
@@ -159,5 +167,13 @@ export class DataStack {
             return this._data[this._data.length - 1].op;
         }
         return null;
+    }
+
+    cloneStackItems(): DataStackItem[] {
+        let newStack: DataStackItem[] = [];
+        for (let item of this._data) {
+            newStack.push(item);
+        }
+        return newStack;
     }
 }

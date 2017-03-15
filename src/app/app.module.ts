@@ -95,7 +95,15 @@ import { BioSourcesScreen } from './dive/view/biosources.screen';
 
 import { GenesScreen } from './dive/view/genes.screen';
 
-import { AnnotationListComponent, DiveStatus, DataStackView, GenomeSelectorComponent, HistoneExperimentsMenu, DataInfoBox } from './dive/view/deepblue';
+import {
+  AnnotationListComponent,
+  DataInfoBox,
+  DataStackView,
+  DiveStatus,
+  GenomeSelectorComponent,
+  HistoneExperimentsMenu,
+  SelectedDataView
+} from './dive/view/deepblue';
 
 import { DataLoadProgressBar } from './dive/view/progressbar';
 
@@ -200,7 +208,8 @@ import { AppComponent } from './app.component';
         RegionsScreen,
         BioSourcesScreen,
         HistonesScreen,
-        GenesScreen
+        GenesScreen,
+        SelectedDataView
     ],
     providers: [
         { provide: LocationStrategy, useClass: HashLocationStrategy },

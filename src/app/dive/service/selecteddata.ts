@@ -65,7 +65,6 @@ export class SelectedData {
     }
     this._activeStack = stack;
 
-    debugger;
     if (this.currentStackSubscription != null && !this.currentStackSubscription.closed) {
       this.currentStackSubscription.unsubscribe();
     }
@@ -92,6 +91,13 @@ export class SelectedData {
       return this._activeStack.getCurrentOperation();
     }
     return null;
+  }
+
+  saveActiveStack() {
+    let clone = this.getActiveStack().cloneStackItems();
+    let stack: DataStack = this.dataStackFactory.newDataStack();
+    stack.setInitialDataArray(clone);
+    this.addStack(stack);
   }
 
   ngOnDestroy() {

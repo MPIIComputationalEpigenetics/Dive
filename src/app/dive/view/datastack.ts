@@ -50,11 +50,7 @@ import { DeepBlueService } from '../service/deepblue';
 })
 export class DataStackView {
 
-    constructor(private deepBlueService: DeepBlueService, private selectedData: SelectedData) {
-        debugger;
-        console.log(selectedData);
-        debugger;
-    }
+    constructor(private deepBlueService: DeepBlueService, private selectedData: SelectedData) { }
 
     removeData(event, data) {
         this.selectedData.getActiveStack().remove(data);
