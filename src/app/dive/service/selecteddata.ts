@@ -6,10 +6,12 @@ import { Subscription } from 'rxjs/Subscription';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subject } from 'rxjs/Subject';
 
+import { Annotation } from '../domain/deepblue';
+
 import { DeepBlueOperation } from '../domain/operations'
 
 import { DeepBlueService } from '../service/deepblue';
-import { DataStack, DataStackItem } from '../service/datastack'
+import { DataStack, DataStackFactory, DataStackItem } from '../service/datastack';
 
 @Injectable()
 export class SelectedData {
@@ -17,10 +19,25 @@ export class SelectedData {
   _activeStack: DataStack = null;
   _stacks: DataStack[] = [];
 
-  currentStackSubscription: Subscription;
+  currentStackSubscription: Subscription = null;
 
-  public topStackSubject = new Subject<DataStackItem>();
-  public topStackValue$: Observable<DataStackItem> = this.topStackSubject.asObservable();
+  public activeTopStackSubject = new Subject<DataStackItem>();
+  public activeTopStackValue$: Observable<DataStackItem> = this.activeTopStackSubject.asObservable();
+
+  annotationSubscription: Subscription;
+
+  constructor(private deepBlueService: DeepBlueService, private dataStackFactory: DataStackFactory) {
+    console.log("CREATING SELECTED DATA");
+    this.annotationSubscription = deepBlueService.annotationValue$.subscribe((annotation: Annotation) => {
+      let stack: DataStack = dataStackFactory.newDataStack();
+      if (annotation.id != "") {
+        console.log("Non empty annotation");
+        stack.setInitialData(annotation);
+        this.addStack(stack);
+        this.setActiveStack(stack);
+      }
+    });
+  }
 
   addStack(stack: DataStack) {
     this._stacks.push(stack);
@@ -48,22 +65,26 @@ export class SelectedData {
     }
     this._activeStack = stack;
 
-    if (!this.currentStackSubscription.closed) {
+    debugger;
+    if (this.currentStackSubscription != null && !this.currentStackSubscription.closed) {
       this.currentStackSubscription.unsubscribe();
     }
-    this.currentStackSubscription = stack.topStackValue$.subscribe();
+    this.currentStackSubscription = stack.topStackValue$.subscribe((dataStackItem: DataStackItem) => this.activeTopStackSubject.next(dataStackItem));
   }
 
   getActiveStack() {
-    debugger;
     return this._activeStack;
   }
 
-  getData(): DataStackItem[] {
+  getActiveData(): DataStackItem[] {
     if (this._activeStack != null) {
       return this._activeStack.getData();
     }
     return [];
+  }
+
+  getActiveTopStackValue() : Observable<DataStackItem> {
+    return this.activeTopStackValue$;
   }
 
   getCurrentOperation(): DeepBlueOperation {
@@ -71,6 +92,11 @@ export class SelectedData {
       return this._activeStack.getCurrentOperation();
     }
     return null;
+  }
+
+  ngOnDestroy() {
+    console.log("SelectedData destroyed");
+    this.annotationSubscription.unsubscribe();
   }
 
 }

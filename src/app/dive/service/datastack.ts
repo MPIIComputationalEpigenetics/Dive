@@ -14,6 +14,16 @@ import { DeepBlueOperation } from '../domain/operations'
 import { DeepBlueService } from '../service/deepblue';
 import { ProgressElement } from '../service/progresselement'
 
+@Injectable()
+export class DataStackFactory {
+    constructor(private deepBlueService: DeepBlueService, private progress_element: ProgressElement,
+        private router: Router) { }
+
+    public newDataStack(): DataStack {
+        return new DataStack(this.deepBlueService, this.progress_element, this.router);
+    }
+}
+
 export class DataStackItem {
     constructor(public op: DeepBlueOperation, public what: string, public description: string, public count: number) { }
 }
@@ -21,22 +31,15 @@ export class DataStackItem {
 export class DataStack {
 
     _data: DataStackItem[] = [];
-    epigeneticMarkSubscription: Subscription;
 
     public topStackSubject = new Subject<DataStackItem>();
     public topStackValue$: Observable<DataStackItem> = this.topStackSubject.asObservable();
 
-    constructor(private deepBlueService: DeepBlueService,
-        public progress_element: ProgressElement, public router: Router) {
+    constructor(private deepBlueService: DeepBlueService, private progress_element: ProgressElement,
+        private router: Router) { }
 
-        this.epigeneticMarkSubscription = deepBlueService.annotationValue$.subscribe((annotation: Annotation) => {
-            this.init(annotation);
-        });
-    }
-
-    init(data: IdName): Observable<IdName> {
+    setInitialData(data: IdName) {
         this._data = [];
-
         if (data.id == "" || data.id == null) {
             return;
         }

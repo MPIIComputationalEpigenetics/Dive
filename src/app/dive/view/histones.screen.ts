@@ -239,9 +239,9 @@ export class HistonesScreen {
             },
                 error => this.errorMessage = <any>error);
         });
-selectedData
+
         this.selectedExperimentsValue$.debounceTime(250).subscribe(() => this.processOverlaps());
-        this.selectedData.getActiveStack().topStackValue$.subscribe((dataStackItem) => this.processOverlaps())
+        this.selectedData.getActiveTopStackValue().subscribe((dataStackItem) => this.processOverlaps())
     }
 
     processOverlaps() {

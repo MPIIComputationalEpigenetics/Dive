@@ -1,3 +1,4 @@
+import { DataStackFactory } from './dive/service/datastack';
 import { SelectedData } from './dive/service/selecteddata';
 import { NgModule } from '@angular/core';
 import { FormsModule, FormBuilder, ReactiveFormsModule } from '@angular/forms';
@@ -210,6 +211,7 @@ import { AppComponent } from './app.component';
         MenuService,
         DeepBlueService,
         ProgressElement,
+        DataStackFactory,
         SelectedData
     ],
     bootstrap: [AppComponent]

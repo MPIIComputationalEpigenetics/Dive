@@ -45,7 +45,7 @@ export class RegionsScreen {
 
     constructor(private deepBlueService: DeepBlueService,
         public progress_element: ProgressElement, private selectedData: SelectedData) {
-        this.topStackSubscription = this.selectedData.getActiveStack().topStackValue$.subscribe((dataStackItem) => this.processRegions())
+        this.topStackSubscription = this.selectedData.getActiveTopStackValue().subscribe((dataStackItem) => this.processRegions())
         this.processRegions();
     }
 

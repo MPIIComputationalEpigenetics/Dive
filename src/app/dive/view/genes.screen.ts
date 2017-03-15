@@ -66,7 +66,7 @@ export class GenesScreen {
         });
 
         this.selectedGeneModelValue$.debounceTime(250).subscribe(() => this.processOverlaps());
-        this.selectedData.topStackValue$.subscribe((dataStackItem: DataStackItem) => this.processOverlaps())
+        this.selectedData.getActiveTopStackValue().subscribe((dataStackItem: DataStackItem) => this.processOverlaps())
     }
 
     selectGeneModel(event) {
