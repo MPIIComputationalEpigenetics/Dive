@@ -24,11 +24,12 @@ import {
 import { IKey } from '../domain/interfaces';
 
 import {
+    DeepBlueMultiParametersOperation,
     DeepBlueOperation,
     DeepBlueParametersOperation,
-    DeepBlueMultiParametersOperation,
     DeepBlueRequest,
-    DeepBlueResult
+    DeepBlueResult,
+    StackValue
 } from '../domain/operations';
 
 import { ProgressElement } from '../service/progresselement';
@@ -369,34 +370,37 @@ export class DeepBlueService {
 
     }
 
-    intersectWithSelected(current: DeepBlueOperation, selected_data: DeepBlueOperation[], progress_element: ProgressElement, request_count: number): Observable<DeepBlueOperation[]> {
+    intersectWithSelected(current_operations: DeepBlueOperation[], selected_data: DeepBlueOperation[],
+        progress_element: ProgressElement, request_count: number): Observable<StackValue[]> {
 
-        let observableBatch: Observable<DeepBlueOperation>[] = [];
+        let observableBatch: Observable<StackValue>[] = [];
 
-        selected_data.forEach((selected, key) => {
-            let o: Observable<DeepBlueOperation>;
-            let cache_key = [current, selected];
+        current_operations.forEach((current, stack_pos) => {
+            selected_data.forEach((selected) => {
+                let o: Observable<StackValue>;
+                let cache_key = [current, selected];
 
-            if (this.intersectsQueryCache.get(cache_key, request_count)) {
-                console.log("overlapSelected hit");
-                progress_element.increment(request_count);
-                let cached_operation = this.intersectsQueryCache.get(cache_key, request_count);
-                o = Observable.of(cached_operation);
-            } else {
-                let params: URLSearchParams = new URLSearchParams();
-                params.set("query_data_id", current.query_id);
-                params.set("query_filter_id", selected.query_id);
-                o = this.http.get(this.deepBlueUrl + "/intersection", { "search": params })
-                    .map((res: Response) => {
-                        let body = res.json();
-                        let response: string = body[1] || "";
-                        progress_element.increment(request_count);
-                        return new DeepBlueOperation(selected.data, response, "intersection", request_count);
-                    })
-                    .do((operation) => this.intersectsQueryCache.put(cache_key, operation))
-                    .catch(this.handleError);
-            }
-            observableBatch.push(o);
+                if (this.intersectsQueryCache.get(cache_key, request_count)) {
+                    console.log("overlapSelected hit");
+                    progress_element.increment(request_count);
+                    let cached_operation = this.intersectsQueryCache.get(cache_key, request_count);
+                    o = Observable.of(new StackValue(stack_pos, cached_operation));
+                } else {
+                    let params: URLSearchParams = new URLSearchParams();
+                    params.set("query_data_id", current.query_id);
+                    params.set("query_filter_id", selected.query_id);
+                    o = this.http.get(this.deepBlueUrl + "/intersection", { "search": params })
+                        .map((res: Response) => {
+                            let body = res.json();
+                            let response: string = body[1] || "";
+                            progress_element.increment(request_count);
+                            return new StackValue(stack_pos, new DeepBlueOperation(selected.data, response, "intersection", request_count));
+                        })
+                        .do((operation: StackValue) => this.intersectsQueryCache.put(cache_key, operation.getDeepBlueOperation()))
+                        .catch(this.handleError);
+                }
+                observableBatch.push(o);
+            });
         });
 
         return Observable.forkJoin(observableBatch);
@@ -560,11 +564,15 @@ export class DeepBlueService {
 
     }
 
-    countRegionsBatch(query_ids: DeepBlueOperation[], progress_element: ProgressElement, request_count: number): Observable<DeepBlueResult[]> {
-        let observableBatch: Observable<DeepBlueResult>[] = [];
+    countRegionsBatch(query_ids: StackValue[], progress_element: ProgressElement, request_count: number): Observable<StackValue[]> {
+        let observableBatch: Observable<StackValue>[] = [];
 
         query_ids.forEach((op_exp, key) => {
-            let o: Observable<DeepBlueResult> = this.countRegionsRequest(op_exp, progress_element, request_count);
+            let o: Observable<StackValue> = new Observable((observer) => {
+                this.countRegionsRequest(op_exp.getDeepBlueOperation(), progress_element, request_count).subscribe((result) => {
+                    observer.next(new StackValue(op_exp.stack, result));
+                })
+            });
 
             observableBatch.push(o);
         });

@@ -82,7 +82,7 @@ export class RegionsScreen {
 
     processRegions() {
 
-        let actualData: DeepBlueOperation = this.selectedData.getCurrentOperation();
+        let actualData: DeepBlueOperation = this.selectedData.getActiveCurrentOperation();
         if (actualData == null) {
             return;
         }

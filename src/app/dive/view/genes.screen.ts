@@ -95,6 +95,7 @@ export class GenesScreen {
         this.current_request++;
         this.currentlyProcessing = gene_model;
 
+/*
 
         this.deepBlueService.selectGenes(gene_model, this.progress_element, this.current_request).subscribe((selected_genes: DeepBlueOperation) => {
             if (selected_genes.request_count != this.current_request) {
@@ -102,7 +103,7 @@ export class GenesScreen {
             }
 
             // Aqui eu mudo, pego todos os current operations das stacks
-            let current: DeepBlueOperation = this.selectedData.getCurrentOperation();
+            let current: DeepBlueOperation[] = this.selectedData.getStacksTopOperation();
 
             if (current == null) {
                 this.reloadPlot([]);
@@ -133,6 +134,8 @@ export class GenesScreen {
                 })
             });
         });
+
+*/
     }
 
     reloadPlot(datum: Object[]) {

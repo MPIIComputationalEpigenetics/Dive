@@ -15,10 +15,7 @@ import { BioSource, EpigeneticMark, FullExperiment, Genome, IdName } from '../do
 
 import { DeepBlueService } from '../service/deepblue';
 
-import {
-    DeepBlueOperation,
-    DeepBlueResult
-} from '../domain/operations';
+import { DeepBlueOperation, DeepBlueResult, StackValue } from '../domain/operations';
 
 
 @Component({
@@ -275,29 +272,29 @@ export class HistonesScreen {
                 return;
             }
 
-            let current: DeepBlueOperation = this.selectedData.getCurrentOperation();
+            let current: DeepBlueOperation[] = this.selectedData.getStacksTopOperation();
 
             if (current == null) {
                 this.reloadPlot([]);
                 return;
             }
 
-            this.deepBlueService.intersectWithSelected(current, selected_experiments, this.progress_element, this.current_request).subscribe((overlap_ids: DeepBlueOperation[]) => {
+            this.deepBlueService.intersectWithSelected(current, selected_experiments, this.progress_element, this.current_request).subscribe((overlap_ids: StackValue[]) => {
                 if (overlap_ids.length == 0) {
                     this.reloadPlot([]);
                     return;
                 }
-                if (overlap_ids[0].request_count != this.current_request) {
+                if (overlap_ids[0].getDeepBlueOperation().request_count != this.current_request) {
                     return;
                 }
 
-                this.deepBlueService.countRegionsBatch(overlap_ids, this.progress_element, this.current_request).subscribe((datum: DeepBlueResult[]) => {
+                this.deepBlueService.countRegionsBatch(overlap_ids, this.progress_element, this.current_request).subscribe((datum: StackValue[]) => {
 
                     if (datum.length == 0) {
                         this.reloadPlot([]);
                         return;
                     }
-                    if (datum[0].request_count != this.current_request) {
+                    if (datum[0].getDeepBlueOperation().request_count != this.current_request) {
                         return;
                     }
 

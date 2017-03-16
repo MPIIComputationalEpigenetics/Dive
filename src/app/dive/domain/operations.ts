@@ -75,3 +75,29 @@ export class DeepBlueResult  implements ICloneable {
         return <string> this.result;
     }
 }
+
+
+export class StackValue {
+    constructor(public stack : number,
+        public value: DeepBlueOperation | DeepBlueParametersOperation | DeepBlueMultiParametersOperation | DeepBlueRequest | DeepBlueResult) {}
+
+    getDeepBlueOperation() : DeepBlueOperation {
+        return <DeepBlueOperation> this.value;
+    }
+
+    getDeepBlueParametersOperation() : DeepBlueParametersOperation {
+        return <DeepBlueParametersOperation> this.value;
+    }
+
+    getDeepBlueMultiParametersOperation() : DeepBlueMultiParametersOperation {
+        return <DeepBlueMultiParametersOperation> this.value;
+    }
+
+    getDeepBlueRequest() : DeepBlueRequest {
+        return <DeepBlueRequest> this.value;
+    }
+
+    getDeepBlueResult() : DeepBlueResult {
+        return <DeepBlueResult> this.value;
+    }
+}

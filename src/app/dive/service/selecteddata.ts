@@ -86,11 +86,19 @@ export class SelectedData {
     return this.activeTopStackValue$;
   }
 
-  getCurrentOperation(): DeepBlueOperation {
+  getActiveCurrentOperation(): DeepBlueOperation {
     if (this._activeStack != null) {
       return this._activeStack.getCurrentOperation();
     }
     return null;
+  }
+
+  getStacksTopOperation(): DeepBlueOperation[] {
+    let ops : DeepBlueOperation[] = [];
+    for (let stack of this._stacks) {
+
+    }
+    return ops;
   }
 
   saveActiveStack() {
