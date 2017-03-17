@@ -96,7 +96,7 @@ export class SelectedData {
   getStacksTopOperation(): DeepBlueOperation[] {
     let ops : DeepBlueOperation[] = [];
     for (let stack of this._stacks) {
-
+      ops.push(stack.getCurrentOperation());
     }
     return ops;
   }

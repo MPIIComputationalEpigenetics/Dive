@@ -146,7 +146,7 @@ export class GenesScreen {
             newdata.push([result["data"]["name"], result["result"]["count"], result["data"]]);
         });
 
-        this.overlapbarchart.setNewData(newdata);
+        //this.overlapbarchart.setNewData(newdata);
     }
 
     hasDataDetail(): boolean {

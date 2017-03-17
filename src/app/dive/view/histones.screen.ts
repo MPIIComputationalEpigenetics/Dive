@@ -1,3 +1,4 @@
+import { DataStack } from '../service/datastack';
 import { SelectedData } from '../service/selecteddata';
 import { ProgressElement } from '../service/progresselement';
 import { Component, OnInit, ViewChild } from '@angular/core';
@@ -32,15 +33,26 @@ import { DeepBlueOperation, DeepBlueResult, StackValue } from '../domain/operati
 export class OverlapsBarChart {
     options: Object;
     chart: Object;
-    Object
-    setNewData(data) {
-        return this.chart["series"][0].setData(data);
+
+    setNewData(categories, series) {
+        this.chart["xAxis"][0].setCategories(categories, false);
+
+        while (this.chart["series"].length > 0) {
+            this.chart["series"][0].remove(false);
+        }
+
+        for (let serie of series) {
+            this.chart["addSeries"](serie, false);
+        }
+
+        this.chart["redraw"]();
     }
 
     hasData(): boolean {
         if (!this.chart) {
             return false;
         }
+        // //this.options['series'][0]['point']['events']['click'] = (ev) => this.clickExperimentBar(ev);
         return this.chart["series"][0]["data"].length > 0;
     }
 
@@ -57,14 +69,7 @@ export class OverlapsBarChart {
                 text: `Overlapping with ${deepBlueService.getAnnotation().name}`
             },
             xAxis: {
-                type: 'category',
-                labels: {
-                    rotation: -45,
-                    style: {
-                        fontSize: '13px',
-                        fontFamily: 'Verdana, sans-serif'
-                    }
-                }
+                categories: []
             },
             credits: {
                 enabled: false
@@ -83,31 +88,8 @@ export class OverlapsBarChart {
             tooltip: {
                 pointFormat: `Overlap with ${deepBlueService.getAnnotation().name}: <b>{point.y} peaks</b>`
             },
-            series: [{
-                name: 'Overlaping',
-                data: [],
-                point: {
-                    events: {
-                        click: function (click, e) {
-                            // Dummy function that will be overwrited bellow.
-                        }
-                    }
-                },
-                dataLabels: {
-                    enabled: true,
-                    rotation: -90,
-                    color: '#FFFFFF',
-                    align: 'right',
-                    format: '{point.y:.1f}', // one decimal
-                    y: 10, // 10 pixels down from the top
-                    style: {
-                        fontSize: '12px',
-                        fontFamily: 'Verdana, sans-serif'
-                    }
-                },
-            }]
+            series: []
         }
-        this.options['series'][0]['point']['events']['click'] = (ev) => this.clickExperimentBar(ev);
     }
 
     clickExperimentBar(click) {
@@ -289,7 +271,6 @@ export class HistonesScreen {
                 }
 
                 this.deepBlueService.countRegionsBatch(overlap_ids, this.progress_element, this.current_request).subscribe((datum: StackValue[]) => {
-
                     if (datum.length == 0) {
                         this.reloadPlot([]);
                         return;
@@ -317,15 +298,37 @@ export class HistonesScreen {
         this.selectedBioSourcesSource.next(biosources);
     }
 
-    reloadPlot(datum: Object[]) {
-        interface KeyValuePair extends Array<string | number | Object> { 0: string; 1: number; 2: Object }
-        let newdata: Array<KeyValuePair> = [];
+    reloadPlot(datum: StackValue[]) {
+        let value_by_stack = {};
+        let categories = [];
 
-        datum.forEach((result: DeepBlueResult) => {
-            newdata.push([result["data"]["name"], result["result"]["count"], result["data"]]);
-        });
+        // Categories = getExperiments
+        // Series = Stacks
 
-        this.overlapbarchart.setNewData(newdata);
+        for (let result of datum) {
+            let stack = result.stack;
+            let dataset_name = result.getDeepBlueResult().data.name;
+            categories.push(dataset_name);
+            if (!(stack in value_by_stack)) {
+                value_by_stack[stack] = [];
+            }
+            value_by_stack[stack].push(result);
+        }
+
+        let series: Array<Object> = [];
+        for (let stack_value in value_by_stack) {
+            let stack = <Array<StackValue>>value_by_stack[stack_value];
+            let stack_values: Array<number> = [];
+            stack.sort((a: StackValue, b: StackValue) => {
+                return a.stack - b.stack;
+            });
+            for (let stack_value of stack) {
+                stack_values.push(stack_value.getDeepBlueResult().resultAsCount());
+            }
+            series.push({ name: stack_value.toString(), data: stack_values });
+        }
+
+        this.overlapbarchart.setNewData(categories, series);
     }
 
     selectExperimentBar(e) {

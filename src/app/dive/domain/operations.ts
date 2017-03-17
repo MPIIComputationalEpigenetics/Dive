@@ -74,6 +74,10 @@ export class DeepBlueResult  implements ICloneable {
     resultAsString() : string {
         return <string> this.result;
     }
+
+    resultAsCount() : number {
+        return <number> this.result["count"];
+    }
 }
 
 

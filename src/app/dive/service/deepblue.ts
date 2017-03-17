@@ -571,6 +571,7 @@ export class DeepBlueService {
             let o: Observable<StackValue> = new Observable((observer) => {
                 this.countRegionsRequest(op_exp.getDeepBlueOperation(), progress_element, request_count).subscribe((result) => {
                     observer.next(new StackValue(op_exp.stack, result));
+                    observer.complete();
                 })
             });
 
