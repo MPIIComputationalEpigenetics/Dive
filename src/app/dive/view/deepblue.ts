@@ -58,7 +58,7 @@ export class DataInfoBox {
         this.selectedData.getActiveStack().non_overlap(this.data.getDeepBlueResult().request.operation);
     }
 
-    getStackName() : string {
+    getStackName(): string {
         return this.data.stack.toString();
     }
 }
@@ -239,10 +239,15 @@ export class HistoneExperimentsMenu {
 @Component({
     selector: 'selected-data',
     template: `
-
-                <div *ngFor="let stackitem of selectedData._stacks | slice:1">
-                    <button class="red-btn" type="button" icon="ui-icon-remove" pButton (click)="infoStack($event, data)"></button>
-                </div>
+                <p-toolbar>
+                    <div class="ui-toolbar-group-left">
+                        <button pButton type="button" icon="ui-icon-dehaze"
+                                *ngFor="let stackitem of selectedData._stacks | slice:1"
+                                label="Saved stack"
+                                (click)="infoStack($event, data)">
+                        </button>
+                    </div>
+                </p-toolbar>
 
     `
 })
