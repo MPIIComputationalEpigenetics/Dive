@@ -89,7 +89,7 @@ export class DeepBlueService {
     public genomeSource = new BehaviorSubject<Genome>(new Genome(["", ""]));
     public annotationSource = new BehaviorSubject<Annotation>(new Annotation(["", ""]));
     public epigeneticMarkSource = new BehaviorSubject<EpigeneticMark>(new EpigeneticMark(["", ""]));
-    public dataInfoSelectedSource = new BehaviorSubject<IdName>(null);
+    public dataInfoSelectedSource = new BehaviorSubject<StackValue>(null);
 
     public selectedBioSources = new BehaviorSubject<BioSource[]>([]);
 
@@ -97,7 +97,7 @@ export class DeepBlueService {
     genomeValue$: Observable<Genome> = this.genomeSource.asObservable();
     annotationValue$: Observable<Annotation> = this.annotationSource.asObservable();
     epigeneticMarkValue$: Observable<EpigeneticMark> = this.epigeneticMarkSource.asObservable();
-    dataInfoSelectedValue$: Observable<IdName> = this.dataInfoSelectedSource.asObservable();
+    dataInfoSelectedValue$: Observable<StackValue> = this.dataInfoSelectedSource.asObservable();
     selectedBioSourcesValue$: Observable<BioSource[]> = this.selectedBioSources.asObservable();
 
     idNamesQueryCache: DataCache<IdName, DeepBlueOperation> = new DataCache<IdName, DeepBlueOperation>()
@@ -108,11 +108,11 @@ export class DeepBlueService {
     requestCache: DataCache<DeepBlueOperation, DeepBlueRequest> = new DataCache<DeepBlueOperation, DeepBlueRequest>()
     resultCache: DataCache<DeepBlueRequest, DeepBlueResult> = new DataCache<DeepBlueRequest, DeepBlueResult>()
 
-    setDataInfoSelected(data: IdName) {
-        this.dataInfoSelectedSource.next(data);
+    setDataInfoSelected(stack_value: StackValue) {
+        this.dataInfoSelectedSource.next(stack_value);
     }
 
-    getDataInfoSelected(): IdName {
+    getDataInfoSelected(): StackValue {
         return this.dataInfoSelectedSource.getValue();
     }
 
@@ -490,7 +490,7 @@ export class DeepBlueService {
                 let status = body[0] || "error"
                 if (status == "okay") {
                     progress_element.increment(request_count);
-                    let op_result = new DeepBlueResult(op_request.data, body[1], request_count);
+                    let op_result = new DeepBlueResult(op_request.data, body[1], op_request, request_count);
                     this.resultCache.put(op_request, op_result)
                     expand.unsubscribe();
                     pollSubject.next(op_result);
@@ -520,7 +520,7 @@ export class DeepBlueService {
                 .map((res: Response) => {
                     let body = res.json();
                     progress_element.increment(request_count);
-                    let request = new DeepBlueRequest(op_exp.data, body[1] || "", request_count);
+                    let request = new DeepBlueRequest(op_exp.data, body[1] || "", "count_regions", op_exp, request_count);
                     this.requestCache.put(op_exp, request);
                     return request;
                 })
@@ -542,7 +542,7 @@ export class DeepBlueService {
             .map((res: Response) => {
                 let body = res.json();
                 progress_element.increment(request_count);
-                let request = new DeepBlueRequest(data.data, body[1] || "", request_count);
+                let request = new DeepBlueRequest(data.data, body[1] || "", "get_regions", data, request_count);
                 return request;
             })
             .flatMap((request_id) => {
@@ -696,6 +696,4 @@ export class DeepBlueService {
         console.log(errMsg);
         return Observable.throw(errMsg);
     }
-
-
 }

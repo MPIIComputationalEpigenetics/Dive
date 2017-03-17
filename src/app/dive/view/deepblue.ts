@@ -1,3 +1,4 @@
+import { StackValue } from '../domain/operations';
 
 import { MenuService } from '../service/menu';
 import {
@@ -31,32 +32,34 @@ import { SelectedData } from '../service/selecteddata';
         <div class="card card-w-title" style="word-wrap: break-word">
             <h2>Data information</h2>
 
-            {{ data.name }}
+            {{ data.value.data.name }} overlapping with {{ getStackName() }}
 
 
-            <button pButton type="button" (click)="filterOverlapping()" label="Filter overlapping"></button>
-            <button pButton type="button" (click)="filterNonOverlapping()" label="Filter not-overlapping"></button>
+            <p><button pButton type="button" (click)="filterOverlapping()" label="Filter overlapping"></button>
+            <p><button pButton type="button" (click)="filterNonOverlapping()" label="Filter not-overlapping"></button>
         </div>
     `
 })
 export class DataInfoBox {
     dataSelectedSubscription: Subscription;
-    data: IdName = null;
+    data: StackValue = null;
 
     constructor(private deepBlueService: DeepBlueService, private selectedData: SelectedData) {
-        this.dataSelectedSubscription = deepBlueService.dataInfoSelectedValue$.subscribe((data: any) => {
-            this.data = data || {};
+        this.dataSelectedSubscription = deepBlueService.dataInfoSelectedValue$.subscribe((data: StackValue) => {
+            this.data = data;
         });
     }
 
     filterOverlapping() {
-        console.log("filter overlapping");
-        this.selectedData.getActiveStack().overlap(this.data);
+        this.selectedData.getActiveStack().overlap(this.data.getDeepBlueResult().request.operation);
     }
 
     filterNonOverlapping() {
-        console.log("filter non overlapping");
-        this.selectedData.getActiveStack().non_overlap(this.data);
+        this.selectedData.getActiveStack().non_overlap(this.data.getDeepBlueResult().request.operation);
+    }
+
+    getStackName() : string {
+        return this.data.stack.toString();
     }
 }
 

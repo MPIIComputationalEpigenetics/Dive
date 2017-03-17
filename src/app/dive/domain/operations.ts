@@ -53,10 +53,10 @@ export class DeepBlueMultiParametersOperation implements IKey {
 }
 
 export class DeepBlueRequest  implements IKey {
-    constructor(public data: IdName, public request_id: string, public request_count: number) { }
+    constructor(public data: IdName, public request_id: string, public command: string, public operation: DeepBlueOperation, public request_count: number) { }
 
     clone(request_count: number = -1) : DeepBlueRequest {
-        return new DeepBlueRequest(this.data, this.request_id, request_count)
+        return new DeepBlueRequest(this.data, this.request_id, this.command, this.operation, request_count)
     }
 
     key(): string {
@@ -65,10 +65,10 @@ export class DeepBlueRequest  implements IKey {
 }
 
 export class DeepBlueResult  implements ICloneable {
-    constructor(public data: IdName, public result: Object, public request_count: number) { }
+    constructor(public data: IdName, public result: Object, public request: DeepBlueRequest, public request_count: number) { }
 
     clone(request_count: number = -1) : DeepBlueResult {
-        return new DeepBlueResult(this.data, this.result, request_count);
+        return new DeepBlueResult(this.data, this.result, this.request, request_count);
     }
 
     resultAsString() : string {

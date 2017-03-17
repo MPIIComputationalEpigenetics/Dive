@@ -9,7 +9,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subject } from 'rxjs/Subject';
 
 import { IdName, EpigeneticMark, Experiment, Genome, Annotation } from '../domain/deepblue';
-import { DeepBlueOperation } from '../domain/operations'
+import { DeepBlueOperation, StackValue } from '../domain/operations';
 
 import { DeepBlueService } from '../service/deepblue';
 import { ProgressElement } from '../service/progresselement'
@@ -64,52 +64,54 @@ export class DataStack {
         });
     }
 
-    setInitialDataArray(data : DataStackItem[]) {
+    setInitialDataArray(data: DataStackItem[]) {
         this._data = data;
     }
 
-    overlap(data: IdName) {
+    overlap(operation: DeepBlueOperation) {
+        let current_op: DeepBlueOperation = this.getCurrentOperation();
+        if (current_op == null) {
+            return;
+        }
+
         let request_count = 0;
         this.progress_element.reset(5, request_count);
 
-        // TODO: use/make a generic method for experiments and annotations
-        this.deepBlueService.selectExperiment(data, this.progress_element, request_count).subscribe((selected_experiment) => {
-            let current_op: DeepBlueOperation = this.getCurrentOperation();
-            if (current_op == null) {
-                return;
-            }
-            this.deepBlueService.overlap(current_op, selected_experiment, "true", this.progress_element, request_count).subscribe((overlap_operation) => {
-                this.deepBlueService.cacheQuery(overlap_operation, this.progress_element, request_count).subscribe((cached_data) => {
-                    this.deepBlueService.countRegionsRequest(cached_data, this.progress_element, request_count).subscribe((total) => {
-                        let totalSelectedRegtions = total["result"]["count"];
-                        let dataStackItem: DataStackItem = new DataStackItem(cached_data, "overlap", "Overlap with " + data.name, totalSelectedRegtions);
-                        this._data.push(dataStackItem);
-                        this.topStackSubject.next(dataStackItem);
-                    });
-                })
+        debugger;
+        this.deepBlueService.overlap(current_op, operation, "true", this.progress_element, request_count).subscribe((overlap_operation) => {
+            this.deepBlueService.cacheQuery(overlap_operation, this.progress_element, request_count).subscribe((cached_data) => {
+                this.deepBlueService.countRegionsRequest(cached_data, this.progress_element, request_count).subscribe((total) => {
+                    let totalSelectedRegtions = total["result"]["count"];
+                    let dataStackItem: DataStackItem = new DataStackItem(cached_data, "overlap",
+                        "Overlap with " + operation.data.name + " overlapping with XXX",
+                        totalSelectedRegtions);
+                    this._data.push(dataStackItem);
+                    this.topStackSubject.next(dataStackItem);
+                });
             })
         });
     }
 
-    non_overlap(data: IdName) {
+    non_overlap(operation: DeepBlueOperation) {
+        // TODO: use/make a generic method for experiments and annotations
+        let current_op: DeepBlueOperation = this.getCurrentOperation();
+        if (current_op == null) {
+            return;
+        }
+
         let request_count = 0;
         this.progress_element.reset(5, request_count);
 
-        // TODO: use/make a generic method for experiments and annotations
-        this.deepBlueService.selectExperiment(data, this.progress_element, request_count).subscribe((selected_experiment) => {
-            let current_op: DeepBlueOperation = this.getCurrentOperation();
-            if (current_op == null) {
-                return;
-            }
-            this.deepBlueService.overlap(current_op, selected_experiment, "false", this.progress_element, request_count).subscribe((overlap_operation) => {
-                this.deepBlueService.cacheQuery(overlap_operation, this.progress_element, request_count).subscribe((cached_data) => {
-                    this.deepBlueService.countRegionsRequest(cached_data, this.progress_element, request_count).subscribe((total) => {
-                        let totalSelectedRegtions = total["result"]["count"];
-                        let dataStackItem: DataStackItem = new DataStackItem(cached_data, "not-overlap", "Not-overlap with " + data.name, totalSelectedRegtions);
-                        this._data.push(dataStackItem);
-                        this.topStackSubject.next(dataStackItem);
-                    });
-                })
+        this.deepBlueService.overlap(current_op, operation, "false", this.progress_element, request_count).subscribe((overlap_operation) => {
+            this.deepBlueService.cacheQuery(overlap_operation, this.progress_element, request_count).subscribe((cached_data) => {
+                this.deepBlueService.countRegionsRequest(cached_data, this.progress_element, request_count).subscribe((total) => {
+                    let totalSelectedRegtions = total["result"]["count"];
+                    let dataStackItem: DataStackItem = new DataStackItem(cached_data, "not-overlap",
+                        "Not-overlap with " + operation.data.name + " overlapping with XXX",
+                        totalSelectedRegtions);
+                    this._data.push(dataStackItem);
+                    this.topStackSubject.next(dataStackItem);
+                });
             })
         });
     }

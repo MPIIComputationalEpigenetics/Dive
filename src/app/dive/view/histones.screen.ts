@@ -33,17 +33,44 @@ import { DeepBlueOperation, DeepBlueResult, StackValue } from '../domain/operati
 export class OverlapsBarChart {
     options: Object;
     chart: Object;
+    result_by_dataset_stack: Object;
 
-    setNewData(categories, series) {
+    setNewData(categories, series, result_by_dataset_stack) {
         this.chart["xAxis"][0].setCategories(categories, false);
+
+        let point = {
+            events: {
+                click: function (click, e) {
+                    // dummy function
+                }
+            }
+        };
+
+        let dataLabels = {
+            enabled: true,
+            rotation: -90,
+            color: '#FFFFFF',
+            align: 'right',
+            format: '{point.y:.1f}', // one decimal
+            y: 10, // 10 pixels down from the top
+            style: {
+                fontSize: '12px',
+                fontFamily: 'Verdana, sans-serif'
+            }
+        };
 
         while (this.chart["series"].length > 0) {
             this.chart["series"][0].remove(false);
         }
 
         for (let serie of series) {
+            serie["point"] = point;
+            serie['point']['events']['click'] = (ev) => this.clickExperimentBar(ev);
+            serie["dataLabels"] = dataLabels;
             this.chart["addSeries"](serie, false);
         }
+
+        this.result_by_dataset_stack = result_by_dataset_stack;
 
         this.chart["redraw"]();
     }
@@ -52,7 +79,6 @@ export class OverlapsBarChart {
         if (!this.chart) {
             return false;
         }
-        // //this.options['series'][0]['point']['events']['click'] = (ev) => this.clickExperimentBar(ev);
         return this.chart["series"][0]["data"].length > 0;
     }
 
@@ -95,9 +121,12 @@ export class OverlapsBarChart {
     clickExperimentBar(click) {
         let point = click.point;
         let category = point.category;
-        let experiment: IdName = point.series.options.data[category][2];
+        let index = point.series.columnIndex;
 
-        this.deepBlueService.setDataInfoSelected(experiment);
+        let stack_value : StackValue = this.result_by_dataset_stack[category][point.series.columnIndex];
+        this.deepBlueService.setDataInfoSelected(stack_value);
+
+
         setTimeout(() => this.chart["reflow"](), 0);
     }
 }
@@ -299,6 +328,8 @@ export class HistonesScreen {
     }
 
     reloadPlot(datum: StackValue[]) {
+
+        let result_by_dataset_stack = {};
         let value_by_stack = {};
         let categories = [];
 
@@ -313,6 +344,7 @@ export class HistonesScreen {
                 value_by_stack[stack] = [];
             }
             value_by_stack[stack].push(result);
+            result_by_dataset_stack[dataset_name] = [];
         }
 
         let series: Array<Object> = [];
@@ -322,13 +354,15 @@ export class HistonesScreen {
             stack.sort((a: StackValue, b: StackValue) => {
                 return a.stack - b.stack;
             });
-            for (let stack_value of stack) {
+            for (let i = 0; i < stack.length; i++) {
+                let stack_value = stack[i];
                 stack_values.push(stack_value.getDeepBlueResult().resultAsCount());
+                result_by_dataset_stack[stack_value.getDeepBlueResult().data.name][stack_value.stack] = stack_value;
             }
             series.push({ name: stack_value.toString(), data: stack_values });
         }
 
-        this.overlapbarchart.setNewData(categories, series);
+        this.overlapbarchart.setNewData(categories, series, result_by_dataset_stack);
     }
 
     selectExperimentBar(e) {
