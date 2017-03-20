@@ -112,7 +112,16 @@ export class OverlapsBarChart {
                 enabled: false
             },
             tooltip: {
-                pointFormat: `Overlap with ${deepBlueService.getAnnotation().name}: <b>{point.y} peaks</b>`
+                formatter: function () {
+                    var s;
+                    if (this.point.name) { // the pie chart
+                        s = this.point.name + ' ' + this.y + ' fruits';
+                    } else {
+                        s = this.series.name + ' : ' +
+                            this.x + ': ' + this.y;
+                    }
+                    return s;
+                }
             },
             series: []
         }
@@ -123,7 +132,7 @@ export class OverlapsBarChart {
         let category = point.category;
         let index = point.series.columnIndex;
 
-        let stack_value : StackValue = this.result_by_dataset_stack[category][point.series.columnIndex];
+        let stack_value: StackValue = this.result_by_dataset_stack[category][point.series.columnIndex];
         this.deepBlueService.setDataInfoSelected(stack_value);
 
 
