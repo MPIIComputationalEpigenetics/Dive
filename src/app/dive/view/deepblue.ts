@@ -1,27 +1,15 @@
-import { StackValue } from '../domain/operations';
-
-import { MenuService } from '../service/menu';
-import {
-    Component,
-    ViewChild,
-    OnInit,
-} from '@angular/core';
+import { DataStack } from '../service/datastack';
+import { Component, ViewChild, OnInit, Input } from '@angular/core';
 
 import { Subscription } from 'rxjs/Subscription';
 
-import {
-    Dropdown,
-    SelectItem
-} from 'primeng/primeng';
+import { Dropdown, SelectItem } from 'primeng/primeng';
 
-import {
-    Annotation,
-    EpigeneticMark,
-    Experiment,
-    FullMetadata,
-    Genome,
-    IdName,
-} from '../domain/deepblue';
+import { Annotation, EpigeneticMark, Experiment, FullMetadata, Genome, IdName } from '../domain/deepblue';
+
+import { StackValue } from '../domain/operations';
+
+import { MenuService } from '../service/menu';
 
 import { DataCache, DeepBlueService, MultiKeyDataCache } from '../service/deepblue';
 import { SelectedData } from '../service/selecteddata';
@@ -117,6 +105,7 @@ export class DataStackView {
     }
 
     saveData(event, data) {
+        debugger;
         this.selectedData.saveActiveStack();
     }
 }
@@ -237,28 +226,56 @@ export class HistoneExperimentsMenu {
 }
 
 @Component({
+    selector: 'selected-data-button',
+    template: `
+    <button pButton type="button" icon="ui-icon-dehaze"
+            label="{{ title() }}"
+            (click)="infoStack($event)">
+    </button>
+    <p-overlayPanel #op>
+        {{ stackData }}
+    </p-overlayPanel>
+    `
+
+})
+export class SelectedDataButton {
+
+    @Input() dataStack: DataStack;
+
+    constructor() { }
+//(click)="op.toggle($event)">
+    infoStack(event) {
+        debugger;
+        console.log(this.dataStack);
+    }
+
+    title() {
+        let top = this.dataStack._data[0];
+        if (top == undefined) {
+            return "(loading..)";
+        }
+        return top.op.data.name;
+    }
+
+}
+
+
+@Component({
     selector: 'selected-data',
     template: `
                 <p-toolbar>
                     <div class="ui-toolbar-group-left">
-                        <button pButton type="button" icon="ui-icon-dehaze"
-                                *ngFor="let stackitem of selectedData._stacks | slice:1"
-                                label="Saved stack"
-                                (click)="infoStack($event, data)">
-                        </button>
+                        <selected-data-button
+                            *ngFor="let ds of selectedData._stacks | slice:1"
+                            [dataStack]="ds">
+                        </selected-data-button>
                     </div>
                 </p-toolbar>
 
     `
 })
 export class SelectedDataView {
-
     constructor(private selectedData: SelectedData) { }
-
-    infoStack(event, data) {
-        console.log(data);
-    }
-
 }
 
 // Building Menu Items with Genome names

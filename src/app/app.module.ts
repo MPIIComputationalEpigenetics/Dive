@@ -102,7 +102,8 @@ import {
   DiveStatus,
   GenomeSelectorComponent,
   HistoneExperimentsMenu,
-  SelectedDataView
+  SelectedDataView,
+  SelectedDataButton
 } from './dive/view/deepblue';
 
 import { DataLoadProgressBar } from './dive/view/progressbar';
@@ -209,7 +210,8 @@ import { AppComponent } from './app.component';
         BioSourcesScreen,
         HistonesScreen,
         GenesScreen,
-        SelectedDataView
+        SelectedDataView,
+        SelectedDataButton
     ],
     providers: [
         { provide: LocationStrategy, useClass: HashLocationStrategy },

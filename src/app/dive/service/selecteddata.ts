@@ -31,6 +31,7 @@ export class SelectedData {
     this.annotationSubscription = deepBlueService.annotationValue$.subscribe((annotation: Annotation) => {
       let stack: DataStack = dataStackFactory.newDataStack();
       if (annotation.id != "") {
+        // TODO: Ask if the user want to save the previous stack
         console.log("Non empty annotation");
         stack.setInitialData(annotation);
         this.addStack(stack);
@@ -40,7 +41,7 @@ export class SelectedData {
   }
 
   addStack(stack: DataStack) {
-    this._stacks.push(stack);
+    this._stacks.unshift(stack);
   }
 
   removeStack(stack: DataStack): DataStack {
@@ -102,6 +103,7 @@ export class SelectedData {
   }
 
   saveActiveStack() {
+    debugger;
     let clone = this.getActiveStack().cloneStackItems();
     let stack: DataStack = this.dataStackFactory.newDataStack();
     stack.setInitialDataArray(clone);
