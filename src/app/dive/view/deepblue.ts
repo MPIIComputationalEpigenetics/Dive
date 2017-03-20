@@ -126,19 +126,24 @@ export class DiveStatus {
     selector: 'select-annotation',
     template: `
                 <div class="ui-g form-group">
-                    <div class="ui-g-12 ui-md-2">
+                    <div class="ui-g-4 ui-md-2">
                         <label for="input">Annotation Name</label>
                     </div>
-                    <div class="ui-g-12 ui-md-4">
+                    <div class="ui-g-4 ui-md-2">
                         <p-dropdown
                             #annotationsDropdown
                             [options]="menuAnnotations"
                             [(ngModel)]="selectedAnnotation"
                             filter="filter"
                             [autoWidth]="false"
-                            (onChange)="selectAnnotation($event)"
                         >
                         </p-dropdown>
+                    </div>
+                    <div class="ui-g-4 ui-md-2">
+                        <button pButton type="button" icon="ui-icon-check-circle"
+                            label="Select Annotation"
+                            (click)="selectAnnotation($event)">
+                        </button>
                     </div>
                 </div>
         `})
@@ -146,7 +151,7 @@ export class AnnotationListComponent {
     errorMessage: string;
     annotations: Annotation[];
     menuAnnotations: SelectItem[];
-    selectedAnnotation: SelectItem;
+    selectedAnnotation: Annotation;
     genomeSubscription: Subscription;
 
     @ViewChild('annotationsDropdown') annotationsDropdown: Dropdown
@@ -181,7 +186,8 @@ export class AnnotationListComponent {
     }
 
     selectAnnotation(event) {
-        this.deepBlueService.setAnnotation(event.value);
+        debugger;
+        this.deepBlueService.setAnnotation(this.selectedAnnotation);
     }
 
     ngOnDestroy() {
