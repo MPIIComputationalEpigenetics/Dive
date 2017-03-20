@@ -54,7 +54,6 @@ export class DataInfoBox {
 @Component({
     selector: 'data-stack',
     template: `
-    <br/><br/>
     <div class="dashboard">
     <div *ngIf="selectedData.getActiveData().length > 0" class="ui-g-12 ui-md-12" style="word-wrap: break-word">
         <p-panel [style]="{'height':'100%'}">

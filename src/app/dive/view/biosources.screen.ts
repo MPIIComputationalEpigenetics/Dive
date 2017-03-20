@@ -33,8 +33,7 @@ export class BioSourcesScreen {
                 return;
             }
             this.deepBlueService.getBioSources().subscribe(biosources => {
-                this.targetBioSources = biosources;
-                this.deepBlueService.setSelectedBioSources(this.targetBioSources);
+                this.sourceBioSources = biosources;
             })
         })
     }
