@@ -103,7 +103,6 @@ export class SelectedData {
   }
 
   saveActiveStack() {
-    debugger;
     let clone = this.getActiveStack().cloneStackItems();
     let stack: DataStack = this.dataStackFactory.newDataStack();
     stack.setInitialDataArray(clone);

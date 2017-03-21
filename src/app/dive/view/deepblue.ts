@@ -1,9 +1,10 @@
-import { DataStack } from '../service/datastack';
 import { Component, ViewChild, OnInit, Input } from '@angular/core';
 
 import { Subscription } from 'rxjs/Subscription';
 
-import { Dropdown, SelectItem } from 'primeng/primeng';
+import { MenuItem } from 'primeng/primeng';
+import { Dropdown } from 'primeng/primeng';
+import { SelectItem } from 'primeng/primeng';
 
 import { Annotation, EpigeneticMark, Experiment, FullMetadata, Genome, IdName } from '../domain/deepblue';
 
@@ -13,6 +14,8 @@ import { MenuService } from '../service/menu';
 
 import { DataCache, DeepBlueService, MultiKeyDataCache } from '../service/deepblue';
 import { SelectedData } from '../service/selecteddata';
+import { DataStack } from '../service/datastack';
+
 
 @Component({
     selector: 'data-info-box',
@@ -48,64 +51,6 @@ export class DataInfoBox {
 
     getStackName(): string {
         return this.data.stack.toString();
-    }
-}
-
-@Component({
-    selector: 'data-stack',
-    template: `
-    <div class="dashboard">
-    <div *ngIf="selectedData.getActiveData().length > 0" class="ui-g-12 ui-md-12" style="word-wrap: break-word">
-        <p-panel [style]="{'height':'100%'}">
-
-            <div class="activity-header dashboard">
-                <div class="ui-g">
-                    <div class="ui-g-10">
-                        <div style="font-weight:bold" class="description">{{ selectedData.getActiveData()[0].op.data.name }}</div>
-                        <p class="count"> {{ selectedData.getActiveData()[0].count }} regions</p>
-                    </div>
-                    <div class="ui-g-2 button-change">
-                        <button type="button" icon="ui-icon-blur-on" pButton (click)="removeData($event, selectedData.getActiveData()[0])"></button>
-                    </div>
-                </div>
-            </div>
-
-            <ul class="activity-list">
-                <li *ngFor="let data of selectedData.getActiveData() | slice:1">
-                    <div class="ui-g">
-                        <div class="ui-g-10">
-                            <div class="description">{{ data.description }}</div>
-                            <p class="count"> {{data.count}} regions <p>
-                        </div>
-
-                        <div class="ui-g-2 button-change">
-                            <button class="red-btn" type="button" icon="ui-icon-remove" pButton (click)="removeData($event, data)"></button>
-                        </div>
-
-                        <div class="ui-g-2 button-change">
-                            <button class="red-btn" type="button" icon="ui-icon-bookmark-border" pButton (click)="saveData($event, data)"></button>
-                        </div>
-                    </div>
-
-                </li>
-            </ul>
-        </p-panel>
-    </div>
-</div>
-`
-
-})
-export class DataStackView {
-
-    constructor(private deepBlueService: DeepBlueService, private selectedData: SelectedData) { }
-
-    removeData(event, data) {
-        this.selectedData.getActiveStack().remove(data);
-    }
-
-    saveData(event, data) {
-        debugger;
-        this.selectedData.saveActiveStack();
     }
 }
 
@@ -185,7 +130,6 @@ export class AnnotationListComponent {
     }
 
     selectAnnotation(event) {
-        debugger;
         this.deepBlueService.setAnnotation(this.selectedAnnotation);
     }
 
@@ -233,24 +177,42 @@ export class HistoneExperimentsMenu {
 @Component({
     selector: 'selected-data-button',
     template: `
+    <p-overlayPanel #op [dismissable]="true" [showCloseIcon]="true">
+        <p-panel [style]="{'width':'500px'}">
+            <p-header>
+                <div class="ui-helper-clearfix">
+                    <span class="ui-panel-title" style="font-size:16px;display:inline-block;margin-top:2px">{{ title() }}</span>
+                    <p-splitButton [style]="{'float':'right'}" label="Remove" icon="fa-close" (onClick)="remove()" [model]="items"></p-splitButton>
+                </div>
+            </p-header>
+            <ul>
+                <li *ngFor="let data of dataStack._data">
+                    <div class="ui-g">
+                        <div class="ui-g-10">
+                            <div class="description">{{ data.description }}</div>
+                            <p class="count"> {{data.count}} regions <p>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </p-panel>
+    </p-overlayPanel>
+
     <button pButton type="button" icon="ui-icon-dehaze"
             label="{{ title() }}"
-            (click)="infoStack($event)">
+            (click)="op.toggle($event)">
     </button>
-    <p-overlayPanel #op>
-        {{ stackData }}
-    </p-overlayPanel>
     `
 
 })
-export class SelectedDataButton {
+export class SelectedDataButton implements OnInit {
 
     @Input() dataStack: DataStack;
+    items: MenuItem[];
 
     constructor() { }
-//(click)="op.toggle($event)">
+
     infoStack(event) {
-        debugger;
         console.log(this.dataStack);
     }
 
@@ -260,6 +222,25 @@ export class SelectedDataButton {
             return "(loading..)";
         }
         return top.op.data.name;
+    }
+
+    ngOnInit() {
+        this.items = [
+            {
+                label: 'Remove', icon: 'fa-close', command: () => this.remove()
+            },
+            {
+                label: 'Save', icon: 'fa-close', command: () => this.save()
+            }
+        ];
+    }
+
+    save() {
+        console.log("save this stack");
+    }
+
+    remove() {
+        console.log("remove this stack");
     }
 
 }

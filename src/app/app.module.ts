@@ -1,3 +1,4 @@
+import { DataStackView } from './dive/view/datastack';
 import { DataStackFactory } from './dive/service/datastack';
 import { SelectedData } from './dive/service/selecteddata';
 import { NgModule } from '@angular/core';
@@ -98,7 +99,6 @@ import { GenesScreen } from './dive/view/genes.screen';
 import {
   AnnotationListComponent,
   DataInfoBox,
-  DataStackView,
   DiveStatus,
   GenomeSelectorComponent,
   HistoneExperimentsMenu,

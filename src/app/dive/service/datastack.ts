@@ -77,7 +77,6 @@ export class DataStack {
         let request_count = 0;
         this.progress_element.reset(5, request_count);
 
-        debugger;
         this.deepBlueService.overlap(current_op, operation, "true", this.progress_element, request_count).subscribe((overlap_operation) => {
             this.deepBlueService.cacheQuery(overlap_operation, this.progress_element, request_count).subscribe((cached_data) => {
                 this.deepBlueService.countRegionsRequest(cached_data, this.progress_element, request_count).subscribe((total) => {
