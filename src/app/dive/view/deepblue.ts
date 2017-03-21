@@ -177,7 +177,7 @@ export class HistoneExperimentsMenu {
 @Component({
     selector: 'selected-data-button',
     template: `
-    <p-overlayPanel #op [dismissable]="true" [showCloseIcon]="true">
+    <p-overlayPanel #op [dismissable]="true" [showCloseIcon]="true" appendTo="body">
         <p-panel [style]="{'width':'500px'}">
             <p-header>
                 <div class="ui-helper-clearfix">
@@ -185,20 +185,24 @@ export class HistoneExperimentsMenu {
                     <p-splitButton [style]="{'float':'right'}" label="Remove" icon="fa-close" (onClick)="remove()" [model]="items"></p-splitButton>
                 </div>
             </p-header>
-            <ul>
-                <li *ngFor="let data of dataStack._data">
-                    <div class="ui-g">
-                        <div class="ui-g-10">
-                            <div class="description">{{ data.description }}</div>
-                            <p class="count"> {{data.count}} regions <p>
+            <div class="dashboard">
+                <ul class="activity-list" style="background: darkcyan">
+                    <li *ngFor="let data of dataStack._data">
+                        <div class="ui-g">
+                            <div class="ui-g-10">
+                                <p>
+                                    {{ data.what }}
+                                    {{ data.description }}
+                                    {{ data.op.data.name }} ({{ data.count }})
+                            </div>
                         </div>
-                    </div>
-                </li>
-            </ul>
+                    </li>
+                </ul>
+            </div>
         </p-panel>
     </p-overlayPanel>
 
-    <button pButton type="button" icon="ui-icon-dehaze"
+    <button #bt pButton type="button" icon="ui-icon-dehaze"
             label="{{ title() }}"
             (click)="op.toggle($event)">
     </button>
@@ -209,6 +213,7 @@ export class SelectedDataButton implements OnInit {
 
     @Input() dataStack: DataStack;
     items: MenuItem[];
+
 
     constructor() { }
 
