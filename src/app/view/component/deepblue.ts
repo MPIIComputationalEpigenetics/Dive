@@ -158,7 +158,9 @@ export class HistoneExperimentsMenu {
                 return;
             }
             this.deepBlueService.getHistones().subscribe(histones => {
+                this.menuService.clean('histones');
                 for (let histone of histones) {
+
                     this.menuService.includeItem('histones', histone.name, 'fiber_manual_record',
                         (event) => { this.changeHistone(histone) },
                         ['/histonemark'], /* router link */

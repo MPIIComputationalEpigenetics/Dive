@@ -49,6 +49,15 @@ export class MenuService {
     }
   }
 
+  clean(parentName) {
+    let subMenu = this.findMenu(parentName);
+    if (!subMenu) {
+      console.error("Sub Menu " + parentName + " not found");
+      return;
+    }
+    subMenu['items'] = [];
+  }
+
   includeItem(parentName: string, label: string, icon: string, command, routerLink, url) {
     let subMenu = this.findMenu(parentName);
     if (!subMenu) {

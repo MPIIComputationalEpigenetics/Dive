@@ -360,7 +360,6 @@ export class HistonesScreen {
 
         let series: Array<Object> = [];
         for (let stack_value : number = 0;  stack_value < value_by_stack.length; stack_value++) {
-            console.log(stack_value);
             let stack_values = <Array<StackValue>>value_by_stack[stack_value];
             let stack_values_result: Array<number> = [];
             stack_values.sort((a: StackValue, b: StackValue) => {
@@ -381,8 +380,6 @@ export class HistonesScreen {
         let dataset = e.dataset;
         let element = e.element;
         let position = element._index;
-
-        console.log(dataset[position]);
     }
 
     hasDataDetail(): boolean {
