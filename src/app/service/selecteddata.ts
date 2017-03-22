@@ -6,12 +6,12 @@ import { Subscription } from 'rxjs/Subscription';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subject } from 'rxjs/Subject';
 
-import { Annotation } from '../domain/deepblue';
+import { Annotation } from 'app/domain/deepblue';
 
-import { DeepBlueOperation } from '../domain/operations'
+import { DeepBlueOperation } from 'app/domain/operations'
 
-import { DeepBlueService } from '../service/deepblue';
-import { DataStack, DataStackFactory, DataStackItem } from '../service/datastack';
+import { DeepBlueService } from 'app/service/deepblue';
+import { DataStack, DataStackFactory, DataStackItem } from 'app/service/datastack';
 
 @Injectable()
 export class SelectedData {

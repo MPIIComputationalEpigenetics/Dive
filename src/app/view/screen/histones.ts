@@ -1,23 +1,25 @@
-import { DataStack } from '../service/datastack';
-import { SelectedData } from '../service/selecteddata';
-import { ProgressElement } from '../service/progresselement';
 import { Component, OnInit, ViewChild } from '@angular/core';
+
 import { Subscription } from 'rxjs/Subscription';
-
-import { SelectItem } from 'primeng/primeng';
-
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable'
 
+import { SelectItem } from 'primeng/primeng';
 import { MultiSelect } from 'primeng/primeng';
 
+import { BioSource } from 'app/domain/deepblue';
+import { EpigeneticMark } from 'app/domain/deepblue';
+import { FullExperiment } from 'app/domain/deepblue';
+import { Genome } from 'app/domain/deepblue';
+import { IdName } from 'app/domain/deepblue';
+import { DeepBlueOperation } from 'app/domain/operations';
+import { DeepBlueResult } from 'app/domain/operations';
+import { StackValue } from 'app/domain/operations';
 
-import { BioSource, EpigeneticMark, FullExperiment, Genome, IdName } from '../domain/deepblue';
-
-import { DeepBlueService } from '../service/deepblue';
-
-import { DeepBlueOperation, DeepBlueResult, StackValue } from '../domain/operations';
-
+import { DeepBlueService } from 'app/service/deepblue';
+import { DataStack } from 'app/service/datastack';
+import { SelectedData } from 'app/service/selecteddata';
+import { ProgressElement } from 'app/service/progresselement';
 
 @Component({
     selector: 'overlaps-bar-chart',
@@ -142,7 +144,7 @@ export class OverlapsBarChart {
 
 
 @Component({
-    templateUrl: './histones.screen.html'
+    templateUrl: './histones.html'
 })
 export class HistonesScreen {
     errorMessage: string;

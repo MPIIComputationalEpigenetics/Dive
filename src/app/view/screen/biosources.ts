@@ -13,13 +13,13 @@ import {
     Experiment,
     Genome,
     IdName,
-} from '../domain/deepblue';
+} from 'app/domain/deepblue';
 
-import { DeepBlueService } from '../service/deepblue';
+import { DeepBlueService } from 'app/service/deepblue';
 
 @Component({
     selector: 'biosources-screen',
-    templateUrl: './biosources.screen.html'
+    templateUrl: './biosources.html'
 })
 export class BioSourcesScreen {
     genomeSubscription: Subscription;

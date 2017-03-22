@@ -6,15 +6,21 @@ import { MenuItem } from 'primeng/primeng';
 import { Dropdown } from 'primeng/primeng';
 import { SelectItem } from 'primeng/primeng';
 
-import { Annotation, EpigeneticMark, Experiment, FullMetadata, Genome, IdName } from '../domain/deepblue';
+import { Annotation } from 'app/domain/deepblue';
+import { EpigeneticMark } from 'app/domain/deepblue';
+import { Experiment } from 'app/domain/deepblue';
+import { FullMetadata } from 'app/domain/deepblue';
+import { Genome } from 'app/domain/deepblue';
+import { IdName } from 'app/domain/deepblue';
 
-import { StackValue } from '../domain/operations';
+import { StackValue } from 'app/domain/operations';
+import { MenuService } from 'app/service/menu';
 
-import { MenuService } from '../service/menu';
-
-import { DataCache, DeepBlueService, MultiKeyDataCache } from '../service/deepblue';
-import { SelectedData } from '../service/selecteddata';
-import { DataStack } from '../service/datastack';
+import { DataCache } from 'app/service/deepblue';
+import { DeepBlueService } from 'app/service/deepblue';
+import { MultiKeyDataCache } from 'app/service/deepblue';
+import { SelectedData } from 'app/service/selecteddata';
+import { DataStack } from 'app/service/datastack';
 
 
 @Component({

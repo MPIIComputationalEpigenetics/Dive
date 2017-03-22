@@ -8,22 +8,20 @@ import { Dropdown, SelectItem } from 'primeng/primeng';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable'
 
-import { BioSource, EpigeneticMark, FullExperiment, Genome, GeneModel } from '../domain/deepblue';
+import { BioSource, EpigeneticMark, FullExperiment, Genome, GeneModel } from 'app/domain/deepblue';
 
-import { DataStackItem } from '../service/datastack';
-import { DeepBlueService } from '../service/deepblue';
-import { SelectedData } from '../service/selecteddata';
-import { ProgressElement } from '../service/progresselement'
-import { OverlapsBarChart } from './histones.screen';
+import { DataStackItem } from 'app/service/datastack';
+import { DeepBlueService } from 'app/service/deepblue';
+import { SelectedData } from 'app/service/selecteddata';
+import { ProgressElement } from 'app/service/progresselement'
 
-import {
-    DeepBlueOperation,
-    DeepBlueResult
-} from '../domain/operations';
+import { OverlapsBarChart } from 'app/view/screen/histones';
 
+import { DeepBlueOperation} from 'app/domain/operations';
+import { DeepBlueResult } from 'app/domain/operations';
 
 @Component({
-    templateUrl: './genes.screen.html'
+    templateUrl: './genes.html'
 })
 export class GenesScreen {
     errorMessage: string;

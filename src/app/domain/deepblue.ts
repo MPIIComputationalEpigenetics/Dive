@@ -1,4 +1,4 @@
-import { IKey } from './interfaces';
+import { IKey } from 'app/domain/interfaces';
 
 export class IdName implements IKey{
     constructor (public id: string, public name: string) {  }

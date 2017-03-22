@@ -1,4 +1,3 @@
-
 import { Injectable } from '@angular/core';
 
 import { Router } from '@angular/router';
@@ -8,11 +7,11 @@ import { Subscription } from 'rxjs/Subscription';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subject } from 'rxjs/Subject';
 
-import { IdName, EpigeneticMark, Experiment, Genome, Annotation } from '../domain/deepblue';
-import { DeepBlueOperation, StackValue } from '../domain/operations';
+import { IdName, EpigeneticMark, Experiment, Genome, Annotation } from 'app/domain/deepblue';
+import { DeepBlueOperation, StackValue } from 'app/domain/operations';
 
-import { DeepBlueService } from '../service/deepblue';
-import { ProgressElement } from '../service/progresselement'
+import { DeepBlueService } from 'app/service/deepblue';
+import { ProgressElement } from 'app/service/progresselement'
 
 @Injectable()
 export class DataStackFactory {

@@ -1,39 +1,30 @@
-import { SelectedData } from '../service/selecteddata';
-import { ProgressElement } from '../service/progresselement';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Subscription } from 'rxjs/Subscription';
-
-import { SelectItem } from 'primeng/primeng';
 
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable'
+import { Subscription } from 'rxjs/Subscription';
 
+import { SelectItem } from 'primeng/primeng';
 import { MultiSelect } from 'primeng/primeng';
 
-import {
-    BioSource,
-    EpigeneticMark,
-    FullExperiment,
-    FullMetadata,
-    Genome,
-    IdName
-} from '../domain/deepblue';
+import { SelectedData } from 'app/service/selecteddata';
+import { ProgressElement } from 'app/service/progresselement';
 
-import { DeepBlueService } from '../service/deepblue';
+import { IdName } from 'app/domain/deepblue';
+import { BioSource } from 'app/domain/deepblue';
+import { EpigeneticMark } from 'app/domain/deepblue';
+import { FullExperiment } from 'app/domain/deepblue';
+import { FullMetadata } from 'app/domain/deepblue';
+import { Genome } from 'app/domain/deepblue';
 
-import {
-    DeepBlueOperation,
-    DeepBlueResult
-} from '../domain/operations';
+import { DeepBlueService } from 'app/service/deepblue';
 
-
-class Regions {
-
-}
+import { DeepBlueOperation } from 'app/domain/operations';
+import { DeepBlueResult } from 'app/domain/operations';
 
 @Component({
     selector: 'regions-screen',
-    templateUrl: './regions.screen.html'
+    templateUrl: './regions.html'
 })
 export class RegionsScreen {
 

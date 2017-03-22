@@ -1,8 +1,6 @@
-import { ICloneable,
-         IKey } from '../domain/interfaces';
-
-import { IdName } from '../domain/deepblue';
-
+import { ICloneable } from 'app/domain/interfaces';
+import { IKey } from 'app/domain/interfaces';
+import { IdName } from 'app/domain/deepblue';
 
 export class DeepBlueOperation implements IKey {
     constructor(public data: IdName, public query_id: string, public command: string, public request_count: number, public cached: boolean = false) { }

@@ -2,9 +2,9 @@ import { Component, Input, OnInit, EventEmitter, ViewChild, trigger, state, tran
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { MenuItem } from 'primeng/primeng';
-import { AppComponent } from './app.component';
 
-import { MenuService } from 'app/dive/service/menu';
+import { AppComponent } from 'app/app.component';
+import { MenuService } from 'app/service/menu';
 
 @Component({
     selector: 'app-menu',

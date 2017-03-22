@@ -1,5 +1,9 @@
-import { SelectedData } from '../service/selecteddata';
-import { MenuService } from '../service/menu';
+import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
+
+import { Subscription } from 'rxjs/Subscription';
+
+import { SelectedData } from 'app/service/selecteddata';
+import { MenuService } from 'app/service/menu';
 import {
     SimpleChanges,
     Component,
@@ -9,16 +13,8 @@ import {
     Input
 } from '@angular/core';
 
-import { Subscription } from 'rxjs/Subscription';
-
-import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
-
-import {
-    Annotation,
-} from '../domain/deepblue';
-
-import { DeepBlueService } from '../service/deepblue';
-
+import { Annotation } from 'app/domain/deepblue';
+import { DeepBlueService } from 'app/service/deepblue';
 
 @Component({
     selector: 'filtering',

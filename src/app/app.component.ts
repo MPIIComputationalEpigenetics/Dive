@@ -1,6 +1,6 @@
 import {Component,AfterViewInit,ElementRef,Renderer,ViewChild} from '@angular/core';
 
-import { DataLoadProgressBar } from './dive/view/progressbar';
+import { DataLoadProgressBar } from 'app/view/component/progressbar';
 
 enum MenuOrientation {
     STATIC,

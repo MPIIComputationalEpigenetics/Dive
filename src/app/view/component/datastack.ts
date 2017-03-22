@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
-import { SelectedData } from '../service/selecteddata';
-import { DeepBlueService } from '../service/deepblue';
+import { SelectedData } from 'app/service/selecteddata';
+import { DeepBlueService } from 'app/service/deepblue';
 
 @Component({
     selector: 'data-stack',

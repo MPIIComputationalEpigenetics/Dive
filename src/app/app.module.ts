@@ -1,6 +1,6 @@
-import { DataStackView } from './dive/view/datastack';
-import { DataStackFactory } from './dive/service/datastack';
-import { SelectedData } from './dive/service/selecteddata';
+import { DataStackView } from 'app/view/component/datastack';
+import { DataStackFactory } from 'app/service/datastack';
+import { SelectedData } from 'app/service/selecteddata';
 import { NgModule } from '@angular/core';
 import { FormsModule, FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
@@ -80,21 +80,18 @@ import { AppFooter } from './app.footer.component';
 
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
-import { MenuService } from './dive/service/menu';
-import { DeepBlueService } from './dive/service/deepblue';
-import { ProgressElement } from './dive/service/progresselement';
+import { MenuService } from 'app/service/menu';
+import { DeepBlueService } from 'app/service/deepblue';
+import { ProgressElement } from 'app/service/progresselement';
 
-import { HistonesScreen, OverlapsBarChart } from './dive/view/histones.screen';
+import { HistonesScreen, OverlapsBarChart } from 'app/view/screen/histones';
 
-import { FilteringComponent } from './dive/view/filtering';
+import { FilteringComponent } from 'app/view/component/filtering';
 
-import { SummaryScreen } from './dive/view/summary.screen';
-
-import { RegionsScreen } from './dive/view/regions.screen';
-
-import { BioSourcesScreen } from './dive/view/biosources.screen';
-
-import { GenesScreen } from './dive/view/genes.screen';
+import { SummaryScreen } from 'app/view/screen/summary';
+import { RegionsScreen } from 'app/view/screen/regions';
+import { BioSourcesScreen } from 'app/view/screen/biosources';
+import { GenesScreen } from 'app/view/screen/genes';
 
 import {
   AnnotationListComponent,
@@ -104,9 +101,9 @@ import {
   HistoneExperimentsMenu,
   SelectedDataView,
   SelectedDataButton
-} from './dive/view/deepblue';
+} from 'app/view/component/deepblue';
 
-import { DataLoadProgressBar } from './dive/view/progressbar';
+import { DataLoadProgressBar } from 'app/view/component/progressbar';
 
 import { HighchartsStatic } from 'angular2-highcharts/dist/HighchartsService';
 import { ChartModule } from "angular2-highcharts";

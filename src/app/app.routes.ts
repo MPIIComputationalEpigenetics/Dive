@@ -1,9 +1,9 @@
 import { Routes, RouterModule } from '@angular/router';
 import { ModuleWithProviders } from '@angular/core';
-import { SummaryScreen } from './dive/view/summary.screen';
-import { RegionsScreen } from './dive/view/regions.screen';
-import { HistonesScreen } from './dive/view/histones.screen';
-import { GenesScreen } from './dive/view/genes.screen';
+import { SummaryScreen } from 'app/view/screen/summary';
+import { RegionsScreen } from 'app/view/screen/regions';
+import { HistonesScreen } from 'app/view/screen/histones';
+import { GenesScreen } from 'app/view/screen/genes';
 
 export const routes: Routes = [
     { path: '', component: SummaryScreen },

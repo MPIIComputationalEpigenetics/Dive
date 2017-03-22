@@ -1,4 +1,4 @@
-import { ProgressElement } from '../service/progresselement';
+import { ProgressElement } from 'app/service/progresselement';
 import {
     Component,
     ViewChild,
