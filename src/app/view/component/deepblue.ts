@@ -190,8 +190,8 @@ export class HistoneExperimentsMenu {
             <p-header>
                 <div class="ui-helper-clearfix">
                     <span class="ui-panel-title" style="font-size:16px;display:inline-block;margin-top:2px">{{ title() }}</span>
-                     <input value="change color" [(colorPicker)]="color" [style.background]="color" style="width: 100px; border: 0px;"/>
                     <p-splitButton [style]="{'float':'right'}" label="Remove" icon="fa-close" (onClick)="remove()" [model]="items"></p-splitButton>
+                    <input readonly [(colorPicker)]="color" [style.float]="'right'" [style.background]="color" style="height: 38px; width: 100px; border: 0px; padding: 3px;"/>
                 </div>
             </p-header>
             <div class="dashboard">
@@ -211,7 +211,7 @@ export class HistoneExperimentsMenu {
         </p-panel>
     </p-overlayPanel>
 
-    <button #bt pButton type="button" icon="ui-icon-dehaze"
+    <button #bt pButton type="button" [style.background]="color" icon="ui-icon-dehaze"
             label="{{ title() }}"
             (click)="op.toggle($event)">
     </button>
