@@ -22,9 +22,6 @@ import { MultiKeyDataCache } from 'app/service/deepblue';
 import { SelectedData } from 'app/service/selecteddata';
 import { DataStack } from 'app/service/datastack';
 
-
-declare var randomColor: any;
-
 @Component({
     selector: 'data-info-box',
     template: `
@@ -189,9 +186,12 @@ export class HistoneExperimentsMenu {
         <p-panel [style]="{'width':'500px'}">
             <p-header>
                 <div class="ui-helper-clearfix">
-                    <span class="ui-panel-title" style="font-size:16px;display:inline-block;margin-top:2px">{{ title() }}</span>
+                    <span class="ui-panel-title" style="font-size:16px;display:inline-block;margin-top:2px">{{ dataStack.name() }}</span>
                     <p-splitButton [style]="{'float':'right'}" label="Remove" icon="fa-close" (onClick)="remove()" [model]="items"></p-splitButton>
-                    <input readonly [(colorPicker)]="color" [style.float]="'right'" [style.background]="color" style="height: 38px; width: 100px; border: 0px; padding: 3px;"/>
+                    <input readonly [(colorPicker)]="dataStack.color"
+                            [style.float]="'right'"
+                            [style.background]="dataStack.color"
+                            style="height: 38px; width: 100px; border: 0px; padding: 3px;"/>
                 </div>
             </p-header>
             <div class="dashboard">
@@ -211,8 +211,8 @@ export class HistoneExperimentsMenu {
         </p-panel>
     </p-overlayPanel>
 
-    <button #bt pButton type="button" [style.background]="color" icon="ui-icon-dehaze"
-            label="{{ title() }}"
+    <button #bt pButton type="button" [style.background]="dataStack.color" icon="ui-icon-dehaze"
+            label="{{ dataStack.name() }}"
             (click)="op.toggle($event)">
     </button>
     `
@@ -222,23 +222,12 @@ export class SelectedDataButton implements OnInit {
 
     @Input() dataStack: DataStack;
     items: MenuItem[];
-    color: string;
 
     constructor() {
-        this.color = randomColor();
-        console.log(this.color);
     }
 
     public change(val: any) {
         console.log(val);
-    }
-
-    title() {
-        let top = this.dataStack._data[0];
-        if (top == undefined) {
-            return "(loading..)";
-        }
-        return top.op.data.name;
     }
 
     ngOnInit() {

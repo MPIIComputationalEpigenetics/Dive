@@ -117,4 +117,20 @@ export class SelectedData {
     this.annotationSubscription.unsubscribe();
   }
 
+  getStackName(pos: number) {
+    if (pos >= this._stacks.length) {
+      return "Invalid Stack";
+    }
+
+    return this._stacks[pos].name();
+  }
+
+  getStackColor(pos: number) {
+    if (pos >= this._stacks.length) {
+      return "#FFFFFF";
+    }
+
+    return this._stacks[pos].color;
+  }
+
 }

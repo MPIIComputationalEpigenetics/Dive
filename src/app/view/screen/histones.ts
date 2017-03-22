@@ -282,7 +282,7 @@ export class HistonesScreen {
         this.current_request++;
 
         // Each experiment is started, selected, overlaped, count, get request data (4 times each)
-        this.progress_element.reset(experiments.length * 5, this.current_request);
+        this.progress_element.reset(experiments.length * this.selectedData.getStacksTopOperation().length * 5, this.current_request);
         this.currentlyProcessing = experiments;
 
         this.deepBlueService.selectMultipleExperiments(experiments, this.progress_element, this.current_request).subscribe((selected_experiments: DeepBlueOperation[]) => {
@@ -341,7 +341,7 @@ export class HistonesScreen {
     reloadPlot(datum: StackValue[]) {
 
         let result_by_dataset_stack = {};
-        let value_by_stack = {};
+        let value_by_stack = [];
         let categories = [];
 
         // Categories = getExperiments
@@ -359,18 +359,19 @@ export class HistonesScreen {
         }
 
         let series: Array<Object> = [];
-        for (let stack_value in value_by_stack) {
-            let stack = <Array<StackValue>>value_by_stack[stack_value];
-            let stack_values: Array<number> = [];
-            stack.sort((a: StackValue, b: StackValue) => {
+        for (let stack_value : number = 0;  stack_value < value_by_stack.length; stack_value++) {
+            console.log(stack_value);
+            let stack_values = <Array<StackValue>>value_by_stack[stack_value];
+            let stack_values_result: Array<number> = [];
+            stack_values.sort((a: StackValue, b: StackValue) => {
                 return a.stack - b.stack;
             });
-            for (let i = 0; i < stack.length; i++) {
-                let stack_value = stack[i];
-                stack_values.push(stack_value.getDeepBlueResult().resultAsCount());
+            for (let i = 0; i < stack_values.length; i++) {
+                let stack_value = stack_values[i];
+                stack_values_result.push(stack_value.getDeepBlueResult().resultAsCount());
                 result_by_dataset_stack[stack_value.getDeepBlueResult().data.name][stack_value.stack] = stack_value;
             }
-            series.push({ name: stack_value.toString(), data: stack_values });
+            series.push({ name: stack_value.toString(), data: stack_values_result, color: this.selectedData.getStackColor(stack_value)});
         }
 
         this.overlapbarchart.setNewData(categories, series, result_by_dataset_stack);

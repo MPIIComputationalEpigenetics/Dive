@@ -13,6 +13,8 @@ import { DeepBlueOperation, StackValue } from 'app/domain/operations';
 import { DeepBlueService } from 'app/service/deepblue';
 import { ProgressElement } from 'app/service/progresselement'
 
+declare var randomColor: any;
+
 @Injectable()
 export class DataStackFactory {
     constructor(private deepBlueService: DeepBlueService, private progress_element: ProgressElement,
@@ -33,13 +35,16 @@ export class DataStackItem {
 
 export class DataStack {
 
+    public color: string = "blue";
     _data: DataStackItem[] = [];
 
     public topStackSubject = new Subject<DataStackItem>();
     public topStackValue$: Observable<DataStackItem> = this.topStackSubject.asObservable();
 
     constructor(private deepBlueService: DeepBlueService, private progress_element: ProgressElement,
-        private router: Router) { }
+        private router: Router) {
+        this.color = randomColor();
+    }
 
     setInitialData(data: IdName) {
         this._data = [];
@@ -175,5 +180,13 @@ export class DataStack {
             newStack.push(item);
         }
         return newStack;
+    }
+
+    name(): string {
+        let top = this._data[0];
+        if (top == undefined) {
+            return "(loading..)";
+        }
+        return top.op.data.name;
     }
 }
