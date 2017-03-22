@@ -26,6 +26,7 @@
     "scripts": [
       "../node_modules/jquery/dist/jquery.js",
       "../node_modules/nanoscroller/bin/javascripts/jquery.nanoscroller.js",
+      "../node_modules/randomcolor/randomColor.js",
       "assets/layout/js/ripple.js"
     ],
     "environmentSource": "environments/environment.ts",

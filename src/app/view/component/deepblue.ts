@@ -23,6 +23,8 @@ import { SelectedData } from 'app/service/selecteddata';
 import { DataStack } from 'app/service/datastack';
 
 
+declare var randomColor: any;
+
 @Component({
     selector: 'data-info-box',
     template: `
@@ -188,6 +190,7 @@ export class HistoneExperimentsMenu {
             <p-header>
                 <div class="ui-helper-clearfix">
                     <span class="ui-panel-title" style="font-size:16px;display:inline-block;margin-top:2px">{{ title() }}</span>
+                     <input value="change color" [(colorPicker)]="color" [style.background]="color" style="width: 100px; border: 0px;"/>
                     <p-splitButton [style]="{'float':'right'}" label="Remove" icon="fa-close" (onClick)="remove()" [model]="items"></p-splitButton>
                 </div>
             </p-header>
@@ -219,12 +222,15 @@ export class SelectedDataButton implements OnInit {
 
     @Input() dataStack: DataStack;
     items: MenuItem[];
+    color: string;
 
+    constructor() {
+        this.color = randomColor();
+        console.log(this.color);
+    }
 
-    constructor() { }
-
-    infoStack(event) {
-        console.log(this.dataStack);
+    public change(val: any) {
+        console.log(val);
     }
 
     title() {

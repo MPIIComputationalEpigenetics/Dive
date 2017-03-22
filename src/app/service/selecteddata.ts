@@ -27,21 +27,38 @@ export class SelectedData {
   annotationSubscription: Subscription;
 
   constructor(private deepBlueService: DeepBlueService, private dataStackFactory: DataStackFactory) {
-    console.log("CREATING SELECTED DATA");
     this.annotationSubscription = deepBlueService.annotationValue$.subscribe((annotation: Annotation) => {
       let stack: DataStack = dataStackFactory.newDataStack();
       if (annotation.id != "") {
         // TODO: Ask if the user want to save the previous stack
         console.log("Non empty annotation");
         stack.setInitialData(annotation);
-        this.addStack(stack);
+        this.insertStack(0, stack);
         this.setActiveStack(stack);
       }
     });
   }
 
-  addStack(stack: DataStack) {
-    this._stacks.unshift(stack);
+  insertStack(position: number, stack: DataStack) {
+    this._stacks.splice(position, 0, stack);
+  }
+
+  setActiveStack(stack: DataStack) {
+    let index = this._stacks.indexOf(stack, 0);
+    if (index <= -1) {
+      console.log(stack, "not found");
+      return;
+    }
+    this._activeStack = stack;
+
+    let toChange = this._stacks[index];
+    this._stacks[index] = this._stacks[0];
+    this._stacks[0] = toChange;
+
+    if (this.currentStackSubscription != null && !this.currentStackSubscription.closed) {
+      this.currentStackSubscription.unsubscribe();
+    }
+    this.currentStackSubscription = stack.topStackValue$.subscribe((dataStackItem: DataStackItem) => this.activeTopStackSubject.next(dataStackItem));
   }
 
   removeStack(stack: DataStack): DataStack {
@@ -56,20 +73,6 @@ export class SelectedData {
       return removedStack;
     }
     return null;
-  }
-
-  setActiveStack(stack: DataStack) {
-    let index = this._stacks.indexOf(stack, 0);
-    if (index <= -1) {
-      console.log(stack, "not found");
-      return;
-    }
-    this._activeStack = stack;
-
-    if (this.currentStackSubscription != null && !this.currentStackSubscription.closed) {
-      this.currentStackSubscription.unsubscribe();
-    }
-    this.currentStackSubscription = stack.topStackValue$.subscribe((dataStackItem: DataStackItem) => this.activeTopStackSubject.next(dataStackItem));
   }
 
   getActiveStack() {
@@ -106,7 +109,7 @@ export class SelectedData {
     let clone = this.getActiveStack().cloneStackItems();
     let stack: DataStack = this.dataStackFactory.newDataStack();
     stack.setInitialDataArray(clone);
-    this.addStack(stack);
+    this.insertStack(1, stack);
   }
 
   ngOnDestroy() {

@@ -16,7 +16,6 @@ import { BreadcrumbModule } from 'primeng/primeng';
 import { ButtonModule } from 'primeng/primeng';
 import { CalendarModule } from 'primeng/primeng';
 import { CarouselModule } from 'primeng/primeng';
-
 import { CheckboxModule } from 'primeng/primeng';
 import { ChipsModule } from 'primeng/primeng';
 import { CodeHighlighterModule } from 'primeng/primeng';
@@ -73,6 +72,8 @@ import { ToolbarModule } from 'primeng/primeng';
 import { TooltipModule } from 'primeng/primeng';
 import { TreeModule } from 'primeng/primeng';
 import { TreeTableModule } from 'primeng/primeng';
+
+import {ColorPickerModule} from 'angular2-color-picker';
 
 import { AppMenuComponent, AppSubMenu } from './app.menu.component';
 import { AppTopBar } from './app.topbar.component';
@@ -185,7 +186,8 @@ import { AppComponent } from './app.component';
         ToolbarModule,
         TooltipModule,
         TreeModule,
-        TreeTableModule
+        TreeTableModule,
+        ColorPickerModule
     ],
     declarations: [
         AppComponent,
