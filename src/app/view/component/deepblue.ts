@@ -94,6 +94,12 @@ export class DiveStatus {
                             (click)="selectAnnotation($event)">
                         </button>
                     </div>
+                    <div class="ui-g-4 ui-md-2">
+                        <button pButton type="button" icon="ui-icon-check-circle"
+                            label="Select Annotation for Comparison"
+                            (click)="selectAnnotationForComparison($event)">
+                        </button>
+                    </div>
                 </div>
         `})
 export class AnnotationListComponent {
@@ -105,7 +111,7 @@ export class AnnotationListComponent {
 
     @ViewChild('annotationsDropdown') annotationsDropdown: Dropdown
 
-    constructor(private deepBlueService: DeepBlueService) {
+    constructor(private deepBlueService: DeepBlueService, private selectedData: SelectedData) {
 
 
         this.genomeSubscription = deepBlueService.genomeValue$.subscribe(genome => {
@@ -136,6 +142,10 @@ export class AnnotationListComponent {
 
     selectAnnotation(event) {
         this.deepBlueService.setAnnotation(this.selectedAnnotation);
+    }
+
+    selectAnnotationForComparison(event) {
+        this.selectedData.insertForComparison(this.selectedAnnotation);
     }
 
     ngOnDestroy() {
@@ -225,11 +235,7 @@ export class SelectedDataButton implements OnInit {
     @Input() dataStack: DataStack;
     items: MenuItem[];
 
-    constructor() {
-    }
-
-    public change(val: any) {
-        console.log(val);
+    constructor(private selectedData: SelectedData) {
     }
 
     ngOnInit() {
@@ -248,6 +254,7 @@ export class SelectedDataButton implements OnInit {
     }
 
     remove() {
+        this.selectedData.removeStack(this.dataStack);
         console.log("remove this stack");
     }
 

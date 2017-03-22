@@ -33,14 +33,25 @@ export class SelectedData {
         // TODO: Ask if the user want to save the previous stack
         console.log("Non empty annotation");
         stack.setInitialData(annotation);
-        this.insertStack(0, stack);
+        this.replaceStack(0, stack);
         this.setActiveStack(stack);
       }
     });
   }
 
+  insertForComparison(annotation: Annotation) {
+    debugger;
+    let stack: DataStack = this.dataStackFactory.newDataStack();
+    stack.setInitialData(annotation);
+    this.insertStack(1, stack);
+  }
+
   insertStack(position: number, stack: DataStack) {
     this._stacks.splice(position, 0, stack);
+  }
+
+  replaceStack(position: number, stack: DataStack) {
+    this._stacks[position] = stack;
   }
 
   setActiveStack(stack: DataStack) {
@@ -86,7 +97,7 @@ export class SelectedData {
     return [];
   }
 
-  getActiveTopStackValue() : Observable<DataStackItem> {
+  getActiveTopStackValue(): Observable<DataStackItem> {
     return this.activeTopStackValue$;
   }
 
@@ -98,7 +109,7 @@ export class SelectedData {
   }
 
   getStacksTopOperation(): DeepBlueOperation[] {
-    let ops : DeepBlueOperation[] = [];
+    let ops: DeepBlueOperation[] = [];
     for (let stack of this._stacks) {
       ops.push(stack.getCurrentOperation());
     }
