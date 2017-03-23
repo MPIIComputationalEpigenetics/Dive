@@ -1,3 +1,5 @@
+import { BioSourcesScreen } from './biosources';
+import { Experiment } from '../../domain/deepblue';
 import { Component, OnInit, ViewChild } from '@angular/core';
 
 import { Subscription } from 'rxjs/Subscription';
@@ -341,36 +343,88 @@ export class HistonesScreen {
     reloadPlot(datum: StackValue[]) {
 
         let result_by_dataset_stack = {};
-        let value_by_stack = [];
         let categories = [];
 
-        // Categories = getExperiments
-        // Series = Stacks
+
+        let value_by_stack_biosource: Array<Array<Array<StackValue>>> = [];
 
         for (let result of datum) {
             let stack = result.stack;
-            let dataset_name = result.getDeepBlueResult().data.name;
-            categories.push(dataset_name);
-            if (!(stack in value_by_stack)) {
-                value_by_stack[stack] = [];
+
+            let experiment = <FullExperiment>result.getDeepBlueResult().data;
+            let biosource = experiment.biosource();
+
+            if (!(stack in value_by_stack_biosource)) {
+                value_by_stack_biosource[stack] = [];
             }
-            value_by_stack[stack].push(result);
-            result_by_dataset_stack[dataset_name] = [];
+
+            if (!(biosource in value_by_stack_biosource[stack])) {
+                if (!(biosource in categories)) {
+                    categories.push(biosource);
+                }
+                value_by_stack_biosource[stack][biosource] = [];
+            }
+
+            value_by_stack_biosource[stack][biosource].push(result);
+            result_by_dataset_stack[biosource] = [];
         }
 
+        let value_by_stack: Array<Array<Object>> = [];
+
+        for (let stack_pos: number = 0; stack_pos < value_by_stack_biosource.length; stack_pos++) {
+            if (!(stack_pos in value_by_stack)) {
+                value_by_stack[stack_pos] = [];
+            }
+            for (let biosource in value_by_stack_biosource[stack_pos]) {
+                let stacks = value_by_stack_biosource[stack_pos][biosource];
+
+                let high = Number.MIN_SAFE_INTEGER;
+                let low = Number.MAX_SAFE_INTEGER;
+                let sum = 0;
+
+                let values: Array<number> = [];
+                for (let stack of stacks) {
+                    let count = stack.getDeepBlueResult().resultAsCount();
+                    if (count < low) {
+                        low = count;
+                    }
+                    if (count > high) {
+                        high = count;
+                    }
+                    sum += count;
+                    values.push(count);
+                }
+
+                values.sort();
+
+                let mean = sum / values.length;
+                let mid_pos = values.length / 2;
+                let median = values[mid_pos];
+                let q3 = values[mid_pos + (mid_pos / 2)]
+                let q1 = values[mid_pos - (mid_pos / 2)]
+
+                let aggr = { low: low, q1: q1, median: median, q3: q3, high: high, mean: mean, elements: values.length }
+
+                value_by_stack[stack_pos].push({ biosource: biosource, value: aggr })
+            }
+        }
+
+
         let series: Array<Object> = [];
-        for (let stack_value : number = 0;  stack_value < value_by_stack.length; stack_value++) {
-            let stack_values = <Array<StackValue>>value_by_stack[stack_value];
+        for (let stack_pos: number = 0; stack_pos < value_by_stack.length; stack_pos++) {
+            let stack_values = value_by_stack[stack_pos];
             let stack_values_result: Array<number> = [];
-            stack_values.sort((a: StackValue, b: StackValue) => {
-                return a.stack - b.stack;
+            stack_values.sort((a: Object, b: Object) => {
+                return (<string>a['biosource']).localeCompare(b['biosource']);
             });
+
+
             for (let i = 0; i < stack_values.length; i++) {
                 let stack_value = stack_values[i];
-                stack_values_result.push(stack_value.getDeepBlueResult().resultAsCount());
-                result_by_dataset_stack[stack_value.getDeepBlueResult().data.name][stack_value.stack] = stack_value;
+                stack_values_result.push(stack_value['value']['mean']);
+                result_by_dataset_stack[stack_value['biosource']][stack_pos] = stack_value;
             }
-            series.push({ name: stack_value.toString(), data: stack_values_result, color: this.selectedData.getStackColor(stack_value)});
+            series.push({ name: stack_pos.toString(), data: stack_values_result, color: this.selectedData.getStackColor(stack_pos) });
         }
 
         this.overlapbarchart.setNewData(categories, series, result_by_dataset_stack);

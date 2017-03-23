@@ -109,6 +109,10 @@ export class FullExperiment extends FullMetadata {
         return this.values["sample_info"];
     }
 
+    biosource() : string {
+        return this.sample_info()["biosource_name"];
+    }
+
     sample_id() : string {
         return this.values["sample_id"];
     }
