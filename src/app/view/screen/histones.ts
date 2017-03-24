@@ -40,6 +40,7 @@ export class OverlapsBarChart {
     result_by_dataset_stack: Object;
 
     setNewData(categories, series, result_by_dataset_stack) {
+        console.log(series);
         this.chart["xAxis"][0].setCategories(categories, false);
 
         let point = {
@@ -92,9 +93,6 @@ export class OverlapsBarChart {
 
     constructor(private deepBlueService: DeepBlueService) {
         this.options = {
-            chart: {
-                type: 'column'
-            },
             title: {
                 text: `Overlapping with ${deepBlueService.getAnnotation().name}`
             },
@@ -395,7 +393,7 @@ export class HistonesScreen {
                     values.push(count);
                 }
 
-                values.sort();
+                values.sort((a, b)=> {return a-b});
 
                 let mean = sum / values.length;
                 let mid_pos = values.length / 2;
@@ -414,17 +412,27 @@ export class HistonesScreen {
         for (let stack_pos: number = 0; stack_pos < value_by_stack.length; stack_pos++) {
             let stack_values = value_by_stack[stack_pos];
             let stack_values_result: Array<number> = [];
+            let stack_values_result_boxplot: Array<Object> = [];
+
             stack_values.sort((a: Object, b: Object) => {
                 return (<string>a['biosource']).localeCompare(b['biosource']);
             });
 
-
             for (let i = 0; i < stack_values.length; i++) {
                 let stack_value = stack_values[i];
                 stack_values_result.push(stack_value['value']['mean']);
+                stack_values_result_boxplot.push([
+                    stack_value['value']['low'],
+                    stack_value['value']['q1'],
+                    stack_value['value']['median'],
+                    stack_value['value']['q3'],
+                    stack_value['value']['high']
+                ]);
                 result_by_dataset_stack[stack_value['biosource']][stack_pos] = stack_value;
             }
-            series.push({ name: stack_pos.toString(), data: stack_values_result, color: this.selectedData.getStackColor(stack_pos) });
+            debugger;
+            //series.push({ type: 'column', name: stack_pos.toString(), data: stack_values_result, color: this.selectedData.getStackColor(stack_pos) });
+            series.push({ type: 'boxplot', name: stack_pos.toString(), data: stack_values_result_boxplot, color: this.selectedData.getStackColor(stack_pos) });
         }
 
         this.overlapbarchart.setNewData(categories, series, result_by_dataset_stack);
