@@ -36,6 +36,7 @@ export class DataStackItem {
 export class DataStack {
 
     public color: string = "blue";
+    public color_array;
     _data: DataStackItem[] = [];
 
     public topStackSubject = new Subject<DataStackItem>();
@@ -43,7 +44,12 @@ export class DataStack {
 
     constructor(private deepBlueService: DeepBlueService, private progress_element: ProgressElement,
         private router: Router) {
-        this.color = randomColor();
+        this.color_array = randomColor({ format: 'rgbArray', luminosity: 'dark' });
+        this.color = "rgba("+this.color_array[0]+","+this.color_array[1]+","+this.color_array[2]+",1)";
+    }
+
+    getColor(alpha: string) {
+        return "rgba("+this.color_array[0]+","+this.color_array[1]+","+this.color_array[2]+","+alpha+")";
     }
 
     setInitialData(data: IdName) {

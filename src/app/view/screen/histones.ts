@@ -69,17 +69,17 @@ export class OverlapsBarChart {
         }
 
         for (let serie of series) {
-            debugger;
             if (serie["type"] == "column") {
                 serie["point"] = point;
                 serie['point']['events']['click'] = (ev) => this.clickExperimentBar(ev);
                 serie["dataLabels"] = dataLabels;
+                serie["borderWidth"] =  0;
                 this.chart["addSeries"](serie, false);
             } else if (serie["type"] == "boxplot") {
                 console.log("bloxplot");
+                serie["tooltip"] = { headerFormat: '<em>Experiment No {point.key}</em><br/>' }
+                serie["backgroundColor"] = "red",
                 this.chart["addSeries"](serie, false);
-                // series.push({ type: 'column', name: stack_pos.toString(), data: stack_values_result, color: this.selectedData.getStackColor(stack_pos) });
-                // series.push({ type: 'boxplot', name: stack_pos.toString(), data: stack_values_result_boxplot, color: this.selectedData.getStackColor(stack_pos) });
             }
         }
 
@@ -121,9 +121,13 @@ export class OverlapsBarChart {
             legend: {
                 enabled: false
             },
+            /*
             tooltip: {
                 formatter: function () {
                     var s;
+                    if (this.point.key) {
+                        s = "<em>Experiment No " + this.point.key + "</em><br/>";
+                    }
                     if (this.point.name) { // the pie chart
                         s = this.point.name + ' ' + this.y + ' fruits';
                     } else {
@@ -133,6 +137,7 @@ export class OverlapsBarChart {
                     return s;
                 }
             },
+            */
             series: []
         }
     }
@@ -438,9 +443,8 @@ export class HistonesScreen {
                 ]);
                 result_by_dataset_stack[stack_value['biosource']][stack_pos] = stack_value;
             }
-            debugger;
-            series.push({ type: 'column', name: stack_pos.toString(), data: stack_values_result, color: this.selectedData.getStackColor(stack_pos) });
-            series.push({ type: 'boxplot', name: stack_pos.toString(), data: stack_values_result_boxplot, color: this.selectedData.getStackColor(stack_pos) });
+            series.push({ type: 'boxplot', name: stack_pos.toString(), data: stack_values_result_boxplot, color: this.selectedData.getStackColor(stack_pos, "1") });
+            series.push({ type: 'column', name: stack_pos.toString(), data: stack_values_result, color: this.selectedData.getStackColor(stack_pos, "0.3") });
         }
 
         this.overlapbarchart.setNewData(categories, series, result_by_dataset_stack);

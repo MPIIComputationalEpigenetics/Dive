@@ -136,12 +136,12 @@ export class SelectedData {
     return this._stacks[pos].name();
   }
 
-  getStackColor(pos: number) {
+  getStackColor(pos: number, alpha: string) {
     if (pos >= this._stacks.length) {
       return "#FFFFFF";
     }
 
-    return this._stacks[pos].color;
+    return this._stacks[pos].getColor(alpha);
   }
 
 }
