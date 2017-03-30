@@ -69,10 +69,18 @@ export class OverlapsBarChart {
         }
 
         for (let serie of series) {
-            serie["point"] = point;
-            serie['point']['events']['click'] = (ev) => this.clickExperimentBar(ev);
-            serie["dataLabels"] = dataLabels;
-            this.chart["addSeries"](serie, false);
+            debugger;
+            if (serie["type"] == "column") {
+                serie["point"] = point;
+                serie['point']['events']['click'] = (ev) => this.clickExperimentBar(ev);
+                serie["dataLabels"] = dataLabels;
+                this.chart["addSeries"](serie, false);
+            } else if (serie["type"] == "boxplot") {
+                console.log("bloxplot");
+                this.chart["addSeries"](serie, false);
+                // series.push({ type: 'column', name: stack_pos.toString(), data: stack_values_result, color: this.selectedData.getStackColor(stack_pos) });
+                // series.push({ type: 'boxplot', name: stack_pos.toString(), data: stack_values_result_boxplot, color: this.selectedData.getStackColor(stack_pos) });
+            }
         }
 
         this.result_by_dataset_stack = result_by_dataset_stack;
@@ -393,7 +401,7 @@ export class HistonesScreen {
                     values.push(count);
                 }
 
-                values.sort((a, b)=> {return a-b});
+                values.sort((a, b) => { return a - b });
 
                 let mean = sum / values.length;
                 let mid_pos = values.length / 2;
@@ -431,7 +439,7 @@ export class HistonesScreen {
                 result_by_dataset_stack[stack_value['biosource']][stack_pos] = stack_value;
             }
             debugger;
-            //series.push({ type: 'column', name: stack_pos.toString(), data: stack_values_result, color: this.selectedData.getStackColor(stack_pos) });
+            series.push({ type: 'column', name: stack_pos.toString(), data: stack_values_result, color: this.selectedData.getStackColor(stack_pos) });
             series.push({ type: 'boxplot', name: stack_pos.toString(), data: stack_values_result_boxplot, color: this.selectedData.getStackColor(stack_pos) });
         }
 

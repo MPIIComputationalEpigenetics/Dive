@@ -110,14 +110,13 @@ import { HighchartsStatic } from 'angular2-highcharts/dist/HighchartsService';
 import { ChartModule } from "angular2-highcharts";
 
 export function highchartsFactory() {
-    return require('highcharts');
+    return require('highcharts')
 }
 
 import { AppComponent } from './app.component';
 
 @NgModule({
     imports: [
-        ChartModule,
         BrowserModule,
         FormsModule,
         AppRoutes,
@@ -128,7 +127,6 @@ import { AppComponent } from './app.component';
         ButtonModule,
         CalendarModule,
         CarouselModule,
-        ChartModule,
         CheckboxModule,
         ChipsModule,
         CodeHighlighterModule,
@@ -187,7 +185,8 @@ import { AppComponent } from './app.component';
         TooltipModule,
         TreeModule,
         TreeTableModule,
-        ColorPickerModule
+        ColorPickerModule,
+        ChartModule
     ],
     declarations: [
         AppComponent,

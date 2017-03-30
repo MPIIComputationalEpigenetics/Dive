@@ -10,6 +10,14 @@ enum MenuOrientation {
 
 declare var jQuery: any;
 
+console.log("Loading Highcharts");
+const Highcharts = require('highcharts');
+console.log("Loading Highcharts-More");
+const HighchartsMore = require('highcharts/highcharts-more');
+console.log("Initializing Highcharts-More");
+HighchartsMore(Highcharts);
+console.log("Highcharts-More done");
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
