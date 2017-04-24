@@ -1,10 +1,11 @@
+import { DeepBlueMiddlewareOverlapResult } from '../../domain/operations';
 import { BioSourcesScreen } from './biosources';
 import { Experiment } from '../../domain/deepblue';
 import { Component, OnInit, ViewChild } from '@angular/core';
 
 import { Subscription } from 'rxjs/Subscription';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Observable } from 'rxjs/Observable'
+import { Observable } from 'rxjs/Observable';
 
 import { SelectItem } from 'primeng/primeng';
 import { MultiSelect } from 'primeng/primeng';
@@ -41,7 +42,7 @@ export class OverlapsBarChart {
 
     setNewData(categories, series, result_by_dataset_stack) {
         console.log(series);
-        this.chart["xAxis"][0].setCategories(categories, false);
+        this.chart['xAxis'][0].setCategories(categories, false);
 
         let point = {
             events: {
@@ -64,35 +65,35 @@ export class OverlapsBarChart {
             }
         };
 
-        while (this.chart["series"].length > 0) {
-            this.chart["series"][0].remove(false);
+        while (this.chart['series'].length > 0) {
+            this.chart['series'][0].remove(false);
         }
 
         for (let serie of series) {
-            if (serie["type"] == "column") {
-                serie["point"] = point;
+            if (serie['type'] === 'column') {
+                serie['point'] = point;
                 serie['point']['events']['click'] = (ev) => this.clickExperimentBar(ev);
-                serie["dataLabels"] = dataLabels;
-                serie["borderWidth"] =  0;
-                this.chart["addSeries"](serie, false);
-            } else if (serie["type"] == "boxplot") {
-                console.log("bloxplot");
-                serie["tooltip"] = { headerFormat: '<em>Experiment No {point.key}</em><br/>' }
-                serie["backgroundColor"] = "red",
-                this.chart["addSeries"](serie, false);
+                serie['dataLabels'] = dataLabels;
+                serie['borderWidth'] = 0;
+                this.chart['addSeries'](serie, false);
+            } else if (serie['type'] === 'boxplot') {
+                console.log('bloxplot');
+                serie['tooltip'] = { headerFormat: '<em>Experiment No {point.key}</em><br/>' };
+                serie['backgroundColor'] = 'red',
+                    this.chart['addSeries'](serie, false);
             }
         }
 
         this.result_by_dataset_stack = result_by_dataset_stack;
 
-        this.chart["redraw"]();
+        this.chart['redraw']();
     }
 
     hasData(): boolean {
         if (!this.chart) {
             return false;
         }
-        return this.chart["series"][0]["data"].length > 0;
+        return this.chart['series'][0]['data'].length > 0;
     }
 
     saveInstance(chartInstance) {
@@ -139,7 +140,7 @@ export class OverlapsBarChart {
             },
             */
             series: []
-        }
+        };
     }
 
     clickExperimentBar(click) {
@@ -151,7 +152,7 @@ export class OverlapsBarChart {
         this.deepBlueService.setDataInfoSelected(stack_value);
 
 
-        setTimeout(() => this.chart["reflow"](), 0);
+        setTimeout(() => this.chart['reflow'](), 0);
     }
 }
 
@@ -169,7 +170,7 @@ export class HistonesScreen {
 
     epigeneticMarkSubscription: Subscription;
 
-    defaultSelectBiosourcesLabel: string = "Select the Biosource"
+    defaultSelectBiosourcesLabel = 'Select the Biosource';
 
     selectedExperimentsSource = new BehaviorSubject<IdName[]>([]);
     selectedExperimentsValue$: Observable<IdName[]> = this.selectedExperimentsSource.asObservable();
@@ -180,39 +181,42 @@ export class HistonesScreen {
 
     currentlyProcessing: Object[] = [];
 
-    current_request: number = 0;
+    current_request = 0;
 
     data: any;
 
-    hasData: boolean = false;
+    hasData = false;
 
     @ViewChild('overlapbarchart') overlapbarchart: OverlapsBarChart;
     @ViewChild('multiselect') multiselect: MultiSelect;
 
     segregate(experiments: FullExperiment[]) {
 
-        let biosources = {}
-        let samples = {}
-        let epigenetic_marks = {}
-        let techniques = {}
-        let projects = {}
+        const biosources = {};
+        const samples = {};
+        const epigenetic_marks = {};
+        const techniques = {};
+        const projects = {};
 
-        let event_items = [];
-        let pre_selected_biosources = this.deepBlueService.selectedBioSources.getValue().map((x: BioSource) => x.name);
+        const event_items = [];
+        const pre_selected_biosources = this.deepBlueService.selectedBioSources.getValue().map((x: BioSource) => x.name);
 
         this.biosourcesItems = [];
         this.selectedMultiSelectBiosources = [];
 
-        for (let experiment of experiments) {
-            let experiment_biosource = experiment.sample_info()['biosource_name'];
-            let experiment_sample_id = experiment.sample_id();
-            let experiment_epigenetic_mark = experiment.epigenetic_mark();
-            let experiment_technique = experiment.technique();
-            let experiment_project = experiment.project();
+        for (const experiment of experiments) {
+            const experiment_biosource = experiment.sample_info()['biosource_name'];
+            const experiment_sample_id = experiment.sample_id();
+            const experiment_epigenetic_mark = experiment.epigenetic_mark();
+            const experiment_technique = experiment.technique();
+            const experiment_project = experiment.project();
 
             if (!(experiment_biosource in biosources)) {
-                biosources[experiment_biosource] = []
-                let l = { label: experiment_biosource, value: { name: experiment_biosource, experiments: biosources[experiment_biosource] } }
+                biosources[experiment_biosource] = [];
+                const l = {
+                    label: experiment_biosource,
+                    value: { name: experiment_biosource, experiments: biosources[experiment_biosource] }
+                };
                 this.biosourcesItems.push(l);
 
                 console.log(l.label);
@@ -225,19 +229,19 @@ export class HistonesScreen {
             }
 
             if (!(experiment_sample_id in samples)) {
-                samples[experiment_sample_id] = []
+                samples[experiment_sample_id] = [];
             }
 
             if (!(experiment_epigenetic_mark in epigenetic_marks)) {
-                epigenetic_marks[experiment_epigenetic_mark] = []
+                epigenetic_marks[experiment_epigenetic_mark] = [];
             }
 
             if (!(experiment_technique in techniques)) {
-                techniques[experiment_technique] = []
+                techniques[experiment_technique] = [];
             }
 
             if (!(experiment_project in projects)) {
-                projects[experiment_project] = []
+                projects[experiment_project] = [];
             }
 
             biosources[experiment_biosource].push(experiment);
@@ -250,12 +254,12 @@ export class HistonesScreen {
         this.selectBiosources({ value: event_items });
 
         return {
-            "biosources": biosources,
-            "samples": samples,
-            "epigenetic_marks": epigenetic_marks,
-            "techniques": techniques,
-            "projects": projects
-        }
+            'biosources': biosources,
+            'samples': samples,
+            'epigenetic_marks': epigenetic_marks,
+            'techniques': techniques,
+            'projects': projects
+        };
     }
 
     constructor(private deepBlueService: DeepBlueService,
@@ -263,7 +267,7 @@ export class HistonesScreen {
 
         this.epigeneticMarkSubscription = deepBlueService.epigeneticMarkValue$.subscribe(selected_epigenetic_mark => {
             this.deepBlueService.getExperiments(deepBlueService.getGenome(), selected_epigenetic_mark).subscribe(experiments_ids => {
-                var ids = experiments_ids.map((e) => e.id);
+                const ids = experiments_ids.map((e) => e.id);
                 this.deepBlueService.getExperimentsInfos(ids).subscribe(full_info => {
                     this.experiments = <FullExperiment[]>full_info;
                     this.segregated_data = this.segregate(<FullExperiment[]>full_info);
@@ -273,23 +277,35 @@ export class HistonesScreen {
         });
 
         this.selectedExperimentsValue$.debounceTime(250).subscribe(() => this.processOverlaps());
-        this.selectedData.getActiveTopStackValue().subscribe((dataStackItem) => this.processOverlaps())
+        this.selectedData.getActiveTopStackValue().subscribe((dataStackItem) => this.processOverlaps());
+    }
+
+    selectBiosources(event) {
+        let experiments: IdName[] = [];
+        const selected_data = event.value;
+        const biosources = event.value.map((x) => x.name);
+
+        const exp_arrays = event.value.map((x) => x.experiments);
+        experiments = experiments.concat.apply([], exp_arrays);
+
+        this.selectedExperimentsSource.next(experiments);
+        this.selectedBioSourcesSource.next(biosources);
     }
 
     processOverlaps() {
-        let experiments = this.selectedExperimentsSource.getValue();
+        const experiments = this.selectedExperimentsSource.getValue();
 
-        if (experiments.length == 0) {
+        if (experiments.length === 0) {
             this.reloadPlot([]);
             return;
         }
 
-        if (experiments != this.selectedExperimentsSource.getValue()) {
+        if (experiments !== this.selectedExperimentsSource.getValue()) {
             this.reloadPlot([]);
             return;
         }
 
-        if (experiments == this.currentlyProcessing) {
+        if (experiments === this.currentlyProcessing) {
             return;
         }
         this.current_request++;
@@ -297,105 +313,138 @@ export class HistonesScreen {
         // Each experiment is started, selected, overlaped, count, get request data (4 times each)
         this.progress_element.reset(experiments.length * this.selectedData.getStacksTopOperation().length * 5, this.current_request);
         this.currentlyProcessing = experiments;
+        const start = new Date().getTime();
 
-        this.deepBlueService.selectMultipleExperiments(experiments, this.progress_element, this.current_request).subscribe((selected_experiments: DeepBlueOperation[]) => {
-            if (selected_experiments.length == 0) {
-                this.reloadPlot([]);
-                return;
-            }
-            if (selected_experiments[0].request_count != this.current_request) {
-                return;
-            }
 
-            let current: DeepBlueOperation[] = this.selectedData.getStacksTopOperation();
+        const current: DeepBlueOperation[] = this.selectedData.getStacksTopOperation();
 
-            if (current == null) {
-                this.reloadPlot([]);
-                return;
-            }
+        this.deepBlueService.composedCountOverlaps(current, experiments).subscribe((request_id: string) => {
+            console.log('request_id from middleware', request_id);
 
-            this.deepBlueService.intersectWithSelected(current, selected_experiments, this.progress_element, this.current_request).subscribe((overlap_ids: StackValue[]) => {
-                if (overlap_ids.length == 0) {
+            this.deepBlueService.getComposedResultIterator(request_id).subscribe((result: DeepBlueMiddlewareOverlapResult[]) => {
+                const end = new Date().getTime();
+                // Now calculate and output the difference
+                console.log(end - start);
+                this.currentlyProcessing = [];
+                this.reloadPlot(result);
+            });
+        });
+
+        /*
+        this.deepBlueService.selectMultipleExperiments(
+            experiments, this.progress_element, this.current_request).subscribe((selected_experiments: DeepBlueOperation[]) => {
+                if (selected_experiments.length === 0) {
                     this.reloadPlot([]);
                     return;
                 }
-                if (overlap_ids[0].getDeepBlueOperation().request_count != this.current_request) {
+                if (selected_experiments[0].request_count !== this.current_request) {
                     return;
                 }
 
-                this.deepBlueService.countRegionsBatch(overlap_ids, this.progress_element, this.current_request).subscribe((datum: StackValue[]) => {
-                    if (datum.length == 0) {
-                        this.reloadPlot([]);
-                        return;
-                    }
-                    if (datum[0].getDeepBlueOperation().request_count != this.current_request) {
-                        return;
-                    }
+                if (current == null) {
+                    this.reloadPlot([]);
+                    return;
+                }
 
-                    this.currentlyProcessing = [];
-                    this.reloadPlot(datum);
-                })
+                this.deepBlueService.intersectWithSelected(
+                    current, selected_experiments, this.progress_element, this.current_request).subscribe((overlap_ids: StackValue[]) => {
+                        if (overlap_ids.length === 0) {
+                            this.reloadPlot([]);
+                            return;
+                        }
+                        if (overlap_ids[0].getDeepBlueOperation().request_count !== this.current_request) {
+                            return;
+                        }
+
+                        this.deepBlueService.countRegionsBatch(
+                            overlap_ids, this.progress_element, this.current_request).subscribe((datum: StackValue[]) => {
+                                if (datum.length === 0) {
+                                    this.reloadPlot([]);
+                                    return;
+                                }
+                                if (datum[0].getDeepBlueOperation().request_count !== this.current_request) {
+                                    return;
+                                }
+
+                                var end = new Date().getTime();
+                                // Now calculate and output the difference
+                                console.log(end - start);
+                                this.currentlyProcessing = [];
+                                this.reloadPlot(datum);
+                            })
+                    });
             });
-        });
+            */
     }
 
-    selectBiosources(event) {
-        let experiments: IdName[] = [];
-        let selected_data = event.value;
-        let biosources = event.value.map((x) => x.name);
+    reloadPlot(datum: DeepBlueMiddlewareOverlapResult[]) {
+        const result_by_dataset_stack = {};
+        const categories = [];
 
-        let exp_arrays = event.value.map((x) => x.experiments)
-        experiments = experiments.concat.apply([], exp_arrays);
-
-        this.selectedExperimentsSource.next(experiments);
-        this.selectedBioSourcesSource.next(biosources);
-    }
-
-    reloadPlot(datum: StackValue[]) {
-
-        let result_by_dataset_stack = {};
-        let categories = [];
+        const value_by_stack_biosource: Array<Array<Array<DeepBlueMiddlewareOverlapResult>>> = [];
 
 
-        let value_by_stack_biosource: Array<Array<Array<StackValue>>> = [];
+        for (const result of datum) {
+            console.log(result);
 
-        for (let result of datum) {
-            let stack = result.stack;
+            const stack_number = Number.parseInt(result.getDataName());
+            console.log(stack_number);
 
-            let experiment = <FullExperiment>result.getDeepBlueResult().data;
-            let biosource = experiment.biosource();
+            const experiment = this.experiments.find((se: FullExperiment) => {
+                if (se.name === result.getFilterName()) {
+                    return true;
+                }
+                return false;
+            });
 
-            if (!(stack in value_by_stack_biosource)) {
-                value_by_stack_biosource[stack] = [];
+            console.log(experiment);
+
+            const biosource = experiment.biosource();
+            console.log(biosource);
+
+
+            if (!(stack_number in value_by_stack_biosource)) {
+                value_by_stack_biosource[stack_number] = [];
             }
 
-            if (!(biosource in value_by_stack_biosource[stack])) {
+            console.log(value_by_stack_biosource);
+
+            if (!(biosource in value_by_stack_biosource[stack_number])) {
                 if (!(biosource in categories)) {
                     categories.push(biosource);
                 }
-                value_by_stack_biosource[stack][biosource] = [];
+                value_by_stack_biosource[stack_number][biosource] = [];
             }
 
-            value_by_stack_biosource[stack][biosource].push(result);
+            console.log(categories);
+
+            value_by_stack_biosource[stack_number][biosource].push(result);
             result_by_dataset_stack[biosource] = [];
+
+            console.log(value_by_stack_biosource[stack_number][biosource]);
         }
 
-        let value_by_stack: Array<Array<Object>> = [];
 
-        for (let stack_pos: number = 0; stack_pos < value_by_stack_biosource.length; stack_pos++) {
+        const value_by_stack: Array<Array<Object>> = [];
+
+        for (let stack_pos = 0; stack_pos < value_by_stack_biosource.length; stack_pos++) {
             if (!(stack_pos in value_by_stack)) {
                 value_by_stack[stack_pos] = [];
             }
-            for (let biosource in value_by_stack_biosource[stack_pos]) {
-                let stacks = value_by_stack_biosource[stack_pos][biosource];
+
+            console.log(value_by_stack);
+
+            for (const biosource in value_by_stack_biosource[stack_pos]) {
+                const results = value_by_stack_biosource[stack_pos][biosource];
+                console.log(results);
 
                 let high = Number.MIN_SAFE_INTEGER;
                 let low = Number.MAX_SAFE_INTEGER;
                 let sum = 0;
 
-                let values: Array<number> = [];
-                for (let stack of stacks) {
-                    let count = stack.getDeepBlueResult().resultAsCount();
+                const values: Array<number> = [];
+                for (const result of results) {
+                    const count = result.getCount();
                     if (count < low) {
                         low = count;
                     }
@@ -406,33 +455,34 @@ export class HistonesScreen {
                     values.push(count);
                 }
 
-                values.sort((a, b) => { return a - b });
+                values.sort((a, b) => { return a - b; });
 
-                let mean = sum / values.length;
-                let mid_pos = values.length / 2;
-                let median = values[mid_pos];
-                let q3 = values[mid_pos + (mid_pos / 2)]
-                let q1 = values[mid_pos - (mid_pos / 2)]
+                const mean = sum / values.length;
+                const mid_pos = values.length / 2;
+                const median = values[mid_pos];
+                const q3 = values[mid_pos + (mid_pos / 2)];
+                const q1 = values[mid_pos - (mid_pos / 2)];
 
-                let aggr = { low: low, q1: q1, median: median, q3: q3, high: high, mean: mean, elements: values.length }
+                const aggr = { low: low, q1: q1, median: median, q3: q3, high: high, mean: mean, elements: values.length };
 
-                value_by_stack[stack_pos].push({ biosource: biosource, value: aggr })
+                value_by_stack[stack_pos].push({ biosource: biosource, value: aggr });
             }
         }
 
+        console.log(value_by_stack);
 
-        let series: Array<Object> = [];
-        for (let stack_pos: number = 0; stack_pos < value_by_stack.length; stack_pos++) {
-            let stack_values = value_by_stack[stack_pos];
-            let stack_values_result: Array<number> = [];
-            let stack_values_result_boxplot: Array<Object> = [];
+        const series: Array<Object> = [];
+        for (let stack_pos = 0; stack_pos < value_by_stack.length; stack_pos++) {
+            const stack_values = value_by_stack[stack_pos];
+            const stack_values_result: Array<number> = [];
+            const stack_values_result_boxplot: Array<Object> = [];
 
             stack_values.sort((a: Object, b: Object) => {
                 return (<string>a['biosource']).localeCompare(b['biosource']);
             });
 
             for (let i = 0; i < stack_values.length; i++) {
-                let stack_value = stack_values[i];
+                const stack_value = stack_values[i];
                 stack_values_result.push(stack_value['value']['mean']);
                 stack_values_result_boxplot.push([
                     stack_value['value']['low'],
@@ -443,17 +493,17 @@ export class HistonesScreen {
                 ]);
                 result_by_dataset_stack[stack_value['biosource']][stack_pos] = stack_value;
             }
-            series.push({ type: 'boxplot', name: stack_pos.toString(), data: stack_values_result_boxplot, color: this.selectedData.getStackColor(stack_pos, "1") });
-            series.push({ type: 'column', name: stack_pos.toString(), data: stack_values_result, color: this.selectedData.getStackColor(stack_pos, "0.3") });
+            series.push({ type: 'boxplot', name: stack_pos.toString(), data: stack_values_result_boxplot, color: this.selectedData.getStackColor(stack_pos, '1') });
+            series.push({ type: 'column', name: stack_pos.toString(), data: stack_values_result, color: this.selectedData.getStackColor(stack_pos, '0.3') });
         }
 
         this.overlapbarchart.setNewData(categories, series, result_by_dataset_stack);
     }
 
     selectExperimentBar(e) {
-        let dataset = e.dataset;
-        let element = e.element;
-        let position = element._index;
+        const dataset = e.dataset;
+        const element = e.element;
+        const position = element._index;
     }
 
     hasDataDetail(): boolean {

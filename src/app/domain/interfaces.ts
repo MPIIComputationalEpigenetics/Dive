@@ -3,5 +3,5 @@ export interface ICloneable {
 }
 
 export interface IKey extends ICloneable {
-    key() : string;
+    key(): string;
 }

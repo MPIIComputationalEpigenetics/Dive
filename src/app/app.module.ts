@@ -8,7 +8,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 import { AppRoutes } from './app.routes';
 
-import "rxjs/Rx";
+import 'rxjs/Rx';
 
 import { AccordionModule } from 'primeng/primeng';
 import { AutoCompleteModule } from 'primeng/primeng';
@@ -107,10 +107,10 @@ import {
 import { DataLoadProgressBar } from 'app/view/component/progressbar';
 
 import { HighchartsStatic } from 'angular2-highcharts/dist/HighchartsService';
-import { ChartModule } from "angular2-highcharts";
+import { ChartModule } from 'angular2-highcharts';
 
 export function highchartsFactory() {
-    return require('highcharts')
+    return require('highcharts');
 }
 
 import { AppComponent } from './app.component';

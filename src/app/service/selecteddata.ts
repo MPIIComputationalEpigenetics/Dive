@@ -29,9 +29,8 @@ export class SelectedData {
   constructor(private deepBlueService: DeepBlueService, private dataStackFactory: DataStackFactory) {
     this.annotationSubscription = deepBlueService.annotationValue$.subscribe((annotation: Annotation) => {
       let stack: DataStack = dataStackFactory.newDataStack();
-      if (annotation.id != "") {
+      if (annotation.id != '') {
         // TODO: Ask if the user want to save the previous stack
-        console.log("Non empty annotation");
         stack.setInitialData(annotation);
         this.replaceStack(0, stack);
         this.setActiveStack(stack);
@@ -40,8 +39,7 @@ export class SelectedData {
   }
 
   insertForComparison(annotation: Annotation) {
-    debugger;
-    let stack: DataStack = this.dataStackFactory.newDataStack();
+    const stack: DataStack = this.dataStackFactory.newDataStack();
     stack.setInitialData(annotation);
     this.insertStack(1, stack);
   }
@@ -55,27 +53,29 @@ export class SelectedData {
   }
 
   setActiveStack(stack: DataStack) {
-    let index = this._stacks.indexOf(stack, 0);
+    const index = this._stacks.indexOf(stack, 0);
     if (index <= -1) {
-      console.log(stack, "not found");
+      console.log(stack, 'not found');
       return;
     }
     this._activeStack = stack;
 
-    let toChange = this._stacks[index];
+    const toChange = this._stacks[index];
     this._stacks[index] = this._stacks[0];
     this._stacks[0] = toChange;
 
     if (this.currentStackSubscription != null && !this.currentStackSubscription.closed) {
       this.currentStackSubscription.unsubscribe();
     }
-    this.currentStackSubscription = stack.topStackValue$.subscribe((dataStackItem: DataStackItem) => this.activeTopStackSubject.next(dataStackItem));
+    this.currentStackSubscription = stack.topStackValue$.subscribe((dataStackItem: DataStackItem) =>
+      this.activeTopStackSubject.next(dataStackItem)
+    );
   }
 
   removeStack(stack: DataStack): DataStack {
-    let index = this._stacks.indexOf(stack, 0);
+    const index = this._stacks.indexOf(stack, 0);
     if (index > -1) {
-      let removedStack = this._stacks[index];
+      const removedStack = this._stacks[index];
       this._stacks.splice(index, 1);
       if (this._activeStack == removedStack) {
         // TODO: set the next one as active.
@@ -109,28 +109,28 @@ export class SelectedData {
   }
 
   getStacksTopOperation(): DeepBlueOperation[] {
-    let ops: DeepBlueOperation[] = [];
-    for (let stack of this._stacks) {
+    const ops: DeepBlueOperation[] = [];
+    for (const stack of this._stacks) {
       ops.push(stack.getCurrentOperation());
     }
     return ops;
   }
 
   saveActiveStack() {
-    let clone = this.getActiveStack().cloneStackItems();
-    let stack: DataStack = this.dataStackFactory.newDataStack();
+    const clone = this.getActiveStack().cloneStackItems();
+    const stack: DataStack = this.dataStackFactory.newDataStack();
     stack.setInitialDataArray(clone);
     this.insertStack(1, stack);
   }
 
   ngOnDestroy() {
-    console.log("SelectedData destroyed");
+    console.log('SelectedData destroyed');
     this.annotationSubscription.unsubscribe();
   }
 
   getStackName(pos: number) {
     if (pos >= this._stacks.length) {
-      return "Invalid Stack";
+      return 'Invalid Stack';
     }
 
     return this._stacks[pos].name();
@@ -138,7 +138,7 @@ export class SelectedData {
 
   getStackColor(pos: number, alpha: string) {
     if (pos >= this._stacks.length) {
-      return "#FFFFFF";
+      return '#FFFFFF';
     }
 
     return this._stacks[pos].getColor(alpha);

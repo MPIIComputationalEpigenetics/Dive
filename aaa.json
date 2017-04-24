@@ -1,0 +1,313 @@
+["okay", [{
+  "data_name": "0",
+  "data_query": "q919877",
+  "filter_name": "ENCFF349NFD",
+  "filter_query": "q947878",
+  "count": 5556
+}, {
+  "data_name": "0",
+  "data_query": "q919877",
+  "filter_name": "ENCFF583TQN",
+  "filter_query": "q947877",
+  "count": 4779
+}, {
+  "data_name": "0",
+  "data_query": "q919877",
+  "filter_name": "ENCFF020KMG",
+  "filter_query": "q947879",
+  "count": 4752
+}, {
+  "data_name": "0",
+  "data_query": "q919877",
+  "filter_name": "ENCFF925GXU",
+  "filter_query": "q947880",
+  "count": 5338
+}, {
+  "data_name": "0",
+  "data_query": "q919877",
+  "filter_name": "ENCFF031VYJ",
+  "filter_query": "q947889",
+  "count": 4557
+}, {
+  "data_name": "0",
+  "data_query": "q919877",
+  "filter_name": "ENCFF517MOV",
+  "filter_query": "q947882",
+  "count": 4752
+}, {
+  "data_name": "0",
+  "data_query": "q919877",
+  "filter_name": "ENCFF531DGU",
+  "filter_query": "q947884",
+  "count": 4557
+}, {
+  "data_name": "0",
+  "data_query": "q919877",
+  "filter_name": "ENCFF276VUE",
+  "filter_query": "q947886",
+  "count": 5323
+}, {
+  "data_name": "0",
+  "data_query": "q919877",
+  "filter_name": "ENCFF360VIS",
+  "filter_query": "q947885",
+  "count": 4779
+}, {
+  "data_name": "0",
+  "data_query": "q919877",
+  "filter_name": "ENCFF857FNO",
+  "filter_query": "q947887",
+  "count": 5557
+}, {
+  "data_name": "0",
+  "data_query": "q919877",
+  "filter_name": "ENCFF494NFQ",
+  "filter_query": "q947891",
+  "count": 5556
+}, {
+  "data_name": "0",
+  "data_query": "q919877",
+  "filter_name": "ENCFF718IKM",
+  "filter_query": "q947888",
+  "count": 5323
+}, {
+  "data_name": "0",
+  "data_query": "q919877",
+  "filter_name": "ENCFF010TEX",
+  "filter_query": "q947890",
+  "count": 4558
+}, {
+  "data_name": "0",
+  "data_query": "q919877",
+  "filter_name": "ENCFF516VWB",
+  "filter_query": "q947892",
+  "count": 5338
+}, {
+  "data_name": "0",
+  "data_query": "q919877",
+  "filter_name": "ENCFF224VQD",
+  "filter_query": "q947883",
+  "count": 5557
+}, {
+  "data_name": "0",
+  "data_query": "q919877",
+  "filter_name": "ENCFF452OHE",
+  "filter_query": "q947881",
+  "count": 4558
+}, {
+  "data_name": "0",
+  "data_query": "q919877",
+  "filter_name": "ENCFF380QWW",
+  "filter_query": "q947844",
+  "count": 9239
+}, {
+  "data_name": "0",
+  "data_query": "q919877",
+  "filter_name": "ENCFF120VJA",
+  "filter_query": "q947841",
+  "count": 10243
+}, {
+  "data_name": "0",
+  "data_query": "q919877",
+  "filter_name": "ENCFF535XWE",
+  "filter_query": "q947842",
+  "count": 9239
+}, {
+  "data_name": "0",
+  "data_query": "q919877",
+  "filter_name": "ENCFF677EXZ",
+  "filter_query": "q947840",
+  "count": 10591
+}, {
+  "data_name": "0",
+  "data_query": "q919877",
+  "filter_name": "ENCFF596ATW",
+  "filter_query": "q947843",
+  "count": 9714
+}, {
+  "data_name": "0",
+  "data_query": "q919877",
+  "filter_name": "ENCFF401IXZ",
+  "filter_query": "q947845",
+  "count": 10243
+}, {
+  "data_name": "0",
+  "data_query": "q919877",
+  "filter_name": "ENCFF141HDZ",
+  "filter_query": "q947846",
+  "count": 9714
+}, {
+  "data_name": "0",
+  "data_query": "q919877",
+  "filter_name": "ENCFF625COC",
+  "filter_query": "q947847",
+  "count": 10591
+}, {
+  "data_name": "0",
+  "data_query": "q919877",
+  "filter_name": "ENCFF604JUW",
+  "filter_query": "q948107",
+  "count": 12884
+}, {
+  "data_name": "0",
+  "data_query": "q919877",
+  "filter_name": "ENCFF802IRN",
+  "filter_query": "q948106",
+  "count": 14115
+}, {
+  "data_name": "1",
+  "data_query": "q919879",
+  "filter_name": "ENCFF349NFD",
+  "filter_query": "q947878",
+  "count": 9737
+}, {
+  "data_name": "1",
+  "data_query": "q919879",
+  "filter_name": "ENCFF583TQN",
+  "filter_query": "q947877",
+  "count": 8076
+}, {
+  "data_name": "1",
+  "data_query": "q919879",
+  "filter_name": "ENCFF020KMG",
+  "filter_query": "q947879",
+  "count": 8038
+}, {
+  "data_name": "1",
+  "data_query": "q919879",
+  "filter_name": "ENCFF925GXU",
+  "filter_query": "q947880",
+  "count": 9498
+}, {
+  "data_name": "1",
+  "data_query": "q919879",
+  "filter_name": "ENCFF031VYJ",
+  "filter_query": "q947889",
+  "count": 8893
+}, {
+  "data_name": "1",
+  "data_query": "q919879",
+  "filter_name": "ENCFF517MOV",
+  "filter_query": "q947882",
+  "count": 8038
+}, {
+  "data_name": "1",
+  "data_query": "q919879",
+  "filter_name": "ENCFF531DGU",
+  "filter_query": "q947884",
+  "count": 8893
+}, {
+  "data_name": "1",
+  "data_query": "q919879",
+  "filter_name": "ENCFF276VUE",
+  "filter_query": "q947886",
+  "count": 9476
+}, {
+  "data_name": "1",
+  "data_query": "q919879",
+  "filter_name": "ENCFF360VIS",
+  "filter_query": "q947885",
+  "count": 8076
+}, {
+  "data_name": "1",
+  "data_query": "q919879",
+  "filter_name": "ENCFF857FNO",
+  "filter_query": "q947887",
+  "count": 9736
+}, {
+  "data_name": "1",
+  "data_query": "q919879",
+  "filter_name": "ENCFF494NFQ",
+  "filter_query": "q947891",
+  "count": 9737
+}, {
+  "data_name": "1",
+  "data_query": "q919879",
+  "filter_name": "ENCFF718IKM",
+  "filter_query": "q947888",
+  "count": 9476
+}, {
+  "data_name": "1",
+  "data_query": "q919879",
+  "filter_name": "ENCFF010TEX",
+  "filter_query": "q947890",
+  "count": 8892
+}, {
+  "data_name": "1",
+  "data_query": "q919879",
+  "filter_name": "ENCFF516VWB",
+  "filter_query": "q947892",
+  "count": 9498
+}, {
+  "data_name": "1",
+  "data_query": "q919879",
+  "filter_name": "ENCFF224VQD",
+  "filter_query": "q947883",
+  "count": 9736
+}, {
+  "data_name": "1",
+  "data_query": "q919879",
+  "filter_name": "ENCFF452OHE",
+  "filter_query": "q947881",
+  "count": 8892
+}, {
+  "data_name": "1",
+  "data_query": "q919879",
+  "filter_name": "ENCFF380QWW",
+  "filter_query": "q947844",
+  "count": 11821
+}, {
+  "data_name": "1",
+  "data_query": "q919879",
+  "filter_name": "ENCFF120VJA",
+  "filter_query": "q947841",
+  "count": 12917
+}, {
+  "data_name": "1",
+  "data_query": "q919879",
+  "filter_name": "ENCFF535XWE",
+  "filter_query": "q947842",
+  "count": 11821
+}, {
+  "data_name": "1",
+  "data_query": "q919879",
+  "filter_name": "ENCFF677EXZ",
+  "filter_query": "q947840",
+  "count": 13293
+}, {
+  "data_name": "1",
+  "data_query": "q919879",
+  "filter_name": "ENCFF596ATW",
+  "filter_query": "q947843",
+  "count": 11768
+}, {
+  "data_name": "1",
+  "data_query": "q919879",
+  "filter_name": "ENCFF401IXZ",
+  "filter_query": "q947845",
+  "count": 12917
+}, {
+  "data_name": "1",
+  "data_query": "q919879",
+  "filter_name": "ENCFF141HDZ",
+  "filter_query": "q947846",
+  "count": 11768
+}, {
+  "data_name": "1",
+  "data_query": "q919879",
+  "filter_name": "ENCFF625COC",
+  "filter_query": "q947847",
+  "count": 13293
+}, {
+  "data_name": "1",
+  "data_query": "q919879",
+  "filter_name": "ENCFF604JUW",
+  "filter_query": "q948107",
+  "count": 15190
+}, {
+  "data_name": "1",
+  "data_query": "q919879",
+  "filter_name": "ENCFF802IRN",
+  "filter_query": "q948106",
+  "count": 14167
+}]]

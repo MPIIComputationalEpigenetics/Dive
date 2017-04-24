@@ -15,7 +15,8 @@ import { DeepBlueService } from 'app/service/deepblue';
                         <p class="count"> {{ selectedData.getActiveData()[0].count }} regions</p>
                     </div>
                     <div class="ui-g-2 button-change">
-                        <button type="button" icon="ui-icon-blur-on" pButton (click)="removeData($event, selectedData.getActiveData()[0])"></button>
+                        <button type="button" icon="ui-icon-blur-on" pButton
+                            (click)="removeData($event, selectedData.getActiveData()[0])"></button>
                     </div>
                 </div>
             </div>
@@ -33,7 +34,8 @@ import { DeepBlueService } from 'app/service/deepblue';
                         </div>
 
                         <div class="ui-g-2 button-change">
-                            <button class="red-btn" type="button" icon="ui-icon-bookmark-border" pButton (click)="saveData($event, data)"></button>
+                            <button class="red-btn" type="button" icon="ui-icon-bookmark-border" pButton
+                                (click)="saveData($event, data)"></button>
                         </div>
                     </div>
 
@@ -52,7 +54,6 @@ export class DataStackView {
     }
 
     saveData(event, data) {
-        debugger;
         this.selectedData.saveActiveStack();
     }
 }
