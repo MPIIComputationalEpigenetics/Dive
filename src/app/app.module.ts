@@ -1,4 +1,4 @@
-import { DataStackView } from 'app/view/component/datastack';
+import { DataStackViewComponent } from 'app/view/component/datastack';
 import { DataStackFactory } from 'app/service/datastack';
 import { SelectedData } from 'app/service/selecteddata';
 import { NgModule } from '@angular/core';
@@ -91,7 +91,7 @@ import { FilteringComponent } from 'app/view/component/filtering';
 
 import { SummaryScreen } from 'app/view/screen/summary';
 import { RegionsScreen } from 'app/view/screen/regions';
-import { BioSourcesScreen } from 'app/view/screen/biosources';
+import { BioSourcesScreenComponent } from 'app/view/screen/biosources';
 import { GenesScreen } from 'app/view/screen/genes';
 
 import {
@@ -195,7 +195,7 @@ import { AppComponent } from './app.component';
         AppTopBar,
         AppFooter,
         DiveStatus,
-        DataStackView,
+        DataStackViewComponent,
         DataLoadProgressBar,
         OverlapsBarChart,
         AnnotationListComponent,
@@ -205,7 +205,7 @@ import { AppComponent } from './app.component';
         DataInfoBox,
         SummaryScreen,
         RegionsScreen,
-        BioSourcesScreen,
+        BioSourcesScreenComponent,
         HistonesScreen,
         GenesScreen,
         SelectedDataView,

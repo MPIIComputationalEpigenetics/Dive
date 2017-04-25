@@ -75,7 +75,7 @@ export class GenesScreen implements OnDestroy {
     processOverlaps() {
         this.progress_element.reset(3, this.current_request);
 
-        let gene_model = this.selectedGeneModelSource.getValue();
+        const gene_model = this.selectedGeneModelSource.getValue();
 
         if (gene_model == null) {
             this.reloadPlot([]);

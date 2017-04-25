@@ -1,5 +1,4 @@
 import { DeepBlueMiddlewareOverlapResult } from '../../domain/operations';
-import { BioSourcesScreen } from './biosources';
 import { Experiment } from '../../domain/deepblue';
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 
@@ -44,7 +43,7 @@ export class OverlapsBarChart {
         console.log(series);
         this.chart['xAxis'][0].setCategories(categories, false);
 
-        let point = {
+        const point = {
             events: {
                 click: function (click, e) {
                     // dummy function

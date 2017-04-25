@@ -4,7 +4,7 @@ import { SelectedData } from 'app/service/selecteddata';
 import { DeepBlueService } from 'app/service/deepblue';
 
 @Component({
-    selector: 'data-stack',
+    selector: 'app-data-stack',
     template: `
     <div class="dashboard">
     <div *ngIf="selectedData.getActiveData().length > 0" class="ui-g-12 ui-md-12" style="word-wrap: break-word" [style]="{'height':'100%'}">
@@ -45,7 +45,7 @@ import { DeepBlueService } from 'app/service/deepblue';
 </div>
 `
 })
-export class DataStackView {
+export class DataStackViewComponent {
 
     constructor(private deepBlueService: DeepBlueService, private selectedData: SelectedData) { }
 

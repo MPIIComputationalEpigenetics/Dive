@@ -1,4 +1,16 @@
-import { Component, Input, OnInit, EventEmitter, ViewChild, trigger, state, transition, style, animate, Inject, forwardRef } from '@angular/core';
+import { Component } from '@angular/core';
+import { Input } from '@angular/core';
+import { OnInit } from '@angular/core';
+import { EventEmitter } from '@angular/core';
+import { ViewChild } from '@angular/core';
+import { trigger } from '@angular/core';
+import { state } from '@angular/core';
+import { transition } from '@angular/core';
+import { style } from '@angular/core';
+import { animate } from '@angular/core';
+import { Inject } from '@angular/core';
+import { forwardRef } from '@angular/core';
+
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { MenuItem } from 'primeng/primeng';
@@ -9,7 +21,7 @@ import { MenuService } from 'app/service/menu';
 @Component({
     selector: 'app-menu',
     template: `
-    <data-stack></data-stack>
+    <app-data-stack></app-data-stack>
         <ul app-submenu [item]="model" root="true" class="ultima-menu ultima-main-menu clearfix" [reset]="reset" visible="true"></ul>
     <dive-menu></dive-menu>
     `
@@ -42,17 +54,19 @@ export class AppMenuComponent {
         <template ngFor let-child let-i="index" [ngForOf]="(root ? item : item.items)">
             <li [ngClass]="{'active-menuitem': isActive(i)}" *ngIf="child.visible === false ? false : true">
 
-                <a [href]="child.url||'#'" (click)="itemClick($event,child,i)" class="ripplelink" *ngIf="!child.type && !child.routerLink" [attr.tabindex]="!visible ? '-1' : null">
-                    <i class="material-icons">{{child.icon}}</i>
-                    <span>{{child.label}}</span>
-                    <i class="material-icons" *ngIf="child.items">keyboard_arrow_down</i>
+                <a [href]="child.url||'#'" (click)="itemClick($event,child,i)"
+                    class="ripplelink" *ngIf="!child.type && !child.routerLink" [attr.tabindex]="!visible ? '-1' : null">
+                        <i class="material-icons">{{child.icon}}</i>
+                        <span>{{child.label}}</span>
+                        <i class="material-icons" *ngIf="child.items">keyboard_arrow_down</i>
                 </a>
 
                 <a (click)="itemClick($event,child,i)" class="ripplelink" *ngIf="!child.type && child.routerLink"
-                    [routerLink]="child.routerLink" routerLinkActive="active-menuitem-routerlink" [routerLinkActiveOptions]="{exact: true}" [attr.tabindex]="!visible ? '-1' : null">
-                    <i class="material-icons">{{child.icon}}</i>
-                    <span>{{child.label}}</span>
-                    <i class="material-icons" *ngIf="child.items">keyboard_arrow_down</i>
+                    [routerLink]="child.routerLink" routerLinkActive="active-menuitem-routerlink"
+                    [routerLinkActiveOptions]="{exact: true}" [attr.tabindex]="!visible ? '-1' : null">
+                        <i class="material-icons">{{child.icon}}</i>
+                        <span>{{child.label}}</span>
+                        <i class="material-icons" *ngIf="child.items">keyboard_arrow_down</i>
                 </a>
 
                 <form novalidate *ngIf="child.type == 'number'" [formGroup]=child.group (ngSubmit)="child.submit()">

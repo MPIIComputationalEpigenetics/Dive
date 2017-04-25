@@ -19,10 +19,10 @@ import {
 import { DeepBlueService } from 'app/service/deepblue';
 
 @Component({
-    selector: 'biosources-screen',
+    selector: 'app-biosources-screen',
     templateUrl: './biosources.html'
 })
-export class BioSourcesScreen implements OnDestroy {
+export class BioSourcesScreenComponent implements OnDestroy {
     genomeSubscription: Subscription;
 
     sourceBioSources: BioSource[] = [];
