@@ -46,16 +46,16 @@ export class GenesScreen implements OnDestroy {
         public progress_element: ProgressElement, private selectedData: SelectedData) {
 
         this.genomeSubscription = deepBlueService.genomeValue$.subscribe(genome => {
-            if (genome.id == "") {
+            if (genome.id === "") {
                 return;
             }
             this.deepBlueService.getGeneModels().subscribe((geneModels: GeneModel[]) => {
-                if (geneModels.length == 0) {
+                if (geneModels.length === 0) {
                     return;
                 }
                 this.geneModels = geneModels;
                 this.menuGeneModel = geneModels.map((geneModel: GeneModel) => {
-                    let l = { label: geneModel.name, value: geneModel };
+                    const l = { label: geneModel.name, value: geneModel };
                     this.geneModelDropdown.selectItem(null, l);
                     return l;
                 });
@@ -82,12 +82,12 @@ export class GenesScreen implements OnDestroy {
             return;
         }
 
-        if (gene_model != this.selectedGeneModelSource.getValue()) {
+        if (gene_model !== this.selectedGeneModelSource.getValue()) {
             this.reloadPlot([]);
             return;
         }
 
-        if (gene_model == this.currentlyProcessing) {
+        if (gene_model === this.currentlyProcessing) {
             return;
         }
         this.current_request++;
