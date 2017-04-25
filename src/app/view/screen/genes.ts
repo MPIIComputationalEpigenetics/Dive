@@ -31,7 +31,7 @@ export class GenesScreen implements OnDestroy {
 
     genomeSubscription: Subscription;
 
-    @ViewChild('overlapbarchart') overlapbarchart: OverlapsBarChart;
+    @ViewChild('overlapbarchart') overlapbarchart: OverlapsBarChartComponent;
     @ViewChild('geneModelDropdown') geneModelDropdown: Dropdown;
 
     selectedGeneModelSource = new BehaviorSubject<GeneModel>(null);
