@@ -24,7 +24,7 @@ import { SelectedData } from 'app/service/selecteddata';
 import { ProgressElement } from 'app/service/progresselement';
 
 @Component({
-    selector: 'overlaps-bar-chart',
+    selector: 'app-overlaps-bar-chart',
     styles: [`
       chart {
         display: block;
@@ -34,7 +34,7 @@ import { ProgressElement } from 'app/service/progresselement';
         <chart [options]="options" (load)="saveInstance($event.context)">></chart>
     `
 })
-export class OverlapsBarChart {
+export class OverlapsBarChartComponent {
     options: Object;
     chart: Object;
     result_by_dataset_stack: Object;
@@ -51,7 +51,7 @@ export class OverlapsBarChart {
             }
         };
 
-        let dataLabels = {
+        const dataLabels = {
             enabled: true,
             rotation: -90,
             color: '#FFFFFF',
@@ -68,7 +68,7 @@ export class OverlapsBarChart {
             this.chart['series'][0].remove(false);
         }
 
-        for (let serie of series) {
+        for (const serie of series) {
             if (serie['type'] === 'column') {
                 serie['point'] = point;
                 serie['point']['events']['click'] = (ev) => this.clickExperimentBar(ev);
@@ -78,8 +78,8 @@ export class OverlapsBarChart {
             } else if (serie['type'] === 'boxplot') {
                 console.log('bloxplot');
                 serie['tooltip'] = { headerFormat: '<em>Experiment No {point.key}</em><br/>' };
-                serie['backgroundColor'] = 'red',
-                    this.chart['addSeries'](serie, false);
+                serie['backgroundColor'] = 'red';
+                this.chart['addSeries'](serie, false);
             }
         }
 
@@ -143,11 +143,11 @@ export class OverlapsBarChart {
     }
 
     clickExperimentBar(click) {
-        let point = click.point;
-        let category = point.category;
-        let index = point.series.columnIndex;
+        const point = click.point;
+        const category = point.category;
+        const index = point.series.columnIndex;
 
-        let stack_value: StackValue = this.result_by_dataset_stack[category][point.series.columnIndex];
+        const stack_value: StackValue = this.result_by_dataset_stack[category][point.series.columnIndex];
         this.deepBlueService.setDataInfoSelected(stack_value);
 
 
@@ -159,7 +159,7 @@ export class OverlapsBarChart {
 @Component({
     templateUrl: './histones.html'
 })
-export class HistonesScreen implements OnDestroy {
+export class HistonesScreenComponent implements OnDestroy {
     errorMessage: string;
     experiments: FullExperiment[];
     segregated_data: Object;
@@ -186,7 +186,7 @@ export class HistonesScreen implements OnDestroy {
 
     hasData = false;
 
-    @ViewChild('overlapbarchart') overlapbarchart: OverlapsBarChart;
+    @ViewChild('overlapbarchart') overlapbarchart: OverlapsBarChartComponent;
     @ViewChild('multiselect') multiselect: MultiSelect;
 
     segregate(experiments: FullExperiment[]) {

@@ -15,7 +15,7 @@ import { DeepBlueService } from 'app/service/deepblue';
 import { SelectedData } from 'app/service/selecteddata';
 import { ProgressElement } from 'app/service/progresselement'
 
-import { OverlapsBarChart } from 'app/view/screen/histones';
+import { OverlapsBarChartComponent } from 'app/view/screen/histones';
 
 import { DeepBlueOperation} from 'app/domain/operations';
 import { DeepBlueResult } from 'app/domain/operations';

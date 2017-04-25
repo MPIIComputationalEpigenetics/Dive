@@ -73,7 +73,7 @@ import { TooltipModule } from 'primeng/primeng';
 import { TreeModule } from 'primeng/primeng';
 import { TreeTableModule } from 'primeng/primeng';
 
-import {ColorPickerModule} from 'angular2-color-picker';
+import { ColorPickerModule } from 'angular2-color-picker';
 
 import { AppMenuComponent, AppSubMenu } from './app.menu.component';
 import { AppTopBar } from './app.topbar.component';
@@ -85,7 +85,8 @@ import { MenuService } from 'app/service/menu';
 import { DeepBlueService } from 'app/service/deepblue';
 import { ProgressElement } from 'app/service/progresselement';
 
-import { HistonesScreen, OverlapsBarChart } from 'app/view/screen/histones';
+import { HistonesScreenComponent } from 'app/view/screen/histones';
+import { OverlapsBarChartComponent } from 'app/view/screen/histones';
 
 import { FilteringComponent } from 'app/view/component/filtering';
 
@@ -95,13 +96,13 @@ import { BioSourcesScreenComponent } from 'app/view/screen/biosources';
 import { GenesScreen } from 'app/view/screen/genes';
 
 import {
-  AnnotationListComponent,
-  DataInfoBox,
-  DiveStatus,
-  GenomeSelectorComponent,
-  HistoneExperimentsMenu,
-  SelectedDataView,
-  SelectedDataButton
+    AnnotationListComponent,
+    DataInfoBox,
+    DiveStatus,
+    GenomeSelectorComponent,
+    HistoneExperimentsMenu,
+    SelectedDataView,
+    SelectedDataButton
 } from 'app/view/component/deepblue';
 
 import { DataLoadProgressBar } from 'app/view/component/progressbar';
@@ -162,6 +163,7 @@ import { AppComponent } from './app.component';
         OverlayPanelModule,
         PaginatorModule,
         PanelModule,
+        HistonesScreenComponent,
         PanelMenuModule,
         PasswordModule,
         PickListModule,
@@ -197,7 +199,7 @@ import { AppComponent } from './app.component';
         DiveStatus,
         DataStackViewComponent,
         DataLoadProgressBar,
-        OverlapsBarChart,
+        OverlapsBarChartComponent,
         AnnotationListComponent,
         GenomeSelectorComponent,
         HistoneExperimentsMenu,
@@ -206,7 +208,7 @@ import { AppComponent } from './app.component';
         SummaryScreen,
         RegionsScreen,
         BioSourcesScreenComponent,
-        HistonesScreen,
+        HistonesScreenComponent,
         GenesScreen,
         SelectedDataView,
         SelectedDataButton
