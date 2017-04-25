@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit, Input } from '@angular/core';
+import { Component, ViewChild, OnInit, Input, OnDestroy } from '@angular/core';
 
 import { Subscription } from 'rxjs/Subscription';
 
@@ -102,14 +102,14 @@ export class DiveStatus {
                     </div>
                 </div>
         `})
-export class AnnotationListComponent {
+export class AnnotationListComponent implements OnDestroy {
     errorMessage: string;
     annotations: Annotation[];
     menuAnnotations: SelectItem[];
     selectedAnnotation: Annotation;
     genomeSubscription: Subscription;
 
-    @ViewChild('annotationsDropdown') annotationsDropdown: Dropdown
+    @ViewChild('annotationsDropdown') annotationsDropdown: Dropdown;
 
     constructor(private deepBlueService: DeepBlueService, private selectedData: SelectedData) {
 
@@ -157,7 +157,7 @@ export class AnnotationListComponent {
     selector: 'histone-mark-selector',
     template: ''
 })
-export class HistoneExperimentsMenu {
+export class HistoneExperimentsMenu implements OnDestroy {
     errorMessage: string;
     selectHistones: EpigeneticMark[];
     genomeSubscription: Subscription;

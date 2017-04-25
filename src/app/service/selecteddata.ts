@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Observable } from 'rxjs/Observable'
@@ -14,7 +14,7 @@ import { DeepBlueService } from 'app/service/deepblue';
 import { DataStack, DataStackFactory, DataStackItem } from 'app/service/datastack';
 
 @Injectable()
-export class SelectedData {
+export class SelectedData implements OnDestroy {
 
   _activeStack: DataStack = null;
   _stacks: DataStack[] = [];
@@ -36,6 +36,11 @@ export class SelectedData {
         this.setActiveStack(stack);
       }
     });
+  }
+
+  ngOnDestroy() {
+    console.log('SelectedData destroyed');
+    this.annotationSubscription.unsubscribe();
   }
 
   insertForComparison(annotation: Annotation) {
@@ -121,11 +126,6 @@ export class SelectedData {
     const stack: DataStack = this.dataStackFactory.newDataStack();
     stack.setInitialDataArray(clone);
     this.insertStack(1, stack);
-  }
-
-  ngOnDestroy() {
-    console.log('SelectedData destroyed');
-    this.annotationSubscription.unsubscribe();
   }
 
   getStackName(pos: number) {

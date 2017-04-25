@@ -2,6 +2,7 @@ import {
     Component,
     ViewChild,
     OnInit,
+    OnDestroy,
 } from '@angular/core';
 
 import { Subscription } from 'rxjs/Subscription';
@@ -21,7 +22,7 @@ import { DeepBlueService } from 'app/service/deepblue';
     selector: 'biosources-screen',
     templateUrl: './biosources.html'
 })
-export class BioSourcesScreen {
+export class BioSourcesScreen implements OnDestroy {
     genomeSubscription: Subscription;
 
     sourceBioSources: BioSource[] = [];

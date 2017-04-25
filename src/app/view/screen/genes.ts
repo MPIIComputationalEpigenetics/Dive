@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 
 import { MultiSelect } from 'primeng/primeng';
@@ -23,7 +23,7 @@ import { DeepBlueResult } from 'app/domain/operations';
 @Component({
     templateUrl: './genes.html'
 })
-export class GenesScreen {
+export class GenesScreen implements OnDestroy {
     errorMessage: string;
     geneModels: GeneModel[];
     menuGeneModel: SelectItem[];
@@ -38,9 +38,9 @@ export class GenesScreen {
     selectedGeneModelValue$: Observable<GeneModel> = this.selectedGeneModelSource.asObservable();
 
     currentlyProcessing: GeneModel = null;
-    current_request: number = 0;
+    current_request = 0;
     data: any;
-    hasData: boolean = false;
+    hasData = false;
 
     constructor(private deepBlueService: DeepBlueService,
         public progress_element: ProgressElement, private selectedData: SelectedData) {

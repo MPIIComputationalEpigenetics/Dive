@@ -1,7 +1,7 @@
 import { DeepBlueMiddlewareOverlapResult } from '../../domain/operations';
 import { BioSourcesScreen } from './biosources';
 import { Experiment } from '../../domain/deepblue';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 
 import { Subscription } from 'rxjs/Subscription';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
@@ -160,7 +160,7 @@ export class OverlapsBarChart {
 @Component({
     templateUrl: './histones.html'
 })
-export class HistonesScreen {
+export class HistonesScreen implements OnDestroy {
     errorMessage: string;
     experiments: FullExperiment[];
     segregated_data: Object;
@@ -493,8 +493,18 @@ export class HistonesScreen {
                 ]);
                 result_by_dataset_stack[stack_value['biosource']][stack_pos] = stack_value;
             }
-            series.push({ type: 'boxplot', name: stack_pos.toString(), data: stack_values_result_boxplot, color: this.selectedData.getStackColor(stack_pos, '1') });
-            series.push({ type: 'column', name: stack_pos.toString(), data: stack_values_result, color: this.selectedData.getStackColor(stack_pos, '0.3') });
+            series.push({
+                type: 'boxplot',
+                name: stack_pos.toString(),
+                data: stack_values_result_boxplot,
+                color: this.selectedData.getStackColor(stack_pos, '1')
+            });
+            series.push({
+                type: 'column',
+                name: stack_pos.toString(),
+                data: stack_values_result,
+                color: this.selectedData.getStackColor(stack_pos, '0.3')
+            });
         }
 
         this.overlapbarchart.setNewData(categories, series, result_by_dataset_stack);
