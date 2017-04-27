@@ -39,7 +39,7 @@ export class OverlapsBarChartComponent {
     chart: Object;
     result_by_dataset_stack: Object;
 
-    setNewData(categories, series, result_by_dataset_stack) {
+    setNewData(categories, series) {
         console.log(series);
         this.chart['xAxis'][0].setCategories(categories, false);
 
@@ -83,7 +83,7 @@ export class OverlapsBarChartComponent {
             }
         }
 
-        this.result_by_dataset_stack = result_by_dataset_stack;
+        // this.result_by_dataset_stack = result_by_dataset_stack;
 
         this.chart['redraw']();
     }
@@ -378,17 +378,12 @@ export class HistonesScreenComponent implements OnDestroy {
 
     reloadPlot(datum: DeepBlueMiddlewareOverlapResult[]) {
         const result_by_dataset_stack = {};
-        const categories = [];
+        const categories: string[] = [];
 
-        const value_by_stack_biosource: Array<Array<Array<DeepBlueMiddlewareOverlapResult>>> = [];
-
+        const value_by_stack_biosource: DeepBlueMiddlewareOverlapResult[][][] = [];
 
         for (const result of datum) {
-            console.log(result);
-
             const stack_number = Number.parseInt(result.getDataName());
-            console.log(stack_number);
-
             const experiment = this.experiments.find((se: FullExperiment) => {
                 if (se.name === result.getFilterName()) {
                     return true;
@@ -396,17 +391,11 @@ export class HistonesScreenComponent implements OnDestroy {
                 return false;
             });
 
-            console.log(experiment);
-
             const biosource = experiment.biosource();
-            console.log(biosource);
-
 
             if (!(stack_number in value_by_stack_biosource)) {
                 value_by_stack_biosource[stack_number] = [];
             }
-
-            console.log(value_by_stack_biosource);
 
             if (!(biosource in value_by_stack_biosource[stack_number])) {
                 if (!(biosource in categories)) {
@@ -415,14 +404,14 @@ export class HistonesScreenComponent implements OnDestroy {
                 value_by_stack_biosource[stack_number][biosource] = [];
             }
 
-            console.log(categories);
-
             value_by_stack_biosource[stack_number][biosource].push(result);
             result_by_dataset_stack[biosource] = [];
-
-            console.log(value_by_stack_biosource[stack_number][biosource]);
         }
 
+
+        categories.sort((a: string, b: string) => {
+            return a.localeCompare(b);
+        });
 
         const value_by_stack: Array<Array<Object>> = [];
 
@@ -431,44 +420,46 @@ export class HistonesScreenComponent implements OnDestroy {
                 value_by_stack[stack_pos] = [];
             }
 
-            console.log(value_by_stack);
-
             for (const biosource in value_by_stack_biosource[stack_pos]) {
-                const results = value_by_stack_biosource[stack_pos][biosource];
-                console.log(results);
+                if (value_by_stack_biosource[stack_pos].hasOwnProperty(biosource)) {
+                    const results = value_by_stack_biosource[stack_pos][biosource];
 
-                let high = Number.MIN_SAFE_INTEGER;
-                let low = Number.MAX_SAFE_INTEGER;
-                let sum = 0;
+                    let high = Number.MIN_SAFE_INTEGER;
+                    let low = Number.MAX_SAFE_INTEGER;
+                    let sum = 0;
 
-                const values: Array<number> = [];
-                for (const result of results) {
-                    const count = result.getCount();
-                    if (count < low) {
-                        low = count;
+                    const values: Array<number> = [];
+                    for (const result of results) {
+                        const count = result.getCount();
+                        if (count < low) {
+                            low = count;
+                        }
+                        if (count > high) {
+                            high = count;
+                        }
+                        sum += count;
+                        values.push(count);
                     }
-                    if (count > high) {
-                        high = count;
-                    }
-                    sum += count;
-                    values.push(count);
+
+                    values.sort((a, b) => { return a - b; });
+
+                    const mean = sum / values.length;
+
+                    const lowMiddle = Math.floor((values.length - 1) / 2);
+                    const highMiddle = Math.ceil((values.length - 1) / 2);
+
+                    const median = (values[lowMiddle] + values[highMiddle]) / 2;
+
+                    const q3 = values[highMiddle + Math.floor(lowMiddle / 2)];
+                    const q1 = values[lowMiddle - Math.ceil(highMiddle / 2)];
+
+                    const aggr = { low: low, q1: q1, median: median, q3: q3, high: high, mean: mean, elements: values.length };
+
+                    value_by_stack[stack_pos].push({ biosource: biosource, value: aggr });
                 }
 
-                values.sort((a, b) => { return a - b; });
-
-                const mean = sum / values.length;
-                const mid_pos = values.length / 2;
-                const median = values[mid_pos];
-                const q3 = values[mid_pos + (mid_pos / 2)];
-                const q1 = values[mid_pos - (mid_pos / 2)];
-
-                const aggr = { low: low, q1: q1, median: median, q3: q3, high: high, mean: mean, elements: values.length };
-
-                value_by_stack[stack_pos].push({ biosource: biosource, value: aggr });
             }
         }
-
-        console.log(value_by_stack);
 
         const series: Array<Object> = [];
         for (let stack_pos = 0; stack_pos < value_by_stack.length; stack_pos++) {
@@ -479,6 +470,8 @@ export class HistonesScreenComponent implements OnDestroy {
             stack_values.sort((a: Object, b: Object) => {
                 return (<string>a['biosource']).localeCompare(b['biosource']);
             });
+
+            console.log(stack_values.map((m) => m['biosource']));
 
             for (let i = 0; i < stack_values.length; i++) {
                 const stack_value = stack_values[i];
@@ -492,12 +485,14 @@ export class HistonesScreenComponent implements OnDestroy {
                 ]);
                 result_by_dataset_stack[stack_value['biosource']][stack_pos] = stack_value;
             }
+
             series.push({
                 type: 'boxplot',
                 name: stack_pos.toString(),
                 data: stack_values_result_boxplot,
                 color: this.selectedData.getStackColor(stack_pos, '1')
             });
+
             series.push({
                 type: 'column',
                 name: stack_pos.toString(),
@@ -506,7 +501,8 @@ export class HistonesScreenComponent implements OnDestroy {
             });
         }
 
-        this.overlapbarchart.setNewData(categories, series, result_by_dataset_stack);
+        //this.overlapbarchart.setNewData(categories, series, result_by_dataset_stack);
+        this.overlapbarchart.setNewData(categories, series)
     }
 
     selectExperimentBar(e) {

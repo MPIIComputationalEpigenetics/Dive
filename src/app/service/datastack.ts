@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { Router } from '@angular/router';
 
-import { Observable } from 'rxjs/Observable'
+import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subject } from 'rxjs/Subject';
@@ -11,7 +11,7 @@ import { IdName, EpigeneticMark, Experiment, Genome, Annotation } from 'app/doma
 import { DeepBlueOperation, StackValue } from 'app/domain/operations';
 
 import { DeepBlueService } from 'app/service/deepblue';
-import { ProgressElement } from 'app/service/progresselement'
+import { ProgressElement } from 'app/service/progresselement';
 
 declare var randomColor: any;
 
@@ -35,7 +35,7 @@ export class DataStackItem {
 
 export class DataStack {
 
-    public color: string = "blue";
+    public color: string = 'blue';
     public color_array;
     _data: DataStackItem[] = [];
 
@@ -45,32 +45,32 @@ export class DataStack {
     constructor(private deepBlueService: DeepBlueService, private progress_element: ProgressElement,
         private router: Router) {
         this.color_array = randomColor({ format: 'rgbArray', luminosity: 'dark' });
-        this.color = "rgba("+this.color_array[0]+","+this.color_array[1]+","+this.color_array[2]+",1)";
+        this.color = 'rgba('+this.color_array[0] + ',' + this.color_array[1] + ',' + this.color_array[2] + ',1)';
     }
 
     getColor(alpha: string) {
-        return "rgba("+this.color_array[0]+","+this.color_array[1]+","+this.color_array[2]+","+alpha+")";
+        return 'rgba('+this.color_array[0]+','+this.color_array[1]+',' + this.color_array[2] + ',' + alpha + ')';
     }
 
     setInitialData(data: IdName) {
         this._data = [];
-        if (data.id == "" || data.id == null) {
+        if (data.id === '' || data.id == null) {
             return;
         }
 
-        let request_count = 0;
+        const request_count = 0;
         this.progress_element.reset(4, request_count);
 
         // TODO: use/make a generic method for experiments and annotations
         this.deepBlueService.selectAnnotation(data, this.progress_element, request_count).subscribe((selected_annotation) => {
             this.deepBlueService.cacheQuery(selected_annotation, this.progress_element, request_count).subscribe((cached_data) => {
                 this.deepBlueService.countRegionsRequest(cached_data, this.progress_element, request_count).subscribe((total) => {
-                    let totalSelectedRegtions = total["result"]["count"];
-                    let dataStackItem: DataStackItem = new DataStackItem(cached_data, "select", "Selection", totalSelectedRegtions);
+                    const totalSelectedRegtions = total['result']['count'];
+                    const dataStackItem: DataStackItem = new DataStackItem(cached_data, 'select', 'Selection', totalSelectedRegtions);
                     this._data.push(dataStackItem);
                     this.topStackSubject.next(dataStackItem);
                 });
-            })
+            });
         });
     }
 
@@ -87,17 +87,17 @@ export class DataStack {
         let request_count = 0;
         this.progress_element.reset(5, request_count);
 
-        this.deepBlueService.overlap(current_op, operation, "true", this.progress_element, request_count).subscribe((overlap_operation) => {
+        this.deepBlueService.overlap(current_op, operation, 'true', this.progress_element, request_count).subscribe((overlap_operation) => {
             this.deepBlueService.cacheQuery(overlap_operation, this.progress_element, request_count).subscribe((cached_data) => {
                 this.deepBlueService.countRegionsRequest(cached_data, this.progress_element, request_count).subscribe((total) => {
-                    let totalSelectedRegtions = total["result"]["count"];
-                    let dataStackItem: DataStackItem = new DataStackItem(cached_data, "overlap",
-                        "Overlap with " + operation.data.name + " overlapping with XXX",
+                    const totalSelectedRegtions = total['result']['count'];
+                    const dataStackItem: DataStackItem = new DataStackItem(cached_data, 'overlap',
+                        'Overlap with ' + operation.data.name + ' overlapping with XXX',
                         totalSelectedRegtions);
                     this._data.push(dataStackItem);
                     this.topStackSubject.next(dataStackItem);
                 });
-            })
+            });
         });
     }
 
@@ -111,51 +111,51 @@ export class DataStack {
         let request_count = 0;
         this.progress_element.reset(5, request_count);
 
-        this.deepBlueService.overlap(current_op, operation, "false", this.progress_element, request_count).subscribe((overlap_operation) => {
+        this.deepBlueService.overlap(current_op, operation, 'false', this.progress_element, request_count).subscribe((overlap_operation) => {
             this.deepBlueService.cacheQuery(overlap_operation, this.progress_element, request_count).subscribe((cached_data) => {
                 this.deepBlueService.countRegionsRequest(cached_data, this.progress_element, request_count).subscribe((total) => {
-                    let totalSelectedRegtions = total["result"]["count"];
-                    let dataStackItem: DataStackItem = new DataStackItem(cached_data, "not-overlap",
-                        "Not-overlap with " + operation.data.name + " overlapping with XXX",
+                    const totalSelectedRegtions = total['result']['count'];
+                    const dataStackItem: DataStackItem = new DataStackItem(cached_data, 'not-overlap',
+                        'Not-overlap with ' + operation.data.name + ' overlapping with XXX',
                         totalSelectedRegtions);
                     this._data.push(dataStackItem);
                     this.topStackSubject.next(dataStackItem);
                 });
-            })
+            });
         });
     }
 
     filter_regions(field: string, operation: string, value: string, type: string) {
-        let request_count = 0;
+        const request_count = 0;
         this.progress_element.reset(4, request_count);
 
-        let current_op: DeepBlueOperation = this.getCurrentOperation();
+        const current_op: DeepBlueOperation = this.getCurrentOperation();
         if (current_op == null) {
             return;
         }
         this.deepBlueService.filter_region(current_op, field, operation, value, type, this.progress_element, request_count).subscribe((filter_operation) => {
             this.deepBlueService.cacheQuery(filter_operation, this.progress_element, request_count).subscribe((cached_data) => {
                 this.deepBlueService.countRegionsRequest(cached_data, this.progress_element, request_count).subscribe((total) => {
-                    let totalSelectedRegtions = total["result"]["count"];
+                    const totalSelectedRegtions = total['result']['count'];
                     let text = field;
-                    if (text == "@LENGTH") {
-                        text = "length";
+                    if (text === '@LENGTH') {
+                        text = 'length';
                     }
-                    let dataStackItem: DataStackItem = new DataStackItem(cached_data, "filter", text + " " + operation + " " + value, totalSelectedRegtions);
+                    const dataStackItem: DataStackItem = new DataStackItem(cached_data, 'filter', text + ' ' + operation + ' ' + value, totalSelectedRegtions);
                     this._data.push(dataStackItem);
                     this.topStackSubject.next(dataStackItem);
                 });
-            })
-        })
+            });
+        });
 
     }
 
     remove(data: DataStackItem) {
-        let query_id = data.op.query_id;
+        const query_id = data.op.query_id;
         // find position
         let i = this._data.length - 1;
         for (; i >= 0; i--) {
-            if (this._data[i].op.query_id == query_id) {
+            if (this._data[i].op.query_id === query_id) {
                 break;
             }
         }
@@ -181,17 +181,17 @@ export class DataStack {
     }
 
     cloneStackItems(): DataStackItem[] {
-        let newStack: DataStackItem[] = [];
-        for (let item of this._data) {
+        const newStack: DataStackItem[] = [];
+        for (const item of this._data) {
             newStack.push(item);
         }
         return newStack;
     }
 
     name(): string {
-        let top = this._data[0];
-        if (top == undefined) {
-            return "(loading..)";
+        const top = this._data[0];
+        if (top === undefined) {
+            return '(loading..)';
         }
         return top.op.data.name;
     }

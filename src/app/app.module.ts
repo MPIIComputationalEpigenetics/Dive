@@ -1,3 +1,4 @@
+import { HistonesScreenComponent } from './view/screen/histones';
 import { DataStackViewComponent } from 'app/view/component/datastack';
 import { DataStackFactory } from 'app/service/datastack';
 import { SelectedData } from 'app/service/selecteddata';
@@ -85,7 +86,6 @@ import { MenuService } from 'app/service/menu';
 import { DeepBlueService } from 'app/service/deepblue';
 import { ProgressElement } from 'app/service/progresselement';
 
-import { HistonesScreenComponent } from 'app/view/screen/histones';
 import { OverlapsBarChartComponent } from 'app/view/screen/histones';
 
 import { FilteringComponent } from 'app/view/component/filtering';
@@ -163,7 +163,6 @@ import { AppComponent } from './app.component';
         OverlayPanelModule,
         PaginatorModule,
         PanelModule,
-        HistonesScreenComponent,
         PanelMenuModule,
         PasswordModule,
         PickListModule,
