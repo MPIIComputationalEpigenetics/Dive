@@ -327,55 +327,11 @@ export class HistonesScreenComponent implements OnDestroy {
                 // Now calculate and output the difference
                 console.log(end - start);
                 this.currentlyProcessing = [];
+                console.log(result);
+                debugger;
                 this.reloadPlot(result);
             });
         });
-
-        /*
-        this.deepBlueService.selectMultipleExperiments(
-            experiments, this.progress_element, this.current_request).subscribe((selected_experiments: DeepBlueOperation[]) => {
-                if (selected_experiments.length === 0) {
-                    this.reloadPlot([]);
-                    return;
-                }
-                if (selected_experiments[0].request_count !== this.current_request) {
-                    return;
-                }
-
-                if (current == null) {
-                    this.reloadPlot([]);
-                    return;
-                }
-
-                this.deepBlueService.intersectWithSelected(
-                    current, selected_experiments, this.progress_element, this.current_request).subscribe((overlap_ids: StackValue[]) => {
-                        if (overlap_ids.length === 0) {
-                            this.reloadPlot([]);
-                            return;
-                        }
-                        if (overlap_ids[0].getDeepBlueOperation().request_count !== this.current_request) {
-                            return;
-                        }
-
-                        this.deepBlueService.countRegionsBatch(
-                            overlap_ids, this.progress_element, this.current_request).subscribe((datum: StackValue[]) => {
-                                if (datum.length === 0) {
-                                    this.reloadPlot([]);
-                                    return;
-                                }
-                                if (datum[0].getDeepBlueOperation().request_count !== this.current_request) {
-                                    return;
-                                }
-
-                                var end = new Date().getTime();
-                                // Now calculate and output the difference
-                                console.log(end - start);
-                                this.currentlyProcessing = [];
-                                this.reloadPlot(datum);
-                            })
-                    });
-            });
-            */
     }
 
     reloadPlot(datum: DeepBlueMiddlewareOverlapResult[]) {
@@ -400,7 +356,7 @@ export class HistonesScreenComponent implements OnDestroy {
             }
 
             if (!(biosource in value_by_stack_biosource[stack_number])) {
-                if (!(biosource in categories)) {
+                if (categories.indexOf(biosource) === -1) {
                     categories.push(biosource);
                 }
                 value_by_stack_biosource[stack_number][biosource] = [];
@@ -500,7 +456,10 @@ export class HistonesScreenComponent implements OnDestroy {
         }
 
         //this.overlapbarchart.setNewData(categories, series, result_by_dataset_stack);
-        this.overlapbarchart.setNewData(categories, series)
+        debugger;
+        console.log(categories);
+        console.log(series);
+        this.overlapbarchart.setNewData(categories, series);
     }
 
     selectExperimentBar(e) {
