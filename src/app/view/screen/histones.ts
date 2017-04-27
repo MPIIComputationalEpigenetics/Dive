@@ -23,6 +23,8 @@ import { DataStack } from 'app/service/datastack';
 import { SelectedData } from 'app/service/selecteddata';
 import { ProgressElement } from 'app/service/progresselement';
 
+import { Statistics } from 'app/service/statistics';
+
 @Component({
     selector: 'app-overlaps-bar-chart',
     styles: [`
@@ -445,13 +447,9 @@ export class HistonesScreenComponent implements OnDestroy {
 
                     const mean = sum / values.length;
 
-                    const lowMiddle = Math.floor((values.length - 1) / 2);
-                    const highMiddle = Math.ceil((values.length - 1) / 2);
-
-                    const median = (values[lowMiddle] + values[highMiddle]) / 2;
-
-                    const q3 = values[highMiddle + Math.floor(lowMiddle / 2)];
-                    const q1 = values[lowMiddle - Math.ceil(highMiddle / 2)];
+                    const q1 = Statistics.percentile(values, 0.25);
+                    const q3 = Statistics.percentile(values, 0.75);
+                    const median = Statistics.percentile(values, 0.5);
 
                     const aggr = { low: low, q1: q1, median: median, q3: q3, high: high, mean: mean, elements: values.length };
 
