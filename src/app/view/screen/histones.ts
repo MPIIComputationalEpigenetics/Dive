@@ -322,13 +322,12 @@ export class HistonesScreenComponent implements OnDestroy {
         this.deepBlueService.composedCountOverlaps(current, experiments).subscribe((request_id: string) => {
             console.log('request_id from middleware', request_id);
 
-            this.deepBlueService.getComposedResultIterator(request_id).subscribe((result: DeepBlueMiddlewareOverlapResult[]) => {
+            this.deepBlueService.getComposedResultIterator(request_id, this.progress_element).subscribe((result: DeepBlueMiddlewareOverlapResult[]) => {
                 const end = new Date().getTime();
                 // Now calculate and output the difference
                 console.log(end - start);
                 this.currentlyProcessing = [];
                 console.log(result);
-                debugger;
                 this.reloadPlot(result);
             });
         });
@@ -365,7 +364,6 @@ export class HistonesScreenComponent implements OnDestroy {
             value_by_stack_biosource[stack_number][biosource].push(result);
             result_by_dataset_stack[biosource] = [];
         }
-
 
         categories.sort((a: string, b: string) => {
             return a.localeCompare(b);
@@ -456,9 +454,6 @@ export class HistonesScreenComponent implements OnDestroy {
         }
 
         //this.overlapbarchart.setNewData(categories, series, result_by_dataset_stack);
-        debugger;
-        console.log(categories);
-        console.log(series);
         this.overlapbarchart.setNewData(categories, series);
     }
 

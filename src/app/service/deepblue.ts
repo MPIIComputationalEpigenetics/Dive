@@ -1,3 +1,4 @@
+import { DataLoadProgressBar } from '../view/component/progressbar';
 import { Injectable } from '@angular/core';
 
 import { Http, Response, URLSearchParams } from '@angular/http';
@@ -23,13 +24,13 @@ import {
 import { IKey } from '../domain/interfaces';
 
 import {
-  DeepBlueMiddlewareOverlapResult,
-  DeepBlueMultiParametersOperation,
-  DeepBlueOperation,
-  DeepBlueParametersOperation,
-  DeepBlueRequest,
-  DeepBlueResult,
-  StackValue
+    DeepBlueMiddlewareOverlapResult,
+    DeepBlueMultiParametersOperation,
+    DeepBlueOperation,
+    DeepBlueParametersOperation,
+    DeepBlueRequest,
+    DeepBlueResult,
+    StackValue
 } from '../domain/operations';
 
 import { ProgressElement } from '../service/progresselement';
@@ -728,22 +729,21 @@ export class DeepBlueService {
             });
     }
 
-    public getComposedResultIterator(request_id: string): Observable<DeepBlueMiddlewareOverlapResult[]> {
+    public getComposedResultIterator(request_id: string, progress_element: ProgressElement):
+        Observable<DeepBlueMiddlewareOverlapResult[]> {
         const pollSubject = new Subject<DeepBlueMiddlewareOverlapResult[]>();
 
-        const timer = Observable.timer(0, 250).concatMap(() => {
+        const timer = Observable.timer(0, 400).concatMap(() => {
             return this.getComposedResult(request_id).map((data: [string, string | DeepBlueMiddlewareOverlapResult[]]) => {
-                // progress_element.increment();
-                // let op_result = new DeepBlueResult(op_request.data, data, op_request);
-                // this.resultCache.put(op_request, op_result)
                 if (data[0] === 'okay') {
                     timer.unsubscribe();
                     pollSubject.next(
                         (<Object[]>(data[1])).map((ee) => DeepBlueMiddlewareOverlapResult.fromObject(ee))
                     );
                     pollSubject.complete();
+                    progress_element.finish();
                 } else {
-                    console.log(data[1]);
+                    progress_element.setStatus(data[1]['step'], data[1]['processed'], data[1]['total']);
                 }
             });
         }).subscribe();
