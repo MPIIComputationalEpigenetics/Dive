@@ -50,7 +50,7 @@ export class DataStackViewComponent {
     constructor(private deepBlueService: DeepBlueService, private selectedData: SelectedData) { }
 
     removeData(event, data) {
-        this.selectedData.getActiveStack().remove(data);
+        this.selectedData.activeStackSubject.getValue().remove(data);
     }
 
     saveData(event, data) {

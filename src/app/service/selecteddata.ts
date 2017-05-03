@@ -16,10 +16,12 @@ import { DataStack, DataStackFactory, DataStackItem } from 'app/service/datastac
 @Injectable()
 export class SelectedData implements OnDestroy {
 
-  _activeStack: DataStack = null;
   _stacks: DataStack[] = [];
 
   currentStackSubscription: Subscription = null;
+
+  public activeStackSubject = new BehaviorSubject<DataStack>(null);
+  public activeStackValue$: Observable<DataStack> = this.activeStackSubject.asObservable();
 
   public activeTopStackSubject = new Subject<DataStackItem>();
   public activeTopStackValue$: Observable<DataStackItem> = this.activeTopStackSubject.asObservable();
@@ -28,8 +30,8 @@ export class SelectedData implements OnDestroy {
 
   constructor(private deepBlueService: DeepBlueService, private dataStackFactory: DataStackFactory) {
     this.annotationSubscription = deepBlueService.annotationValue$.subscribe((annotation: Annotation) => {
-      let stack: DataStack = dataStackFactory.newDataStack();
-      if (annotation.id != '') {
+      const stack: DataStack = dataStackFactory.newDataStack();
+      if (annotation.id !== '') {
         // TODO: Ask if the user want to save the previous stack
         stack.setInitialData(annotation);
         this.replaceStack(0, stack);
@@ -63,7 +65,7 @@ export class SelectedData implements OnDestroy {
       console.log(stack, 'not found');
       return;
     }
-    this._activeStack = stack;
+    this.activeStackSubject.next(stack);
 
     const toChange = this._stacks[index];
     this._stacks[index] = this._stacks[0];
@@ -82,22 +84,18 @@ export class SelectedData implements OnDestroy {
     if (index > -1) {
       const removedStack = this._stacks[index];
       this._stacks.splice(index, 1);
-      if (this._activeStack == removedStack) {
+      if (this.activeStackSubject.getValue() === removedStack) {
         // TODO: set the next one as active.
-        this._activeStack = null;
+        this.activeStackSubject.next(this.dataStackFactory.newDataStack());
       }
       return removedStack;
     }
     return null;
   }
 
-  getActiveStack() {
-    return this._activeStack;
-  }
-
   getActiveData(): DataStackItem[] {
-    if (this._activeStack != null) {
-      return this._activeStack.getData();
+    if (this.activeStackSubject.getValue() != null) {
+      return this.activeStackSubject.getValue().getData();
     }
     return [];
   }
@@ -107,8 +105,8 @@ export class SelectedData implements OnDestroy {
   }
 
   getActiveCurrentOperation(): DeepBlueOperation {
-    if (this._activeStack != null) {
-      return this._activeStack.getCurrentOperation();
+    if (this.activeStackSubject.getValue() != null) {
+      return this.activeStackSubject.getValue().getCurrentOperation();
     }
     return null;
   }
@@ -122,7 +120,7 @@ export class SelectedData implements OnDestroy {
   }
 
   saveActiveStack() {
-    const clone = this.getActiveStack().cloneStackItems();
+    const clone = this.activeStackSubject.getValue().cloneStackItems();
     const stack: DataStack = this.dataStackFactory.newDataStack();
     stack.setInitialDataArray(clone);
     this.insertStack(1, stack);

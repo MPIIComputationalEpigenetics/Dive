@@ -47,11 +47,11 @@ export class DataInfoBox {
     }
 
     filterOverlapping() {
-        this.selectedData.getActiveStack().overlap(this.data.getDeepBlueResult().request.operation);
+        this.selectedData.activeStackSubject.getValue().overlap(this.data.getDeepBlueResult().request.operation);
     }
 
     filterNonOverlapping() {
-        this.selectedData.getActiveStack().non_overlap(this.data.getDeepBlueResult().request.operation);
+        this.selectedData.activeStackSubject.getValue().non_overlap(this.data.getDeepBlueResult().request.operation);
     }
 
     getStackName(): string {

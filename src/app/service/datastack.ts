@@ -35,7 +35,7 @@ export class DataStackItem {
 
 export class DataStack {
 
-    public color: string = 'blue';
+    public color = 'blue';
     public color_array;
     _data: DataStackItem[] = [];
 
@@ -45,11 +45,11 @@ export class DataStack {
     constructor(private deepBlueService: DeepBlueService, private progress_element: ProgressElement,
         private router: Router) {
         this.color_array = randomColor({ format: 'rgbArray', luminosity: 'dark' });
-        this.color = 'rgba('+this.color_array[0] + ',' + this.color_array[1] + ',' + this.color_array[2] + ',1)';
+        this.color = 'rgba(' + this.color_array[0] + ',' + this.color_array[1] + ',' + this.color_array[2] + ',1)';
     }
 
     getColor(alpha: string) {
-        return 'rgba('+this.color_array[0]+','+this.color_array[1]+',' + this.color_array[2] + ',' + alpha + ')';
+        return 'rgba(' + this.color_array[0] + ',' + this.color_array[1] + ',' + this.color_array[2] + ',' + alpha + ')';
     }
 
     setInitialData(data: IdName) {
@@ -79,12 +79,12 @@ export class DataStack {
     }
 
     overlap(operation: DeepBlueOperation) {
-        let current_op: DeepBlueOperation = this.getCurrentOperation();
+        const current_op: DeepBlueOperation = this.getCurrentOperation();
         if (current_op == null) {
             return;
         }
 
-        let request_count = 0;
+        const request_count = 0;
         this.progress_element.reset(5, request_count);
 
         this.deepBlueService.overlap(current_op, operation, 'true', this.progress_element, request_count).subscribe((overlap_operation) => {
@@ -103,26 +103,27 @@ export class DataStack {
 
     non_overlap(operation: DeepBlueOperation) {
         // TODO: use/make a generic method for experiments and annotations
-        let current_op: DeepBlueOperation = this.getCurrentOperation();
+        const current_op: DeepBlueOperation = this.getCurrentOperation();
         if (current_op == null) {
             return;
         }
 
-        let request_count = 0;
+        const request_count = 0;
         this.progress_element.reset(5, request_count);
 
-        this.deepBlueService.overlap(current_op, operation, 'false', this.progress_element, request_count).subscribe((overlap_operation) => {
-            this.deepBlueService.cacheQuery(overlap_operation, this.progress_element, request_count).subscribe((cached_data) => {
-                this.deepBlueService.countRegionsRequest(cached_data, this.progress_element, request_count).subscribe((total) => {
-                    const totalSelectedRegtions = total['result']['count'];
-                    const dataStackItem: DataStackItem = new DataStackItem(cached_data, 'not-overlap',
-                        'Not-overlap with ' + operation.data.name + ' overlapping with XXX',
-                        totalSelectedRegtions);
-                    this._data.push(dataStackItem);
-                    this.topStackSubject.next(dataStackItem);
+        this.deepBlueService.overlap(current_op, operation, 'false', this.progress_element, request_count)
+            .subscribe((overlap_operation) => {
+                this.deepBlueService.cacheQuery(overlap_operation, this.progress_element, request_count).subscribe((cached_data) => {
+                    this.deepBlueService.countRegionsRequest(cached_data, this.progress_element, request_count).subscribe((total) => {
+                        const totalSelectedRegtions = total['result']['count'];
+                        const dataStackItem: DataStackItem = new DataStackItem(cached_data, 'not-overlap',
+                            'Not-overlap with ' + operation.data.name + ' overlapping with XXX',
+                            totalSelectedRegtions);
+                        this._data.push(dataStackItem);
+                        this.topStackSubject.next(dataStackItem);
+                    });
                 });
             });
-        });
     }
 
     filter_regions(field: string, operation: string, value: string, type: string) {
@@ -133,20 +134,22 @@ export class DataStack {
         if (current_op == null) {
             return;
         }
-        this.deepBlueService.filter_region(current_op, field, operation, value, type, this.progress_element, request_count).subscribe((filter_operation) => {
-            this.deepBlueService.cacheQuery(filter_operation, this.progress_element, request_count).subscribe((cached_data) => {
-                this.deepBlueService.countRegionsRequest(cached_data, this.progress_element, request_count).subscribe((total) => {
-                    const totalSelectedRegtions = total['result']['count'];
-                    let text = field;
-                    if (text === '@LENGTH') {
-                        text = 'length';
-                    }
-                    const dataStackItem: DataStackItem = new DataStackItem(cached_data, 'filter', text + ' ' + operation + ' ' + value, totalSelectedRegtions);
-                    this._data.push(dataStackItem);
-                    this.topStackSubject.next(dataStackItem);
+        this.deepBlueService.filter_region(current_op, field, operation, value, type, this.progress_element, request_count)
+            .subscribe((filter_operation) => {
+                this.deepBlueService.cacheQuery(filter_operation, this.progress_element, request_count).subscribe((cached_data) => {
+                    this.deepBlueService.countRegionsRequest(cached_data, this.progress_element, request_count).subscribe((total) => {
+                        const totalSelectedRegtions = total['result']['count'];
+                        let text = field;
+                        if (text === '@LENGTH') {
+                            text = 'length';
+                        }
+                        const dataStackItem: DataStackItem =
+                            new DataStackItem(cached_data, 'filter', text + ' ' + operation + ' ' + value, totalSelectedRegtions);
+                        this._data.push(dataStackItem);
+                        this.topStackSubject.next(dataStackItem);
+                    });
                 });
             });
-        });
 
     }
 
