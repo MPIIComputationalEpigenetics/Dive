@@ -152,12 +152,11 @@ export class DeepBlueService {
 
     // Functions to select data from the Server
 
-
     getHistones(): Observable<EpigeneticMark[]> {
         if (!this.getGenome()) {
             return Observable.empty<EpigeneticMark[]>();
         }
-        let params: URLSearchParams = new URLSearchParams();
+        const params: URLSearchParams = new URLSearchParams();
         params.set('genome', this.getGenome().name);
         params.set('controlled_vocabulary', 'epigenetic_marks');
         params.set('type', 'peaks');
@@ -180,33 +179,33 @@ export class DeepBlueService {
     }
 
     private extractBioSources(res: Response) {
-        let body = res.json();
-        let data = body[1] || [];
+        const body = res.json();
+        const data = body[1] || [];
         return data.map((value) => {
             return new BioSource(value);
-        });
+        }).sort((a: IdName, b: IdName) => a.name.localeCompare(b.name));
     }
 
 
     private extractHistone(res: Response) {
-        let body = res.json();
+        const body = res.json();
         let data = body[1] || [];
-        let regexp = new RegExp('h([134]|2[ab])([a-z])([0-9]+)(.*)');
+        const regexp = new RegExp('h([134]|2[ab])([a-z])([0-9]+)(.*)');
 
         data = data.filter((em) => {
             // em[1] is where the name is
             return regexp.test(em[1].toLowerCase());
         }).sort((em1, em2) => {
             return em1[1].localeCompare(em2[1]);
-        });;
+        });
 
         return data.map((value) => {
             return (new EpigeneticMark(value));
-        });
-    } que;
+        }).sort((a: IdName, b: IdName) => a.name.localeCompare(b.name));
+    };
 
     getGenomes(): Observable<Genome[]> {
-        let params: URLSearchParams = new URLSearchParams();
+        const params: URLSearchParams = new URLSearchParams();
         params.set('controlled_vocabulary', 'genomes');
         params.set('type', 'peaks');
         return this.http.get(this.deepBlueUrl + '/collection_experiments_count', { 'search': params })
@@ -215,11 +214,11 @@ export class DeepBlueService {
     }
 
     private extractGenomes(res: Response) {
-        let body = res.json();
+        const body = res.json();
         const data = body[1] || [];
         return data.map((value) => {
             return new Genome(value);
-        });
+        }).sort((a: IdName, b: IdName) => a.name.localeCompare(b.name));
     }
 
     getAnnotations(genome): Observable<Annotation[]> {
@@ -238,7 +237,7 @@ export class DeepBlueService {
         const data = body[1] || [];
         return data.map((value) => {
             return new Annotation(value);
-        });
+        }).sort((a: IdName, b: IdName) => a.name.localeCompare(b.name));
     }
 
     getExperiments(genome: Genome, epigenetic_mark: EpigeneticMark): Observable<IdName[]> {
@@ -250,7 +249,7 @@ export class DeepBlueService {
             return Observable.empty<IdName[]>();
         }
 
-        let params: URLSearchParams = new URLSearchParams();
+        const params: URLSearchParams = new URLSearchParams();
         params.set('genome', genome.name);
         params.set('type', 'peaks');
         params.set('epigenetic_mark', epigenetic_mark.name);
@@ -324,7 +323,8 @@ export class DeepBlueService {
             .catch(this.handleError);
     }
 
-    selectMultipleExperiments(experiments: IdName[], progress_element: ProgressElement, request_count: number): Observable<DeepBlueOperation[]> {
+    selectMultipleExperiments(experiments: IdName[],
+        progress_element: ProgressElement, request_count: number): Observable<DeepBlueOperation[]> {
 
         const observableBatch: Observable<DeepBlueOperation>[] = [];
 
@@ -337,7 +337,8 @@ export class DeepBlueService {
         return Observable.forkJoin(observableBatch);
     }
 
-    filter_region(data: DeepBlueOperation, field: string, operation: string, value: string, type: string, progress_element: ProgressElement, request_count: number): Observable<DeepBlueOperation> {
+    filter_region(data: DeepBlueOperation, field: string, operation: string,
+        value: string, type: string, progress_element: ProgressElement, request_count: number): Observable<DeepBlueOperation> {
 
 
         const parameters = [field, operation, value, type];
@@ -407,7 +408,9 @@ export class DeepBlueService {
         return Observable.forkJoin(observableBatch);
     }
 
-    overlap(data_one: DeepBlueOperation, data_two: DeepBlueOperation, overlap: string, progress_element: ProgressElement, request_count: number): Observable<DeepBlueOperation> {
+    overlap(data_one: DeepBlueOperation, data_two: DeepBlueOperation,
+        overlap: string, progress_element: ProgressElement, request_count: number): Observable<DeepBlueOperation> {
+
         const amount = '1';
         const amount_type = 'bp';
 
