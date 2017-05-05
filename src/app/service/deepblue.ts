@@ -90,7 +90,7 @@ export class DeepBlueService {
     public genomeSource = new BehaviorSubject<Genome>(new Genome(['', '']));
     public annotationSource = new BehaviorSubject<Annotation>(new Annotation(['', '']));
     public epigeneticMarkSource = new BehaviorSubject<EpigeneticMark>(new EpigeneticMark(['', '']));
-    public dataInfoSelectedSource = new BehaviorSubject<StackValue>(null);
+    public dataInfoSelectedSource = new BehaviorSubject<Object>(null);
 
     public selectedBioSources = new BehaviorSubject<BioSource[]>([]);
 
@@ -109,11 +109,11 @@ export class DeepBlueService {
     requestCache = new DataCache<DeepBlueOperation, DeepBlueRequest>();
     resultCache = new DataCache<DeepBlueRequest, DeepBlueResult>();
 
-    setDataInfoSelected(stack_value: StackValue) {
-        this.dataInfoSelectedSource.next(stack_value);
+    setDataInfoSelected(cliked_data: Object) {
+        this.dataInfoSelectedSource.next(cliked_data);
     }
 
-    getDataInfoSelected(): StackValue {
+    getDataInfoSelected(): Object {
         return this.dataInfoSelectedSource.getValue();
     }
 

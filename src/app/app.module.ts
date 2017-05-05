@@ -97,7 +97,7 @@ import { GenesScreen } from 'app/view/screen/genes';
 
 import {
     AnnotationListComponent,
-    DataInfoBox,
+    DataInfoBoxComponent,
     DiveStatus,
     GenomeSelectorComponent,
     HistoneExperimentsMenu,
@@ -203,7 +203,7 @@ import { AppComponent } from './app.component';
         GenomeSelectorComponent,
         HistoneExperimentsMenu,
         FilteringComponent,
-        DataInfoBox,
+        DataInfoBoxComponent,
         SummaryScreen,
         RegionsScreen,
         BioSourcesScreenComponent,

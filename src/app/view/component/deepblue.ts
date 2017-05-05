@@ -1,3 +1,4 @@
+import { DeepBlueMiddlewareOverlapResult } from '../../domain/operations';
 import { Component, ViewChild, OnInit, Input, OnDestroy } from '@angular/core';
 
 import { Subscription } from 'rxjs/Subscription';
@@ -23,40 +24,55 @@ import { SelectedData } from 'app/service/selecteddata';
 import { DataStack } from 'app/service/datastack';
 
 @Component({
-    selector: 'data-info-box',
+    selector: 'app-data-info-box',
     template: `
         <div class="card card-w-title" style="word-wrap: break-word">
-            <h2>Data information</h2>
+            <h2>Data overlapping with {{ getStackName() }}</h2>
 
-            {{ data.value.data.name }} overlapping with {{ getStackName() }}
+            <li *ngFor="let result of results">
+                {{ result.filter_name }} - {{ result.count }}
+            </li>
 
 
+            <!--
             <p><button pButton type="button" (click)="filterOverlapping()" label="Filter overlapping"></button>
             <p><button pButton type="button" (click)="filterNonOverlapping()" label="Filter not-overlapping"></button>
+            -->
         </div>
     `
 })
-export class DataInfoBox {
+export class DataInfoBoxComponent implements OnDestroy {
     dataSelectedSubscription: Subscription;
-    data: StackValue = null;
+
+    biosource: string = null;
+    value: Object = null;
+    results: DeepBlueMiddlewareOverlapResult[] = [];
 
     constructor(private deepBlueService: DeepBlueService, private selectedData: SelectedData) {
-        this.dataSelectedSubscription = deepBlueService.dataInfoSelectedValue$.subscribe((data: StackValue) => {
-            this.data = data;
+        this.dataSelectedSubscription = deepBlueService.dataInfoSelectedValue$.subscribe((data: Object) => {
+            this.biosource = data['biosource'];
+            this.value = data['value'];
+            this.results = data['results']
+                .sort((a: DeepBlueMiddlewareOverlapResult, b: DeepBlueMiddlewareOverlapResult) => a.getCount() - b.getCount());
         });
     }
 
     filterOverlapping() {
-        this.selectedData.activeStackSubject.getValue().overlap(this.data.getDeepBlueResult().request.operation);
+        // this.selectedData.activeStackSubject.getValue().overlap(this.data.getDeepBlueResult().request.operation);
     }
 
     filterNonOverlapping() {
-        this.selectedData.activeStackSubject.getValue().non_overlap(this.data.getDeepBlueResult().request.operation);
+        // this.selectedData.activeStackSubject.getValue().non_overlap(this.data.getDeepBlueResult().request.operation);
     }
 
     getStackName(): string {
-        return this.data.stack.toString();
+        return this.biosource;
     }
+
+    ngOnDestroy() {
+        this.dataSelectedSubscription.unsubscribe();
+    }
+
 }
 
 

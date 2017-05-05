@@ -41,8 +41,10 @@ export class OverlapsBarChartComponent {
     chart: Object;
     result_by_dataset_stack: Object;
 
-    setNewData(categories, series) {
-        console.log(series);
+    setNewData(categories, series, result_by_dataset_stack) {
+
+        this.result_by_dataset_stack = result_by_dataset_stack;
+
         this.chart['xAxis'][0].setCategories(categories, false);
 
         const point = {
@@ -84,8 +86,6 @@ export class OverlapsBarChartComponent {
                 this.chart['addSeries'](serie, false);
             }
         }
-
-        // this.result_by_dataset_stack = result_by_dataset_stack;
 
         this.chart['redraw']();
     }
@@ -149,9 +149,9 @@ export class OverlapsBarChartComponent {
         const category = point.category;
         const index = point.series.columnIndex;
 
-        const stack_value: StackValue = this.result_by_dataset_stack[category][point.series.columnIndex];
-        this.deepBlueService.setDataInfoSelected(stack_value);
-
+        // TODO: create a type to hold this data
+        const bar_element: Object = this.result_by_dataset_stack[category][point.series.columnIndex];
+        this.deepBlueService.setDataInfoSelected(bar_element);
 
         setTimeout(() => this.chart['reflow'](), 0);
     }
@@ -408,7 +408,7 @@ export class HistonesScreenComponent implements OnDestroy {
 
                     const aggr = { low: low, q1: q1, median: median, q3: q3, high: high, mean: mean, elements: values.length };
 
-                    value_by_stack[stack_pos].push({ biosource: biosource, value: aggr });
+                    value_by_stack[stack_pos].push({ biosource: biosource, value: aggr, results: results});
                 }
 
             }
@@ -423,8 +423,6 @@ export class HistonesScreenComponent implements OnDestroy {
             stack_values.sort((a: Object, b: Object) => {
                 return (<string>a['biosource']).localeCompare(b['biosource']);
             });
-
-            console.log(stack_values.map((m) => m['biosource']));
 
             for (let i = 0; i < stack_values.length; i++) {
                 const stack_value = stack_values[i];
@@ -454,8 +452,7 @@ export class HistonesScreenComponent implements OnDestroy {
             });
         }
 
-        //this.overlapbarchart.setNewData(categories, series, result_by_dataset_stack);
-        this.overlapbarchart.setNewData(categories, series);
+        this.overlapbarchart.setNewData(categories, series, result_by_dataset_stack);
     }
 
     selectExperimentBar(e) {
