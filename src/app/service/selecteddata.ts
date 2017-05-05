@@ -112,11 +112,17 @@ export class SelectedData implements OnDestroy {
   }
 
   getStacksTopOperation(): DeepBlueOperation[] {
-    const ops: DeepBlueOperation[] = [];
-    for (const stack of this._stacks) {
-      ops.push(stack.getCurrentOperation());
-    }
-    return ops;
+    return this._stacks.map((stack: DataStack) => stack.getCurrentOperation());
+  }
+
+  getStackPosByQueryId(query_id: string): number {
+    return this.getStacksTopOperation()
+      .map((stack: DeepBlueOperation) => stack.query_id)
+      .indexOf(query_id);
+  }
+
+  getStackname(pos: number): string {
+    return this._stacks[pos].name();
   }
 
   saveActiveStack() {

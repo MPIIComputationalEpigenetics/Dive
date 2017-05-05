@@ -196,6 +196,10 @@ export class DataStack {
         if (top === undefined) {
             return '(loading..)';
         }
-        return top.op.data.name;
+        if (this._data.length > 1) {
+            return top.op.data.name + ' (filtered)';
+        } else {
+            return top.op.data.name;
+        }
     }
 }
