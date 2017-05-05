@@ -86,7 +86,7 @@ import { MenuService } from 'app/service/menu';
 import { DeepBlueService } from 'app/service/deepblue';
 import { ProgressElement } from 'app/service/progresselement';
 
-import { OverlapsBarChartComponent } from 'app/view/screen/histones';
+import { OverlapsBarChartComponent } from 'app/view/component/charts/overlappingbar';
 
 import { FilteringComponent } from 'app/view/component/filtering';
 

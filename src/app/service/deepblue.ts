@@ -43,13 +43,13 @@ export class DataCache<T extends IKey, V extends ICloneable> {
     constructor(private _data: Map<string, V> = new Map()) { }
 
     put(key: T, value: V) {
-        let cloneValue = value.clone(-1);
+        const cloneValue = value.clone(-1);
         this._data.set(key.key(), cloneValue);
         console.log(this._data);
     }
 
     get(key: T, request_count: number): V {
-        let value: V = this._data.get(key.key());
+        const value: V = this._data.get(key.key());
         if (value) {
             console.log('cache hit', value);
             return value.clone(request_count);
@@ -64,15 +64,15 @@ export class MultiKeyDataCache<T extends IKey, V extends ICloneable> {
     constructor(private _data: Map<string, V> = new Map()) { }
 
     put(keys: T[], value: V) {
-        let key_value = keys.map((k) => k.key()).join();
-        let cloneValue = value.clone(-1);
+        const key_value = keys.map((k) => k.key()).join();
+        const cloneValue = value.clone(-1);
         this._data.set(key_value, cloneValue);
         console.log(this._data);
     }
 
     get(keys: T[], request_count: number): V {
-        let key_value = keys.map((k) => k.key()).join();
-        let value: V = this._data.get(key_value);
+        const key_value = keys.map((k) => k.key()).join();
+        const value: V = this._data.get(key_value);
         if (value) {
             console.log('multikey cache hit', value);
             return value.clone(request_count);
@@ -711,6 +711,21 @@ export class DeepBlueService {
         }
 
         return this.http.get(this.deepBlueUrl + '/composed_commands/count_overlaps', { 'search': params })
+            .map((res: Response) => {
+                const body = res.json();
+                const response: string = body[1] || '';
+                return response;
+            });
+    }
+
+    public composedCountGenesOverlaps(queries: DeepBlueOperation[], gene_model: GeneModel): Observable<string> {
+        const params: URLSearchParams = new URLSearchParams();
+        for (const query_op_id of queries) {
+            params.append('queries_id', query_op_id.query_id);
+        }
+        params.append('gene_model_name', gene_model.name);
+
+        return this.http.get(this.deepBlueUrl + '/composed_commands/count_genes_overlaps', { 'search': params })
             .map((res: Response) => {
                 const body = res.json();
                 const response: string = body[1] || '';

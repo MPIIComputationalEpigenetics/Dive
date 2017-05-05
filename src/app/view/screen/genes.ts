@@ -1,3 +1,4 @@
+import { DeepBlueMiddlewareOverlapResult } from '../../domain/operations';
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -15,9 +16,9 @@ import { DeepBlueService } from 'app/service/deepblue';
 import { SelectedData } from 'app/service/selecteddata';
 import { ProgressElement } from 'app/service/progresselement'
 
-import { OverlapsBarChartComponent } from 'app/view/screen/histones';
+import { OverlapsBarChartComponent } from 'app/view/component/charts/overlappingbar';
 
-import { DeepBlueOperation} from 'app/domain/operations';
+import { DeepBlueOperation } from 'app/domain/operations';
 import { DeepBlueResult } from 'app/domain/operations';
 
 @Component({
@@ -27,7 +28,7 @@ export class GenesScreen implements OnDestroy {
     errorMessage: string;
     geneModels: GeneModel[];
     menuGeneModel: SelectItem[];
-    selectedGeneModel:  SelectItem[];
+    selectedGeneModel: SelectItem[];
 
     genomeSubscription: Subscription;
 
@@ -46,7 +47,7 @@ export class GenesScreen implements OnDestroy {
         public progress_element: ProgressElement, private selectedData: SelectedData) {
 
         this.genomeSubscription = deepBlueService.genomeValue$.subscribe(genome => {
-            if (genome.id === "") {
+            if (genome.id === '') {
                 return;
             }
             this.deepBlueService.getGeneModels().subscribe((geneModels: GeneModel[]) => {
@@ -87,64 +88,52 @@ export class GenesScreen implements OnDestroy {
             return;
         }
 
+        this.current_request++;
+
+        // Each experiment is started, selected, overlaped, count, get request data (4 times each)
+        this.progress_element.reset(0, this.current_request);
+        this.currentlyProcessing = gene_model;
+        const start = new Date().getTime();
+
+        const current: DeepBlueOperation[] = this.selectedData.getStacksTopOperation();
+
+        this.deepBlueService.composedCountGenesOverlaps(current, gene_model).subscribe((request_id: string) => {
+            console.log('request_id from middleware', request_id);
+
+            this.deepBlueService.getComposedResultIterator(request_id, this.progress_element)
+                .subscribe((result: DeepBlueMiddlewareOverlapResult[]) => {
+                    const end = new Date().getTime();
+                    // Now calculate and output the difference
+                    console.log(end - start);
+                    this.currentlyProcessing = null;
+                    console.log(result);
+                    this.reloadPlot(result);
+                });
+        });
+
         if (gene_model === this.currentlyProcessing) {
             return;
         }
         this.current_request++;
         this.currentlyProcessing = gene_model;
+    }
 
-/*
+    reloadPlot(datum: DeepBlueMiddlewareOverlapResult[]) {
 
-        this.deepBlueService.selectGenes(gene_model, this.progress_element, this.current_request).subscribe((selected_genes: DeepBlueOperation) => {
-            if (selected_genes.request_count != this.current_request) {
-                return;
-            }
+        const series: Array<Object> = [];
 
-            // Aqui eu mudo, pego todos os current operations das stacks
-            let current: DeepBlueOperation[] = this.selectedData.getStacksTopOperation();
-
-            if (current == null) {
-                this.reloadPlot([]);
-                return;
-            }
-
-            this.deepBlueService.intersectWithSelected(current, [selected_genes], this.progress_element, this.current_request).subscribe((overlap_ids: DeepBlueOperation[]) => {
-                if (overlap_ids.length == 0) {
-                    this.reloadPlot([]);
-                    return;
-                }
-                if (overlap_ids[0].request_count != this.current_request) {
-                    return;
-                }
-
-                this.deepBlueService.countRegionsBatch(overlap_ids, this.progress_element, this.current_request).subscribe((datum: DeepBlueResult[]) => {
-
-                    if (datum.length == 0) {
-                        this.reloadPlot([]);
-                        return;
-                    }
-                    if (datum[0].request_count != this.current_request) {
-                        return;
-                    }
-
-                    this.currentlyProcessing = null;
-                    this.reloadPlot(datum);
-                })
+        datum.forEach((result: DeepBlueMiddlewareOverlapResult, index: number) => {
+            series.push({
+                type: 'column',
+                name: this.selectedData.getStackname(index),
+                data: [result.getCount()],
+                color: this.selectedData.getStackColor(index, '0.3')
             });
         });
 
-*/
-    }
+        const categories = datum.map((r: DeepBlueMiddlewareOverlapResult) => r.getFilterName());
 
-    reloadPlot(datum: Object[]) {
-        interface KeyValuePair extends Array<string | number | Object> { 0: string; 1: number; 2: Object }
-        let newdata: Array<KeyValuePair> = [];
-
-        datum.forEach((result: DeepBlueResult) => {
-            newdata.push([result["data"]["name"], result["result"]["count"], result["data"]]);
-        });
-
-        //this.overlapbarchart.setNewData(newdata);
+        this.overlapbarchart.setNewData(categories, series, null);
     }
 
     hasDataDetail(): boolean {
