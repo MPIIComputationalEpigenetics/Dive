@@ -26,15 +26,18 @@ export class MenuService {
     },
     {
       name: 'genes', label: 'Genes', icon: 'lens', routerLink: ['/genes']
-    }
+    },
+    {
+      name: 'go_enrichment', label: 'Gene Ontology', icon: 'view_quilt', routerLink: ['/go_enrichment']
+    },
   ];
 
   public menuItems = new BehaviorSubject<Object[]>(this.model);
   genomeValue$: Observable<Object[]> = this.menuItems.asObservable();
 
   findMenu(parentName: string): {} {
-    for (let subMenu of this.model) {
-      if (subMenu['name'] == parentName) {
+    for (const subMenu of this.model) {
+      if (subMenu['name'] === parentName) {
         return subMenu;
       }
     }
@@ -50,22 +53,22 @@ export class MenuService {
   }
 
   clean(parentName) {
-    let subMenu = this.findMenu(parentName);
+    const subMenu = this.findMenu(parentName);
     if (!subMenu) {
-      console.error("Sub Menu " + parentName + " not found");
+      console.error('Sub Menu ' + parentName + ' not found');
       return;
     }
     subMenu['items'] = [];
   }
 
   includeItem(parentName: string, label: string, icon: string, command, routerLink, url) {
-    let subMenu = this.findMenu(parentName);
+    const subMenu = this.findMenu(parentName);
     if (!subMenu) {
-      console.error("Sub Menu " + parentName + " not found");
+      console.error('Sub Menu ' + parentName + ' not found');
       return;
     }
 
-    let item = { 'label': label };
+    const item = { 'label': label };
     if (icon) {
       item['icon'] = icon;
     }
@@ -85,9 +88,9 @@ export class MenuService {
 
 
   includeObject(parentName: string, item: Object) {
-    let subMenu = this.findMenu(parentName);
+    const subMenu = this.findMenu(parentName);
     if (!subMenu) {
-      console.error("Sub Menu " + parentName + " not found");
+      console.error('Sub Menu ' + parentName + ' not found');
       return;
     }
     this.pushItem(subMenu, item);

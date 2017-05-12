@@ -45,7 +45,6 @@ export class HistonesScreenComponent implements OnDestroy {
     selectedExperimentsSource = new BehaviorSubject<IdName[]>([]);
     selectedExperimentsValue$: Observable<IdName[]> = this.selectedExperimentsSource.asObservable();
 
-
     selectedBioSourcesSource = new BehaviorSubject<IdName[]>([]);
     selectedBioSourcesValue$: Observable<IdName[]> = this.selectedBioSourcesSource.asObservable();
 
@@ -191,7 +190,7 @@ export class HistonesScreenComponent implements OnDestroy {
         this.deepBlueService.composedCountOverlaps(current, experiments).subscribe((request_id: string) => {
             console.log('request_id from middleware', request_id);
 
-            this.deepBlueService.getComposedResultIterator(request_id, this.progress_element)
+            this.deepBlueService.getComposedResultIterator(request_id, this.progress_element, 'overlaps')
                 .subscribe((result: DeepBlueMiddlewareOverlapResult[]) => {
                     const end = new Date().getTime();
                     // Now calculate and output the difference

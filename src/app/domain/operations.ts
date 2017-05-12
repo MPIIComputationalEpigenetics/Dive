@@ -58,7 +58,7 @@ export class DeepBlueRequest implements IKey {
         public command: string, public operation: DeepBlueOperation, public request_count: number) { }
 
     clone(request_count: number = -1): DeepBlueRequest {
-        return new DeepBlueRequest(this.data, this.request_id, this.command, this.operation, request_count)
+        return new DeepBlueRequest(this.data, this.request_id, this.command, this.operation, request_count);
     }
 
     key(): string {
@@ -143,4 +143,28 @@ export class DeepBlueMiddlewareOverlapResult {
         return this.count;
     }
 }
+
+export class DeepBlueMiddlewareGOEnrichtmentResult {
+
+    static fromObject(obj: Object): DeepBlueMiddlewareGOEnrichtmentResult {
+        return new DeepBlueMiddlewareGOEnrichtmentResult(obj['data_name'], obj['gene_model'],
+            obj['results']);
+    }
+
+    constructor(public data_name: string, public gene_model: string,
+        public results: Object[]) { }
+
+    getDataName(): string {
+        return this.data_name;
+    }
+
+    getGeneModel(): string {
+        return this.gene_model;
+    }
+
+    getResults(): Object[] {
+        return this.results;
+    }
+}
+
 

@@ -1,4 +1,4 @@
-import { DeepBlueMiddlewareOverlapResult } from '../../domain/operations';
+import { DeepBlueMiddlewareGOEnrichtmentResult, DeepBlueMiddlewareOverlapResult } from '../../domain/operations';
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -16,15 +16,13 @@ import { DeepBlueService } from 'app/service/deepblue';
 import { SelectedData } from 'app/service/selecteddata';
 import { ProgressElement } from 'app/service/progresselement';
 
-import { OverlapsBarChartComponent } from 'app/view/component/charts/overlappingbar';
-
 import { DeepBlueOperation } from 'app/domain/operations';
 import { DeepBlueResult } from 'app/domain/operations';
 
 @Component({
     templateUrl: './genes.html'
 })
-export class GenesScreen implements OnDestroy {
+export class GoEnrichmentScreen implements OnDestroy {
     errorMessage: string;
     geneModels: GeneModel[];
     menuGeneModel: SelectItem[];
@@ -32,7 +30,10 @@ export class GenesScreen implements OnDestroy {
 
     genomeSubscription: Subscription;
 
-    @ViewChild('overlapbarchart') overlapbarchart: OverlapsBarChartComponent;
+    enrichment_data: DeepBlueMiddlewareGOEnrichtmentResult[] = null;
+
+    columns: ['id', 'name', 'go_colocated', 'ration', 'p_value'];
+
     @ViewChild('geneModelDropdown') geneModelDropdown: Dropdown;
 
     selectedGeneModelSource = new BehaviorSubject<GeneModel>(null);
@@ -64,8 +65,8 @@ export class GenesScreen implements OnDestroy {
                 error => this.errorMessage = <any>error);
         });
 
-        this.selectedGeneModelValue$.debounceTime(250).subscribe(() => this.processOverlaps());
-        this.selectedData.getActiveTopStackValue().subscribe((dataStackItem: DataStackItem) => this.processOverlaps());
+        this.selectedGeneModelValue$.debounceTime(250).subscribe(() => this.processEnrichment());
+        this.selectedData.getActiveTopStackValue().subscribe((dataStackItem: DataStackItem) => this.processEnrichment());
     }
 
     selectGeneModel(event) {
@@ -73,7 +74,7 @@ export class GenesScreen implements OnDestroy {
         this.selectedGeneModelSource.next(event.value);
     }
 
-    processOverlaps() {
+    processEnrichment() {
         this.progress_element.reset(3, this.current_request);
 
         const gene_model = this.selectedGeneModelSource.getValue();
@@ -97,11 +98,11 @@ export class GenesScreen implements OnDestroy {
 
         const current: DeepBlueOperation[] = this.selectedData.getStacksTopOperation();
 
-        this.deepBlueService.composedCountGenesOverlaps(current, gene_model).subscribe((request_id: string) => {
+        this.deepBlueService.composedCalculateEnrichment(current, gene_model).subscribe((request_id: string) => {
             console.log('request_id from middleware', request_id);
 
-            this.deepBlueService.getComposedResultIterator(request_id, this.progress_element, 'overlaps')
-                .subscribe((result: DeepBlueMiddlewareOverlapResult[]) => {
+            this.deepBlueService.getComposedResultIterator(request_id, this.progress_element, 'go_enrichment')
+                .subscribe((result: DeepBlueMiddlewareGOEnrichtmentResult[]) => {
                     const end = new Date().getTime();
                     // Now calculate and output the difference
                     console.log(end - start);
@@ -118,22 +119,22 @@ export class GenesScreen implements OnDestroy {
         this.currentlyProcessing = gene_model;
     }
 
-    reloadPlot(datum: DeepBlueMiddlewareOverlapResult[]) {
+    reloadPlot(datum: DeepBlueMiddlewareGOEnrichtmentResult[]) {
+
+        debugger;
 
         const series: Array<Object> = [];
 
-        datum.forEach((result: DeepBlueMiddlewareOverlapResult, index: number) => {
+        datum.forEach((result: DeepBlueMiddlewareGOEnrichtmentResult, index: number) => {
             series.push({
                 type: 'column',
                 name: this.selectedData.getStackname(index),
-                data: [result.getCount()],
+                data: [result.getResults()],
                 color: this.selectedData.getStackColor(index, '0.3')
             });
         });
 
-        const categories = datum.map((r: DeepBlueMiddlewareOverlapResult) => r.getFilterName());
 
-        this.overlapbarchart.setNewData(categories, series, null);
     }
 
     hasDataDetail(): boolean {

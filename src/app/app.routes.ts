@@ -1,3 +1,4 @@
+import { GoEnrichmentScreen } from './view/screen/go_enrichment';
 import { Routes, RouterModule } from '@angular/router';
 import { ModuleWithProviders } from '@angular/core';
 import { SummaryScreen } from 'app/view/screen/summary';
@@ -9,7 +10,8 @@ export const routes: Routes = [
     { path: '', component: SummaryScreen },
     { path: 'regions', component: RegionsScreen },
     { path: 'histonemark', component: HistonesScreenComponent },
-    { path: 'genes', component: GenesScreen }
+    { path: 'genes', component: GenesScreen },
+    { path: 'go_enrichment', component: GoEnrichmentScreen }
 ];
 
 export const AppRoutes: ModuleWithProviders = RouterModule.forRoot(routes);

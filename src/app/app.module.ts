@@ -94,6 +94,8 @@ import { SummaryScreen } from 'app/view/screen/summary';
 import { RegionsScreen } from 'app/view/screen/regions';
 import { BioSourcesScreenComponent } from 'app/view/screen/biosources';
 import { GenesScreen } from 'app/view/screen/genes';
+import { GoEnrichmentScreen } from 'app/view/screen/go_enrichment';
+
 
 import {
     AnnotationListComponent,
@@ -209,6 +211,7 @@ import { AppComponent } from './app.component';
         BioSourcesScreenComponent,
         HistonesScreenComponent,
         GenesScreen,
+        GoEnrichmentScreen,
         SelectedDataView,
         SelectedDataButton
     ],

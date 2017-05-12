@@ -28,11 +28,11 @@ import { DeepBlueResult } from 'app/domain/operations';
 })
 export class RegionsScreen {
 
-    //regions: Regions;
+    // regions: Regions;
     topStackSubscription: Subscription;
 
-    columns = []
-    rows = []
+    columns = [];
+    rows = [];
 
     constructor(private deepBlueService: DeepBlueService,
         public progress_element: ProgressElement, private selectedData: SelectedData) {
@@ -41,14 +41,14 @@ export class RegionsScreen {
     }
 
     isInteger(column_name: string): boolean {
-        if (column_name == "CHROMOSOME") {
+        if (column_name === 'CHROMOSOME') {
             return false;
         }
 
-        if (column_name == "START") {
+        if (column_name === 'START') {
             return true;
         }
-        if (column_name == "END") {
+        if (column_name === 'END') {
             return true;
         }
 
@@ -56,15 +56,15 @@ export class RegionsScreen {
     }
 
     convert(value: string, column_type: string): Object {
-        if ((column_type == "string") || (column_type == "category")) {
+        if ((column_type === 'string') || (column_type === 'category')) {
             return value;
         }
 
-        if (column_type == "double") {
+        if (column_type === 'double') {
             return parseFloat(value);
         }
 
-        if (column_type == "integer") {
+        if (column_type === 'integer') {
             return parseInt(value);
         }
 
@@ -81,25 +81,25 @@ export class RegionsScreen {
         this.deepBlueService.getInfo(actualData.data.id).subscribe((info: FullMetadata) => {
             this.progress_element.reset(4, 0);
 
-            let format = info.format();
-            let columns_types = info.columns();
+            const format = info.format();
+            const columns_types = info.columns();
 
             this.deepBlueService.getRegions(actualData, format, this.progress_element, 0).subscribe((regions: DeepBlueResult) => {
                 this.progress_element.increment(0);
 
                 this.columns = format.split(",").map((c) => {
-                    return { 'name': c, 'prop': c.toLowerCase().replace("_", "") }
+                    return { 'name': c, 'prop': c.toLowerCase().replace('_', '') }
                 });
 
-                this.rows = regions.resultAsString().split("\n").map((x) => {
-                    let row_values = x.split("\t");
+                this.rows = regions.resultAsString().split('\n').map((x) => {
+                    let row_values = x.split('\t');
                     let row = {};
 
                     for (var idx in columns_types) {
-                        let column_name = columns_types[idx]["name"];
+                        let column_name = columns_types[idx]['name'];
                         let v = row_values[idx];
 
-                        row[column_name.toLowerCase().replace("_", "")] = this.convert(v, columns_types[idx]["column_type"])
+                        row[column_name.toLowerCase().replace('_', '')] = this.convert(v, columns_types[idx]['column_type'])
                     }
 
                     return row;
