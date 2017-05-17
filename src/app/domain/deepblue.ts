@@ -82,7 +82,7 @@ export class FullMetadata extends IdName {
         return this.values['format'];
     }
 
-    columns(): Object {
+    columns(): Object[] {
         return this.values['columns'];
     }
 }

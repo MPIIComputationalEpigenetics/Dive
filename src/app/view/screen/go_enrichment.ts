@@ -20,7 +20,7 @@ import { DeepBlueOperation } from 'app/domain/operations';
 import { DeepBlueResult } from 'app/domain/operations';
 
 @Component({
-    templateUrl: './genes.html'
+    templateUrl: './go_enrichment.html'
 })
 export class GoEnrichmentScreen implements OnDestroy {
     errorMessage: string;
@@ -30,9 +30,15 @@ export class GoEnrichmentScreen implements OnDestroy {
 
     genomeSubscription: Subscription;
 
-    enrichment_data: DeepBlueMiddlewareGOEnrichtmentResult[] = null;
+    enrichment_data: DeepBlueMiddlewareGOEnrichtmentResult[] = [];
 
-    columns: ['id', 'name', 'go_colocated', 'ration', 'p_value'];
+    columns = [
+        { name: 'id', prop: 'id', column_type: 'string' },
+        { name: 'name', prop: 'name', column_type: 'string' },
+        { name: 'go_colocated', prop: 'gocolocated', column_type: 'string' },
+        { name: 'ratio', prop: 'ratio', column_type: 'number' },
+        { name: 'p_value', prop: 'pvalue', column_type: 'number' }
+    ];
 
     @ViewChild('geneModelDropdown') geneModelDropdown: Dropdown;
 
@@ -119,9 +125,43 @@ export class GoEnrichmentScreen implements OnDestroy {
         this.currentlyProcessing = gene_model;
     }
 
+    convert(value: string, column_type: string): Object {
+        if ((column_type === 'string') || (column_type === 'category')) {
+            return value;
+        }
+
+        if (column_type === 'double') {
+            return parseFloat(value);
+        }
+
+        if (column_type === 'integer') {
+            return parseInt(value);
+        }
+
+        return value;
+    }
+
     reloadPlot(datum: DeepBlueMiddlewareGOEnrichtmentResult[]) {
 
-        debugger;
+        this.enrichment_data = [];
+
+        for (let pos = 0; pos < datum.length; pos++) {
+            const data = datum[pos];
+            const rows = data.results['enrichment']['go_terms'].map((x) => {
+
+                const row = {};
+
+                for (let idx = 0; idx < this.columns.length; idx++) {
+                    const column_name = this.columns[idx]['name'];
+                    const v = x[column_name];
+                    row[column_name.toLowerCase().replace('_', '')] = this.convert(v, this.columns[idx]['column_type'])
+                }
+
+                return row;
+            });
+
+            this.enrichment_data.push(rows);
+        }
 
         const series: Array<Object> = [];
 

@@ -73,7 +73,7 @@ export class RegionsScreen {
 
     processRegions() {
 
-        let actualData: DeepBlueOperation = this.selectedData.getActiveCurrentOperation();
+        const actualData: DeepBlueOperation = this.selectedData.getActiveCurrentOperation();
         if (actualData == null) {
             return;
         }
@@ -92,18 +92,18 @@ export class RegionsScreen {
                 });
 
                 this.rows = regions.resultAsString().split('\n').map((x) => {
-                    let row_values = x.split('\t');
-                    let row = {};
+                    const row_values = x.split('\t');
+                    const row = {};
 
-                    for (var idx in columns_types) {
-                        let column_name = columns_types[idx]['name'];
-                        let v = row_values[idx];
+                    for (let idx = 0; idx < columns_types.length; idx++) {
+                        const column_name = columns_types[idx]['name'];
+                        const v = row_values[idx];
 
                         row[column_name.toLowerCase().replace('_', '')] = this.convert(v, columns_types[idx]['column_type'])
                     }
 
                     return row;
-                })
+                });
 
                 this.progress_element.increment(0);
             })

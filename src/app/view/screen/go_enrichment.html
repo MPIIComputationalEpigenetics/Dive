@@ -1,7 +1,7 @@
 <div class="ui-fluid">
     <div [ngClass]="{'ui-g-12': true, 'ui-lg-10': (hasDataDetail()), 'ui-lg-12': (hasDataDetail() == false) }">
         <div class="card card-w-title">
-            <h1>Overlaping Genes with {{ deepBlueService.getAnnotation().name }}</h1>
+            <h1>GO enrichment</h1>
 
             <div class="ui-g form-group">
                 <div class="ui-g-12 ui-md-2">
@@ -14,25 +14,11 @@
                 </div>
             </div>
 
-
-
-            <div class="ui-g ui-fluid" *ngFor="let data of enrichment_data">
-                <div ngClass="ui-g-12">
-                    <div class="card card-w-title">
-                        <h1>Selected regions</h1>
-
-                        <ngx-datatable class='material' [rows]='data.results.enrichment.go_terms' [columns]="columns" [columnMode]="'force'" [headerHeight]="50"
-                            [footerHeight]="50" [rowHeight]="'auto'" [limit]="10">
-                        </ngx-datatable>
-
-                    </div>
-                </div>
-            </div>
-
-            <data-load-progress-bar #progressbar></data-load-progress-bar>
+            <li *ngFor="let data of enrichment_data">
+                <ngx-datatable class='material' [columns]="columns" [rows]='data' [columnMode]="'force'" [headerHeight]="50"
+                    [footerHeight]="50" [rowHeight]="'auto'" [limit]="50">
+                </ngx-datatable>
+            </li>
         </div>
-    </div>
-    <div *ngIf="hasDataDetail()" class="ui-g-12 ui-lg-2">
-        <app-data-info-box></app-data-info-box>
     </div>
 </div>
