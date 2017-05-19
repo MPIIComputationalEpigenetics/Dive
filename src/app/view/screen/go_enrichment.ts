@@ -35,9 +35,9 @@ export class GoEnrichmentScreen implements OnDestroy {
     columns = [
         { name: 'id', prop: 'id', column_type: 'string' },
         { name: 'name', prop: 'name', column_type: 'string' },
-        { name: 'go_colocated', prop: 'gocolocated', column_type: 'string' },
-        { name: 'ratio', prop: 'ratio', column_type: 'number' },
-        { name: 'p_value', prop: 'pvalue', column_type: 'number' }
+        { name: 'go_colocated', prop: 'gocolocated', column_type: 'integer' },
+        { name: 'ratio', prop: 'ratio', column_type: 'double' },
+        { name: 'p_value', prop: 'pvalue', column_type: 'double' }
     ];
 
     @ViewChild('geneModelDropdown') geneModelDropdown: Dropdown;
@@ -57,7 +57,7 @@ export class GoEnrichmentScreen implements OnDestroy {
             if (genome.id === '') {
                 return;
             }
-            this.deepBlueService.getGeneModels().subscribe((geneModels: GeneModel[]) => {
+            this.deepBlueService.getGeneModelsBySelectedGenome().subscribe((geneModels: GeneModel[]) => {
                 if (geneModels.length === 0) {
                     return;
                 }
@@ -126,16 +126,23 @@ export class GoEnrichmentScreen implements OnDestroy {
     }
 
     convert(value: string, column_type: string): Object {
+        debugger;
         if ((column_type === 'string') || (column_type === 'category')) {
             return value;
         }
 
         if (column_type === 'double') {
-            return parseFloat(value);
+            console.log(value);
+            if (value === "0") {
+                console.log(value);
+                console.log(Number(value));
+                console.log(Number(value).toExponential());
+            }
+            return Number(value);
         }
 
         if (column_type === 'integer') {
-            return parseInt(value);
+            return Number(value);
         }
 
         return value;
@@ -157,6 +164,7 @@ export class GoEnrichmentScreen implements OnDestroy {
                     row[column_name.toLowerCase().replace('_', '')] = this.convert(v, this.columns[idx]['column_type'])
                 }
 
+                debugger;
                 return row;
             });
 

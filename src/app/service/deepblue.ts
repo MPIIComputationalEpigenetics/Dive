@@ -660,6 +660,20 @@ export class DeepBlueService {
             .catch(this.handleError);
     }
 
+    getGeneModelsBySelectedGenome(): Observable<GeneModel[]> {
+        const params: URLSearchParams = new URLSearchParams();
+        params.set('genome', this.getGenome().name);
+        return this.http.get(this.deepBlueUrl + '/composed_commands/gene_models_by_genome', {'search': params})
+            .map((res: Response) => {
+                const body = res.json();
+                const data = body[1] || [];
+                return data.map((value) => {
+                    return new FullGeneModel(value['values']);
+                });
+            })
+            .catch(this.handleError);
+    }
+
     selectGenes(gene_model: IdName, progress_element: ProgressElement, request_count: number): Observable<DeepBlueOperation> {
         if (!gene_model) {
             return Observable.empty<DeepBlueOperation>();
