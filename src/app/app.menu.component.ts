@@ -51,7 +51,7 @@ export class AppMenuComponent {
 @Component({
     selector: '[app-submenu]',
     template: `
-        <template ngFor let-child let-i="index" [ngForOf]="(root ? item : item.items)">
+        <ng-template ngFor let-child let-i="index" [ngForOf]="(root ? item : item.items)">
             <li [ngClass]="{'active-menuitem': isActive(i)}" *ngIf="child.visible === false ? false : true">
 
                 <a [href]="child.url||'#'" (click)="itemClick($event,child,i)"
@@ -76,7 +76,7 @@ export class AppMenuComponent {
 
                 <ul app-submenu [item]="child" *ngIf="child.items" [@children]="isActive(i) ? 'visible' : 'hidden'" [visible]="isActive(i)" [reset]="reset"></ul>
             </li>
-        </template>
+        </ng-template>
     `,
     animations: [
         trigger('children', [
