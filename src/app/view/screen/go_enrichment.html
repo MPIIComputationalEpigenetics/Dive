@@ -4,21 +4,68 @@
             <h1>GO enrichment</h1>
 
             <div class="ui-g form-group">
-                <div class="ui-g-12 ui-md-2">
+                <div class="ui-g-12 ui-md-3">
                     <label for="input">Annotation Name</label>
                 </div>
-                <div class="ui-g-12 ui-md-4">
+                <div class="ui-g-12 ui-md-2">
                     <p-dropdown #geneModelDropdown [options]="menuGeneModel" [(ngModel)]="selectedGeneModel" filter="filter" [autoWidth]="false"
                         (onChange)="selectGeneModel($event)">
                     </p-dropdown>
                 </div>
             </div>
 
-            <li *ngFor="let data of enrichment_data">
-                <ngx-datatable class='material' [columns]="columns" [rows]='data' [columnMode]="'force'" [headerHeight]="50"
-                    [footerHeight]="50" [rowHeight]="'auto'" [limit]="50">
-                </ngx-datatable>
-            </li>
+            <div class="ui-g form-group">
+                <div class="ui-g-12 ui-md-3">
+                    <label for="input">Mimimum number of co-located GO terms</label>
+                </div>
+                <div class="ui-g-12 ui-md-2">
+                    <input type="text" pInputText [(ngModel)]="filter_go_colocated" placeholder="Mimimum number of co-located GO terms" (ngModelChange)="filter_enrichment_data($event)"
+                    />
+                </div>
+            </div>
+
+            <div class="ui-g form-group">
+                <div class="ui-g-12 ui-md-3">
+                    <label for="input">Minimum ratio</label>
+                </div>
+                <div class="ui-g-12 ui-md-2">
+                    <input type="text" pInputText [(ngModel)]="filter_ratio" placeholder="Mimimum ratio" (ngModelChange)="filter_enrichment_data($event)"
+                    />
+                </div>
+            </div>
+
+
+            <div class="ui-g form-group">
+                <div class="ui-g-12 ui-md-3">
+                    <label for="input">Maximum p-value</label>
+                </div>
+                <div class="ui-g-12 ui-md-2">
+                    <input type="text" pInputText [(ngModel)]="filter_p_value" placeholder="Maximum p-value" (ngModelChange)="filter_enrichment_data($event)"
+                    />
+                </div>
+            </div>
+
+            {{ filter_go_colocated }} {{ filter_ratio }} {{ filter_p_value }}
+
+            <div class="ui-g">
+
+                <div class="ui-g-8 ui-g-nopad">
+                    <div class="ui-g">
+                        <div class="ui-g-6">
+
+                            <li *ngFor="let data of enrichment_data">
+                                <ngx-datatable class='material' [columns]="columns" [rows]='data' [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50"
+                                    [rowHeight]="'auto'" [limit]="10">
+                                </ngx-datatable>
+                            </li>
+
+
+                        </div>
+                        <div class="ui-g-12">12</div>
+                    </div>
+                </div>
+                <div class="ui-g-4">4</div>
+            </div>
         </div>
     </div>
 </div>

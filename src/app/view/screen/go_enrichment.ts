@@ -30,7 +30,12 @@ export class GoEnrichmentScreen implements OnDestroy {
 
     genomeSubscription: Subscription;
 
-    enrichment_data: DeepBlueMiddlewareGOEnrichtmentResult[] = [];
+    enrichment_data: Object[][] = new Array<Object[]>();
+    enrichment_data_from_server: Object[][] = new Array<Object[]>();
+
+    filter_go_colocated = '0';
+    filter_ratio = '0';
+    filter_p_value = '1';
 
     columns = [
         { name: 'id', prop: 'id', column_type: 'string' },
@@ -75,8 +80,45 @@ export class GoEnrichmentScreen implements OnDestroy {
         this.selectedData.getActiveTopStackValue().subscribe((dataStackItem: DataStackItem) => this.processEnrichment());
     }
 
+    filter_enrichment_data(newvalue) {
+        const newResults = [];
+        for (let idx = 0; idx < this.enrichment_data_from_server.length; idx++) {
+            newResults.push(this.filter_enrichment_datei(this.enrichment_data_from_server[idx]));
+        }
+        this.enrichment_data = newResults;
+    }
+
+    filter_enrichment_datei(value: Object[]) {
+
+        let go_colocated = Number.MIN_SAFE_INTEGER;
+        if (this.filter_go_colocated) {
+            go_colocated = Number(this.filter_go_colocated);
+        }
+
+        let ratio = Number.MIN_SAFE_INTEGER;
+        if (this.filter_ratio) {
+            ratio = Number(this.filter_ratio);
+        }
+
+        let p_value = Number.MAX_SAFE_INTEGER;
+        if (this.filter_p_value) {
+            p_value = Number(this.filter_p_value);
+        }
+
+        const filtered_data = [];
+        for (let idx = 0; idx < value.length; idx++) {
+            const row = value[idx];
+
+            if ((row['gocolocated'] >= go_colocated) &&
+                (row['ratio'] >= ratio) &&
+                (row['pvalue'] <= p_value)) {
+                filtered_data.push(row);
+            }
+        }
+        return filtered_data;
+    }
+
     selectGeneModel(event) {
-        console.log(event.value);
         this.selectedGeneModelSource.next(event.value);
     }
 
@@ -126,18 +168,11 @@ export class GoEnrichmentScreen implements OnDestroy {
     }
 
     convert(value: string, column_type: string): Object {
-        debugger;
         if ((column_type === 'string') || (column_type === 'category')) {
             return value;
         }
 
         if (column_type === 'double') {
-            console.log(value);
-            if (value === "0") {
-                console.log(value);
-                console.log(Number(value));
-                console.log(Number(value).toExponential());
-            }
             return Number(value);
         }
 
@@ -150,7 +185,7 @@ export class GoEnrichmentScreen implements OnDestroy {
 
     reloadPlot(datum: DeepBlueMiddlewareGOEnrichtmentResult[]) {
 
-        this.enrichment_data = [];
+        this.enrichment_data_from_server = [];
 
         for (let pos = 0; pos < datum.length; pos++) {
             const data = datum[pos];
@@ -163,13 +198,13 @@ export class GoEnrichmentScreen implements OnDestroy {
                     const v = x[column_name];
                     row[column_name.toLowerCase().replace('_', '')] = this.convert(v, this.columns[idx]['column_type'])
                 }
-
-                debugger;
                 return row;
             });
 
-            this.enrichment_data.push(rows);
+            this.enrichment_data_from_server.push(rows);
         }
+
+        this.filter_enrichment_data(null);
 
         const series: Array<Object> = [];
 
