@@ -131,21 +131,21 @@ export class AnnotationListComponent implements OnDestroy {
 
 
         this.genomeSubscription = deepBlueService.genomeValue$.subscribe(genome => {
-            if (genome.id == null || genome.name == "") {
+            if (genome.id == null || genome.name == '') {
                 return;
             }
             this.deepBlueService.getAnnotations(genome).subscribe(annotations => {
-                if (annotations.length == 0) {
+                if (annotations.length === 0) {
                     return;
                 }
                 this.annotations = annotations;
                 this.menuAnnotations = annotations.map((annotation: Annotation) => {
                     let l = { label: annotation.name, value: annotation };
-                    if (l.label.toLowerCase().startsWith("cpg islands")) {
+                    if (l.label.toLowerCase().startsWith('cpg islands')) {
                         this.annotationsDropdown.selectItem(null, l);
                     }
 
-                    if (l.label.toLowerCase().startsWith("blueprint")) {
+                    if (l.label.toLowerCase().startsWith('blueprint')) {
                         this.annotationsDropdown.selectItem(null, l);
                     }
                     return l;
@@ -216,10 +216,13 @@ export class HistoneExperimentsMenu implements OnDestroy {
                 <div class="ui-helper-clearfix">
                     <span class="ui-panel-title" style="font-size:16px;display:inline-block;margin-top:2px">{{ dataStack.name() }}</span>
                     <p-splitButton [style]="{'float':'right'}" label="Remove" icon="fa-close" (onClick)="remove()" [model]="items"></p-splitButton>
+
+                    <!--
                     <input readonly [(colorPicker)]="dataStack.color"
                             [style.float]="'right'"
                             [style.background]="dataStack.color"
                             style="height: 38px; width: 100px; border: 0px; padding: 3px;"/>
+                    -->
                 </div>
             </p-header>
             <div class="dashboard">
@@ -266,12 +269,12 @@ export class SelectedDataButton implements OnInit {
     }
 
     save() {
-        console.log("save this stack");
+        console.log('save this stack');
     }
 
     remove() {
         this.selectedData.removeStack(this.dataStack);
-        console.log("remove this stack");
+        console.log('remove this stack');
     }
 
 }

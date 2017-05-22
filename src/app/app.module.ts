@@ -74,7 +74,9 @@ import { TooltipModule } from 'primeng/primeng';
 import { TreeModule } from 'primeng/primeng';
 import { TreeTableModule } from 'primeng/primeng';
 
-import { ColorPickerModule } from 'angular2-color-picker';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+//import { ColorPickerModule } from 'angular2-color-picker';
 
 import { AppMenuComponent, AppSubMenu } from './app.menu.component';
 import { AppTopBar } from './app.topbar.component';
@@ -188,8 +190,9 @@ import { AppComponent } from './app.component';
         TooltipModule,
         TreeModule,
         TreeTableModule,
-        ColorPickerModule,
-        ChartModule
+//        ColorPickerModule,
+        ChartModule,
+        BrowserAnimationsModule
     ],
     declarations: [
         AppComponent,
