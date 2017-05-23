@@ -1,5 +1,6 @@
+import { OverlapsBarChartComponent } from '../component/charts/overlappingbar';
 import { DeepBlueMiddlewareGOEnrichtmentResult, DeepBlueMiddlewareOverlapResult } from '../../domain/operations';
-import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 
 import { MultiSelect } from 'primeng/primeng';
@@ -20,9 +21,10 @@ import { DeepBlueOperation } from 'app/domain/operations';
 import { DeepBlueResult } from 'app/domain/operations';
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './go_enrichment.html'
 })
-export class GoEnrichmentScreen implements OnDestroy {
+export class GoEnrichmentScreenComponent implements OnDestroy {
     errorMessage: string;
     geneModels: GeneModel[];
     menuGeneModel: SelectItem[];
@@ -33,27 +35,21 @@ export class GoEnrichmentScreen implements OnDestroy {
     enrichment_data: Object[][] = new Array<Object[]>();
     enrichment_data_from_server: Object[][] = new Array<Object[]>();
 
-    filter_go_colocated = '0';
+    filter_go_overlap = '0';
     filter_ratio = '0';
-    filter_p_value = '1';
 
     columns = [
         { name: 'id', prop: 'id', column_type: 'string' },
         { name: 'name', prop: 'name', column_type: 'string' },
-        { name: 'go_colocated', prop: 'gocolocated', column_type: 'integer' },
-        { name: 'ratio', prop: 'ratio', column_type: 'double' },
-        { name: 'p_value', prop: 'pvalue', column_type: 'double' }
+        { name: 'go_overlap', prop: 'gooverlap', column_type: 'integer' },
+        { name: 'ratio', prop: 'ratio', column_type: 'double' }
     ];
 
     @ViewChild('geneModelDropdown') geneModelDropdown: Dropdown;
+    @ViewChild('overlapbarchart') overlapbarchart: OverlapsBarChartComponent;
 
     selectedGeneModelSource = new BehaviorSubject<GeneModel>(null);
     selectedGeneModelValue$: Observable<GeneModel> = this.selectedGeneModelSource.asObservable();
-
-    currentlyProcessing: GeneModel = null;
-    current_request = 0;
-    data: any;
-    hasData = false;
 
     constructor(private deepBlueService: DeepBlueService,
         public progress_element: ProgressElement, private selectedData: SelectedData) {
@@ -81,18 +77,22 @@ export class GoEnrichmentScreen implements OnDestroy {
     }
 
     filter_enrichment_data(newvalue) {
+
         const newResults = [];
         for (let idx = 0; idx < this.enrichment_data_from_server.length; idx++) {
-            newResults.push(this.filter_enrichment_datei(this.enrichment_data_from_server[idx]));
+            const x = this.filter_enrichment_datei(this.enrichment_data_from_server[idx]);
+            newResults.push(x);
         }
+
         this.enrichment_data = newResults;
+        this.plotBar();
     }
 
     filter_enrichment_datei(value: Object[]) {
 
-        let go_colocated = Number.MIN_SAFE_INTEGER;
-        if (this.filter_go_colocated) {
-            go_colocated = Number(this.filter_go_colocated);
+        let go_overlap = Number.MIN_SAFE_INTEGER;
+        if (this.filter_go_overlap) {
+            go_overlap = Number(this.filter_go_overlap);
         }
 
         let ratio = Number.MIN_SAFE_INTEGER;
@@ -100,22 +100,16 @@ export class GoEnrichmentScreen implements OnDestroy {
             ratio = Number(this.filter_ratio);
         }
 
-        let p_value = Number.MAX_SAFE_INTEGER;
-        if (this.filter_p_value) {
-            p_value = Number(this.filter_p_value);
-        }
-
         const filtered_data = [];
         for (let idx = 0; idx < value.length; idx++) {
             const row = value[idx];
 
-            if ((row['gocolocated'] >= go_colocated) &&
-                (row['ratio'] >= ratio) &&
-                (row['pvalue'] <= p_value)) {
+            if ((row['gooverlap'] >= go_overlap) &&
+                (row['ratio'] >= ratio)) {
                 filtered_data.push(row);
             }
         }
-        return filtered_data;
+        return filtered_data.sort((a: Object, b: Object) => b['gooverlap'] - a['gooverlap']);
     }
 
     selectGeneModel(event) {
@@ -123,25 +117,9 @@ export class GoEnrichmentScreen implements OnDestroy {
     }
 
     processEnrichment() {
-        this.progress_element.reset(3, this.current_request);
-
         const gene_model = this.selectedGeneModelSource.getValue();
 
-        if (gene_model == null) {
-            this.reloadPlot([]);
-            return;
-        }
-
-        if (gene_model !== this.selectedGeneModelSource.getValue()) {
-            this.reloadPlot([]);
-            return;
-        }
-
-        this.current_request++;
-
         // Each experiment is started, selected, overlaped, count, get request data (4 times each)
-        this.progress_element.reset(0, this.current_request);
-        this.currentlyProcessing = gene_model;
         const start = new Date().getTime();
 
         const current: DeepBlueOperation[] = this.selectedData.getStacksTopOperation();
@@ -152,19 +130,13 @@ export class GoEnrichmentScreen implements OnDestroy {
             this.deepBlueService.getComposedResultIterator(request_id, this.progress_element, 'go_enrichment')
                 .subscribe((result: DeepBlueMiddlewareGOEnrichtmentResult[]) => {
                     const end = new Date().getTime();
+                    console.log(result[0]['results']['enrichment']['go_terms'].length);
                     // Now calculate and output the difference
                     console.log(end - start);
-                    this.currentlyProcessing = null;
                     console.log(result);
-                    this.reloadPlot(result);
+                    this.prepare_data(result);
                 });
         });
-
-        if (gene_model === this.currentlyProcessing) {
-            return;
-        }
-        this.current_request++;
-        this.currentlyProcessing = gene_model;
     }
 
     convert(value: string, column_type: string): Object {
@@ -183,16 +155,16 @@ export class GoEnrichmentScreen implements OnDestroy {
         return value;
     }
 
-    reloadPlot(datum: DeepBlueMiddlewareGOEnrichtmentResult[]) {
+    prepare_data(datum: DeepBlueMiddlewareGOEnrichtmentResult[]) {
 
         this.enrichment_data_from_server = [];
 
         for (let pos = 0; pos < datum.length; pos++) {
             const data = datum[pos];
-            const rows = data.results['enrichment']['go_terms'].map((x) => {
-
+            const rows: Object[] = data.getResults()['enrichment']['go_terms'].filter((x) => {
+                return x['go_overlap'] !== 0
+            }).map((x) => {
                 const row = {};
-
                 for (let idx = 0; idx < this.columns.length; idx++) {
                     const column_name = this.columns[idx]['name'];
                     const v = x[column_name];
@@ -201,23 +173,67 @@ export class GoEnrichmentScreen implements OnDestroy {
                 return row;
             });
 
+            rows.sort((a: Object, b: Object) => b['go_overlap'] - a['go_overlap']);
+
             this.enrichment_data_from_server.push(rows);
         }
 
         this.filter_enrichment_data(null);
+    }
+
+    plotBar() {
+        const categories = [];
+        const categories_value = new Array<{}>();
+
+        for (let stack = 0; stack < this.enrichment_data.length; stack++) {
+            const data = this.enrichment_data[stack];
+            const values_by_category = {}
+
+            for (let term_pos = 0; term_pos < data.length; term_pos++) {
+                const term = data[term_pos];
+
+                const id = term['id'];
+                const name = term['name'];
+                const go_overlap = term['gooverlap'];
+
+                const category = name + ' (' + id + ')';
+
+                // If it is one of top 100 elements of the main stack
+                // or if its values was found in the top 100 elements of the main stack
+                if (stack === 0 && term_pos < 50) {
+                    categories.push(category);
+                    values_by_category[category] = go_overlap;
+                } else if (stack > 0 && categories.indexOf(category) !== -1) {
+                    console.log(values_by_category[category]);
+                    values_by_category[category] = go_overlap;
+                }
+            }
+
+            categories_value.push(values_by_category);
+        }
+
 
         const series: Array<Object> = [];
+        for (let stack_pos = 0; stack_pos < categories_value.length; stack_pos++) {
+            const stack_values_result: Array<number> = [];
+            const stack_categories_values = categories_value[stack_pos];
+            for (let cat_pos = 0; cat_pos < categories.length; cat_pos++) {
+                const category = categories[cat_pos];
+                if (stack_categories_values[category]) {
+                    stack_values_result.push(stack_categories_values[category]);
+                } else {
+                    stack_values_result.push(0)
+                }
+            }
 
-        datum.forEach((result: DeepBlueMiddlewareGOEnrichtmentResult, index: number) => {
             series.push({
                 type: 'column',
-                name: this.selectedData.getStackname(index),
-                data: [result.getResults()],
-                color: this.selectedData.getStackColor(index, '0.3')
+                name: this.selectedData.getStackname(stack_pos),
+                data: stack_values_result,
+                color: this.selectedData.getStackColor(stack_pos, '0.3')
             });
-        });
-
-
+        }
+        this.overlapbarchart.setNewData(categories, series, categories_value);
     }
 
     hasDataDetail(): boolean {
