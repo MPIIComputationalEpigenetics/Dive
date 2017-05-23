@@ -76,7 +76,7 @@ import { TreeTableModule } from 'primeng/primeng';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-//import { ColorPickerModule } from 'angular2-color-picker';
+// import { ColorPickerModule } from 'angular2-color-picker';
 
 import { AppMenuComponent, AppSubMenu } from './app.menu.component';
 import { AppTopBar } from './app.topbar.component';
@@ -96,7 +96,7 @@ import { SummaryScreen } from 'app/view/screen/summary';
 import { RegionsScreen } from 'app/view/screen/regions';
 import { BioSourcesScreenComponent } from 'app/view/screen/biosources';
 import { GenesScreen } from 'app/view/screen/genes';
-import { GoEnrichmentScreen } from 'app/view/screen/go_enrichment';
+import { GoEnrichmentScreenComponent } from 'app/view/screen/go_enrichment';
 
 
 import {
@@ -214,7 +214,7 @@ import { AppComponent } from './app.component';
         BioSourcesScreenComponent,
         HistonesScreenComponent,
         GenesScreen,
-        GoEnrichmentScreen,
+        GoEnrichmentScreenComponent,
         SelectedDataView,
         SelectedDataButton
     ],
