@@ -31,13 +31,9 @@ import { DataStack } from 'app/service/datastack';
 
             <li *ngFor="let result of results">
                 {{ result.filter_name }} - {{ result.count }}
+            <p><button pButton type="button" (click)="filterOverlapping(result)" label="Filter overlapping"></button>
+            <p><button pButton type="button" (click)="filterNonOverlapping(result)" label="Filter not-overlapping"></button>
             </li>
-
-
-            <!--
-            <p><button pButton type="button" (click)="filterOverlapping()" label="Filter overlapping"></button>
-            <p><button pButton type="button" (click)="filterNonOverlapping()" label="Filter not-overlapping"></button>
-            -->
         </div>
     `
 })
@@ -54,15 +50,17 @@ export class DataInfoBoxComponent implements OnDestroy {
             this.value = data['value'];
             this.results = data['results']
                 .sort((a: DeepBlueMiddlewareOverlapResult, b: DeepBlueMiddlewareOverlapResult) => a.getCount() - b.getCount());
+
+            console.log(this.results);
         });
     }
 
-    filterOverlapping() {
-        // this.selectedData.activeStackSubject.getValue().overlap(this.data.getDeepBlueResult().request.operation);
+    filterOverlapping(result: DeepBlueMiddlewareOverlapResult) {
+        this.selectedData.activeStackSubject.getValue().overlap(result.filterToDeepBlueOperation());
     }
 
-    filterNonOverlapping() {
-        // this.selectedData.activeStackSubject.getValue().non_overlap(this.data.getDeepBlueResult().request.operation);
+    filterNonOverlapping(result: DeepBlueMiddlewareOverlapResult) {
+        this.selectedData.activeStackSubject.getValue().non_overlap(result.filterToDeepBlueOperation());
     }
 
     getStackName(): string {

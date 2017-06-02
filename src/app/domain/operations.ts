@@ -142,6 +142,12 @@ export class DeepBlueMiddlewareOverlapResult {
     getCount(): number {
         return this.count;
     }
+
+    filterToDeepBlueOperation(): DeepBlueOperation {
+        return new DeepBlueOperation(
+            new IdName(this.filter_query, this.filter_name),
+            this.filter_query, 'Select Experiment Data', -1);
+    }
 }
 
 export class DeepBlueMiddlewareGOEnrichtmentResult {
