@@ -80,6 +80,7 @@ export class DataInfoBoxComponent implements OnDestroy {
             <filtering></filtering>
             <genome-selector></genome-selector>
             <histone-mark-selector></histone-mark-selector>
+            <css-selector></css-selector>
             `,
 })
 export class DiveStatus {
@@ -326,5 +327,48 @@ export class GenomeSelectorComponent implements OnInit {
 
     changeGenome(genome) {
         this.deepBlueService.setGenome(genome);
+    }
+}
+
+// Building Menu Items with Genome names
+// TODO: This component must be moved to a 'Dive main component', since it is not a visual component anymore
+
+@Component({
+    selector: 'css-selector',
+    template: ''
+})
+export class CSSExperimentsMenu implements OnInit, OnDestroy {
+    errorMessage: string;
+    selectHistones: EpigeneticMark[];
+    genomeSubscription: Subscription;
+
+    constructor(private deepBlueService: DeepBlueService, private menuService: MenuService) { }
+
+    ngOnInit() {
+        this.genomeSubscription = this.deepBlueService.genomeValue$.subscribe(genome => {
+            if (!(genome.id)) {
+                return;
+            }
+            this.deepBlueService.getChromatinStateSegments().subscribe((csss: string[]) => {
+                this.menuService.clean('css');
+                for (let css of csss) {
+                    this.menuService.includeItem('css', css[1], 'fiber_manual_record',
+                        (event) => { this.changeCss(css[0]) },
+                        ['/histonemark'], /* router link */
+                        null /* url */
+                    );
+                }
+            });
+        },
+            error => this.errorMessage = <any>error
+        );
+    }
+
+    changeCss(css) {
+        this.deepBlueService.setEpigeneticMark(css);
+    }
+
+    ngOnDestroy() {
+        this.genomeSubscription.unsubscribe();
     }
 }

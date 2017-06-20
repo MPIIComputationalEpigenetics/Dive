@@ -105,6 +105,7 @@ import {
     DiveStatus,
     GenomeSelectorComponent,
     HistoneExperimentsMenu,
+    CSSExperimentsMenu,
     SelectedDataView,
     SelectedDataButton
 } from 'app/view/component/deepblue';
@@ -207,6 +208,7 @@ import { AppComponent } from './app.component';
         AnnotationListComponent,
         GenomeSelectorComponent,
         HistoneExperimentsMenu,
+        CSSExperimentsMenu,
         FilteringComponent,
         DataInfoBoxComponent,
         SummaryScreen,

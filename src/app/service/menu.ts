@@ -21,7 +21,11 @@ export class MenuService {
       items: []
     },
     {
-      name: 'histones', label: 'Histone Modification ', icon: 'change_history',
+      name: 'histones', label: 'Histone Modification', icon: 'change_history',
+      items: []
+    },
+    {
+      name: 'css', label: 'Chromatin State Segmentation', icon: 'change_history',
       items: []
     },
     {

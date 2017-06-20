@@ -153,6 +153,15 @@ export class DeepBlueService {
 
     // Functions to select data from the Server
 
+    getChromosomes() : Observable<String[]> {
+        if (!this.getGenome()) {
+            return Observable.empty<String[]>();
+        }
+
+        const params: URLSearchParams = new URLSearchParams();
+        params.set('genome', this.getGenome().name);
+    }
+
     getHistones(): Observable<EpigeneticMark[]> {
         if (!this.getGenome()) {
             return Observable.empty<EpigeneticMark[]>();
@@ -163,6 +172,19 @@ export class DeepBlueService {
         params.set('type', 'peaks');
         return this.http.get(this.deepBlueUrl + '/collection_experiments_count', { 'search': params })
             .map(this.extractHistone)
+            .catch(this.handleError);
+    }
+
+    getChromatinStateSegments() : Observable<string[]> {
+        const params: URLSearchParams = new URLSearchParams();
+        params.set('genome', this.getGenome().name);
+        return this.http.get(this.deepBlueUrl + '/composed_commands/chromatin_states_by_genome', {'search': params})
+            .map((res: Response) => {
+                const body = res.json();
+                const data = body[1] || [];
+                // Remove the numbers and the _
+                return Object.keys(data.result.distinct).map((k) => [k, k.replace(/_/g, " ")]).sort();
+            })
             .catch(this.handleError);
     }
 
