@@ -4,6 +4,7 @@ import { ModuleWithProviders } from '@angular/core';
 import { SummaryScreen } from 'app/view/screen/summary';
 import { RegionsScreen } from 'app/view/screen/regions';
 import { HistonesScreenComponent } from 'app/view/screen/histones';
+import { ChromatinStatesScreenComponent } from 'app/view/screen/chromatin_states';
 import { GenesScreen } from 'app/view/screen/genes';
 
 export const routes: Routes = [
@@ -11,7 +12,8 @@ export const routes: Routes = [
     { path: 'regions', component: RegionsScreen },
     { path: 'histonemark', component: HistonesScreenComponent },
     { path: 'genes', component: GenesScreen },
-    { path: 'go_enrichment', component: GoEnrichmentScreenComponent }
+    { path: 'go_enrichment', component: GoEnrichmentScreenComponent },
+    { path: 'chromatin_states', component: ChromatinStatesScreenComponent }
 ];
 
 export const AppRoutes: ModuleWithProviders = RouterModule.forRoot(routes);

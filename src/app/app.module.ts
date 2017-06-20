@@ -120,6 +120,7 @@ export function highchartsFactory() {
 }
 
 import { AppComponent } from './app.component';
+import { ChromatinStatesScreenComponent } from "app/view/screen/chromatin_states";
 
 @NgModule({
     imports: [
@@ -215,6 +216,7 @@ import { AppComponent } from './app.component';
         RegionsScreen,
         BioSourcesScreenComponent,
         HistonesScreenComponent,
+        ChromatinStatesScreenComponent,
         GenesScreen,
         GoEnrichmentScreenComponent,
         SelectedDataView,

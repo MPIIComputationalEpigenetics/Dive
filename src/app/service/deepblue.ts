@@ -263,7 +263,7 @@ export class DeepBlueService {
         }).sort((a: IdName, b: IdName) => a.name.localeCompare(b.name));
     }
 
-    getExperiments(genome: Genome, epigenetic_mark: EpigeneticMark): Observable<IdName[]> {
+    getExperiments(genome: Genome, epigenetic_mark: EpigeneticMark | string): Observable<IdName[]> {
         if (!genome) {
             return Observable.empty<IdName[]>();
         }
@@ -272,10 +272,17 @@ export class DeepBlueService {
             return Observable.empty<IdName[]>();
         }
 
+        let epigenetic_mark_name = "";
+        if (epigenetic_mark instanceof EpigeneticMark) {
+            epigenetic_mark_name = epigenetic_mark.name;
+        } else {
+            epigenetic_mark_name = epigenetic_mark;
+        }
+
         const params: URLSearchParams = new URLSearchParams();
         params.set('genome', genome.name);
         params.set('type', 'peaks');
-        params.set('epigenetic_mark', epigenetic_mark.name);
+        params.set('epigenetic_mark', epigenetic_mark_name);
         return this.http.get(this.deepBlueUrl + '/list_experiments', { 'search': params })
             .map((res: Response) => {
                 const body = res.json();

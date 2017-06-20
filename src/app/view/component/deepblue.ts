@@ -354,7 +354,7 @@ export class CSSExperimentsMenu implements OnInit, OnDestroy {
                 for (let css of csss) {
                     this.menuService.includeItem('css', css[1], 'fiber_manual_record',
                         (event) => { this.changeCss(css[0]) },
-                        ['/histonemark'], /* router link */
+                        ['/chromatin_states'], /* router link */
                         null /* url */
                     );
                 }

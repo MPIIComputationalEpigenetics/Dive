@@ -1,0 +1,29 @@
+<div class="ui-g ui-fluid">
+    <div [ngClass]="{'ui-g-12': true, 'ui-lg-10': (hasDataDetail()), 'ui-lg-12': (hasDataDetail() == false) }">
+        <div class="card card-w-title">
+            <h1>Overlaping Chromatin State with {{ deepBlueService.getAnnotation().name }}</h1>
+            <p-multiSelect
+                #multiselect
+                [defaultLabel]="defaultSelectBiosourcesLabel"
+                [options]="biosourcesItems"
+                [(ngModel)]="selectedMultiSelectBiosources"
+                (onChange)="selectBiosources($event)">
+            </p-multiSelect>
+            <app-overlaps-bar-chart #overlapbarchart> </app-overlaps-bar-chart>
+            <data-load-progress-bar #progressbar></data-load-progress-bar>
+        </div>
+    </div>
+
+    <div *ngIf="hasDataDetail()" class="ui-g-12 ui-lg-2">
+        <app-data-info-box></app-data-info-box>
+    </div>
+
+    <div class="ui-g-12 ui-lg-6">
+        <div class="card card-w-title">
+            <h2>Displayed data</h2>
+            <ul>
+                <li *ngFor="let experiment of experiments"> {{ experiment.name }}({{ experiment.id }})   </li>
+            </ul>
+        </div>
+    </div>
+</div>
