@@ -31,6 +31,7 @@ import {
     DeepBlueParametersOperation,
     DeepBlueRequest,
     DeepBlueResult,
+    FilterParameter,
     StackValue
 } from '../domain/operations';
 
@@ -744,7 +745,7 @@ export class DeepBlueService {
         return Observable.throw(errMsg);
     }
 
-    public composedCountOverlaps(queries: DeepBlueOperation[], experiments: IdName[]): Observable<string> {
+    public composedCountOverlaps(queries: DeepBlueOperation[], experiments: IdName[], filters? : FilterParameter[]): Observable<string> {
         const params: URLSearchParams = new URLSearchParams();
         for (const query_op_id of queries) {
             params.append('queries_id', query_op_id.query_id);
@@ -752,6 +753,10 @@ export class DeepBlueService {
 
         for (const exp of experiments) {
             params.append('experiments_id', exp.id);
+        }
+
+        if (filters) {
+            params.append("filters", JSON.stringify(filters));
         }
 
         return this.http.get(this.deepBlueUrl + '/composed_commands/count_overlaps', { 'search': params })

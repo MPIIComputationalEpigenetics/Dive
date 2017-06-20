@@ -15,9 +15,11 @@ import { EpigeneticMark } from 'app/domain/deepblue';
 import { FullExperiment } from 'app/domain/deepblue';
 import { Genome } from 'app/domain/deepblue';
 import { IdName } from 'app/domain/deepblue';
+
 import { DeepBlueOperation } from 'app/domain/operations';
 import { DeepBlueResult } from 'app/domain/operations';
 import { StackValue } from 'app/domain/operations';
+import { FilterParameter } from 'app/domain/operations';
 
 import { DeepBlueService } from 'app/service/deepblue';
 import { DataStack } from 'app/service/datastack';
@@ -184,7 +186,8 @@ export class ChromatinStatesScreenComponent {
     const current: DeepBlueOperation[] = this.selectedData.getStacksTopOperation();
 
     debugger;
-    this.deepBlueService.composedCountOverlaps(current, experiments).subscribe((request_id: string) => {
+    let filter = new FilterParameter("NAME", "==", "8_Insulator", "string");
+    this.deepBlueService.composedCountOverlaps(current, experiments, [filter]).subscribe((request_id: string) => {
       console.log('request_id from middleware', request_id);
 
       this.deepBlueService.getComposedResultIterator(request_id, this.progress_element, 'overlaps')

@@ -173,4 +173,6 @@ export class DeepBlueMiddlewareGOEnrichtmentResult {
     }
 }
 
-
+export class FilterParameter {
+    constructor (public field : string, public operation : string, public value : string, public type : string) {}
+}
