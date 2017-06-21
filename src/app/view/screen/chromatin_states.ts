@@ -42,6 +42,8 @@ export class ChromatinStatesScreenComponent {
 
   defaultSelectBiosourcesLabel = 'Select the Biosource';
 
+  epigeneticMarkSubscription: Subscription;
+
   selectedExperimentsSource = new BehaviorSubject<IdName[]>([]);
   selectedExperimentsValue$: Observable<IdName[]> = this.selectedExperimentsSource.asObservable();
 
@@ -134,14 +136,16 @@ export class ChromatinStatesScreenComponent {
   constructor(private deepBlueService: DeepBlueService,
     public progress_element: ProgressElement, private selectedData: SelectedData) {
 
-    this.deepBlueService.getExperiments(deepBlueService.getGenome(), "Chromatin State Segmentation").subscribe(experiments_ids => {
-      const ids = experiments_ids.map((e) => e.id);
-      this.deepBlueService.getExperimentsInfos(ids).subscribe(full_info => {
-        this.experiments = <FullExperiment[]>full_info;
-        this.segregated_data = this.segregate(<FullExperiment[]>full_info);
-      });
-    },
-      error => this.errorMessage = <any>error);
+    this.epigeneticMarkSubscription = deepBlueService.epigeneticMarkValue$.subscribe(css => {
+      this.deepBlueService.getExperiments(deepBlueService.getGenome(), "Chromatin State Segmentation").subscribe(experiments_ids => {
+        const ids = experiments_ids.map((e) => e.id);
+        this.deepBlueService.getExperimentsInfos(ids).subscribe(full_info => {
+          this.experiments = <FullExperiment[]>full_info;
+          this.segregated_data = this.segregate(<FullExperiment[]>full_info);
+        });
+      },
+        error => this.errorMessage = <any>error);
+    });
 
     this.selectedExperimentsValue$.debounceTime(250).subscribe(() => this.processOverlaps());
     this.selectedData.getActiveTopStackValue().subscribe((dataStackItem) => this.processOverlaps());
@@ -185,8 +189,8 @@ export class ChromatinStatesScreenComponent {
 
     const current: DeepBlueOperation[] = this.selectedData.getStacksTopOperation();
 
-    debugger;
-    let filter = new FilterParameter("NAME", "==", "8_Insulator", "string");
+    let state = this.deepBlueService.epigeneticMarkSource.getValue();
+    let filter = new FilterParameter("NAME", "==", state.name, "string");
     this.deepBlueService.composedCountOverlaps(current, experiments, [filter]).subscribe((request_id: string) => {
       console.log('request_id from middleware', request_id);
 
@@ -325,5 +329,9 @@ export class ChromatinStatesScreenComponent {
 
   hasDataDetail(): boolean {
     return this.deepBlueService.getDataInfoSelected() != null;
+  }
+
+  ngOnDestroy() {
+    this.epigeneticMarkSubscription.unsubscribe();
   }
 }

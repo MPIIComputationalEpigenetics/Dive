@@ -365,7 +365,7 @@ export class CSSExperimentsMenu implements OnInit, OnDestroy {
     }
 
     changeCss(css) {
-        this.deepBlueService.setEpigeneticMark(css);
+        this.deepBlueService.setEpigeneticMark(new EpigeneticMark(["Chromatin State Segmentation", css]));
     }
 
     ngOnDestroy() {
