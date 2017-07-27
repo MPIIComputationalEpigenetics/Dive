@@ -789,7 +789,7 @@ export class DeepBlueService {
         }
         params.append('gene_model_name', gene_model.name);
 
-        return this.http.get(this.deepBlueUrl + '/composed_commands/calculate_enrichment', { 'search': params })
+        return this.http.get(this.deepBlueUrl + '/composed_commands/enrich_regions_go_terms', { 'search': params })
             .map((res: Response) => {
                 const body = res.json();
                 const response: string = body[1] || '';
