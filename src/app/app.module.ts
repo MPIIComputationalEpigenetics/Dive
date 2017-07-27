@@ -76,8 +76,6 @@ import { TreeTableModule } from 'primeng/primeng';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-// import { ColorPickerModule } from 'angular2-color-picker';
-
 import { AppMenuComponent, AppSubMenu } from './app.menu.component';
 import { AppTopBar } from './app.topbar.component';
 import { AppFooter } from './app.footer.component';
@@ -192,7 +190,6 @@ import { ChromatinStatesScreenComponent } from "app/view/screen/chromatin_states
         TooltipModule,
         TreeModule,
         TreeTableModule,
-//        ColorPickerModule,
         ChartModule,
         BrowserAnimationsModule
     ],
