@@ -105,41 +105,32 @@ export class AppSubMenu {
 
     constructor( @Inject(forwardRef(() => AppComponent)) public app: AppComponent, public router: Router, public location: Location) { }
 
-    itemClick(event: Event, item: MenuItem, index: number) {
-        // avoid processing disabled items
+    itemClick(event: Event, item: MenuItem, index: number)  {
+        //avoid processing disabled items
         if (item.disabled) {
             event.preventDefault();
             return true;
         }
 
-        // activate current item and deactivate active sibling if any
+        //activate current item and deactivate active sibling if any
         this.activeIndex = (this.activeIndex === index) ? null : index;
 
-        // execute command
+        //execute command
         if (item.command) {
-            if (!item.eventEmitter) {
-                item.eventEmitter = new EventEmitter();
-                item.eventEmitter.subscribe(item.command);
-            }
-
-            item.eventEmitter.emit({
-                originalEvent: event,
-                item: item
-            });
+            item.command({ originalEvent: event, item: item });
         }
 
-        // prevent hash change
+        //prevent hash change
         if (item.items || (!item.url && !item.routerLink)) {
             event.preventDefault();
         }
 
-        // hide menu
+        //hide menu
         if (!item.items) {
-            if (this.app.isHorizontal()) {
+            if (this.app.isHorizontal())
                 this.app.resetMenu = true;
-            } else {
+            else
                 this.app.resetMenu = false;
-            }
 
             this.app.overlayMenuActive = false;
             this.app.staticMenuMobileActive = false;
