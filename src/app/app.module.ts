@@ -92,13 +92,11 @@ import { FilteringComponent } from 'app/view/component/filtering';
 
 import { SummaryScreen } from 'app/view/screen/summary';
 import { RegionsScreen } from 'app/view/screen/regions';
-import { BioSourcesScreenComponent } from 'app/view/screen/biosources';
 import { GenesScreen } from 'app/view/screen/genes';
 import { GoEnrichmentScreenComponent } from 'app/view/screen/go_enrichment';
 
 
 import {
-    AnnotationListComponent,
     DataInfoBoxComponent,
     DiveStatus,
     GenomeSelectorComponent,
@@ -119,6 +117,8 @@ export function highchartsFactory() {
 
 import { AppComponent } from './app.component';
 import { ChromatinStatesScreenComponent } from "app/view/screen/chromatin_states";
+import { BioSourcesScreenComponent } from "app/view/component/biosources";
+import { AnnotationListComponent } from "app/view/component/annotation-selection";
 
 @NgModule({
     imports: [
