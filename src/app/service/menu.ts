@@ -34,6 +34,9 @@ export class MenuService {
     {
       name: 'go_enrichment', label: 'Gene Ontology', icon: 'view_quilt', routerLink: ['/go_enrichment']
     },
+    {
+      name: 'overlap_enrichment', label: 'Overlap Enrichment', icon: 'view_quilt', routerLink: ['/overlap_enrichment']
+    }
   ];
 
   public menuItems = new BehaviorSubject<Object[]>(this.model);

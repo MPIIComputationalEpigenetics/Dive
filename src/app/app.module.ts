@@ -94,6 +94,7 @@ import { SummaryScreen } from 'app/view/screen/summary';
 import { RegionsScreen } from 'app/view/screen/regions';
 import { GenesScreen } from 'app/view/screen/genes';
 import { GoEnrichmentScreenComponent } from 'app/view/screen/go_enrichment';
+import { OverlapEnrichmentScreenComponent } from 'app/view/screen/overlap_enrichment';
 
 
 import {
@@ -119,6 +120,7 @@ import { AppComponent } from './app.component';
 import { ChromatinStatesScreenComponent } from "app/view/screen/chromatin_states";
 import { BioSourcesScreenComponent } from "app/view/component/biosources";
 import { AnnotationListComponent } from "app/view/component/annotation-selection";
+import { SelectDeepBlueDataComponent } from "app/view/component/select-deepblue-data";
 
 @NgModule({
     imports: [
@@ -209,6 +211,7 @@ import { AnnotationListComponent } from "app/view/component/annotation-selection
         CSSExperimentsMenu,
         FilteringComponent,
         DataInfoBoxComponent,
+        SelectDeepBlueDataComponent,
         SummaryScreen,
         RegionsScreen,
         BioSourcesScreenComponent,
@@ -216,6 +219,7 @@ import { AnnotationListComponent } from "app/view/component/annotation-selection
         ChromatinStatesScreenComponent,
         GenesScreen,
         GoEnrichmentScreenComponent,
+        OverlapEnrichmentScreenComponent,
         SelectedDataView,
         SelectedDataButton
     ],
