@@ -18,7 +18,9 @@ import {
     FullMetadata,
     GeneModel,
     Genome,
-    IdName
+    IdName,
+    Technique,
+    Project
 } from '../domain/deepblue';
 
 import { IKey } from '../domain/interfaces';
@@ -142,7 +144,7 @@ export class DeepBlueService {
     }
 
 
-    getEpigeneticMark(): EpigeneticMark {
+    getSelectedEpigeneticMark(): EpigeneticMark {
         return this.epigeneticMarkSource.getValue();
     }
 
@@ -154,13 +156,26 @@ export class DeepBlueService {
 
     // Functions to select data from the Server
 
-    getChromosomes() : Observable<String[]> {
+    getChromosomes(): Observable<String[]> {
         if (!this.getGenome()) {
             return Observable.empty<String[]>();
         }
 
         const params: URLSearchParams = new URLSearchParams();
         params.set('genome', this.getGenome().name);
+    }
+
+    listEpigeneticMarks(): Observable<EpigeneticMark[]> {
+        if (!this.getGenome()) {
+            return Observable.empty<EpigeneticMark[]>();
+        }
+        const params: URLSearchParams = new URLSearchParams();
+        params.set('genome', this.getGenome().name);
+        params.set('controlled_vocabulary', 'epigenetic_marks');
+        params.set('type', 'peaks');
+        return this.http.get(this.deepBlueUrl + '/collection_experiments_count', { 'search': params })
+            .map(this.extractEpigeneticMarks)
+            .catch(this.handleError);
     }
 
     getHistones(): Observable<EpigeneticMark[]> {
@@ -176,10 +191,10 @@ export class DeepBlueService {
             .catch(this.handleError);
     }
 
-    getChromatinStateSegments() : Observable<string[]> {
+    getChromatinStateSegments(): Observable<string[]> {
         const params: URLSearchParams = new URLSearchParams();
         params.set('genome', this.getGenome().name);
-        return this.http.get(this.deepBlueUrl + '/composed_commands/chromatin_states_by_genome', {'search': params})
+        return this.http.get(this.deepBlueUrl + '/composed_commands/chromatin_states_by_genome', { 'search': params })
             .map((res: Response) => {
                 const body = res.json();
                 const data = body[1] || [];
@@ -189,9 +204,9 @@ export class DeepBlueService {
             .catch(this.handleError);
     }
 
-    getBioSources(): Observable<BioSource[]> {
+    listBioSources(): Observable<BioSource[]> {
         if (!this.getGenome()) {
-            return Observable.empty<EpigeneticMark[]>();
+            return Observable.empty<BioSource[]>();
         }
         const params: URLSearchParams = new URLSearchParams();
         params.set('genome', this.getGenome().name);
@@ -202,14 +217,93 @@ export class DeepBlueService {
             .catch(this.handleError);
     }
 
+    listTechniques(): Observable<Technique[]> {
+        if (!this.getGenome()) {
+            return Observable.empty<Technique[]>();
+        }
+        const params: URLSearchParams = new URLSearchParams();
+        params.set('genome', this.getGenome().name);
+        params.set('controlled_vocabulary', 'techniques');
+        params.set('type', 'peaks');
+        return this.http.get(this.deepBlueUrl + '/collection_experiments_count', { 'search': params })
+            .map(this.extractBioSources)
+            .catch(this.handleError);
+    }
+
+    listProjects(): Observable<Project[]> {
+        if (!this.getGenome()) {
+            return Observable.empty<Project[]>();
+        }
+        const params: URLSearchParams = new URLSearchParams();
+        params.set('genome', this.getGenome().name);
+        params.set('controlled_vocabulary', 'projects');
+        params.set('type', 'peaks');
+        return this.http.get(this.deepBlueUrl + '/collection_experiments_count', { 'search': params })
+            .map(this.extractProjects)
+            .catch(this.handleError);
+    }
+
+    listExperiments(epigenetic_marks: EpigeneticMark[], biosources: BioSource[], techniques: Technique[], projects: Project[]): Observable<Experiment[]> {
+        if (!this.getGenome()) {
+            return Observable.empty<Project[]>();
+        }
+        const params: URLSearchParams = new URLSearchParams();
+        params.set('genome', this.getGenome().name);
+        params.set('controlled_vocabulary', 'projects');
+        params.set('type', 'peaks');
+
+        epigenetic_marks.forEach(em => {
+            params.set("epigenetic_mark", em.name);
+        });
+
+        biosources.forEach(bs => {
+            params.set("biosource", bs.name);
+        });
+
+        techniques.forEach(tc => {
+            params.set("technique", tc.name);
+        });
+
+        projects.forEach(pj => {
+            params.set("project", pj.name);
+        });
+
+        return this.http.get(this.deepBlueUrl + '/list_experiments', { 'search': params })
+            .map(this.extractExperiments)
+            .catch(this.handleError);
+    }
+
     private extractBioSources(res: Response) {
         const body = res.json();
         const data = body[1] || [];
         return data.map((value) => {
             return new BioSource(value);
-        }).sort((a: IdName, b: IdName) => a.name.localeCompare(b.name));
+        }).sort((a: BioSource, b: BioSource) => a.name.localeCompare(b.name));
     }
 
+    private extractEpigeneticMarks(res: Response) {
+        const body = res.json();
+        const data = body[1] || [];
+        return data.map((value) => {
+            return new EpigeneticMark(value);
+        }).sort((a: EpigeneticMark, b: EpigeneticMark) => a.name.localeCompare(b.name));
+    }
+
+    private extractProjects(res: Response) {
+        const body = res.json();
+        const data = body[1] || [];
+        return data.map((value) => {
+            return new Project(value);
+        }).sort((a: Project, b: Project) => a.name.localeCompare(b.name));
+    }
+
+    private extractExperiments(res: Response) {
+        const body = res.json();
+        const data = body[1] || [];
+        return data.map((value) => {
+            return new Experiment(value);
+        }).sort((a: Experiment, b: Experiment) => a.name.localeCompare(b.name));
+    }
 
     private extractHistone(res: Response) {
         const body = res.json();
@@ -693,7 +787,7 @@ export class DeepBlueService {
     getGeneModelsBySelectedGenome(): Observable<GeneModel[]> {
         const params: URLSearchParams = new URLSearchParams();
         params.set('genome', this.getGenome().name);
-        return this.http.get(this.deepBlueUrl + '/composed_commands/gene_models_by_genome', {'search': params})
+        return this.http.get(this.deepBlueUrl + '/composed_commands/gene_models_by_genome', { 'search': params })
             .map((res: Response) => {
                 const body = res.json();
                 const data = body[1] || [];
@@ -745,7 +839,19 @@ export class DeepBlueService {
         return Observable.throw(errMsg);
     }
 
-    public composedCountOverlaps(queries: DeepBlueOperation[], experiments: IdName[], filters? : FilterParameter[]): Observable<string> {
+    public composedOverlapEnrichmentDatabase(gene_model: GeneModel): Observable<[string, string[]][]> {
+        const params: URLSearchParams = new URLSearchParams();
+        params.append('genome', gene_model.name);
+
+        return this.http.get(this.deepBlueUrl + '/composed_commands/get_enrichment_databases', { 'search': params })
+            .map((res: Response) => {
+                const body = res.json();
+                const response: [string, string[]][] = body || '';
+                return response;
+            });
+    }
+
+    public composedCountOverlaps(queries: DeepBlueOperation[], experiments: IdName[], filters?: FilterParameter[]): Observable<string> {
         const params: URLSearchParams = new URLSearchParams();
         for (const query_op_id of queries) {
             params.append('queries_id', query_op_id.query_id);
@@ -813,7 +919,7 @@ export class DeepBlueService {
 
     public getComposedResultIterator(request_id: string, progress_element: ProgressElement, request_type: string):
         Observable<DeepBlueMiddlewareOverlapResult[] | DeepBlueMiddlewareGOEnrichtmentResult[]> {
-        const pollSubject = new Subject<DeepBlueMiddlewareOverlapResult[]| DeepBlueMiddlewareGOEnrichtmentResult[]>();
+        const pollSubject = new Subject<DeepBlueMiddlewareOverlapResult[] | DeepBlueMiddlewareGOEnrichtmentResult[]>();
 
         const timer = Observable.timer(0, 400).concatMap(() => {
             return this.getComposedResult(request_id).map((data: [string, string | DeepBlueMiddlewareOverlapResult[]]) => {
