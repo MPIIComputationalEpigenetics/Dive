@@ -33,7 +33,7 @@ export class BioSourcesScreenComponent implements OnDestroy {
             if (genome.id === '') {
                 return;
             }
-            this.deepBlueService.getBioSources().subscribe(biosources => {
+            this.deepBlueService.listBioSources().subscribe(biosources => {
                 this.sourceBioSources = biosources;
             });
         });
