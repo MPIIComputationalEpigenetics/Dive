@@ -121,6 +121,7 @@ import { ChromatinStatesScreenComponent } from "app/view/screen/chromatin_states
 import { BioSourcesScreenComponent } from "app/view/component/biosources";
 import { AnnotationListComponent } from "app/view/component/annotation-selection";
 import { SelectDeepBlueDataComponent } from "app/view/component/select-deepblue-data";
+import { SelectTilingRegionsComponent } from "app/view/component/select-tiling-regions";
 
 @NgModule({
     imports: [
@@ -212,6 +213,7 @@ import { SelectDeepBlueDataComponent } from "app/view/component/select-deepblue-
         FilteringComponent,
         DataInfoBoxComponent,
         SelectDeepBlueDataComponent,
+        SelectTilingRegionsComponent,
         SummaryScreen,
         RegionsScreen,
         BioSourcesScreenComponent,

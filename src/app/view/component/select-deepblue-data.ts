@@ -1,18 +1,10 @@
-import {
-    Component,
-    ViewChild,
-    OnInit,
-    OnDestroy,
-} from '@angular/core';
-
-import { Subscription } from 'rxjs/Subscription';
+import { Component } from '@angular/core';
 
 import {
     Annotation,
     BioSource,
     EpigeneticMark,
     Experiment,
-    Genome,
     IdName,
     Technique,
     Project,
@@ -25,9 +17,7 @@ import { DeepBlueService } from 'app/service/deepblue';
     templateUrl: './select-deepblue-data.html'
 })
 
-export class SelectDeepBlueDataComponent implements OnDestroy {
-    genomeSubscription: Subscription;
-
+export class SelectDeepBlueDataComponent {
     all_epigenetic_marks = new Array<EpigeneticMark>();
     epigenetic_marks = new Array<EpigeneticMark>();
     epigenetic_marks_suggestions = new Array<EpigeneticMark>();
@@ -106,10 +96,6 @@ export class SelectDeepBlueDataComponent implements OnDestroy {
             this.deepBlueService.listExperiments(this.epigenetic_marks, this.biosources, this.techniques, this.projects).subscribe((exps: Experiment[]) => {
                 this.experiments = exps;
             }), 0);
-    }
-
-    ngOnDestroy() {
-        this.genomeSubscription.unsubscribe();
     }
 
     select_click() {
