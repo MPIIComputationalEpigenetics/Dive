@@ -17,19 +17,35 @@ export class IdNameCount extends IdName {
 
     constructor(data: string[]) {
         super(data[0], data[1]);
-        this.count = parseInt(data[2]);
+        if (data.length >= 2) {
+            this.count = parseInt(data[2]);
+        } else {
+            this.count = -1;
+        }
     }
 }
 
-export class EpigeneticMark extends IdName {
+export class EpigeneticMark extends IdNameCount {
     constructor(data: string[]) {
-        super(data[0], data[1]);
+        super(data);
     }
 }
 
-export class BioSource extends IdName {
+export class BioSource extends IdNameCount {
     constructor(data: string[]) {
-        super(data[0], data[1]);
+        super(data);
+    }
+}
+
+export class Technique extends IdNameCount {
+    constructor(data: string[]) {
+        super(data);
+    }
+}
+
+export class Project extends IdNameCount {
+    constructor(data: string[]) {
+        super(data);
     }
 }
 
