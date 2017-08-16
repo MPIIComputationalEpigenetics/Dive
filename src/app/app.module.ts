@@ -119,9 +119,10 @@ export function highchartsFactory() {
 import { AppComponent } from './app.component';
 import { ChromatinStatesScreenComponent } from "app/view/screen/chromatin_states";
 import { BioSourcesScreenComponent } from "app/view/component/biosources";
-import { AnnotationListComponent } from "app/view/component/annotation-selection";
 import { SelectTilingRegionsComponent } from "app/view/component/select-tiling-regions";
-import { SelectDeepBlueDataComponent } from "app/view/component/select-deepblue-experiments";
+import { SelectDeepBlueExperimentsComponent } from "app/view/component/select-deepblue-experiments";
+import { SelectDeepBlueAnnotationsComponent } from "app/view/component/select-deepblue-annotations";
+
 
 @NgModule({
     imports: [
@@ -206,13 +207,13 @@ import { SelectDeepBlueDataComponent } from "app/view/component/select-deepblue-
         DataStackViewComponent,
         DataLoadProgressBar,
         OverlapsBarChartComponent,
-        AnnotationListComponent,
         GenomeSelectorComponent,
         HistoneExperimentsMenu,
         CSSExperimentsMenu,
         FilteringComponent,
         DataInfoBoxComponent,
-        SelectDeepBlueDataComponent,
+        SelectDeepBlueAnnotationsComponent,
+        SelectDeepBlueExperimentsComponent,
         SelectTilingRegionsComponent,
         SummaryScreen,
         RegionsScreen,

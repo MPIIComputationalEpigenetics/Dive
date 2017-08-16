@@ -5,38 +5,11 @@ import { Subscription } from "rxjs";
 import { DeepBlueService } from "app/service/deepblue";
 import { SelectedData } from "app/service/selecteddata";
 
+
 @Component({
-    selector: 'select-annotation',
-    template: `
-                <div class="ui-g form-group">
-                    <div class="ui-g-4 ui-md-2">
-                        <label for="input">Annotation Name</label>
-                    </div>
-                    <div class="ui-g-4 ui-md-2">
-                        <p-dropdown
-                            #annotationsDropdown
-                            [options]="menuAnnotations"
-                            [(ngModel)]="selectedAnnotation"
-                            filter="filter"
-                            [autoWidth]="false"
-                        >
-                        </p-dropdown>
-                    </div>
-                    <div class="ui-g-4 ui-md-2">
-                        <button pButton type="button" icon="ui-icon-check-circle"
-                            label="Select Annotation"
-                            (click)="selectAnnotation($event)">
-                        </button>
-                    </div>
-                    <div class="ui-g-4 ui-md-2" [hidden]="!toCompare">
-                        <button pButton type="button" icon="ui-icon-check-circle"
-                            label="Select Annotation for Comparison"
-                            (click)="selectAnnotationForComparison($event)">
-                        </button>
-                    </div>
-                </div>
-        `})
-export class AnnotationListComponent implements OnDestroy {
+    selector: 'select-deepblue-annotations-component',
+    templateUrl: 'select-deepblue-annotations.html'})
+export class SelectDeepBlueAnnotationsComponent implements OnDestroy {
     errorMessage: string;
     annotations: Annotation[];
     menuAnnotations: SelectItem[];
