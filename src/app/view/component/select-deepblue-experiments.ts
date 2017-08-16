@@ -13,8 +13,8 @@ import {
 import { DeepBlueService } from 'app/service/deepblue';
 
 @Component({
-    selector: 'select-deepblue-data-component',
-    templateUrl: './select-deepblue-data.html'
+    selector: 'select-deepblue-experiments-component',
+    templateUrl: './select-deepblue-experiments.html'
 })
 
 export class SelectDeepBlueDataComponent {
