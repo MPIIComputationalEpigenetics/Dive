@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit, Input, OnDestroy } from '@angular/core';
+import { Component, ViewChild, OnInit, Input, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { Annotation } from "app/domain/deepblue";
 import { SelectItem, Dropdown } from "primeng/primeng";
 import { Subscription } from "rxjs";
@@ -28,7 +28,7 @@ import { SelectedData } from "app/service/selecteddata";
                             (click)="selectAnnotation($event)">
                         </button>
                     </div>
-                    <div class="ui-g-4 ui-md-2">
+                    <div class="ui-g-4 ui-md-2" [hidden]="!toCompare">
                         <button pButton type="button" icon="ui-icon-check-circle"
                             label="Select Annotation for Comparison"
                             (click)="selectAnnotationForComparison($event)">
@@ -43,10 +43,15 @@ export class AnnotationListComponent implements OnDestroy {
     selectedAnnotation: Annotation;
     genomeSubscription: Subscription;
 
+    @Input() toCompare: boolean;
+
+    @Output() annotationSelected = new EventEmitter();
+
+    @Output() comparedAnnotationSelected = new EventEmitter();
+
     @ViewChild('annotationsDropdown') annotationsDropdown: Dropdown;
 
     constructor(private deepBlueService: DeepBlueService, private selectedData: SelectedData) {
-
 
         this.genomeSubscription = deepBlueService.genomeValue$.subscribe(genome => {
             if (genome.id == null || genome.name == '') {
@@ -75,11 +80,11 @@ export class AnnotationListComponent implements OnDestroy {
     }
 
     selectAnnotation(event) {
-        this.deepBlueService.setAnnotation(this.selectedAnnotation);
+        this.annotationSelected.emit(this.selectedAnnotation);
     }
 
     selectAnnotationForComparison(event) {
-        this.selectedData.insertForComparison(this.selectedAnnotation);
+        this.comparedAnnotationSelected.emit(this.selectedAnnotation);
     }
 
     ngOnDestroy() {
