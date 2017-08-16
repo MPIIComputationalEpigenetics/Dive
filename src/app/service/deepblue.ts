@@ -204,6 +204,17 @@ export class DeepBlueService {
             .catch(this.handleError);
     }
 
+    getAnnotations(genome: Genome): Observable<Annotation[]> {
+        if (!genome) {
+            return Observable.empty<Annotation[]>();
+        }
+        const params: URLSearchParams = new URLSearchParams();
+        params.set('genome', genome.name);
+        return this.http.get(this.deepBlueUrl + '/list_annotations', { 'search': params })
+            .map(this.extractAnnotation)
+            .catch(this.handleError);
+    }
+
     listBioSources(): Observable<BioSource[]> {
         if (!this.getGenome()) {
             return Observable.empty<BioSource[]>();
@@ -273,6 +284,8 @@ export class DeepBlueService {
             .catch(this.handleError);
     }
 
+
+
     private extractBioSources(res: Response) {
         const body = res.json();
         const data = body[1] || [];
@@ -337,17 +350,6 @@ export class DeepBlueService {
         return data.map((value) => {
             return new Genome(value);
         }).sort((a: IdName, b: IdName) => a.name.localeCompare(b.name));
-    }
-
-    getAnnotations(genome): Observable<Annotation[]> {
-        if (!genome) {
-            return Observable.empty<Annotation[]>();
-        }
-        const params: URLSearchParams = new URLSearchParams();
-        params.set('genome', genome.name);
-        return this.http.get(this.deepBlueUrl + '/list_annotations', { 'search': params })
-            .map(this.extractAnnotation)
-            .catch(this.handleError);
     }
 
     private extractAnnotation(res: Response) {
