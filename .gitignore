@@ -43,3 +43,6 @@ out/chrome
 .sass-cache
 src/assets/layout/.sass-cache/
 src/assets/.sass-cache/
+.vscode/.ropeproject/objectdb
+.vscode/.ropeproject/objectdb
+.vscode/.ropeproject/config.py
