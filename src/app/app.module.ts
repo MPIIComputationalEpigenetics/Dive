@@ -120,8 +120,8 @@ import { AppComponent } from './app.component';
 import { ChromatinStatesScreenComponent } from "app/view/screen/chromatin_states";
 import { BioSourcesScreenComponent } from "app/view/component/biosources";
 import { SelectTilingRegionsComponent } from "app/view/component/select-tiling-regions";
-import { SelectDeepBlueExperimentsComponent } from "app/view/component/select-deepblue-experiments";
-import { SelectDeepBlueAnnotationsComponent } from "app/view/component/select-deepblue-annotations";
+import { SelectDeepBlueExperimentsComponent } from "app/view/component/select-experiments";
+import { SelectDeepBlueAnnotationsComponent } from "app/view/component/select-annotations";
 
 
 @NgModule({

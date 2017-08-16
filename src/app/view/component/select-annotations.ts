@@ -7,8 +7,8 @@ import { SelectedData } from "app/service/selecteddata";
 
 
 @Component({
-    selector: 'select-deepblue-annotations-component',
-    templateUrl: 'select-deepblue-annotations.html'})
+    selector: 'select-annotations-component',
+    templateUrl: 'select-annotations.html'})
 export class SelectDeepBlueAnnotationsComponent implements OnDestroy {
     errorMessage: string;
     annotations: Annotation[];
