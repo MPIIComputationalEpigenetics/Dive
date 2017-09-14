@@ -3,10 +3,29 @@
 
   <p-tabView>
     <p-tabPanel header="Experiments">
-      <select-deepblue-experiments-component></select-deepblue-experiments-component>
+        <select-experiments-component></select-experiments-component>
     </p-tabPanel>
+
+    <p-tabPanel header="Annotations">
+        <select-annotations-component [toCompare]="true" (annotationSelected)="selectAnnotation($event)" (comparedAnnotationSelected)="selectAnnotationForComparison($event)"></select-annotations-component>
+    </p-tabPanel>
+
     <p-tabPanel header="Tiling Regions">
-      <select-tiling-component></select-tiling-component>
+        <select-tiling-component></select-tiling-component>
     </p-tabPanel>
+
+    <p-tabPanel header="Query ID">
+
+    </p-tabPanel>
+
+    <p-tabPanel header="Genes">
+      <select-genes-component></select-genes-component>
+    </p-tabPanel>
+
+    <p-tabPanel header="Upload">
+
+    </p-tabPanel>
+
+
   </p-tabView>
 </div>
