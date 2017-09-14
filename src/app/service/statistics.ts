@@ -6,9 +6,6 @@ export class Statistics {
     if (arr.length === 0) {
       return 0;
     }
-    if (typeof p !== 'number') {
-      throw new TypeError('p must be a number');
-    }
 
     if (p <= 0) {
       return arr[0];
