@@ -960,5 +960,15 @@ export class DeepBlueService {
     }
 
 
+    public getComposedEnrichmentDatabases(genome: string): Observable<[string, string[]][]> {
+        const params: URLSearchParams = new URLSearchParams();
+        params.set('genome', genome);
+
+        return this.http.get(this.deepBlueUrl + '/composed_commands/get_enrichment_databases', { 'search': params })
+            .map((res: Response) => {
+                const body = res.json();
+                return body;
+            });
+    }
 
 }
