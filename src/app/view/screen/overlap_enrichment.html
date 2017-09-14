@@ -2,16 +2,21 @@
   <h1>Select the universe</h1>
 
   <p-tabView>
+
+    <p-tabPanel header="Datasets">
+      <select-datasets-component></select-datasets-component>
+    </p-tabPanel>
+
     <p-tabPanel header="Experiments">
-        <select-experiments-component></select-experiments-component>
+      <select-experiments-component></select-experiments-component>
     </p-tabPanel>
 
     <p-tabPanel header="Annotations">
-        <select-annotations-component [toCompare]="true" (annotationSelected)="selectAnnotation($event)" (comparedAnnotationSelected)="selectAnnotationForComparison($event)"></select-annotations-component>
+      <select-annotations-component [toCompare]="true" (annotationSelected)="selectAnnotation($event)" (comparedAnnotationSelected)="selectAnnotationForComparison($event)"></select-annotations-component>
     </p-tabPanel>
 
     <p-tabPanel header="Tiling Regions">
-        <select-tiling-component></select-tiling-component>
+      <select-tiling-component></select-tiling-component>
     </p-tabPanel>
 
     <p-tabPanel header="Query ID">

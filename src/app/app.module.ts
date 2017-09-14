@@ -123,6 +123,7 @@ import { SelectTilingRegionsComponent } from "app/view/component/select-tiling-r
 import { SelectExperimentsComponent } from "app/view/component/select-experiments";
 import { SelectAnnotationsComponent } from "app/view/component/select-annotations";
 import { SelectGenesComponent } from 'app/view/component/select-genes';
+import { SelectDatasetsComponent } from 'app/view/component/select-datasets';
 
 
 @NgModule({
@@ -214,6 +215,7 @@ import { SelectGenesComponent } from 'app/view/component/select-genes';
         FilteringComponent,
         DataInfoBoxComponent,
         SelectAnnotationsComponent,
+        SelectDatasetsComponent,
         SelectExperimentsComponent,
         SelectTilingRegionsComponent,
         SelectGenesComponent,

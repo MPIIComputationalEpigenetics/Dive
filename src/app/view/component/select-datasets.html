@@ -1,0 +1,8 @@
+<div class="content-section implementation">
+
+  <p>Selected Nodes: <span *ngFor="let dataset of selectedDatasets">{{dataset}} </span></p>
+  <p-treeTable [value]="datasets" selectionMode="checkbox" [(selection)]="selectedDatasets">
+    <p-column field="name" header="Name"></p-column>
+  </p-treeTable>
+
+</div>
