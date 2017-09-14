@@ -120,8 +120,9 @@ import { AppComponent } from './app.component';
 import { ChromatinStatesScreenComponent } from "app/view/screen/chromatin_states";
 import { BioSourcesScreenComponent } from "app/view/component/biosources";
 import { SelectTilingRegionsComponent } from "app/view/component/select-tiling-regions";
-import { SelectDeepBlueExperimentsComponent } from "app/view/component/select-experiments";
-import { SelectDeepBlueAnnotationsComponent } from "app/view/component/select-annotations";
+import { SelectExperimentsComponent } from "app/view/component/select-experiments";
+import { SelectAnnotationsComponent } from "app/view/component/select-annotations";
+import { SelectGenesComponent } from 'app/view/component/select-genes';
 
 
 @NgModule({
@@ -212,9 +213,10 @@ import { SelectDeepBlueAnnotationsComponent } from "app/view/component/select-an
         CSSExperimentsMenu,
         FilteringComponent,
         DataInfoBoxComponent,
-        SelectDeepBlueAnnotationsComponent,
-        SelectDeepBlueExperimentsComponent,
+        SelectAnnotationsComponent,
+        SelectExperimentsComponent,
         SelectTilingRegionsComponent,
+        SelectGenesComponent,
         SummaryScreen,
         RegionsScreen,
         BioSourcesScreenComponent,

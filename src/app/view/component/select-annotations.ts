@@ -9,7 +9,7 @@ import { SelectedData } from "app/service/selecteddata";
 @Component({
     selector: 'select-annotations-component',
     templateUrl: 'select-annotations.html'})
-export class SelectDeepBlueAnnotationsComponent implements OnDestroy {
+export class SelectAnnotationsComponent implements OnDestroy {
     errorMessage: string;
     annotations: Annotation[];
     menuAnnotations: SelectItem[];

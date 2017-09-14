@@ -17,7 +17,7 @@ import { DeepBlueService } from 'app/service/deepblue';
     templateUrl: './select-experiments.html'
 })
 
-export class SelectDeepBlueExperimentsComponent {
+export class SelectExperimentsComponent {
     all_epigenetic_marks = new Array<EpigeneticMark>();
     epigenetic_marks = new Array<EpigeneticMark>();
     epigenetic_marks_suggestions = new Array<EpigeneticMark>();
