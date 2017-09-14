@@ -20,7 +20,8 @@ import {
     Genome,
     IdName,
     Technique,
-    Project
+    Project,
+    Gene
 } from '../domain/deepblue';
 
 import { IKey } from '../domain/interfaces';
@@ -55,7 +56,6 @@ export class DataCache<T extends IKey, V extends ICloneable> {
     get(key: T, request_count: number): V {
         const value: V = this._data.get(key.key());
         if (value) {
-            console.log('cache hit', value);
             return value.clone(request_count);
         } else {
             return null;
@@ -946,6 +946,19 @@ export class DeepBlueService {
 
         return pollSubject;
     }
+
+    public getComposedListGenes(gene_model: string, gene_id_name: string): Observable<Gene[]> {
+        const params: URLSearchParams = new URLSearchParams();
+        params.set('gene_model', gene_model);
+        params.set('gene_id_name', gene_id_name);
+
+        return this.http.get(this.deepBlueUrl + '/composed_commands/list_genes', { 'search': params })
+            .map((res: Response) => {
+                const body = res.json();
+                return body;
+            });
+    }
+
 
 
 }
