@@ -1,4 +1,4 @@
-import { Component, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnDestroy, ViewChild, Output, EventEmitter } from '@angular/core';
 
 import {
     Annotation,
@@ -39,6 +39,8 @@ export class SelectGenesComponent implements OnDestroy {
     dt_selected_gene: Gene[] = [];
 
     genomeSubscription: Subscription;
+
+    @Output() queryIdSelected = new EventEmitter();
 
     datatable_columns = [
         { name: 'name', prop: 'data.gene_name', column_type: 'string' },

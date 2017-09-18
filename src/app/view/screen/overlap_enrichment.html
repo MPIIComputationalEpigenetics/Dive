@@ -1,22 +1,24 @@
 <div class="card card-w-title">
   <h1>Select the universe</h1>
 
+  <h1>{{ selected_data?.text() }} </h1>
+
   <p-tabView>
 
     <p-tabPanel header="Datasets">
-      <select-datasets-component></select-datasets-component>
+      <select-datasets-component (queryIdSelected)="selectQuery($event)"></select-datasets-component>
     </p-tabPanel>
 
     <p-tabPanel header="Experiments">
-      <select-experiments-component></select-experiments-component>
+      <select-experiments-component (queryIdSelected)="selectQuery($event)"></select-experiments-component>
     </p-tabPanel>
 
     <p-tabPanel header="Annotations">
-      <select-annotations-component [toCompare]="true" (annotationSelected)="selectAnnotation($event)" (comparedAnnotationSelected)="selectAnnotationForComparison($event)"></select-annotations-component>
+      <select-annotations-component [toCompare]="true" (queryIdSelected)="selectQuery($event)" (annotationSelected)="selectAnnotation($event)" (comparedAnnotationSelected)="selectAnnotationForComparison($event)"></select-annotations-component>
     </p-tabPanel>
 
     <p-tabPanel header="Tiling Regions">
-      <select-tiling-component></select-tiling-component>
+      <select-tiling-component (queryIdSelected)="selectQuery($event)"></select-tiling-component>
     </p-tabPanel>
 
     <p-tabPanel header="Query ID">
@@ -24,7 +26,7 @@
     </p-tabPanel>
 
     <p-tabPanel header="Genes">
-      <select-genes-component></select-genes-component>
+      <select-genes-component (queryIdSelected)="selectQuery($event)"></select-genes-component>
     </p-tabPanel>
 
     <p-tabPanel header="Upload">

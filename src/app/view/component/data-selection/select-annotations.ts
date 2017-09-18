@@ -8,7 +8,8 @@ import { SelectedData } from "app/service/selecteddata";
 
 @Component({
     selector: 'select-annotations-component',
-    templateUrl: 'select-annotations.html'})
+    templateUrl: 'select-annotations.html'
+})
 export class SelectAnnotationsComponent implements OnDestroy {
     errorMessage: string;
     annotations: Annotation[];
@@ -21,6 +22,8 @@ export class SelectAnnotationsComponent implements OnDestroy {
     @Output() annotationSelected = new EventEmitter();
 
     @Output() comparedAnnotationSelected = new EventEmitter();
+
+    @Output() queryIdSelected = new EventEmitter();
 
     @ViewChild('annotationsDropdown') annotationsDropdown: Dropdown;
 

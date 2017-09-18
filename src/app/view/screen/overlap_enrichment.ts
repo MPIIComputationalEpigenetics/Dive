@@ -19,6 +19,7 @@ import { ProgressElement } from 'app/service/progresselement';
 
 import { DeepBlueOperation } from 'app/domain/operations';
 import { DeepBlueResult } from 'app/domain/operations';
+import { IOperation } from 'app/domain/interfaces';
 
 @Component({
     selector: 'app-enrichment-database-component',
@@ -68,12 +69,20 @@ export class OverlapDatabaseSeletionComponent implements OnDestroy {
 })
 export class OverlapEnrichmentScreenComponent implements OnDestroy {
 
+    selected_data : IOperation;
+
     constructor(private deepBlueService: DeepBlueService,
         public progress_element: ProgressElement, private selectedData: SelectedData) {
 
     }
 
+    selectQuery(event) {
+        this.selected_data = event;
+        console.log(this.selected_data);
+    }
+
     ngOnDestroy() {
 
     }
+
 }

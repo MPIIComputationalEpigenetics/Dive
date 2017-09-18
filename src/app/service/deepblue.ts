@@ -35,7 +35,8 @@ import {
     DeepBlueRequest,
     DeepBlueResult,
     FilterParameter,
-    StackValue
+    StackValue,
+    DeepBlueTiling
 } from '../domain/operations';
 
 import { ProgressElement } from '../service/progresselement';
@@ -393,6 +394,24 @@ export class DeepBlueService {
 
     setSelectedBioSources(biosources: BioSource[]) {
         this.selectedBioSources.next(biosources);
+    }
+
+    tilingRegions(size: number, chromosomes: string[], progress_element: ProgressElement, request_count: number) : Observable<DeepBlueTiling> {
+        const params: URLSearchParams = new URLSearchParams();
+        params.set('size', size.toLocaleString());
+        for (let chromosome in chromosomes) {
+            params.set('chromosome', chromosome);
+        }
+
+        params.set('genome', this.getGenome().name);
+        return this.http.get(this.deepBlueUrl + '/tiling_regions', { 'search': params })
+            .map((res: Response) => {
+                const body = res.json();
+                const response: string = body[1] || '';
+                progress_element.increment(request_count);
+                return new DeepBlueTiling(size, this.getGenome().name, chromosomes, response, request_count);
+            })
+            .catch(this.handleError);
     }
 
 

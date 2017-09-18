@@ -10,6 +10,10 @@ export class IdName implements IKey {
     clone(): IdName {
         return new IdName(this.id, this.name);
     }
+
+    text() : string {
+        return this.name + "(" + this.id + ")";
+    }
 }
 
 export class IdNameCount extends IdName {

@@ -1,8 +1,8 @@
 import { ICloneable } from 'app/domain/interfaces';
-import { IKey } from 'app/domain/interfaces';
+import { IKey, IOperation } from 'app/domain/interfaces';
 import { IdName } from 'app/domain/deepblue';
 
-export class DeepBlueOperation implements IKey {
+export class DeepBlueOperation implements IOperation {
     constructor(public data: IdName, public query_id: string,
         public command: string, public request_count: number, public cached = false) { }
 
@@ -15,6 +15,40 @@ export class DeepBlueOperation implements IKey {
     }
 
     key(): string {
+        return this.query_id;
+    }
+
+    text() : string {
+        return this.command + " " + this.data.name;
+    }
+
+    queryId() : string {
+        return this.query_id;
+    }
+}
+
+export class DeepBlueTiling implements IOperation {
+    constructor(public size: number, public genome: string, public chromosomes: string[], public query_id: string,
+        public request_count: number, public cached = false) { }
+
+    clone(request_count: number = -1): DeepBlueTiling {
+        return new DeepBlueTiling(this.size, this.genome, this.chromosomes, this.query_id,
+            this.request_count, this.cached);
+    }
+
+    cacheIt(query_id: string): DeepBlueTiling {
+        return new DeepBlueTiling(this.size, this.genome, this.chromosomes, this.query_id, this.request_count, true);
+    }
+
+    key(): string {
+        return this.query_id;
+    }
+
+    text() : string {
+        return "Tiling regions of " + this.size;
+    }
+
+    queryId() : string {
         return this.query_id;
     }
 }
@@ -34,6 +68,10 @@ export class DeepBlueParametersOperation implements IKey {
     key(): string {
         return this.operation.key() + this.parameters.join();
     }
+
+    text() : string {
+        return this.command + "(" + this.parameters.join(",") + ") on " + this.operation;
+    }
 }
 
 export class DeepBlueMultiParametersOperation implements IKey {
@@ -51,6 +89,10 @@ export class DeepBlueMultiParametersOperation implements IKey {
     key(): string {
         return this.op_one.key() + this.op_two.key() + this.parameters.join();
     }
+
+    text() : string {
+        return this.command + "(" + this.parameters.join(",") + ") on " + this.op_one + " and " + this.op_two;
+    }
 }
 
 export class DeepBlueRequest implements IKey {
@@ -63,6 +105,10 @@ export class DeepBlueRequest implements IKey {
 
     key(): string {
         return this.request_id;
+    }
+
+    text() : string {
+        return "Request data: " + this.operation;
     }
 }
 
@@ -174,5 +220,5 @@ export class DeepBlueMiddlewareGOEnrichtmentResult {
 }
 
 export class FilterParameter {
-    constructor (public field : string, public operation : string, public value : string, public type : string) {}
+    constructor(public field: string, public operation: string, public value: string, public type: string) { }
 }

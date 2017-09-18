@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 
 import {
     Annotation,
@@ -33,6 +33,8 @@ export class SelectExperimentsComponent {
     all_projects = new Array<Project>();
     projects = new Array<Project>();
     projects_suggestions = new Array<Project>();
+
+    @Output() queryIdSelected = new EventEmitter();
 
     datatable_columns = [
         { name: 'id', prop: 'id', column_type: 'string' },

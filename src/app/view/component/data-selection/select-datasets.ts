@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 
 import {
   Annotation,
@@ -29,6 +29,8 @@ export class SelectDatasetsComponent {
   datasets : TreeNode[] = [];
   selectedDatasets: TreeNode[];
 
+  @Output() queryIdSelected = new EventEmitter();
+
   constructor(private deepBlueService: DeepBlueService) {
     this.genomeSubscription = deepBlueService.genomeValue$.subscribe(genome => {
       if (genome.id === '') {
@@ -36,6 +38,8 @@ export class SelectDatasetsComponent {
       }
       type Dataset = [string, string[]];
       this.deepBlueService.getComposedEnrichmentDatabases(genome.name).subscribe((datasets: Dataset[]) => {
+
+        console.log(datasets);
 
 
         this.datasets = <TreeNode[]>datasets.map((dataset: Dataset) => {
