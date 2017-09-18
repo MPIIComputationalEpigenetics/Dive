@@ -36,7 +36,8 @@ import {
     DeepBlueResult,
     FilterParameter,
     StackValue,
-    DeepBlueTiling
+    DeepBlueTiling,
+    DeepBlueGenes
 } from '../domain/operations';
 
 import { ProgressElement } from '../service/progresselement';
@@ -819,29 +820,24 @@ export class DeepBlueService {
             .catch(this.handleError);
     }
 
-    selectGenes(gene_model: IdName, progress_element: ProgressElement, request_count: number): Observable<DeepBlueOperation> {
+    selectGenes(genes: string[], gene_model: IdName, progress_element: ProgressElement, request_count: number): Observable<DeepBlueOperation> {
         if (!gene_model) {
             return Observable.empty<DeepBlueOperation>();
         }
 
-        if (this.idNamesQueryCache.get(gene_model, request_count)) {
-            console.log('selectGene hit');
-            progress_element.increment(request_count);
-            const cached_operation = this.idNamesQueryCache.get(gene_model, request_count);
-            return Observable.of(cached_operation);
-        }
-
         const params: URLSearchParams = new URLSearchParams();
         params.set('gene_model', gene_model.name);
+
+        for (let name in genes) {
+            params.set('genes', name);
+        }
+
         return this.http.get(this.deepBlueUrl + '/select_genes', { 'search': params })
             .map((res: Response) => {
                 const body = res.json();
                 const response: string = body[1] || '';
                 progress_element.increment(request_count);
-                return new DeepBlueOperation(gene_model, response, 'select_genes', request_count);
-            })
-            .do((operation) => {
-                this.idNamesQueryCache.put(gene_model, operation);
+                return new DeepBlueGenes(genes, gene_model, response, request_count);
             })
             .catch(this.handleError);
     }

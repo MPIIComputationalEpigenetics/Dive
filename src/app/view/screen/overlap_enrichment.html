@@ -14,7 +14,7 @@
     </p-tabPanel>
 
     <p-tabPanel header="Annotations">
-      <select-annotations-component [toCompare]="true" (queryIdSelected)="selectQuery($event)" (annotationSelected)="selectAnnotation($event)" (comparedAnnotationSelected)="selectAnnotationForComparison($event)"></select-annotations-component>
+      <select-annotations-component [toCompare]="false" (queryIdSelected)="selectQuery($event)"></select-annotations-component>
     </p-tabPanel>
 
     <p-tabPanel header="Tiling Regions">

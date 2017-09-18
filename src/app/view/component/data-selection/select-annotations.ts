@@ -3,7 +3,8 @@ import { Annotation } from "app/domain/deepblue";
 import { SelectItem, Dropdown } from "primeng/primeng";
 import { Subscription } from "rxjs";
 import { DeepBlueService } from "app/service/deepblue";
-import { SelectedData } from "app/service/selecteddata";
+import { ProgressElement } from 'app/service/progresselement';
+import { DeepBlueOperation } from 'app/domain/operations';
 
 
 @Component({
@@ -27,7 +28,7 @@ export class SelectAnnotationsComponent implements OnDestroy {
 
     @ViewChild('annotationsDropdown') annotationsDropdown: Dropdown;
 
-    constructor(private deepBlueService: DeepBlueService, private selectedData: SelectedData) {
+    constructor(private deepBlueService: DeepBlueService, private progress_element: ProgressElement) {
 
         this.genomeSubscription = deepBlueService.genomeValue$.subscribe(genome => {
             if (genome.id == null || genome.name == '') {
@@ -57,6 +58,10 @@ export class SelectAnnotationsComponent implements OnDestroy {
 
     selectAnnotation(event) {
         this.annotationSelected.emit(this.selectedAnnotation);
+
+        this.deepBlueService.selectAnnotation(this.selectedAnnotation, this.progress_element, 0).subscribe((operation: DeepBlueOperation) => {
+            this.queryIdSelected.emit(operation);
+        });
     }
 
     selectAnnotationForComparison(event) {

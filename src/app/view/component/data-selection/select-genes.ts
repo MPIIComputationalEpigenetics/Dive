@@ -15,6 +15,8 @@ import {
 import { DeepBlueService } from 'app/service/deepblue';
 import { Subscription } from 'rxjs';
 import { Dropdown } from 'primeng/primeng';
+import { ProgressElement } from 'app/service/progresselement';
+import { DeepBlueOperation } from 'app/domain/operations';
 
 @Component({
     selector: 'select-genes-component',
@@ -32,7 +34,6 @@ export class SelectGenesComponent implements OnDestroy {
 
     gene: Gene = null;
     genes_suggestions = new Array<Gene>();
-    gene_model = "";
 
     selected_genes: Gene[] = [];
 
@@ -47,7 +48,7 @@ export class SelectGenesComponent implements OnDestroy {
         { name: 'id', prop: 'data.gene_id', column_type: 'string' },
     ];
 
-    constructor(private deepBlueService: DeepBlueService) {
+    constructor(private deepBlueService: DeepBlueService, private progress_element: ProgressElement) {
         this.genomeSubscription = deepBlueService.genomeValue$.subscribe(genome => {
             if (genome.id === '') {
                 return;
@@ -79,6 +80,14 @@ export class SelectGenesComponent implements OnDestroy {
         console.log(this.selectedGeneModel.name, event.query);
         this.deepBlueService.getComposedListGenes(this.selectedGeneModel.name, event.query).subscribe((genes: Gene[]) => {
             this.genes_suggestions = genes
+        });
+    }
+
+    selectGenes(event) {
+        let gene_names = this.selected_genes.map((gene: Gene) => gene.name);
+        this.deepBlueService.selectGenes(gene_names, this.selectedGeneModel, this.progress_element, 0).subscribe((operation: DeepBlueOperation) => {
+            this.queryIdSelected.emit(operation);
+            console.log(operation);
         });
     }
 
