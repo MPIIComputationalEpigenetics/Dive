@@ -78,7 +78,7 @@ export class RegionsScreen {
             return;
         }
 
-        this.deepBlueService.getInfo(actualData.data.id).subscribe((info: FullMetadata) => {
+        this.deepBlueService.getInfo(actualData.dataId()).subscribe((info: FullMetadata) => {
             this.progress_element.reset(4, 0);
 
             const format = info.format();

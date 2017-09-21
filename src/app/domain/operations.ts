@@ -3,7 +3,7 @@ import { IKey, IOperation } from 'app/domain/interfaces';
 import { IdName, GeneModel } from 'app/domain/deepblue';
 
 export class DeepBlueOperation implements IOperation {
-    constructor(public data: IdName, public query_id: string,
+    constructor(public data: IdName | string[], public query_id: string,
         public command: string, public request_count: number, public cached = false) { }
 
     clone(request_count: number = -1): DeepBlueOperation {
@@ -18,8 +18,28 @@ export class DeepBlueOperation implements IOperation {
         return this.query_id;
     }
 
+    dataName() : string {
+        let data_name = "";
+        if (this.data instanceof IdName) {
+            data_name = (<IdName>this.data).name;
+        } else {
+            data_name = (<string[]>this.data).join(",");
+        }
+        return data_name;
+    }
+
+    dataId() : string {
+        let data_id = "";
+        if (this.data instanceof IdName) {
+            data_id = (<IdName>this.data).id;
+        } else {
+            data_id = (<string[]>this.data).join(",");
+        }
+        return data_id;
+    }
+
     text(): string {
-        return this.command + " " + this.data.name;
+        return this.command + " " + this.dataName();
     }
 
     queryId(): string {
@@ -121,7 +141,7 @@ export class DeepBlueMultiParametersOperation implements IKey {
 }
 
 export class DeepBlueRequest implements IKey {
-    constructor(public data: IdName, public request_id: string,
+    constructor(public data: IdName | string[], public request_id: string,
         public command: string, public operation: DeepBlueOperation, public request_count: number) { }
 
     clone(request_count: number = -1): DeepBlueRequest {
@@ -138,7 +158,7 @@ export class DeepBlueRequest implements IKey {
 }
 
 export class DeepBlueResult implements ICloneable {
-    constructor(public data: IdName, public result: Object, public request: DeepBlueRequest, public request_count: number) { }
+    constructor(public data: IdName | string[] , public result: Object, public request: DeepBlueRequest, public request_count: number) { }
 
     clone(request_count: number = -1): DeepBlueResult {
         return new DeepBlueResult(this.data, this.result, this.request, request_count);

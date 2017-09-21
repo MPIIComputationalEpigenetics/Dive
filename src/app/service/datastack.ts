@@ -92,7 +92,7 @@ export class DataStack {
                 this.deepBlueService.countRegionsRequest(cached_data, this.progress_element, request_count).subscribe((total) => {
                     const totalSelectedRegtions = total['result']['count'];
                     const dataStackItem: DataStackItem = new DataStackItem(cached_data, 'overlap',
-                        'Overlap with ' + operation.data.name + ' overlapping with XXX',
+                        'Overlap with ' + operation.dataName() + ' overlapping with XXX',
                         totalSelectedRegtions);
                     this._data.push(dataStackItem);
                     this.topStackSubject.next(dataStackItem);
@@ -117,7 +117,7 @@ export class DataStack {
                     this.deepBlueService.countRegionsRequest(cached_data, this.progress_element, request_count).subscribe((total) => {
                         const totalSelectedRegtions = total['result']['count'];
                         const dataStackItem: DataStackItem = new DataStackItem(cached_data, 'not-overlap',
-                            'Not-overlap with ' + operation.data.name + ' overlapping with XXX',
+                            'Not-overlap with ' + operation.dataName() + ' overlapping with XXX',
                             totalSelectedRegtions);
                         this._data.push(dataStackItem);
                         this.topStackSubject.next(dataStackItem);
@@ -197,9 +197,9 @@ export class DataStack {
             return '(loading..)';
         }
         if (this._data.length > 1) {
-            return top.op.data.name + ' (filtered)';
+            return top.op.dataName() + ' (filtered)';
         } else {
-            return top.op.data.name;
+            return top.op.dataName();
         }
     }
 }

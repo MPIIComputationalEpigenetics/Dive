@@ -397,10 +397,10 @@ export class DeepBlueService {
         this.selectedBioSources.next(biosources);
     }
 
-    tilingRegions(size: number, chromosomes: string[], progress_element: ProgressElement, request_count: number) : Observable<DeepBlueTiling> {
+    tilingRegions(size: number, chromosomes: string[], progress_element: ProgressElement, request_count: number): Observable<DeepBlueTiling> {
         const params: URLSearchParams = new URLSearchParams();
         params.set('size', size.toLocaleString());
-        for (let chromosome in chromosomes) {
+        for (let chromosome of chromosomes) {
             params.set('chromosome', chromosome);
         }
 
@@ -469,6 +469,29 @@ export class DeepBlueService {
             })
             .catch(this.handleError);
     }
+
+    selectExperiments(experiments: string[], progress_element: ProgressElement, request_count: number): Observable<DeepBlueOperation> {
+        if (!experiments || experiments.length == 0) {
+            return Observable.empty<DeepBlueOperation>();
+        }
+
+        const params: URLSearchParams = new URLSearchParams();
+        for (let experiment of experiments) {
+            console.log(experiment);
+            params.set('experiment_name', experiment);
+        }
+        params.set('genome', this.getGenome().name);
+
+        return this.http.get(this.deepBlueUrl + '/select_experiments', { 'search': params })
+            .map((res: Response) => {
+                const body = res.json();
+                const response: string = body[1] || '';
+                progress_element.increment(request_count);
+                return new DeepBlueOperation(experiments, response, 'select_experiment', request_count);
+            })
+            .catch(this.handleError);
+    }
+
 
     selectMultipleExperiments(experiments: IdName[],
         progress_element: ProgressElement, request_count: number): Observable<DeepBlueOperation[]> {
@@ -828,7 +851,7 @@ export class DeepBlueService {
         const params: URLSearchParams = new URLSearchParams();
         params.set('gene_model', gene_model.name);
 
-        for (let name in genes) {
+        for (let name of genes) {
             params.set('genes', name);
         }
 
