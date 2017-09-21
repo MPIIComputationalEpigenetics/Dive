@@ -36,3 +36,10 @@
 
   </p-tabView>
 </div>
+
+<div class="card card-w-title">
+  <h1>Select the datasets to be compared agains</h1>
+
+  <h1>{{ selected_data?.text() }} </h1>
+  <select-datasets-component (queryIdSelected)="selectQuery($event)"></select-datasets-component>
+</div>

@@ -1,6 +1,7 @@
 <div class="content-section implementation">
 
-  <p>Selected Nodes: <span *ngFor="let dataset of selectedDatasets">{{dataset}} </span></p>
+  <button pButton type="button" icon="ui-icon-check-circle" label="Select Datasets" (click)="selectDatasets($event)"></button>
+
   <p-treeTable [value]="datasets" selectionMode="checkbox" [(selection)]="selectedDatasets">
     <p-column field="name" header="Name"></p-column>
   </p-treeTable>

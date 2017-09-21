@@ -22,49 +22,6 @@ import { DeepBlueResult } from 'app/domain/operations';
 import { IOperation } from 'app/domain/interfaces';
 
 @Component({
-    selector: 'app-enrichment-database-component',
-    template: `
-    <div class="card card-w-title">
-        <h1>Select the databases that you wish to use for enrichment</h1>
-        <p-pickList #picklist
-                [source]="sourceDatabases"
-                [target]="targetDatabases"
-                sourceHeader="Available"
-                targetHeader="Selected"
-                [responsive]="true">
-
-            <ng-template let-database pTemplate="item">
-                <span>{{database[0]}} ({{database[1].length}})</span>
-            </ng-template>
-
-        </p-pickList>
-    </div>
-    `
-})
-export class OverlapDatabaseSeletionComponent implements OnDestroy {
-    genomeSubscription: Subscription;
-
-    sourceDatabases: [string, string[]][] = [];
-    targetDatabases: [string, string[]][] = [];
-
-    constructor(private deepBlueService: DeepBlueService) {
-        this.genomeSubscription = deepBlueService.genomeValue$.subscribe(genome => {
-            if (genome.id === '') {
-                return;
-            }
-            this.deepBlueService.composedOverlapEnrichmentDatabase(genome).subscribe(databases => {
-                this.sourceDatabases = databases;
-            });
-        });
-    }
-
-    ngOnDestroy() {
-        this.genomeSubscription.unsubscribe();
-    }
-}
-
-
-@Component({
     templateUrl: './overlap_enrichment.html'
 })
 export class OverlapEnrichmentScreenComponent implements OnDestroy {

@@ -13,6 +13,8 @@ import {
 import { DeepBlueService } from 'app/service/deepblue';
 import { Subscription } from 'rxjs';
 import { TreeNode } from 'primeng/primeng';
+import { ProgressElement } from 'app/service/progresselement';
+import { DeepBlueOperation } from 'app/domain/operations';
 
 @Component({
   selector: 'select-datasets-component',
@@ -26,12 +28,16 @@ export class SelectDatasetsComponent {
   ];
 
   genomeSubscription: Subscription;
-  datasets : TreeNode[] = [];
-  selectedDatasets: TreeNode[];
+  datasets: TreeNode[] = [];
+  selectedDatasets: TreeNode[] = [];
 
   @Output() queryIdSelected = new EventEmitter();
+  @Output() datasetsSelected = new EventEmitter();
 
-  constructor(private deepBlueService: DeepBlueService) {
+  JSON: any;
+
+  constructor(private deepBlueService: DeepBlueService, private progress_element: ProgressElement) {
+    this.JSON = JSON;
     this.genomeSubscription = deepBlueService.genomeValue$.subscribe(genome => {
       if (genome.id === '') {
         return;
@@ -51,21 +57,28 @@ export class SelectDatasetsComponent {
               return {
                 "data": {
                   "name": name,
+                  "parent": dataset[0],
                   "leaf": true
                 }
               }
             })
           }
         });
+      });
+
+    })
+  }
+
+  selectDatasets(event) {
+    let selected = this.selectedDatasets.filter((node: TreeNode) => node.data.leaf).map((node: TreeNode) => node.data.name);
+    this.deepBlueService.selectExperiments(selected, this.progress_element, 0).subscribe((op: DeepBlueOperation) => {
+      this.queryIdSelected.emit(op);
     });
+  }
 
-  })
-}
-
-
-ngOnDestroy() {
-  this.genomeSubscription.unsubscribe();
-}
+  ngOnDestroy() {
+    this.genomeSubscription.unsubscribe();
+  }
 
 
 }
