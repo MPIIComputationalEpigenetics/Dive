@@ -1,7 +1,7 @@
 import { DataLoadProgressBar } from '../view/component/progressbar';
 import { Injectable } from '@angular/core';
 
-import { Http, Response, URLSearchParams } from '@angular/http';
+import { Http, Response, Headers, URLSearchParams } from '@angular/http';
 
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
@@ -928,7 +928,7 @@ export class DeepBlueService {
             });
     }
 
-    public composedCalculateEnrichment(queries: DeepBlueOperation[], gene_model: GeneModel): Observable<string> {
+    public composedCalculateGenesEnrichment(queries: DeepBlueOperation[], gene_model: GeneModel): Observable<string> {
         const params: URLSearchParams = new URLSearchParams();
         for (const query_op_id of queries) {
             params.append('queries_id', query_op_id.query_id);
@@ -936,6 +936,24 @@ export class DeepBlueService {
         params.append('gene_model_name', gene_model.name);
 
         return this.http.get(this.deepBlueUrl + '/composed_commands/enrich_regions_go_terms', { 'search': params })
+            .map((res: Response) => {
+                const body = res.json();
+                const response: string = body[1] || '';
+                return response;
+            });
+    }
+
+    public composedCalculateOverlapsEnrichment(queries: DeepBlueOperation[], universe_id: string, datasets: Object): Observable<string> {
+        var headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+
+        let request = {
+            "queries_id": queries.map((op) => op.queryId()),
+            "universe_id": universe_id,
+            "datasets": datasets
+        }
+
+        return this.http.post(this.deepBlueUrl + '/composed_commands/enrich_regions_overlap', request, { headers: headers })
             .map((res: Response) => {
                 const body = res.json();
                 const response: string = body[1] || '';
