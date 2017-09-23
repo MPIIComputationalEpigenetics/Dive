@@ -124,7 +124,7 @@ export class GoEnrichmentScreenComponent implements OnDestroy {
 
         const current: DeepBlueOperation[] = this.selectedData.getStacksTopOperation();
 
-        this.deepBlueService.composedCalculateEnrichment(current, gene_model).subscribe((request_id: string) => {
+        this.deepBlueService.composedCalculateGenesEnrichment(current, gene_model).subscribe((request_id: string) => {
             console.log('request_id from middleware', request_id);
 
             this.deepBlueService.getComposedResultIterator(request_id, this.progress_element, 'go_enrichment')
