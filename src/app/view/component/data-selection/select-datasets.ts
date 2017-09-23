@@ -45,9 +45,6 @@ export class SelectDatasetsComponent {
       type Dataset = [string, string[]];
       this.deepBlueService.getComposedEnrichmentDatabases(genome.name).subscribe((datasets: Dataset[]) => {
 
-        console.log(datasets);
-
-
         this.datasets = <TreeNode[]>datasets.map((dataset: Dataset) => {
           return {
             "data": {
@@ -74,6 +71,27 @@ export class SelectDatasetsComponent {
     this.deepBlueService.selectExperiments(selected, this.progress_element, 0).subscribe((op: DeepBlueOperation) => {
       this.queryIdSelected.emit(op);
     });
+    this.buildDatasets();
+  }
+
+  buildDatasets() {
+    let actual = null;
+    let datasets = {}
+    for (let selected of this.selectedDatasets) {
+      if (selected.data.leaf) {
+        actual.data.push(selected.data.name);
+      } else {
+        if (actual) {
+          datasets[actual.name] = actual.data;
+        }
+        actual = { name: selected.data.name, data: [] }
+      }
+    }
+    if (actual) {
+      datasets[actual.name] = actual.data;
+    }
+
+    this.datasetsSelected.emit(datasets);
   }
 
   ngOnDestroy() {
