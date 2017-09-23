@@ -33,7 +33,6 @@
 
     </p-tabPanel>
 
-
   </p-tabView>
 </div>
 
@@ -41,5 +40,7 @@
   <h1>Select the datasets to be compared agains</h1>
 
   <h1>{{ selected_data?.text() }} </h1>
-  <select-datasets-component (queryIdSelected)="selectQuery($event)"></select-datasets-component>
+  <select-datasets-component (datasetsSelected)="selectDatasets($event)"></select-datasets-component>
+
+  <button pButton type="button" icon="ui-icon-check-circle" label="Enrich this shit" (click)="process($event)"></button>
 </div>

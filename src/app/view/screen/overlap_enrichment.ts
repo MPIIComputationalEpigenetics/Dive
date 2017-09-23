@@ -27,6 +27,7 @@ import { IOperation } from 'app/domain/interfaces';
 export class OverlapEnrichmentScreenComponent implements OnDestroy {
 
     selected_data : IOperation;
+    selected_datasets : Object;
 
     constructor(private deepBlueService: DeepBlueService,
         public progress_element: ProgressElement, private selectedData: SelectedData) {
@@ -36,6 +37,18 @@ export class OverlapEnrichmentScreenComponent implements OnDestroy {
     selectQuery(event) {
         this.selected_data = event;
         console.log(this.selected_data);
+    }
+
+    selectDatasets(event) {
+        this.selected_datasets = event;
+        console.log(this.selected_datasets);
+    }
+
+
+    process() {
+        const current: DeepBlueOperation[] = this.selectedData.getStacksTopOperation();
+
+        this.deepBlueService.composedCalculateOverlapsEnrichment(current, this.selected_data.queryId(), this.selected_datasets).subscribe((a) => console.log(a));
     }
 
     ngOnDestroy() {
