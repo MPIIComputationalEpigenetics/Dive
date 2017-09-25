@@ -399,11 +399,10 @@ export class DeepBlueService {
 
     tilingRegions(size: number, chromosomes: string[], progress_element: ProgressElement, request_count: number): Observable<DeepBlueTiling> {
         const params: URLSearchParams = new URLSearchParams();
-        params.set('size', size.toLocaleString());
+        params.set('size', size.toString());
         for (let chromosome of chromosomes) {
             params.set('chromosome', chromosome);
         }
-
         params.set('genome', this.getGenome().name);
         return this.http.get(this.deepBlueUrl + '/tiling_regions', { 'search': params })
             .map((res: Response) => {
