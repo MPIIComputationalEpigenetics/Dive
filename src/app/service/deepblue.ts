@@ -37,7 +37,8 @@ import {
     FilterParameter,
     StackValue,
     DeepBlueTiling,
-    DeepBlueGenes
+    DeepBlueGenes,
+    DeepBlueMiddlewareOverlapEnrichtmentResult
 } from '../domain/operations';
 
 import { ProgressElement } from '../service/progresselement';
@@ -975,8 +976,8 @@ export class DeepBlueService {
     }
 
     public getComposedResultIterator(request_id: string, progress_element: ProgressElement, request_type: string):
-        Observable<DeepBlueMiddlewareOverlapResult[] | DeepBlueMiddlewareGOEnrichtmentResult[]> {
-        const pollSubject = new Subject<DeepBlueMiddlewareOverlapResult[] | DeepBlueMiddlewareGOEnrichtmentResult[]>();
+        Observable<DeepBlueMiddlewareOverlapResult[] | DeepBlueMiddlewareGOEnrichtmentResult[] | DeepBlueMiddlewareOverlapEnrichtmentResult[]> {
+        const pollSubject = new Subject<DeepBlueMiddlewareOverlapResult[] | DeepBlueMiddlewareGOEnrichtmentResult[] | DeepBlueMiddlewareOverlapEnrichtmentResult[]>();
 
         const timer = Observable.timer(0, 400).concatMap(() => {
             return this.getComposedResult(request_id).map((data: [string, string | DeepBlueMiddlewareOverlapResult[]]) => {
@@ -989,6 +990,11 @@ export class DeepBlueService {
                     } else if (request_type === 'go_enrichment') {
                         pollSubject.next(
                             (<Object[]>(data[1])).map((ee) => DeepBlueMiddlewareGOEnrichtmentResult.fromObject(ee))
+                        );
+                    } else if (request_type === 'overlaps_enrichment') {
+                        debugger;
+                        pollSubject.next(
+                            (<Object[]>(data[1])).map((ee) => DeepBlueMiddlewareOverlapEnrichtmentResult.fromObject(ee))
                         );
                     }
                     pollSubject.complete();

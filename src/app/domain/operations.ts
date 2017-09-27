@@ -18,7 +18,7 @@ export class DeepBlueOperation implements IOperation {
         return this.query_id;
     }
 
-    dataName() : string {
+    dataName(): string {
         let data_name = "";
         if (this.data instanceof IdName) {
             data_name = (<IdName>this.data).name;
@@ -28,7 +28,7 @@ export class DeepBlueOperation implements IOperation {
         return data_name;
     }
 
-    dataId() : string {
+    dataId(): string {
         let data_id = "";
         if (this.data instanceof IdName) {
             data_id = (<IdName>this.data).id;
@@ -158,7 +158,7 @@ export class DeepBlueRequest implements IKey {
 }
 
 export class DeepBlueResult implements ICloneable {
-    constructor(public data: IdName | string[] , public result: Object, public request: DeepBlueRequest, public request_count: number) { }
+    constructor(public data: IdName | string[], public result: Object, public request: DeepBlueRequest, public request_count: number) { }
 
     clone(request_count: number = -1): DeepBlueResult {
         return new DeepBlueResult(this.data, this.result, this.request, request_count);
@@ -245,7 +245,7 @@ export class DeepBlueMiddlewareGOEnrichtmentResult {
 
     static fromObject(obj: Object): DeepBlueMiddlewareGOEnrichtmentResult {
         return new DeepBlueMiddlewareGOEnrichtmentResult(obj['data_name'], obj['gene_model'],
-            obj['results']);
+            obj['results'])
     }
 
     constructor(public data_name: string, public gene_model: string,
@@ -261,6 +261,49 @@ export class DeepBlueMiddlewareGOEnrichtmentResult {
 
     getResults(): Object[] {
         return this.results;
+    }
+}
+
+export class DeepBlueMiddlewareOverlapEnrichtmentResult {
+
+    static fromObject(obj: Object): DeepBlueMiddlewareOverlapEnrichtmentResult {
+        return new DeepBlueMiddlewareOverlapEnrichtmentResult(obj['data_name'], obj['universe_id'],
+            obj['results']['enrichment']['results'].map((obj: Object) => DeepBlueMiddlewareOverlapEnrichtmentResultItem.fromObject(obj)));
+    }
+
+    constructor(public data_name: string, public universe_id: string, public results: DeepBlueMiddlewareOverlapEnrichtmentResultItem[]) { }
+
+    getDataName(): string {
+        return this.data_name;
+    }
+
+    getUniverseId(): string {
+        return this.universe_id;
+    }
+
+    getResults(): DeepBlueMiddlewareOverlapEnrichtmentResultItem[] {
+        return this.results;
+    }
+}
+
+export class DeepBlueMiddlewareOverlapEnrichtmentResultItem {
+    static fromObject(obj: Object): DeepBlueMiddlewareOverlapEnrichtmentResultItem {
+        debugger;
+        return new DeepBlueMiddlewareOverlapEnrichtmentResultItem(
+            obj['dataset'], obj['description'], obj['experiment_size'], obj['database_name'],
+            obj['p_value_log'], obj['log_odds_ratio'], obj['support'],
+            obj['b'], obj['c'], obj['d'],
+            obj['support_rank'], obj['log_rank'], obj['odd_rank'],
+            obj['max_rank'], obj['mean_rank']);
+    }
+
+    constructor(public dataset: string, public description: string, public experiment_size: number, public database_name: string,
+        public p_value_log: number, public log_odds_ratio: number, public support: number,
+        public b: number, public c: number, public d: number,
+        public support_rank: number, public log_rank: number, public odd_rank: number,
+        public max_rank: number, public mean_rank: number) {
+        // JSON does not send infinity values, so we have to fix it manually.
+        this.p_value_log = this.p_value_log != null ? this.p_value_log : Infinity;
     }
 }
 

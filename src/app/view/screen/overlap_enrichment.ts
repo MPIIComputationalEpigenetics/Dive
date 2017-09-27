@@ -18,7 +18,7 @@ import { SelectedData } from 'app/service/selecteddata';
 import { ProgressElement } from 'app/service/progresselement';
 
 import { DeepBlueOperation } from 'app/domain/operations';
-import { DeepBlueResult } from 'app/domain/operations';
+import { DeepBlueResult, DeepBlueMiddlewareOverlapEnrichtmentResult } from 'app/domain/operations';
 import { IOperation } from 'app/domain/interfaces';
 
 @Component({
@@ -26,8 +26,8 @@ import { IOperation } from 'app/domain/interfaces';
 })
 export class OverlapEnrichmentScreenComponent implements OnDestroy {
 
-    selected_data : IOperation;
-    selected_datasets : Object;
+    selected_data: IOperation;
+    selected_datasets: Object;
 
     constructor(private deepBlueService: DeepBlueService,
         public progress_element: ProgressElement, private selectedData: SelectedData) {
@@ -48,7 +48,18 @@ export class OverlapEnrichmentScreenComponent implements OnDestroy {
     process() {
         const current: DeepBlueOperation[] = this.selectedData.getStacksTopOperation();
 
-        this.deepBlueService.composedCalculateOverlapsEnrichment(current, this.selected_data.queryId(), this.selected_datasets).subscribe((a) => console.log(a));
+        this.deepBlueService
+            .composedCalculateOverlapsEnrichment(current, this.selected_data.queryId(), this.selected_datasets)
+            .subscribe((request_id: string) => {
+                console.log('request_id from middleware', request_id);
+
+                this.deepBlueService.getComposedResultIterator(request_id, this.progress_element, 'overlaps_enrichment')
+                    .subscribe((result: DeepBlueMiddlewareOverlapEnrichtmentResult[]) => {
+                        debugger;
+                        console.log(result);
+                    });
+            });
+
     }
 
     ngOnDestroy() {
