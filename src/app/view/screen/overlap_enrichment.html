@@ -44,3 +44,11 @@
 
   <button pButton type="button" icon="ui-icon-check-circle" label="Enrich this shit" (click)="process($event)"></button>
 </div>
+
+<div class="card card-w-title">
+  <h1>Shit</h1>
+  <div *ngFor="let data of enrichment_data; let i = index">
+    <h2> {{ selectedData.getStackname(i) }} </h2>
+    <ngx-datatable class='material' [columns]="columns" [rows]='data' [columnMode]="'force'" [limit]="50"></ngx-datatable>
+  </div>
+</div>

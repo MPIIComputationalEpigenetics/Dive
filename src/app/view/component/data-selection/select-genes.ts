@@ -92,7 +92,6 @@ export class SelectGenesComponent implements OnDestroy {
     }
 
     handle_dropdown_genes(event) {
-        debugger;
     }
 
     content_changed() {
@@ -102,7 +101,6 @@ export class SelectGenesComponent implements OnDestroy {
     }
 
     select_click() {
-        debugger;
         console.log(this.gene);
     }
 

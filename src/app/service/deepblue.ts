@@ -992,7 +992,6 @@ export class DeepBlueService {
                             (<Object[]>(data[1])).map((ee) => DeepBlueMiddlewareGOEnrichtmentResult.fromObject(ee))
                         );
                     } else if (request_type === 'overlaps_enrichment') {
-                        debugger;
                         pollSubject.next(
                             (<Object[]>(data[1])).map((ee) => DeepBlueMiddlewareOverlapEnrichtmentResult.fromObject(ee))
                         );

@@ -288,7 +288,6 @@ export class DeepBlueMiddlewareOverlapEnrichtmentResult {
 
 export class DeepBlueMiddlewareOverlapEnrichtmentResultItem {
     static fromObject(obj: Object): DeepBlueMiddlewareOverlapEnrichtmentResultItem {
-        debugger;
         return new DeepBlueMiddlewareOverlapEnrichtmentResultItem(
             obj['dataset'], obj['description'], obj['experiment_size'], obj['database_name'],
             obj['p_value_log'], obj['log_odds_ratio'], obj['support'],
@@ -304,6 +303,26 @@ export class DeepBlueMiddlewareOverlapEnrichtmentResultItem {
         public max_rank: number, public mean_rank: number) {
         // JSON does not send infinity values, so we have to fix it manually.
         this.p_value_log = this.p_value_log != null ? this.p_value_log : Infinity;
+    }
+
+    static asColumns() {
+        return [
+            { name: 'dataset', prop: 'dataset', column_type: 'string' },
+            { name: 'description', prop: 'description', column_type: 'string' },
+            { name: 'experiment_size', prop: 'experimentsize', column_type: 'integer' },
+            { name: 'database_name', prop: 'databasename', column_type: 'string' },
+            { name: 'p_value_log', prop: 'pvaluelog', column_type: 'double' },
+            { name: 'log_odds_ratio', prop: 'logoddsratio', column_type: 'double' },
+            { name: 'support', prop: 'support', column_type: 'integer' },
+            { name: 'b', prop: 'b', column_type: 'integer' },
+            { name: 'c', prop: 'c', column_type: 'integer' },
+            { name: 'd', prop: 'd', column_type: 'integer' },
+            { name: 'support_rank', prop: 'supportrank', column_type: 'integer' },
+            { name: 'log_rank', prop: 'logrank', column_type: 'integer' },
+            { name: 'odd_rank', prop: 'oddrank', column_type: 'integer' },
+            { name: 'max_rank', prop: 'maxrank', column_type: 'integer' },
+            { name: 'mean_rank', prop: 'meanrank', column_type: 'integer' }
+        ]
     }
 }
 

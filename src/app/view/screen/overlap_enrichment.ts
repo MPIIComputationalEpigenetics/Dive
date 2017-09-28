@@ -18,8 +18,9 @@ import { SelectedData } from 'app/service/selecteddata';
 import { ProgressElement } from 'app/service/progresselement';
 
 import { DeepBlueOperation } from 'app/domain/operations';
-import { DeepBlueResult, DeepBlueMiddlewareOverlapEnrichtmentResult } from 'app/domain/operations';
+import { DeepBlueResult, DeepBlueMiddlewareOverlapEnrichtmentResult, DeepBlueMiddlewareOverlapEnrichtmentResultItem } from 'app/domain/operations';
 import { IOperation } from 'app/domain/interfaces';
+import { Utils } from 'app/service/utils';
 
 @Component({
     templateUrl: './overlap_enrichment.html'
@@ -28,6 +29,11 @@ export class OverlapEnrichmentScreenComponent implements OnDestroy {
 
     selected_data: IOperation;
     selected_datasets: Object;
+
+    enrichment_data: Object[][] = new Array<Object[]>();
+    enrichment_data_from_server: Object[][] = new Array<DeepBlueMiddlewareOverlapEnrichtmentResultItem[]>();
+
+    columns = DeepBlueMiddlewareOverlapEnrichtmentResultItem.asColumns();
 
     constructor(private deepBlueService: DeepBlueService,
         public progress_element: ProgressElement, private selectedData: SelectedData) {
@@ -55,15 +61,51 @@ export class OverlapEnrichmentScreenComponent implements OnDestroy {
 
                 this.deepBlueService.getComposedResultIterator(request_id, this.progress_element, 'overlaps_enrichment')
                     .subscribe((result: DeepBlueMiddlewareOverlapEnrichtmentResult[]) => {
-                        debugger;
                         console.log(result);
+                        this.prepare_data(result);
                     });
             });
 
     }
 
-    ngOnDestroy() {
+    prepare_data(datum: DeepBlueMiddlewareOverlapEnrichtmentResult[]) {
 
+        this.enrichment_data_from_server = [];
+
+        for (let pos = 0; pos < datum.length; pos++) {
+            const data = datum[pos];
+            const rows: Object[] = data.getResults().map((x) => {
+                const row = {};
+                for (let idx = 0; idx < this.columns.length; idx++) {
+                    const column_name = this.columns[idx]['name'];
+                    const v = x[column_name];
+                    row[column_name.toLowerCase().replace(/_/g, '')] = Utils.convert(v, this.columns[idx]['column_type'])
+                }
+                return row;
+            });
+
+            rows.sort((a: Object, b: Object) => a['meanrank'] - b['meanrank']);
+
+            debugger;
+
+            this.enrichment_data_from_server.push(rows);
+        }
+
+        this.filter_enrichment_data(null);
     }
+
+    filter_enrichment_data($event) {
+        const newResults = [];
+        for (let idx = 0; idx < this.enrichment_data_from_server.length; idx++) {
+            //const x = this.filter_enrichment_datei(this.enrichment_data_from_server[idx]);
+            const x = this.enrichment_data_from_server[idx];
+            newResults.push(x);
+        }
+
+        this.enrichment_data = newResults;
+        //this.plotBar();
+    }
+
+    ngOnDestroy() { }
 
 }

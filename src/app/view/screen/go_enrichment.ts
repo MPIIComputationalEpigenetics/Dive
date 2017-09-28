@@ -19,6 +19,7 @@ import { ProgressElement } from 'app/service/progresselement';
 
 import { DeepBlueOperation } from 'app/domain/operations';
 import { DeepBlueResult } from 'app/domain/operations';
+import { Utils } from 'app/service/utils';
 
 @Component({
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -76,7 +77,7 @@ export class GoEnrichmentScreenComponent implements OnDestroy {
         this.selectedData.getActiveTopStackValue().subscribe((dataStackItem: DataStackItem) => this.processEnrichment());
     }
 
-    filter_enrichment_data(newvalue) {
+    filter_enrichment_data($event) {
 
         const newResults = [];
         for (let idx = 0; idx < this.enrichment_data_from_server.length; idx++) {
@@ -139,22 +140,6 @@ export class GoEnrichmentScreenComponent implements OnDestroy {
         });
     }
 
-    convert(value: string, column_type: string): Object {
-        if ((column_type === 'string') || (column_type === 'category')) {
-            return value;
-        }
-
-        if (column_type === 'double') {
-            return Number(value);
-        }
-
-        if (column_type === 'integer') {
-            return Number(value);
-        }
-
-        return value;
-    }
-
     prepare_data(datum: DeepBlueMiddlewareGOEnrichtmentResult[]) {
 
         this.enrichment_data_from_server = [];
@@ -168,7 +153,7 @@ export class GoEnrichmentScreenComponent implements OnDestroy {
                 for (let idx = 0; idx < this.columns.length; idx++) {
                     const column_name = this.columns[idx]['name'];
                     const v = x[column_name];
-                    row[column_name.toLowerCase().replace('_', '')] = this.convert(v, this.columns[idx]['column_type'])
+                    row[column_name.toLowerCase().replace('_', '')] = Utils.convert(v, this.columns[idx]['column_type'])
                 }
                 return row;
             });
