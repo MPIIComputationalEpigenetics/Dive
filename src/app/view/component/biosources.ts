@@ -30,7 +30,7 @@ export class BioSourcesScreenComponent implements OnDestroy {
 
     constructor(private deepBlueService: DeepBlueService) {
         this.genomeSubscription = deepBlueService.genomeValue$.subscribe(genome => {
-            if (genome.id === '') {
+            if (genome === null) {
                 return;
             }
             this.deepBlueService.listBioSources().subscribe(biosources => {
@@ -39,12 +39,12 @@ export class BioSourcesScreenComponent implements OnDestroy {
         });
     }
 
-    onMoveToSource($event) {
+    onMoveToSource($event: any) {
         this.deepBlueService.setSelectedBioSources(this.targetBioSources);
     }
 
 
-    onMoveToTarget($event) {
+    onMoveToTarget($event: any) {
         this.deepBlueService.setSelectedBioSources(this.targetBioSources);
     }
 

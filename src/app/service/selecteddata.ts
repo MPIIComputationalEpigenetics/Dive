@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subject } from 'rxjs/Subject';
 
-import { Annotation } from 'app/domain/deepblue';
+import { Annotation, Id } from 'app/domain/deepblue';
 
 import { DeepBlueOperation } from 'app/domain/operations'
 
@@ -31,7 +31,7 @@ export class SelectedData implements OnDestroy {
   constructor(private deepBlueService: DeepBlueService, private dataStackFactory: DataStackFactory) {
     this.annotationSubscription = deepBlueService.annotationValue$.subscribe((annotation: Annotation) => {
       const stack: DataStack = dataStackFactory.newDataStack();
-      if (annotation.id !== '') {
+      if (annotation !== null) {
         // TODO: Ask if the user want to save the previous stack
         stack.setInitialData(annotation);
         this.replaceStack(0, stack);
@@ -115,7 +115,7 @@ export class SelectedData implements OnDestroy {
     return this._stacks.map((stack: DataStack) => stack.getCurrentOperation());
   }
 
-  getStackPosByQueryId(query_id: string): number {
+  getStackPosByQueryId(query_id: Id): number {
     return this.getStacksTopOperation()
       .map((stack: DeepBlueOperation) => stack.query_id)
       .indexOf(query_id);

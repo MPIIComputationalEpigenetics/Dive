@@ -14,7 +14,7 @@ export class SelectDatabasesComponent implements OnDestroy {
 
   constructor(private deepBlueService: DeepBlueService) {
       this.genomeSubscription = deepBlueService.genomeValue$.subscribe(genome => {
-          if (genome.id === '') {
+          if (genome === null) {
               return;
           }
           this.deepBlueService.composedOverlapEnrichmentDatabase(genome).subscribe(databases => {

@@ -5,7 +5,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 @Injectable()
 export class MenuService {
-  model = [
+  model : any[] = [
     {
       label: 'Dashboard', icon: 'dashboard', routerLink: ['/']
     },
@@ -42,7 +42,7 @@ export class MenuService {
   public menuItems = new BehaviorSubject<Object[]>(this.model);
   genomeValue$: Observable<Object[]> = this.menuItems.asObservable();
 
-  findMenu(parentName: string): {} {
+  findMenu(parentName: string): any {
     for (const subMenu of this.model) {
       if (subMenu['name'] === parentName) {
         return subMenu;
@@ -51,7 +51,7 @@ export class MenuService {
     return null;
   }
 
-  pushItem(subMenu, item) {
+  pushItem(subMenu: any, item: any) {
     if ('items' in subMenu) {
       subMenu['items'].push(item);
     } else {
@@ -59,7 +59,7 @@ export class MenuService {
     }
   }
 
-  clean(parentName) {
+  clean(parentName: string) {
     const subMenu = this.findMenu(parentName);
     if (!subMenu) {
       console.error('Sub Menu ' + parentName + ' not found');
@@ -68,14 +68,14 @@ export class MenuService {
     subMenu['items'] = [];
   }
 
-  includeItem(parentName: string, label: string, icon: string, command, routerLink, url) {
+  includeItem(parentName: string, label: string, icon: string, command: any, routerLink: any, url: any) {
     const subMenu = this.findMenu(parentName);
     if (!subMenu) {
       console.error('Sub Menu ' + parentName + ' not found');
       return;
     }
 
-    const item = { 'label': label };
+    const item : any = { 'label': label };
     if (icon) {
       item['icon'] = icon;
     }

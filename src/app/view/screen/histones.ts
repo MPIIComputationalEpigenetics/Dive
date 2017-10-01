@@ -61,11 +61,11 @@ export class HistonesScreenComponent implements OnDestroy {
 
     segregate(experiments: FullExperiment[]) {
 
-        const biosources = {};
-        const samples = {};
-        const epigenetic_marks = {};
-        const techniques = {};
-        const projects = {};
+        const biosources: { [key: string]: FullExperiment[] } = {};
+        const samples: { [key: string]: FullExperiment[] } = {};
+        const epigenetic_marks: { [key: string]: FullExperiment[] } = {};
+        const techniques: { [key: string]: FullExperiment[] } = {};
+        const projects: { [key: string]: FullExperiment[] } = {};
 
         const event_items = [];
         const pre_selected_biosources = this.deepBlueService.selectedBioSources.getValue().map((x: BioSource) => x.name);
@@ -136,7 +136,7 @@ export class HistonesScreenComponent implements OnDestroy {
 
         this.epigeneticMarkSubscription = deepBlueService.epigeneticMarkValue$.subscribe(selected_epigenetic_mark => {
             this.deepBlueService.getExperiments(deepBlueService.getGenome(), selected_epigenetic_mark).subscribe(experiments_ids => {
-                const ids = experiments_ids.map((e) => e.id);
+                const ids = experiments_ids.map((e) => e.id.id);
                 this.deepBlueService.getExperimentsInfos(ids).subscribe(full_info => {
                     this.experiments = <FullExperiment[]>full_info;
                     this.segregated_data = this.segregate(<FullExperiment[]>full_info);
@@ -149,12 +149,12 @@ export class HistonesScreenComponent implements OnDestroy {
         this.selectedData.getActiveTopStackValue().subscribe((dataStackItem) => this.processOverlaps());
     }
 
-    selectBiosources(event) {
+    selectBiosources(event: any) {
         let experiments: IdName[] = [];
         const selected_data = event.value;
-        const biosources = event.value.map((x) => x.name);
+        const biosources = event.value.map((x: any) => x.name);
 
-        const exp_arrays = event.value.map((x) => x.experiments);
+        const exp_arrays = event.value.map((x: any) => x.experiments);
         experiments = experiments.concat.apply([], exp_arrays);
 
         this.selectedExperimentsSource.next(experiments);
@@ -203,10 +203,18 @@ export class HistonesScreenComponent implements OnDestroy {
     }
 
     reloadPlot(datum: DeepBlueMiddlewareOverlapResult[]) {
-        const result_by_dataset_stack = {};
         const categories: string[] = [];
 
-        const value_by_stack_biosource: DeepBlueMiddlewareOverlapResult[][][] = [];
+        const value_by_stack_biosource: Array<
+        {
+          [key: string]: DeepBlueMiddlewareOverlapResult[]
+        }> = [];
+
+        const result_by_dataset_stack: {
+            [key: string]: {
+              [key: string]: DeepBlueMiddlewareOverlapResult[]
+            }
+          } = {};
 
         for (const result of datum) {
             const stack_number = this.selectedData.getStackPosByQueryId(result.getDataQuery());
@@ -220,7 +228,7 @@ export class HistonesScreenComponent implements OnDestroy {
             const biosource = experiment.biosource();
 
             if (!(stack_number in value_by_stack_biosource)) {
-                value_by_stack_biosource[stack_number] = [];
+                value_by_stack_biosource[stack_number] = {};
             }
 
             if (!(biosource in value_by_stack_biosource[stack_number])) {
@@ -231,14 +239,14 @@ export class HistonesScreenComponent implements OnDestroy {
             }
 
             value_by_stack_biosource[stack_number][biosource].push(result);
-            result_by_dataset_stack[biosource] = [];
+            result_by_dataset_stack[biosource] = {};
         }
 
         categories.sort((a: string, b: string) => {
             return a.localeCompare(b);
         });
 
-        const value_by_stack: Array<Array<Object>> = [];
+        const value_by_stack: Array<Array<any>> = [];
 
         for (let stack_pos = 0; stack_pos < value_by_stack_biosource.length; stack_pos++) {
             if (!(stack_pos in value_by_stack)) {
@@ -276,7 +284,7 @@ export class HistonesScreenComponent implements OnDestroy {
 
                     const aggr = { low: low, q1: q1, median: median, q3: q3, high: high, mean: mean, elements: values.length };
 
-                    value_by_stack[stack_pos].push({ biosource: biosource, value: aggr, results: results});
+                    value_by_stack[stack_pos].push({ biosource: biosource, value: aggr, results: results });
                 }
 
             }
@@ -288,7 +296,7 @@ export class HistonesScreenComponent implements OnDestroy {
             const stack_values_result: Array<number> = [];
             const stack_values_result_boxplot: Array<Object> = [];
 
-            stack_values.sort((a: Object, b: Object) => {
+            stack_values.sort((a: any, b: any) => {
                 return (<string>a['biosource']).localeCompare(b['biosource']);
             });
 

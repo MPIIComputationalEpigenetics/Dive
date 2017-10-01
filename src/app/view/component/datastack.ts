@@ -47,13 +47,13 @@ import { DeepBlueService } from 'app/service/deepblue';
 })
 export class DataStackViewComponent {
 
-    constructor(private deepBlueService: DeepBlueService, private selectedData: SelectedData) { }
+    constructor(private deepBlueService: DeepBlueService, public selectedData: SelectedData) { }
 
-    removeData(event, data) {
+    removeData(event: any, data: any) {
         this.selectedData.activeStackSubject.getValue().remove(data);
     }
 
-    saveData(event, data) {
+    saveData(event: any, data: any) {
         this.selectedData.saveActiveStack();
     }
 }

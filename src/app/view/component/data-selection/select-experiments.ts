@@ -51,48 +51,47 @@ export class SelectExperimentsComponent {
         this.deepBlueService.listProjects().subscribe(data => this.all_projects = data);
     }
 
-    search_epigenetic_marks(event) {
+    search_epigenetic_marks(event: any) {
         this.epigenetic_marks_suggestions = this.all_epigenetic_marks.filter((em: EpigeneticMark) =>
             em.name.toLowerCase().includes(event.query)
         );
     }
 
-
-    search_biosources(event) {
+    search_biosources(event: any) {
         this.biosources_suggestions = this.all_biosources.filter((bs: BioSource) =>
             bs.name.toLowerCase().includes(event.query)
         );
     }
 
-    search_techniques(event) {
+    search_techniques(event: any) {
         this.techniques_suggestions = this.all_techniques.filter((tc: Technique) =>
             tc.name.toLowerCase().includes(event.query)
         );
     }
 
-    search_projects(event) {
+    search_projects(event: any) {
         this.projects_suggestions = this.all_projects.filter((pj: Project) =>
             pj.name.toLowerCase().includes(event.query)
         );
     }
 
-    handle_dropdown_epigenetic_marks(event) {
+    handle_dropdown_epigenetic_marks(event: any) {
         this.epigenetic_marks_suggestions = this.all_epigenetic_marks;
     }
 
-    handle_dropdown_biosources(event) {
+    handle_dropdown_biosources(event: any) {
         this.biosources_suggestions = this.all_biosources;
     }
 
-    handle_dropdown_techniques(event) {
+    handle_dropdown_techniques(event: any) {
         this.techniques_suggestions = this.all_techniques;
     }
 
-    handle_dropdown_project(event) {
+    handle_dropdown_project(event: any) {
         this.projects_suggestions = this.all_projects;
     }
 
-    content_changed(event) {
+    content_changed(event: any) {
         console.log(event);
         setTimeout(() =>
             this.deepBlueService.listExperiments(this.epigenetic_marks, this.biosources, this.techniques, this.projects).subscribe((exps: Experiment[]) => {

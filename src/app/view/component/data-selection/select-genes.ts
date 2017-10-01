@@ -50,7 +50,7 @@ export class SelectGenesComponent implements OnDestroy {
 
     constructor(private deepBlueService: DeepBlueService, private progress_element: ProgressElement) {
         this.genomeSubscription = deepBlueService.genomeValue$.subscribe(genome => {
-            if (genome.id === '') {
+            if (genome === null) {
                 return;
             }
             this.deepBlueService.getGeneModelsBySelectedGenome().subscribe((geneModels: GeneModel[]) => {
@@ -68,11 +68,11 @@ export class SelectGenesComponent implements OnDestroy {
         });
     }
 
-    selectGeneModel(event) {
+    selectGeneModel(event: any) {
         this.selectedGeneModel = event.value;
     }
 
-    search_genes(event) {
+    search_genes(event: any) {
         let gene_name = event.query;
         if (gene_name.length < 3) {
             return;
@@ -83,7 +83,7 @@ export class SelectGenesComponent implements OnDestroy {
         });
     }
 
-    selectGenes(event) {
+    selectGenes(event: any) {
         let gene_names = this.selected_genes.map((gene: Gene) => gene.name);
         this.deepBlueService.selectGenes(gene_names, this.selectedGeneModel, this.progress_element, 0).subscribe((operation: DeepBlueOperation) => {
             this.queryIdSelected.emit(operation);
@@ -91,7 +91,7 @@ export class SelectGenesComponent implements OnDestroy {
         });
     }
 
-    handle_dropdown_genes(event) {
+    handle_dropdown_genes(event: any) {
     }
 
     content_changed() {

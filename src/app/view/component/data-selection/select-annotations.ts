@@ -31,7 +31,7 @@ export class SelectAnnotationsComponent implements OnDestroy {
     constructor(private deepBlueService: DeepBlueService, private progress_element: ProgressElement) {
 
         this.genomeSubscription = deepBlueService.genomeValue$.subscribe(genome => {
-            if (genome.id == null || genome.name == '') {
+            if (genome === null) {
                 return;
             }
             this.deepBlueService.getAnnotations(genome).subscribe(annotations => {
@@ -56,7 +56,7 @@ export class SelectAnnotationsComponent implements OnDestroy {
         );
     }
 
-    selectAnnotation(event) {
+    selectAnnotation(event: any) {
         this.annotationSelected.emit(this.selectedAnnotation);
 
         this.deepBlueService.selectAnnotation(this.selectedAnnotation, this.progress_element, 0).subscribe((operation: DeepBlueOperation) => {
@@ -64,7 +64,7 @@ export class SelectAnnotationsComponent implements OnDestroy {
         });
     }
 
-    selectAnnotationForComparison(event) {
+    selectAnnotationForComparison(event: any) {
         this.comparedAnnotationSelected.emit(this.selectedAnnotation);
     }
 

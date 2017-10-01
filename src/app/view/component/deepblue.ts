@@ -22,6 +22,7 @@ import { DeepBlueService } from 'app/service/deepblue';
 import { MultiKeyDataCache } from 'app/service/deepblue';
 import { SelectedData } from 'app/service/selecteddata';
 import { DataStack } from 'app/service/datastack';
+import { IMenu } from 'app/domain/interfaces';
 
 @Component({
     selector: 'app-data-info-box',
@@ -30,7 +31,7 @@ import { DataStack } from 'app/service/datastack';
             <h2>Data overlapping with {{ getStackName() }}</h2>
 
             <li *ngFor="let result of results">
-                {{ result.filter_name }} - {{ result.count }}
+                {{ result.getFilterName() }} - {{ result.getCount() }}
             <p><button pButton type="button" (click)="filterOverlapping(result)" label="Filter overlapping"></button>
             <p><button pButton type="button" (click)="filterNonOverlapping(result)" label="Filter not-overlapping"></button>
             </li>
@@ -45,7 +46,7 @@ export class DataInfoBoxComponent implements OnDestroy {
     results: DeepBlueMiddlewareOverlapResult[] = [];
 
     constructor(private deepBlueService: DeepBlueService, private selectedData: SelectedData) {
-        this.dataSelectedSubscription = deepBlueService.dataInfoSelectedValue$.subscribe((data: Object) => {
+        this.dataSelectedSubscription = deepBlueService.dataInfoSelectedValue$.subscribe((data: any) => {
             this.biosource = data['biosource'];
             this.value = data['value'];
             this.results = data['results']
@@ -56,11 +57,11 @@ export class DataInfoBoxComponent implements OnDestroy {
     }
 
     filterOverlapping(result: DeepBlueMiddlewareOverlapResult) {
-        this.selectedData.activeStackSubject.getValue().overlap(result.filterToDeepBlueOperation());
+        this.selectedData.activeStackSubject.getValue().overlap(result.toDeepBlueOperation());
     }
 
     filterNonOverlapping(result: DeepBlueMiddlewareOverlapResult) {
-        this.selectedData.activeStackSubject.getValue().non_overlap(result.filterToDeepBlueOperation());
+        this.selectedData.activeStackSubject.getValue().non_overlap(result.toDeepBlueOperation());
     }
 
     getStackName(): string {
@@ -78,28 +79,61 @@ export class DataInfoBoxComponent implements OnDestroy {
     selector: 'dive-menu',
     template: `
             <filtering></filtering>
-            <genome-selector></genome-selector>
-            <histone-mark-selector></histone-mark-selector>
-            <css-selector></css-selector>
             `,
 })
 export class DiveStatus {
-    constructor(private deepBlueService: DeepBlueService) { }
+    menus: IMenu[] = [];
+    constructor(private deepBlueService: DeepBlueService, private menuService: MenuService) {
+        this.menus = [
+            new GenomeSelectorMenu(this.deepBlueService, this.menuService),
+            new HistoneExperimentsMenu(this.deepBlueService, this.menuService),
+            new CSSExperimentsMenu(this.deepBlueService, this.menuService)
+        ];
+
+    }
 }
 
 
-@Component({
-    selector: 'histone-mark-selector',
-    template: ''
-})
-export class HistoneExperimentsMenu implements OnDestroy {
+// Building Menu Items with Genome names
+// TODO: These menu component must be moved to a 'Dive main component', since it is not a visual component anymore
+class GenomeSelectorMenu implements IMenu {
+
+    errorMessage: string;
+
+    constructor(private deepBlueService: DeepBlueService, private menuService: MenuService) { }
+
+    loadMenu(): any {
+        return this.deepBlueService.getGenomes().subscribe(genomes => {
+            this.deepBlueService.setGenome(genomes[0]);
+
+            for (let genome of genomes) {
+                this.menuService.includeItem('genomes', genome.name, 'fiber_manual_record',
+                    (event: any) => { this.selectItem(genome) },
+                    ['/'], /* router link */
+                    null /* url */
+                );
+            }
+            return true;
+        },
+            error => this.errorMessage = <any>error
+        );
+    }
+
+    selectItem(genome: Genome) {
+        this.deepBlueService.setGenome(genome);
+    }
+}
+
+export class HistoneExperimentsMenu implements IMenu {
     errorMessage: string;
     selectHistones: EpigeneticMark[];
     genomeSubscription: Subscription;
 
-    constructor(private deepBlueService: DeepBlueService, private menuService: MenuService) {
-        this.genomeSubscription = deepBlueService.genomeValue$.subscribe(genome => {
-            if (!(genome.id)) {
+    constructor(private deepBlueService: DeepBlueService, private menuService: MenuService) { }
+
+    loadMenu(): any {
+        this.genomeSubscription = this.deepBlueService.genomeValue$.subscribe(genome => {
+            if (genome === null) {
                 return;
             }
             this.deepBlueService.getHistones().subscribe(histones => {
@@ -107,7 +141,7 @@ export class HistoneExperimentsMenu implements OnDestroy {
                 for (let histone of histones) {
 
                     this.menuService.includeItem('histones', histone.name, 'fiber_manual_record',
-                        (event) => { this.changeHistone(histone) },
+                        (event: any) => this.selectItem(histone),
                         ['/histonemark'], /* router link */
                         null /* url */
                     );
@@ -117,14 +151,44 @@ export class HistoneExperimentsMenu implements OnDestroy {
         });
     }
 
-    changeHistone(histone) {
+    selectItem(histone: EpigeneticMark) {
         this.deepBlueService.setEpigeneticMark(histone);
     }
+}
 
-    ngOnDestroy() {
-        this.genomeSubscription.unsubscribe();
+export class CSSExperimentsMenu implements IMenu {
+    errorMessage: string;
+    selectHistones: EpigeneticMark[];
+    genomeSubscription: Subscription;
+
+    constructor(private deepBlueService: DeepBlueService, private menuService: MenuService) { }
+
+    loadMenu() {
+        this.genomeSubscription = this.deepBlueService.genomeValue$.subscribe(genome => {
+            if (genome === null) {
+                return;
+            }
+            this.deepBlueService.getChromatinStateSegments().subscribe((csss: string[]) => {
+                this.menuService.clean('css');
+                for (let css of csss) {
+                    this.menuService.includeItem('css', css[1], 'fiber_manual_record',
+                        (event: any) => { this.selectItem(css[0]) },
+                        ['/chromatin_states'], /* router link */
+                        null /* url */
+                    );
+                }
+            });
+        },
+            error => this.errorMessage = <any>error
+        );
+    }
+
+    selectItem(css: string) {
+        this.deepBlueService.setEpigeneticMark(new EpigeneticMark(["Chromatin State Segmentation", css]));
     }
 }
+
+///
 
 @Component({
     selector: 'selected-data-button',
@@ -152,7 +216,7 @@ export class HistoneExperimentsMenu implements OnDestroy {
                                 <p>
                                     {{ data.what }}
                                     {{ data.description }}
-                                    {{ data.op.data.name }} ({{ data.count }})
+                                    {{ data.op.dataName() }} ({{ data.count }})
                             </div>
                         </div>
                     </li>
@@ -214,81 +278,6 @@ export class SelectedDataButton implements OnInit {
     `
 })
 export class SelectedDataView {
-    constructor(private selectedData: SelectedData) { }
+    constructor(public selectedData: SelectedData) { }
 }
 
-// Building Menu Items with Genome names
-// TODO: This component must be moved to a 'Dive main component', since it is not a visual component anymore
-@Component({
-    selector: 'genome-selector',
-    template: ''
-})
-export class GenomeSelectorComponent implements OnInit {
-
-    errorMessage: string;
-
-    constructor(private deepBlueService: DeepBlueService, private menuService: MenuService) { }
-
-    ngOnInit() {
-        this.deepBlueService.getGenomes().subscribe(genomes => {
-            this.deepBlueService.setGenome(genomes[0]);
-
-            for (let genome of genomes) {
-                this.menuService.includeItem('genomes', genome.name, 'fiber_manual_record',
-                    (event) => { this.changeGenome(genome) },
-                    ['/'], /* router link */
-                    null /* url */
-                );
-            }
-        },
-            error => this.errorMessage = <any>error
-        );
-    }
-
-    changeGenome(genome) {
-        this.deepBlueService.setGenome(genome);
-    }
-}
-
-// Building Menu Items with Genome names
-// TODO: This component must be moved to a 'Dive main component', since it is not a visual component anymore
-
-@Component({
-    selector: 'css-selector',
-    template: ''
-})
-export class CSSExperimentsMenu implements OnInit, OnDestroy {
-    errorMessage: string;
-    selectHistones: EpigeneticMark[];
-    genomeSubscription: Subscription;
-
-    constructor(private deepBlueService: DeepBlueService, private menuService: MenuService) { }
-
-    ngOnInit() {
-        this.genomeSubscription = this.deepBlueService.genomeValue$.subscribe(genome => {
-            if (!(genome.id)) {
-                return;
-            }
-            this.deepBlueService.getChromatinStateSegments().subscribe((csss: string[]) => {
-                this.menuService.clean('css');
-                for (let css of csss) {
-                    this.menuService.includeItem('css', css[1], 'fiber_manual_record',
-                        (event) => { this.changeCss(css[0]) },
-                        ['/chromatin_states'], /* router link */
-                        null /* url */
-                    );
-                }
-            });
-        },
-            error => this.errorMessage = <any>error
-        );
-    }
-
-    changeCss(css) {
-        this.deepBlueService.setEpigeneticMark(new EpigeneticMark(["Chromatin State Segmentation", css]));
-    }
-
-    ngOnDestroy() {
-        this.genomeSubscription.unsubscribe();
-    }
-}

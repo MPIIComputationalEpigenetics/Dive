@@ -36,7 +36,7 @@ export class DataStackItem {
 export class DataStack {
 
     public color = 'blue';
-    public color_array;
+    public color_array: any;
     _data: DataStackItem[] = [];
 
     public topStackSubject = new Subject<DataStackItem>();
@@ -54,7 +54,7 @@ export class DataStack {
 
     setInitialData(data: IdName) {
         this._data = [];
-        if (data.id === '' || data.id == null) {
+        if (data.id == null) {
             return;
         }
 

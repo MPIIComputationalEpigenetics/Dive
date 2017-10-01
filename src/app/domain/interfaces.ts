@@ -1,3 +1,5 @@
+import { Id } from "app/domain/deepblue";
+
 export interface ICloneable {
     clone (request_count: number): any;
 }
@@ -11,5 +13,14 @@ export interface IKey extends ICloneable, ITextable {
 }
 
 export interface IOperation extends IKey {
-    queryId() : string;
+    queryId() : Id;
+}
+
+export interface IRow {
+    [key: string]: any
+}
+
+export interface IMenu {
+    loadMenu() : any;
+    selectItem(item: any): any;
 }

@@ -31,8 +31,8 @@ export class RegionsScreen {
     // regions: Regions;
     topStackSubscription: Subscription;
 
-    columns = [];
-    rows = [];
+    columns : any[] = [];
+    rows : any[] = [];
 
     constructor(private deepBlueService: DeepBlueService,
         public progress_element: ProgressElement, private selectedData: SelectedData) {
@@ -93,10 +93,10 @@ export class RegionsScreen {
 
                 this.rows = regions.resultAsString().split('\n').map((x) => {
                     const row_values = x.split('\t');
-                    const row = {};
+                    const row : {[key: string]: any} = {};
 
                     for (let idx = 0; idx < columns_types.length; idx++) {
-                        const column_name = columns_types[idx]['name'];
+                        const column_name : string = columns_types[idx]['name'];
                         const v = row_values[idx];
 
                         row[column_name.toLowerCase().replace('_', '')] = this.convert(v, columns_types[idx]['column_type'])

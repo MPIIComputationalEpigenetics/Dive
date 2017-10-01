@@ -39,7 +39,7 @@ export class SelectDatasetsComponent {
   constructor(private deepBlueService: DeepBlueService, private progress_element: ProgressElement) {
     this.JSON = JSON;
     this.genomeSubscription = deepBlueService.genomeValue$.subscribe(genome => {
-      if (genome.id === '') {
+      if (genome === null) {
         return;
       }
       type Dataset = [string, string[]];
@@ -66,7 +66,7 @@ export class SelectDatasetsComponent {
     })
   }
 
-  selectDatasets(event) {
+  selectDatasets(event: any) {
     let selected = this.selectedDatasets.filter((node: TreeNode) => node.data.leaf).map((node: TreeNode) => node.data.name);
     this.deepBlueService.selectExperiments(selected, this.progress_element, 0).subscribe((op: DeepBlueOperation) => {
       this.queryIdSelected.emit(op);
@@ -76,7 +76,7 @@ export class SelectDatasetsComponent {
 
   buildDatasets() {
     let actual = null;
-    let datasets = {}
+    let datasets : any = {}
     for (let selected of this.selectedDatasets) {
       if (selected.data.leaf) {
         actual.data.push(selected.data.name);

@@ -97,15 +97,7 @@ import { GoEnrichmentScreenComponent } from 'app/view/screen/go_enrichment';
 import { OverlapEnrichmentScreenComponent } from 'app/view/screen/overlap_enrichment';
 
 
-import {
-    DataInfoBoxComponent,
-    DiveStatus,
-    GenomeSelectorComponent,
-    HistoneExperimentsMenu,
-    CSSExperimentsMenu,
-    SelectedDataView,
-    SelectedDataButton
-} from 'app/view/component/deepblue';
+import { DataInfoBoxComponent, DiveStatus, HistoneExperimentsMenu, CSSExperimentsMenu, SelectedDataView, SelectedDataButton } from 'app/view/component/deepblue';
 
 import { DataLoadProgressBar } from 'app/view/component/progressbar';
 
@@ -124,6 +116,7 @@ import { SelectExperimentsComponent } from "app/view/component/data-selection/se
 import { SelectAnnotationsComponent } from "app/view/component/data-selection/select-annotations";
 import { SelectGenesComponent } from 'app/view/component/data-selection/select-genes';
 import { SelectDatasetsComponent } from 'app/view/component/data-selection/select-datasets';
+import { SelectDatabasesComponent } from 'app/view/component/data-selection/select-databases';
 
 
 @NgModule({
@@ -209,9 +202,6 @@ import { SelectDatasetsComponent } from 'app/view/component/data-selection/selec
         DataStackViewComponent,
         DataLoadProgressBar,
         OverlapsBarChartComponent,
-        GenomeSelectorComponent,
-        HistoneExperimentsMenu,
-        CSSExperimentsMenu,
         FilteringComponent,
         DataInfoBoxComponent,
         SelectAnnotationsComponent,
@@ -219,6 +209,7 @@ import { SelectDatasetsComponent } from 'app/view/component/data-selection/selec
         SelectExperimentsComponent,
         SelectTilingRegionsComponent,
         SelectGenesComponent,
+        SelectDatabasesComponent,
         SummaryScreen,
         RegionsScreen,
         BioSourcesScreenComponent,

@@ -9,7 +9,7 @@ export class ProgressElement {
     public progressValueSource = new BehaviorSubject<number>(-1);
     progressValueValue$: Observable<number> = this.progressValueSource.asObservable();
 
-    reset(total, request_count) {
+    reset(total: number, request_count: number) {
         this.total_to_load = total;
         this.total_loaded = 0;
         this.request_count = request_count;

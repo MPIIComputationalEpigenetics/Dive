@@ -12,11 +12,11 @@ export class SummaryScreen {
     constructor(private deepBlueService: DeepBlueService, private selectedData: SelectedData) {
     }
 
-    selectAnnotation(selectedAnnotation) {
+    selectAnnotation(selectedAnnotation: any) {
         this.deepBlueService.setAnnotation(selectedAnnotation);
     }
 
-    selectAnnotationForComparison(selectedAnnotation) {
+    selectAnnotationForComparison(selectedAnnotation: any) {
         this.selectedData.insertForComparison(selectedAnnotation);
     }
 }

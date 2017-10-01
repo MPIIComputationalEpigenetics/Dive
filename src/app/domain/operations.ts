@@ -1,21 +1,21 @@
 import { ICloneable } from 'app/domain/interfaces';
 import { IKey, IOperation } from 'app/domain/interfaces';
-import { IdName, GeneModel } from 'app/domain/deepblue';
+import { IdName, GeneModel, Id } from 'app/domain/deepblue';
 
 export class DeepBlueOperation implements IOperation {
-    constructor(public data: IdName | string[], public query_id: string,
+    constructor(public data: IdName | string[], public query_id: Id,
         public command: string, public request_count: number, public cached = false) { }
 
     clone(request_count: number = -1): DeepBlueOperation {
         return new DeepBlueOperation(this.data, this.query_id, this.command, request_count, this.cached);
     }
 
-    cacheIt(query_id: string): DeepBlueOperation {
+    cacheIt(query_id: Id): DeepBlueOperation {
         return new DeepBlueOperation(this.data, query_id, this.command, this.request_count, true);
     }
 
     key(): string {
-        return this.query_id;
+        return this.query_id.id;
     }
 
     dataName(): string {
@@ -28,27 +28,25 @@ export class DeepBlueOperation implements IOperation {
         return data_name;
     }
 
-    dataId(): string {
-        let data_id = "";
+    dataId(): Id {
         if (this.data instanceof IdName) {
-            data_id = (<IdName>this.data).id;
+            return this.data.id;
         } else {
-            data_id = (<string[]>this.data).join(",");
+            return new Id((<string[]>this.data).join(","));
         }
-        return data_id;
     }
 
     text(): string {
         return this.command + " " + this.dataName();
     }
 
-    queryId(): string {
+    queryId(): Id {
         return this.query_id;
     }
 }
 
 export class DeepBlueTiling implements IOperation {
-    constructor(public size: number, public genome: string, public chromosomes: string[], public query_id: string,
+    constructor(public size: number, public genome: string, public chromosomes: string[], public query_id: Id,
         public request_count: number, public cached = false) { }
 
     clone(request_count: number = -1): DeepBlueTiling {
@@ -61,20 +59,20 @@ export class DeepBlueTiling implements IOperation {
     }
 
     key(): string {
-        return this.query_id;
+        return this.query_id.id;
     }
 
     text(): string {
         return "Tiling regions of " + this.size;
     }
 
-    queryId(): string {
+    queryId(): Id {
         return this.query_id;
     }
 }
 
 export class DeepBlueGenes implements IOperation {
-    constructor(public genes: string[], public gene_model: GeneModel, public query_id: string,
+    constructor(public genes: string[], public gene_model: GeneModel, public query_id: Id,
         public request_count: number, public cached = false) { }
 
     clone(request_count: number = -1): DeepBlueGenes {
@@ -86,14 +84,14 @@ export class DeepBlueGenes implements IOperation {
     }
 
     key(): string {
-        return this.query_id;
+        return this.query_id.id;
     }
 
     text(): string {
         return "Genes: " + this.genes.join(",");
     }
 
-    queryId(): string {
+    queryId(): Id {
         return this.query_id;
     }
 }
@@ -141,7 +139,7 @@ export class DeepBlueMultiParametersOperation implements IKey {
 }
 
 export class DeepBlueRequest implements IKey {
-    constructor(public data: IdName | string[], public request_id: string,
+    constructor(public data: IdName | string[], public request_id: Id,
         public command: string, public operation: DeepBlueOperation, public request_count: number) { }
 
     clone(request_count: number = -1): DeepBlueRequest {
@@ -149,7 +147,7 @@ export class DeepBlueRequest implements IKey {
     }
 
     key(): string {
-        return this.request_id;
+        return this.request_id.id;
     }
 
     text(): string {
@@ -158,7 +156,7 @@ export class DeepBlueRequest implements IKey {
 }
 
 export class DeepBlueResult implements ICloneable {
-    constructor(public data: IdName | string[], public result: Object, public request: DeepBlueRequest, public request_count: number) { }
+    constructor(public data: IdName | string[], public result: any, public request: DeepBlueRequest, public request_count: number) { }
 
     clone(request_count: number = -1): DeepBlueResult {
         return new DeepBlueResult(this.data, this.result, this.request, request_count);
@@ -203,13 +201,13 @@ export class StackValue {
 
 export class DeepBlueMiddlewareOverlapResult {
 
-    static fromObject(obj: Object): DeepBlueMiddlewareOverlapResult {
+    static fromObject(obj: any): DeepBlueMiddlewareOverlapResult {
         return new DeepBlueMiddlewareOverlapResult(obj['data_name'], obj['data_query'],
-            obj['filter_name'], obj['filter_query'], obj['count']);
+            obj['filter_name'], obj['filter_query'].id, obj['count']);
     }
 
-    constructor(private data_name: string, private data_query: string,
-        private filter_name: string, private filter_query: string,
+    constructor(private data_name: string, private data_query: Id,
+        private filter_name: string, private filter_query: Id,
         private count: number) {
 
     }
@@ -218,7 +216,7 @@ export class DeepBlueMiddlewareOverlapResult {
         return this.data_name;
     }
 
-    getDataQuery(): string {
+    getDataQuery(): Id {
         return this.data_query;
     }
 
@@ -226,7 +224,7 @@ export class DeepBlueMiddlewareOverlapResult {
         return this.filter_name;
     }
 
-    getFilterQuery(): string {
+    getFilterQuery(): Id {
         return this.filter_query;
     }
 
@@ -234,7 +232,7 @@ export class DeepBlueMiddlewareOverlapResult {
         return this.count;
     }
 
-    filterToDeepBlueOperation(): DeepBlueOperation {
+    toDeepBlueOperation(): DeepBlueOperation {
         return new DeepBlueOperation(
             new IdName(this.filter_query, this.filter_name),
             this.filter_query, 'Select Experiment Data', -1);
@@ -243,13 +241,13 @@ export class DeepBlueMiddlewareOverlapResult {
 
 export class DeepBlueMiddlewareGOEnrichtmentResult {
 
-    static fromObject(obj: Object): DeepBlueMiddlewareGOEnrichtmentResult {
+    static fromObject(obj: any): DeepBlueMiddlewareGOEnrichtmentResult {
         return new DeepBlueMiddlewareGOEnrichtmentResult(obj['data_name'], obj['gene_model'],
             obj['results'])
     }
 
     constructor(public data_name: string, public gene_model: string,
-        public results: Object[]) { }
+        public results: any[]) { }
 
     getDataName(): string {
         return this.data_name;
@@ -259,16 +257,19 @@ export class DeepBlueMiddlewareGOEnrichtmentResult {
         return this.gene_model;
     }
 
-    getResults(): Object[] {
+    getResults(): any {
         return this.results;
     }
 }
 
 export class DeepBlueMiddlewareOverlapEnrichtmentResult {
 
-    static fromObject(obj: Object): DeepBlueMiddlewareOverlapEnrichtmentResult {
-        return new DeepBlueMiddlewareOverlapEnrichtmentResult(obj['data_name'], obj['universe_id'],
-            obj['results']['enrichment']['results'].map((obj: Object) => DeepBlueMiddlewareOverlapEnrichtmentResultItem.fromObject(obj)));
+    static fromObject(obj: any): DeepBlueMiddlewareOverlapEnrichtmentResult {
+        return new DeepBlueMiddlewareOverlapEnrichtmentResult(
+            obj['data_name'],
+            obj['universe_id'],
+            obj['results']['enrichment']['results'].map((obj: Object) => DeepBlueMiddlewareOverlapEnrichtmentResultItem.fromObject(obj))
+        );
     }
 
     constructor(public data_name: string, public universe_id: string, public results: DeepBlueMiddlewareOverlapEnrichtmentResultItem[]) { }
@@ -287,20 +288,20 @@ export class DeepBlueMiddlewareOverlapEnrichtmentResult {
 }
 
 export class DeepBlueMiddlewareOverlapEnrichtmentResultItem {
-    static fromObject(obj: Object): DeepBlueMiddlewareOverlapEnrichtmentResultItem {
+    static fromObject(obj: any): DeepBlueMiddlewareOverlapEnrichtmentResultItem {
         return new DeepBlueMiddlewareOverlapEnrichtmentResultItem(
             obj['dataset'], obj['description'], obj['experiment_size'], obj['database_name'],
             obj['p_value_log'], obj['log_odds_ratio'], obj['support'],
             obj['b'], obj['c'], obj['d'],
             obj['support_rank'], obj['log_rank'], obj['odd_rank'],
-            obj['max_rank'], obj['mean_rank']);
+            obj['max_rank'], obj['mean_rank'], obj);
     }
 
     constructor(public dataset: string, public description: string, public experiment_size: number, public database_name: string,
         public p_value_log: number, public log_odds_ratio: number, public support: number,
         public b: number, public c: number, public d: number,
         public support_rank: number, public log_rank: number, public odd_rank: number,
-        public max_rank: number, public mean_rank: number) {
+        public max_rank: number, public mean_rank: number, public data: any) {
         // JSON does not send infinity values, so we have to fix it manually.
         this.p_value_log = this.p_value_log != null ? this.p_value_log : Infinity;
     }

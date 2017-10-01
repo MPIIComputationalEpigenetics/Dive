@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 
 export class Utils {
 
-  static convert(value: string, column_type: string): Object {
+  static convert(value: string, column_type: string): any {
     if ((column_type === 'string') || (column_type === 'category')) {
       return value;
     }

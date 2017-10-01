@@ -1,6 +1,6 @@
-import { OverlapsBarChartComponent } from '../component/charts/overlappingbar';
-import { DeepBlueMiddlewareGOEnrichtmentResult, DeepBlueMiddlewareOverlapResult } from '../../domain/operations';
 import { Component, OnInit, ViewChild, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
+
+import { OverlapsBarChartComponent } from '../component/charts/overlappingbar';
 import { Subscription } from 'rxjs/Subscription';
 
 import { MultiSelect } from 'primeng/primeng';
@@ -18,8 +18,8 @@ import { SelectedData } from 'app/service/selecteddata';
 import { ProgressElement } from 'app/service/progresselement';
 
 import { DeepBlueOperation } from 'app/domain/operations';
-import { DeepBlueResult, DeepBlueMiddlewareOverlapEnrichtmentResult, DeepBlueMiddlewareOverlapEnrichtmentResultItem } from 'app/domain/operations';
-import { IOperation } from 'app/domain/interfaces';
+import { DeepBlueResult, DeepBlueMiddlewareOverlapEnrichtmentResult, DeepBlueMiddlewareOverlapEnrichtmentResultItem, DeepBlueMiddlewareGOEnrichtmentResult, DeepBlueMiddlewareOverlapResult } from 'app/domain/operations';
+import { IOperation, IRow } from 'app/domain/interfaces';
 import { Utils } from 'app/service/utils';
 
 @Component({
@@ -40,12 +40,12 @@ export class OverlapEnrichmentScreenComponent implements OnDestroy {
 
     }
 
-    selectQuery(event) {
+    selectQuery(event: IOperation) {
         this.selected_data = event;
         console.log(this.selected_data);
     }
 
-    selectDatasets(event) {
+    selectDatasets(event: Object) {
         this.selected_datasets = event;
         console.log(this.selected_datasets);
     }
@@ -74,17 +74,17 @@ export class OverlapEnrichmentScreenComponent implements OnDestroy {
 
         for (let pos = 0; pos < datum.length; pos++) {
             const data = datum[pos];
-            const rows: Object[] = data.getResults().map((x) => {
-                const row = {};
+            const rows: Object[] = data.getResults().map((x: DeepBlueMiddlewareOverlapEnrichtmentResultItem) => {
+                const row: IRow = {};
                 for (let idx = 0; idx < this.columns.length; idx++) {
-                    const column_name = this.columns[idx]['name'];
-                    const v = x[column_name];
+                    const column_name = this.columns[idx].name;
+                    const v = x.data[column_name];
                     row[column_name.toLowerCase().replace(/_/g, '')] = Utils.convert(v, this.columns[idx]['column_type'])
                 }
                 return row;
             });
 
-            rows.sort((a: Object, b: Object) => a['meanrank'] - b['meanrank']);
+            rows.sort((a: IRow, b: IRow) => a['meanrank'] - b['meanrank']);
 
             debugger;
 
@@ -94,7 +94,7 @@ export class OverlapEnrichmentScreenComponent implements OnDestroy {
         this.filter_enrichment_data(null);
     }
 
-    filter_enrichment_data($event) {
+    filter_enrichment_data($event: any) {
         const newResults = [];
         for (let idx = 0; idx < this.enrichment_data_from_server.length; idx++) {
             //const x = this.filter_enrichment_datei(this.enrichment_data_from_server[idx]);

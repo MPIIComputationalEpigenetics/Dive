@@ -47,7 +47,7 @@ export class GenesScreen implements OnDestroy {
         public progress_element: ProgressElement, private selectedData: SelectedData) {
 
         this.genomeSubscription = deepBlueService.genomeValue$.subscribe(genome => {
-            if (genome.id === '') {
+            if (genome === null) {
                 return;
             }
             this.deepBlueService.getGeneModels().subscribe((geneModels: GeneModel[]) => {
@@ -68,7 +68,7 @@ export class GenesScreen implements OnDestroy {
         this.selectedData.getActiveTopStackValue().subscribe((dataStackItem: DataStackItem) => this.processOverlaps());
     }
 
-    selectGeneModel(event) {
+    selectGeneModel(event: any) {
         console.log(event.value);
         this.selectedGeneModelSource.next(event.value);
     }

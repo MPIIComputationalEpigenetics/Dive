@@ -14,10 +14,10 @@ import { Component } from '@angular/core';
 })
 export class OverlapsBarChartComponent {
     options: Object;
-    chart: Object;
-    result_by_dataset_stack: Object;
+    chart: any;
+    result_by_dataset_stack: any;
 
-    setNewData(categories, series, result_by_dataset_stack) {
+    setNewData(categories: any, series: any, result_by_dataset_stack: any) {
 
         this.result_by_dataset_stack = result_by_dataset_stack;
 
@@ -25,7 +25,7 @@ export class OverlapsBarChartComponent {
 
         const point = {
             events: {
-                click: function (click, e) {
+                click: function (click: any, e: any) {
                     // dummy function
                 }
             }
@@ -51,7 +51,7 @@ export class OverlapsBarChartComponent {
         for (const serie of series) {
             if (serie['type'] === 'column') {
                 serie['point'] = point;
-                serie['point']['events']['click'] = (ev) => this.clickExperimentBar(ev);
+                serie['point']['events']['click'] = (ev: any) => this.clickExperimentBar(ev);
                 serie['dataLabels'] = dataLabels;
                 serie['borderWidth'] = 0;
                 this.chart['addSeries'](serie, false);
@@ -73,7 +73,7 @@ export class OverlapsBarChartComponent {
         return this.chart['series'][0]['data'].length > 0;
     }
 
-    saveInstance(chartInstance) {
+    saveInstance(chartInstance: any) {
         this.chart = chartInstance;
     }
 
@@ -120,7 +120,7 @@ export class OverlapsBarChartComponent {
         };
     }
 
-    clickExperimentBar(click) {
+    clickExperimentBar(click: any) {
         const point = click.point;
         const category = point.category;
         const index = point.series.columnIndex;

@@ -38,7 +38,7 @@ export class AppMenuComponent {
         menuService.genomeValue$.subscribe((menuItems: Object[]) => this.model = menuItems);
     }
 
-    changeTheme(theme) {
+    changeTheme(theme: string) {
         const themeLink: HTMLLinkElement = <HTMLLinkElement>document.getElementById('theme-css');
         const layoutLink: HTMLLinkElement = <HTMLLinkElement>document.getElementById('layout-css');
 

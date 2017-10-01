@@ -1,10 +1,27 @@
 import { IKey } from 'app/domain/interfaces';
 
-export class IdName implements IKey {
-    constructor(public id: string, public name: string) { }
+export class Id implements IKey {
+    constructor(public id: string) { }
 
     key(): string {
         return this.id;
+    }
+
+    clone(): Id {
+        return new Id(this.id);
+    }
+
+    text() : string {
+        return 'ID: ' + this.id;
+    }
+}
+
+
+export class IdName implements IKey {
+    constructor(public id: Id, public name: string) { }
+
+    key(): string {
+        return this.id.id;
     }
 
     clone(): IdName {
@@ -20,7 +37,7 @@ export class IdNameCount extends IdName {
     count: number;
 
     constructor(data: string[]) {
-        super(data[0], data[1]);
+        super(new Id(data[0]), data[1]);
         if (data.length >= 2) {
             this.count = parseInt(data[2]);
         } else {
@@ -55,48 +72,48 @@ export class Project extends IdNameCount {
 
 export class Annotation extends IdName {
     constructor(data: string[]) {
-        super(data[0], data[1]);
+        super(new Id(data[0]), data[1]);
     }
 }
 
 export class Experiment extends IdName {
     constructor(data: string[]) {
-        super(data[0], data[1]);
+        super(new Id(data[0]), data[1]);
     }
 }
 
 export class Genome extends IdName {
     constructor(data: string[]) {
-        super(data[0], data[1]);
+        super(new Id(data[0]), data[1]);
     }
 }
 
 
 export class GeneModel extends IdName {
     constructor(data: string[]) {
-        super(data[0], data[1]);
+        super(new Id(data[0]), data[1]);
     }
 }
 
 export class Gene extends IdName {
     constructor(private data: {}) {
-        super(data["_id"], data["gene_name"])
+        super((<any>data)["_id"], (<any>data)["gene_name"])
     }
 
     gene_id(): string {
-        return this.data["gene_id"];
+        return (<any>this.data)["gene_id"];
     }
 
     gene_name(): string {
-        return this.data["gene_name"];
+        return (<any>this.data)["gene_name"];
     }
 }
 
 export class FullMetadata extends IdName {
-    values: Object;
+    values: any;
 
     constructor(data: Object) {
-        super(data['_id'], data['name']);
+        super((<any>data)["_id"], (<any>data)["name"])
         this.values = data;
     }
 
@@ -116,7 +133,7 @@ export class FullMetadata extends IdName {
         return this.values['format'];
     }
 
-    columns(): Object[] {
+    columns(): any[] {
         return this.values['columns'];
     }
 }
@@ -135,11 +152,11 @@ export class FullGeneModel extends FullMetadata {
 }
 
 export class FullExperiment extends FullMetadata {
-    constructor(data: Object) {
+    constructor(data: any) {
         super(data);
     }
 
-    sample_info(): Object {
+    sample_info(): any {
         return this.values['sample_info'];
     }
 

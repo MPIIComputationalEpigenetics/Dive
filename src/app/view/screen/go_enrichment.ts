@@ -56,7 +56,7 @@ export class GoEnrichmentScreenComponent implements OnDestroy {
         public progress_element: ProgressElement, private selectedData: SelectedData) {
 
         this.genomeSubscription = deepBlueService.genomeValue$.subscribe(genome => {
-            if (genome.id === '') {
+            if (genome === null) {
                 return;
             }
             this.deepBlueService.getGeneModelsBySelectedGenome().subscribe((geneModels: GeneModel[]) => {
@@ -77,7 +77,7 @@ export class GoEnrichmentScreenComponent implements OnDestroy {
         this.selectedData.getActiveTopStackValue().subscribe((dataStackItem: DataStackItem) => this.processEnrichment());
     }
 
-    filter_enrichment_data($event) {
+    filter_enrichment_data($event: any) {
 
         const newResults = [];
         for (let idx = 0; idx < this.enrichment_data_from_server.length; idx++) {
@@ -103,17 +103,17 @@ export class GoEnrichmentScreenComponent implements OnDestroy {
 
         const filtered_data = [];
         for (let idx = 0; idx < value.length; idx++) {
-            const row = value[idx];
+            const row : any = value[idx];
 
             if ((row['gooverlap'] >= go_overlap) &&
                 (row['ratio'] >= ratio)) {
                 filtered_data.push(row);
             }
         }
-        return filtered_data.sort((a: Object, b: Object) => b['gooverlap'] - a['gooverlap']);
+        return filtered_data.sort((a: any, b: any) => b['gooverlap'] - a['gooverlap']);
     }
 
-    selectGeneModel(event) {
+    selectGeneModel(event: any) {
         this.selectedGeneModelSource.next(event.value);
     }
 
@@ -131,7 +131,7 @@ export class GoEnrichmentScreenComponent implements OnDestroy {
             this.deepBlueService.getComposedResultIterator(request_id, this.progress_element, 'go_enrichment')
                 .subscribe((result: DeepBlueMiddlewareGOEnrichtmentResult[]) => {
                     const end = new Date().getTime();
-                    console.log(result[0]['results']['enrichment']['go_terms'].length);
+                    console.log(result[0].getResults()['enrichment']['go_terms'].length);
                     // Now calculate and output the difference
                     console.log(end - start);
                     console.log(result);
@@ -146,10 +146,11 @@ export class GoEnrichmentScreenComponent implements OnDestroy {
 
         for (let pos = 0; pos < datum.length; pos++) {
             const data = datum[pos];
-            const rows: Object[] = data.getResults()['enrichment']['go_terms'].filter((x) => {
+
+            const rows: any[] = data.getResults()['enrichment']['go_terms'].filter((x: any) => {
                 return x['go_overlap'] !== 0
-            }).map((x) => {
-                const row = {};
+            }).map((x: any) => {
+                const row : {[key: string]: any} = {};
                 for (let idx = 0; idx < this.columns.length; idx++) {
                     const column_name = this.columns[idx]['name'];
                     const v = x[column_name];
@@ -158,7 +159,7 @@ export class GoEnrichmentScreenComponent implements OnDestroy {
                 return row;
             });
 
-            rows.sort((a: Object, b: Object) => b['go_overlap'] - a['go_overlap']);
+            rows.sort((a: any, b: any) => b['go_overlap'] - a['go_overlap']);
 
             this.enrichment_data_from_server.push(rows);
         }
@@ -168,14 +169,14 @@ export class GoEnrichmentScreenComponent implements OnDestroy {
 
     plotBar() {
         const categories = [];
-        const categories_value = new Array<{}>();
+        const categories_value = new Array<any>();
 
         for (let stack = 0; stack < this.enrichment_data.length; stack++) {
             const data = this.enrichment_data[stack];
-            const values_by_category = {}
+            const values_by_category : {[key: string]: any} = {};
 
             for (let term_pos = 0; term_pos < data.length; term_pos++) {
-                const term = data[term_pos];
+                const term : any = data[term_pos];
 
                 const id = term['id'];
                 const name = term['name'];
