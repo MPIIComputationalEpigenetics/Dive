@@ -960,7 +960,7 @@ export class DeepBlueService {
         headers.append('Content-Type', 'application/json');
 
         let request = {
-            "queries_id": queries.map((op) => op.queryId()),
+            "queries_id": queries.map((op) => op.queryId().id),
             "universe_id": universe_id.id,
             "datasets": datasets
         }
