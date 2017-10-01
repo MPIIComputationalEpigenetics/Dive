@@ -90,6 +90,9 @@ export class DiveStatus {
             new CSSExperimentsMenu(this.deepBlueService, this.menuService)
         ];
 
+        this.menus.forEach((menu: IMenu) => {
+            menu.loadMenu();
+        });
     }
 }
 
