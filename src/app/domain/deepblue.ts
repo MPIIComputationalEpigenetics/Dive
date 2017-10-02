@@ -96,8 +96,8 @@ export class GeneModel extends IdName {
 }
 
 export class Gene extends IdName {
-    constructor(private data: {}) {
-        super((<any>data)["_id"], (<any>data)["gene_name"])
+    constructor(private data: any) {
+        super(new Id(data["_id"]), data["gene_name"]);
     }
 
     gene_id(): string {
@@ -112,8 +112,8 @@ export class Gene extends IdName {
 export class FullMetadata extends IdName {
     values: any;
 
-    constructor(data: Object) {
-        super((<any>data)["_id"], (<any>data)["name"])
+    constructor(data: any) {
+        super(new Id(data["_id"]), data["name"]);
         this.values = data;
     }
 

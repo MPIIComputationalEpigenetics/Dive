@@ -202,8 +202,8 @@ export class StackValue {
 export class DeepBlueMiddlewareOverlapResult {
 
     static fromObject(obj: any): DeepBlueMiddlewareOverlapResult {
-        return new DeepBlueMiddlewareOverlapResult(obj['data_name'], obj['data_query'],
-            obj['filter_name'], obj['filter_query'].id, obj['count']);
+        return new DeepBlueMiddlewareOverlapResult(obj['data_name'], new Id(obj['data_query'].id),
+            obj['filter_name'], new Id(obj['filter_query'].id), obj['count']);
     }
 
     constructor(private data_name: string, private data_query: Id,

@@ -117,8 +117,8 @@ export class SelectedData implements OnDestroy {
 
   getStackPosByQueryId(query_id: Id): number {
     return this.getStacksTopOperation()
-      .map((stack: DeepBlueOperation) => stack.query_id)
-      .indexOf(query_id);
+      .map((stack: DeepBlueOperation) => stack.query_id.id)
+      .indexOf(query_id.id);
   }
 
   getStackname(pos: number): string {
