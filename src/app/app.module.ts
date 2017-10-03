@@ -97,7 +97,7 @@ import { GoEnrichmentScreenComponent } from 'app/view/screen/go_enrichment';
 import { OverlapEnrichmentScreenComponent } from 'app/view/screen/overlap_enrichment';
 
 
-import { DataInfoBoxComponent, DiveStatus, HistoneExperimentsMenu, CSSExperimentsMenu, SelectedDataView, SelectedDataButton } from 'app/view/component/deepblue';
+import { DiveStatus, HistoneExperimentsMenu, CSSExperimentsMenu, SelectedDataView, SelectedDataButton } from 'app/view/component/deepblue';
 
 import { DataLoadProgressBar } from 'app/view/component/progressbar';
 
@@ -117,6 +117,7 @@ import { SelectAnnotationsComponent } from "app/view/component/data-selection/se
 import { SelectGenesComponent } from 'app/view/component/data-selection/select-genes';
 import { SelectDatasetsComponent } from 'app/view/component/data-selection/select-datasets';
 import { SelectDatabasesComponent } from 'app/view/component/data-selection/select-databases';
+import { DataInfoBoxComponent } from 'app/view/component/data-info-box';
 
 
 @NgModule({
@@ -203,7 +204,6 @@ import { SelectDatabasesComponent } from 'app/view/component/data-selection/sele
         DataLoadProgressBar,
         OverlapsBarChartComponent,
         FilteringComponent,
-        DataInfoBoxComponent,
         SelectAnnotationsComponent,
         SelectDatasetsComponent,
         SelectExperimentsComponent,
@@ -219,7 +219,8 @@ import { SelectDatabasesComponent } from 'app/view/component/data-selection/sele
         GoEnrichmentScreenComponent,
         OverlapEnrichmentScreenComponent,
         SelectedDataView,
-        SelectedDataButton
+        SelectedDataButton,
+        DataInfoBoxComponent
     ],
     providers: [
         { provide: LocationStrategy, useClass: HashLocationStrategy },

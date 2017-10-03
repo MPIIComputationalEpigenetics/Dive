@@ -25,57 +25,6 @@ import { DataStack } from 'app/service/datastack';
 import { IMenu } from 'app/domain/interfaces';
 
 @Component({
-    selector: 'app-data-info-box',
-    template: `
-        <div class="card card-w-title" style="word-wrap: break-word">
-            <h2>Data overlapping with {{ getStackName() }}</h2>
-
-            <li *ngFor="let result of results">
-                {{ result.getFilterName() }} - {{ result.getCount() }}
-            <p><button pButton type="button" (click)="filterOverlapping(result)" label="Filter overlapping"></button>
-            <p><button pButton type="button" (click)="filterNonOverlapping(result)" label="Filter not-overlapping"></button>
-            </li>
-        </div>
-    `
-})
-export class DataInfoBoxComponent implements OnDestroy {
-    dataSelectedSubscription: Subscription;
-
-    biosource: string = null;
-    value: Object = null;
-    results: DeepBlueMiddlewareOverlapResult[] = [];
-
-    constructor(private deepBlueService: DeepBlueService, private selectedData: SelectedData) {
-        this.dataSelectedSubscription = deepBlueService.dataInfoSelectedValue$.subscribe((data: any) => {
-            this.biosource = data['biosource'];
-            this.value = data['value'];
-            this.results = data['results']
-                .sort((a: DeepBlueMiddlewareOverlapResult, b: DeepBlueMiddlewareOverlapResult) => a.getCount() - b.getCount());
-
-            console.log(this.results);
-        });
-    }
-
-    filterOverlapping(result: DeepBlueMiddlewareOverlapResult) {
-        this.selectedData.activeStackSubject.getValue().overlap(result.toDeepBlueOperation());
-    }
-
-    filterNonOverlapping(result: DeepBlueMiddlewareOverlapResult) {
-        this.selectedData.activeStackSubject.getValue().non_overlap(result.toDeepBlueOperation());
-    }
-
-    getStackName(): string {
-        return this.biosource;
-    }
-
-    ngOnDestroy() {
-        this.dataSelectedSubscription.unsubscribe();
-    }
-
-}
-
-
-@Component({
     selector: 'dive-menu',
     template: `
             <filtering></filtering>
