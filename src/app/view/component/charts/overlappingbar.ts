@@ -80,7 +80,7 @@ export class OverlapsBarChartComponent {
     constructor(private deepBlueService: DeepBlueService) {
         this.options = {
             title: {
-                text: `Overlapping with ${deepBlueService.getAnnotation().name}`
+                text: `Overlapping with ${deepBlueService.getDivingData().data().name()}`
             },
             xAxis: {
                 categories: []

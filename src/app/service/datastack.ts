@@ -12,6 +12,7 @@ import { DeepBlueOperation, StackValue } from 'app/domain/operations';
 
 import { DeepBlueService } from 'app/service/deepblue';
 import { ProgressElement } from 'app/service/progresselement';
+import { IOperation } from 'app/domain/interfaces';
 
 declare var randomColor: any;
 
@@ -26,7 +27,7 @@ export class DataStackFactory {
 }
 
 export class DataStackItem {
-    constructor(public op: DeepBlueOperation, public what: string, public description: string, public count: number) { }
+    constructor(public op: IOperation, public what: string, public description: string, public count: number) { }
 
     clone(): DataStackItem {
         return new DataStackItem(this.op, this.what, this.description, this.count);
@@ -52,9 +53,9 @@ export class DataStack {
         return 'rgba(' + this.color_array[0] + ',' + this.color_array[1] + ',' + this.color_array[2] + ',' + alpha + ')';
     }
 
-    setInitialData(data: IdName) {
+    setInitialData(data: IOperation) {
         this._data = [];
-        if (data.id == null) {
+        if (data == null) {
             return;
         }
 
@@ -62,14 +63,12 @@ export class DataStack {
         this.progress_element.reset(4, request_count);
 
         // TODO: use/make a generic method for experiments and annotations
-        this.deepBlueService.selectAnnotation(data, this.progress_element, request_count).subscribe((selected_annotation) => {
-            this.deepBlueService.cacheQuery(selected_annotation, this.progress_element, request_count).subscribe((cached_data) => {
-                this.deepBlueService.countRegionsRequest(cached_data, this.progress_element, request_count).subscribe((total) => {
-                    const totalSelectedRegtions = total['result']['count'];
-                    const dataStackItem: DataStackItem = new DataStackItem(cached_data, 'select', 'Selection', totalSelectedRegtions);
-                    this._data.push(dataStackItem);
-                    this.topStackSubject.next(dataStackItem);
-                });
+        this.deepBlueService.cacheQuery(data, this.progress_element, request_count).subscribe((cached_data) => {
+            this.deepBlueService.countRegionsRequest(cached_data, this.progress_element, request_count).subscribe((total) => {
+                const totalSelectedRegtions = total['result']['count'];
+                const dataStackItem: DataStackItem = new DataStackItem(cached_data, 'select', 'Selection', totalSelectedRegtions);
+                this._data.push(dataStackItem);
+                this.topStackSubject.next(dataStackItem);
             });
         });
     }
@@ -79,7 +78,7 @@ export class DataStack {
     }
 
     overlap(operation: DeepBlueOperation) {
-        const current_op: DeepBlueOperation = this.getCurrentOperation();
+        const current_op: IOperation = this.getCurrentOperation();
         if (current_op == null) {
             return;
         }
@@ -92,7 +91,7 @@ export class DataStack {
                 this.deepBlueService.countRegionsRequest(cached_data, this.progress_element, request_count).subscribe((total) => {
                     const totalSelectedRegtions = total['result']['count'];
                     const dataStackItem: DataStackItem = new DataStackItem(cached_data, 'overlap',
-                        'Overlap with ' + operation.dataName() + ' overlapping with XXX',
+                        'Overlap with ' + operation.data().name() + ' overlapping with XXX',
                         totalSelectedRegtions);
                     this._data.push(dataStackItem);
                     this.topStackSubject.next(dataStackItem);
@@ -103,7 +102,7 @@ export class DataStack {
 
     non_overlap(operation: DeepBlueOperation) {
         // TODO: use/make a generic method for experiments and annotations
-        const current_op: DeepBlueOperation = this.getCurrentOperation();
+        const current_op = this.getCurrentOperation();
         if (current_op == null) {
             return;
         }
@@ -117,7 +116,7 @@ export class DataStack {
                     this.deepBlueService.countRegionsRequest(cached_data, this.progress_element, request_count).subscribe((total) => {
                         const totalSelectedRegtions = total['result']['count'];
                         const dataStackItem: DataStackItem = new DataStackItem(cached_data, 'not-overlap',
-                            'Not-overlap with ' + operation.dataName() + ' overlapping with XXX',
+                            'Not-overlap with ' + operation.data().name() + ' overlapping with XXX',
                             totalSelectedRegtions);
                         this._data.push(dataStackItem);
                         this.topStackSubject.next(dataStackItem);
@@ -130,7 +129,7 @@ export class DataStack {
         const request_count = 0;
         this.progress_element.reset(4, request_count);
 
-        const current_op: DeepBlueOperation = this.getCurrentOperation();
+        const current_op = this.getCurrentOperation();
         if (current_op == null) {
             return;
         }
@@ -154,11 +153,11 @@ export class DataStack {
     }
 
     remove(data: DataStackItem) {
-        const query_id = data.op.query_id;
+        const query_id = data.op.queryId().id;
         // find position
         let i = this._data.length - 1;
         for (; i >= 0; i--) {
-            if (this._data[i].op.query_id === query_id) {
+            if (this._data[i].op.queryId().id === query_id) {
                 break;
             }
         }
@@ -176,7 +175,7 @@ export class DataStack {
         return this._data;
     }
 
-    getCurrentOperation(): DeepBlueOperation {
+    getCurrentOperation(): IOperation {
         if (this._data.length > 0) {
             return this._data[this._data.length - 1].op;
         }
@@ -197,9 +196,9 @@ export class DataStack {
             return '(loading..)';
         }
         if (this._data.length > 1) {
-            return top.op.dataName() + ' (filtered)';
+            return top.op.data().name() + ' (filtered)';
         } else {
-            return top.op.dataName();
+            return top.op.data().name();
         }
     }
 }

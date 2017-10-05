@@ -90,7 +90,7 @@ import { OverlapsBarChartComponent } from 'app/view/component/charts/overlapping
 
 import { FilteringComponent } from 'app/view/component/filtering';
 
-import { SummaryScreen } from 'app/view/screen/summary';
+import { DataSelectionScreen } from 'app/view/screen/data-selection';
 import { RegionsScreen } from 'app/view/screen/regions';
 import { GenesScreen } from 'app/view/screen/genes';
 import { GoEnrichmentScreenComponent } from 'app/view/screen/go_enrichment';
@@ -210,7 +210,7 @@ import { DataInfoBoxComponent } from 'app/view/component/data-info-box';
         SelectTilingRegionsComponent,
         SelectGenesComponent,
         SelectDatabasesComponent,
-        SummaryScreen,
+        DataSelectionScreen,
         RegionsScreen,
         BioSourcesScreenComponent,
         HistonesScreenComponent,

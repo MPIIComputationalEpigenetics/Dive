@@ -12,6 +12,7 @@ import { DeepBlueOperation } from 'app/domain/operations'
 
 import { DeepBlueService } from 'app/service/deepblue';
 import { DataStack, DataStackFactory, DataStackItem } from 'app/service/datastack';
+import { IOperation } from 'app/domain/interfaces';
 
 @Injectable()
 export class SelectedData implements OnDestroy {
@@ -29,11 +30,11 @@ export class SelectedData implements OnDestroy {
   annotationSubscription: Subscription;
 
   constructor(private deepBlueService: DeepBlueService, private dataStackFactory: DataStackFactory) {
-    this.annotationSubscription = deepBlueService.annotationValue$.subscribe((annotation: Annotation) => {
+    this.annotationSubscription = deepBlueService.dataToDiveValue$.subscribe((op: IOperation) => {
       const stack: DataStack = dataStackFactory.newDataStack();
-      if (annotation !== null) {
+      if (op !== null) {
         // TODO: Ask if the user want to save the previous stack
-        stack.setInitialData(annotation);
+        stack.setInitialData(op);
         this.replaceStack(0, stack);
         this.setActiveStack(stack);
       }
@@ -45,9 +46,9 @@ export class SelectedData implements OnDestroy {
     this.annotationSubscription.unsubscribe();
   }
 
-  insertForComparison(annotation: Annotation) {
+  insertForComparison(comparisonData: IOperation) {
     const stack: DataStack = this.dataStackFactory.newDataStack();
-    stack.setInitialData(annotation);
+    stack.setInitialData(comparisonData);
     this.insertStack(1, stack);
   }
 
@@ -104,14 +105,14 @@ export class SelectedData implements OnDestroy {
     return this.activeTopStackValue$;
   }
 
-  getActiveCurrentOperation(): DeepBlueOperation {
+  getActiveCurrentOperation(): IOperation {
     if (this.activeStackSubject.getValue() != null) {
       return this.activeStackSubject.getValue().getCurrentOperation();
     }
     return null;
   }
 
-  getStacksTopOperation(): DeepBlueOperation[] {
+  getStacksTopOperation(): IOperation[] {
     return this._stacks.map((stack: DataStack) => stack.getCurrentOperation());
   }
 

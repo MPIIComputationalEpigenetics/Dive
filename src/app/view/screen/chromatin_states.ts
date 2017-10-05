@@ -187,7 +187,7 @@ export class ChromatinStatesScreenComponent {
     const start = new Date().getTime();
 
 
-    const current: DeepBlueOperation[] = this.selectedData.getStacksTopOperation();
+    const current = this.selectedData.getStacksTopOperation();
 
     let state = this.deepBlueService.epigeneticMarkSource.getValue();
     let filter = new FilterParameter("NAME", "==", state.name, "string");

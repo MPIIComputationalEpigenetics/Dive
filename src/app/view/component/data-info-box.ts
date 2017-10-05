@@ -57,7 +57,6 @@ export class DataInfoBoxComponent implements OnDestroy {
 
   filterOverlapping(result: DeepBlueMiddlewareOverlapResult) {
     let op = result.toDeepBlueOperation();
-    debugger;
     this.selectedData.activeStackSubject.getValue().overlap(op);
   }
 

@@ -1,7 +1,7 @@
 import { GoEnrichmentScreenComponent } from './view/screen/go_enrichment';
 import { Routes, RouterModule } from '@angular/router';
 import { ModuleWithProviders } from '@angular/core';
-import { SummaryScreen } from 'app/view/screen/summary';
+import { DataSelectionScreen } from 'app/view/screen/data-selection';
 import { RegionsScreen } from 'app/view/screen/regions';
 import { HistonesScreenComponent } from 'app/view/screen/histones';
 import { ChromatinStatesScreenComponent } from 'app/view/screen/chromatin_states';
@@ -9,7 +9,7 @@ import { GenesScreen } from 'app/view/screen/genes';
 import { OverlapEnrichmentScreenComponent } from "app/view/screen/overlap_enrichment";
 
 export const routes: Routes = [
-    { path: '', component: SummaryScreen },
+    { path: '', component: DataSelectionScreen },
     { path: 'regions', component: RegionsScreen },
     { path: 'histonemark', component: HistonesScreenComponent },
     { path: 'genes', component: GenesScreen },

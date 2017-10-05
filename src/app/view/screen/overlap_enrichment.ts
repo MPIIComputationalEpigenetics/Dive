@@ -36,7 +36,7 @@ export class OverlapEnrichmentScreenComponent implements OnDestroy {
     columns = DeepBlueMiddlewareOverlapEnrichtmentResultItem.asColumns();
 
     constructor(private deepBlueService: DeepBlueService,
-        public progress_element: ProgressElement, private selectedData: SelectedData) {
+        public progress_element: ProgressElement, public selectedData: SelectedData) {
 
     }
 
@@ -52,7 +52,7 @@ export class OverlapEnrichmentScreenComponent implements OnDestroy {
 
 
     process() {
-        const current: DeepBlueOperation[] = this.selectedData.getStacksTopOperation();
+        const current: IOperation[] = this.selectedData.getStacksTopOperation();
 
         this.deepBlueService
             .composedCalculateOverlapsEnrichment(current, this.selected_data.queryId(), this.selected_datasets)

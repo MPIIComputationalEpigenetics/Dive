@@ -123,7 +123,7 @@ export class GoEnrichmentScreenComponent implements OnDestroy {
         // Each experiment is started, selected, overlaped, count, get request data (4 times each)
         const start = new Date().getTime();
 
-        const current: DeepBlueOperation[] = this.selectedData.getStacksTopOperation();
+        const current = this.selectedData.getStacksTopOperation();
 
         this.deepBlueService.composedCalculateGenesEnrichment(current, gene_model).subscribe((request_id: string) => {
             console.log('request_id from middleware', request_id);

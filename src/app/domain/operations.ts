@@ -1,43 +1,51 @@
 import { ICloneable } from 'app/domain/interfaces';
-import { IKey, IOperation } from 'app/domain/interfaces';
+import { IKey, IOperation, IDataParameter } from 'app/domain/interfaces';
 import { IdName, GeneModel, Id } from 'app/domain/deepblue';
 
+export class DataParameter implements IDataParameter {
+    constructor(private _data: IdName | string[]) { }
+
+    name(): string {
+        let data_name = "";
+        if (this._data instanceof IdName) {
+            data_name = (<IdName>this._data).name;
+        } else {
+            data_name = (<string[]>this._data).join(",");
+        }
+        return data_name;
+    }
+
+    id(): Id {
+        if (this._data instanceof IdName) {
+            return (<IdName>this._data).id;
+        } else {
+            return new Id((<string[]>this._data).join(","));
+        }
+    }
+}
+
 export class DeepBlueOperation implements IOperation {
-    constructor(public data: IdName | string[], public query_id: Id,
+    constructor(private _data: IDataParameter, public query_id: Id,
         public command: string, public request_count: number, public cached = false) { }
 
+    data(): IDataParameter {
+        return this._data;
+    }
+
     clone(request_count: number = -1): DeepBlueOperation {
-        return new DeepBlueOperation(this.data, this.query_id, this.command, request_count, this.cached);
+        return new DeepBlueOperation(this._data, this.query_id, this.command, request_count, this.cached);
     }
 
     cacheIt(query_id: Id): DeepBlueOperation {
-        return new DeepBlueOperation(this.data, query_id, this.command, this.request_count, true);
+        return new DeepBlueOperation(this._data, query_id, this.command, this.request_count, true);
     }
 
     key(): string {
         return this.query_id.id;
     }
 
-    dataName(): string {
-        let data_name = "";
-        if (this.data instanceof IdName) {
-            data_name = (<IdName>this.data).name;
-        } else {
-            data_name = (<string[]>this.data).join(",");
-        }
-        return data_name;
-    }
-
-    dataId(): Id {
-        if (this.data instanceof IdName) {
-            return this.data.id;
-        } else {
-            return new Id((<string[]>this.data).join(","));
-        }
-    }
-
     text(): string {
-        return this.command + " " + this.dataName();
+        return this.command + " " + this._data.name();
     }
 
     queryId(): Id {
@@ -49,12 +57,16 @@ export class DeepBlueTiling implements IOperation {
     constructor(public size: number, public genome: string, public chromosomes: string[], public query_id: Id,
         public request_count: number, public cached = false) { }
 
+    data(): DataParameter {
+        return null;
+    }
+
     clone(request_count: number = -1): DeepBlueTiling {
         return new DeepBlueTiling(this.size, this.genome, this.chromosomes, this.query_id,
             this.request_count, this.cached);
     }
 
-    cacheIt(query_id: string): DeepBlueTiling {
+    cacheIt(query_id: Id): DeepBlueTiling {
         return new DeepBlueTiling(this.size, this.genome, this.chromosomes, this.query_id, this.request_count, true);
     }
 
@@ -75,11 +87,15 @@ export class DeepBlueGenes implements IOperation {
     constructor(public genes: string[], public gene_model: GeneModel, public query_id: Id,
         public request_count: number, public cached = false) { }
 
+    data(): DataParameter {
+        return null;
+    }
+
     clone(request_count: number = -1): DeepBlueGenes {
         return new DeepBlueGenes(this.genes, this.gene_model, this.query_id, this.request_count, this.cached);
     }
 
-    cacheIt(query_id: string): DeepBlueGenes {
+    cacheIt(query_id: Id): DeepBlueGenes {
         return new DeepBlueGenes(this.genes, this.gene_model, this.query_id, this.request_count, true);
     }
 
@@ -97,7 +113,7 @@ export class DeepBlueGenes implements IOperation {
 }
 
 export class DeepBlueParametersOperation implements IKey {
-    constructor(public operation: DeepBlueOperation, public parameters: string[],
+    constructor(public operation: IOperation, public parameters: string[],
         public command: string, public request_count: number, public cached = false) { }
 
     clone(request_count: number = -1): DeepBlueParametersOperation {
@@ -118,7 +134,7 @@ export class DeepBlueParametersOperation implements IKey {
 }
 
 export class DeepBlueMultiParametersOperation implements IKey {
-    constructor(public op_one: DeepBlueOperation, public op_two: DeepBlueOperation, public parameters: string[],
+    constructor(public op_one: IOperation, public op_two: IOperation, public parameters: string[],
         public command: string, public request_count: number, public cached = false) { }
 
     clone(request_count: number = -1): DeepBlueMultiParametersOperation {
@@ -139,11 +155,15 @@ export class DeepBlueMultiParametersOperation implements IKey {
 }
 
 export class DeepBlueRequest implements IKey {
-    constructor(public data: IdName | string[], public request_id: Id,
-        public command: string, public operation: DeepBlueOperation, public request_count: number) { }
+    constructor(public _data: IDataParameter, public request_id: Id,
+        public command: string, public operation: IOperation, public request_count: number) { }
 
     clone(request_count: number = -1): DeepBlueRequest {
-        return new DeepBlueRequest(this.data, this.request_id, this.command, this.operation, request_count);
+        return new DeepBlueRequest(this._data, this.request_id, this.command, this.operation, request_count);
+    }
+
+    data() : IDataParameter {
+        return this._data;
     }
 
     key(): string {
@@ -156,10 +176,14 @@ export class DeepBlueRequest implements IKey {
 }
 
 export class DeepBlueResult implements ICloneable {
-    constructor(public data: IdName | string[], public result: any, public request: DeepBlueRequest, public request_count: number) { }
+    constructor(public _data: IDataParameter, public result: any, public request: DeepBlueRequest, public request_count: number) { }
 
     clone(request_count: number = -1): DeepBlueResult {
-        return new DeepBlueResult(this.data, this.result, this.request, request_count);
+        return new DeepBlueResult(this._data, this.result, this.request, request_count);
+    }
+
+    data() : IDataParameter {
+        return this._data;
     }
 
     resultAsString(): string {
@@ -174,10 +198,10 @@ export class DeepBlueResult implements ICloneable {
 
 export class StackValue {
     constructor(public stack: number,
-        public value: DeepBlueOperation | DeepBlueParametersOperation |
+        public value: IOperation | DeepBlueParametersOperation |
             DeepBlueMultiParametersOperation | DeepBlueRequest | DeepBlueResult) { }
 
-    getDeepBlueOperation(): DeepBlueOperation {
+    getDeepBlueOperation(): IOperation {
         return <DeepBlueOperation>this.value;
     }
 
@@ -234,7 +258,9 @@ export class DeepBlueMiddlewareOverlapResult {
 
     toDeepBlueOperation(): DeepBlueOperation {
         return new DeepBlueOperation(
-            new IdName(this.filter_query, this.filter_name),
+            new DataParameter(
+                new IdName(this.filter_query, this.filter_name)
+            ),
             this.filter_query, 'Select Experiment Data', -1);
     }
 }

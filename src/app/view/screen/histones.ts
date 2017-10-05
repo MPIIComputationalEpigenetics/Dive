@@ -185,7 +185,7 @@ export class HistonesScreenComponent implements OnDestroy {
         const start = new Date().getTime();
 
 
-        const current: DeepBlueOperation[] = this.selectedData.getStacksTopOperation();
+        const current = this.selectedData.getStacksTopOperation();
 
         this.deepBlueService.composedCountOverlaps(current, experiments).subscribe((request_id: string) => {
             console.log('request_id from middleware', request_id);

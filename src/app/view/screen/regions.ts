@@ -73,12 +73,12 @@ export class RegionsScreen {
 
     processRegions() {
 
-        const actualData: DeepBlueOperation = this.selectedData.getActiveCurrentOperation();
+        const actualData = this.selectedData.getActiveCurrentOperation();
         if (actualData == null) {
             return;
         }
 
-        this.deepBlueService.getInfo(actualData.dataId()).subscribe((info: FullMetadata) => {
+        this.deepBlueService.getInfo(actualData.data().id()).subscribe((info: FullMetadata) => {
             this.progress_element.reset(4, 0);
 
             const format = info.format();
