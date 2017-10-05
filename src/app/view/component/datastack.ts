@@ -11,7 +11,7 @@ import { DeepBlueService } from 'app/service/deepblue';
             <div class="activity-header dashboard">
                 <div class="ui-g">
                     <div class="ui-g-10">
-                        <div style="font-weight:bold" class="description">{{ selectedData.getActiveData()[0].op.data.name }}</div>
+                        <div style="font-weight:bold" class="description">{{ selectedData.getActiveData()[0].op.data().name() }}</div>
                         <p class="count"> {{ selectedData.getActiveData()[0].count }} regions</p>
                     </div>
                     <div class="ui-g-2 button-change">

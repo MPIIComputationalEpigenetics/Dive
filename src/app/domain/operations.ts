@@ -58,7 +58,7 @@ export class DeepBlueTiling implements IOperation {
         public request_count: number, public cached = false) { }
 
     data(): DataParameter {
-        return null;
+        return new DataParameter(new IdName(this.query_id, "Tiling Regions of " + this.size.toLocaleString() + "bp"));
     }
 
     clone(request_count: number = -1): DeepBlueTiling {
@@ -88,7 +88,7 @@ export class DeepBlueGenes implements IOperation {
         public request_count: number, public cached = false) { }
 
     data(): DataParameter {
-        return null;
+        return new DataParameter(new IdName(this.query_id, "Selected Genes"));
     }
 
     clone(request_count: number = -1): DeepBlueGenes {
