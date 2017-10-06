@@ -8,6 +8,7 @@ import { HttpModule } from '@angular/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 import { AppRoutes } from './app.routes';
+import { InplaceModule } from 'primeng/primeng';
 
 import 'rxjs/Rx';
 
@@ -88,8 +89,6 @@ import { ProgressElement } from 'app/service/progresselement';
 
 import { OverlapsBarChartComponent } from 'app/view/component/charts/overlappingbar';
 
-import { FilteringComponent } from 'app/view/component/filtering';
-
 import { DataSelectionScreen } from 'app/view/screen/data-selection';
 import { RegionsScreen } from 'app/view/screen/regions';
 import { GenesScreen } from 'app/view/screen/genes';
@@ -97,7 +96,7 @@ import { GoEnrichmentScreenComponent } from 'app/view/screen/go_enrichment';
 import { OverlapEnrichmentScreenComponent } from 'app/view/screen/overlap_enrichment';
 
 
-import { DiveStatus, HistoneExperimentsMenu, CSSExperimentsMenu, SelectedDataView, SelectedDataButton } from 'app/view/component/deepblue';
+import { DiveStatus, HistoneExperimentsMenu, CSSExperimentsMenu} from 'app/view/component/menu/main-menu';
 
 import { DataLoadProgressBar } from 'app/view/component/progressbar';
 
@@ -118,6 +117,8 @@ import { SelectGenesComponent } from 'app/view/component/data-selection/select-g
 import { SelectDatasetsComponent } from 'app/view/component/data-selection/select-datasets';
 import { SelectDatabasesComponent } from 'app/view/component/data-selection/select-databases';
 import { DataInfoBoxComponent } from 'app/view/component/data-info-box';
+import { SelectedDataView, SelectedDataButton } from 'app/view/component/deepblue';
+import { LengthMenuFilterComponent } from 'app/view/component/menu/length-filtering';
 
 
 @NgModule({
@@ -151,6 +152,7 @@ import { DataInfoBoxComponent } from 'app/view/component/data-info-box';
         GalleriaModule,
         GMapModule,
         GrowlModule,
+        InplaceModule,
         InputMaskModule,
         InputSwitchModule,
         InputTextModule,
@@ -191,7 +193,7 @@ import { DataInfoBoxComponent } from 'app/view/component/data-info-box';
         TreeModule,
         TreeTableModule,
         ChartModule,
-        BrowserAnimationsModule
+        BrowserAnimationsModule,
     ],
     declarations: [
         AppComponent,
@@ -203,7 +205,6 @@ import { DataInfoBoxComponent } from 'app/view/component/data-info-box';
         DataStackViewComponent,
         DataLoadProgressBar,
         OverlapsBarChartComponent,
-        FilteringComponent,
         SelectAnnotationsComponent,
         SelectDatasetsComponent,
         SelectExperimentsComponent,
@@ -220,7 +221,8 @@ import { DataInfoBoxComponent } from 'app/view/component/data-info-box';
         OverlapEnrichmentScreenComponent,
         SelectedDataView,
         SelectedDataButton,
-        DataInfoBoxComponent
+        DataInfoBoxComponent,
+        LengthMenuFilterComponent
     ],
     providers: [
         { provide: LocationStrategy, useClass: HashLocationStrategy },

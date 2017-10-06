@@ -17,10 +17,10 @@ import { Annotation } from 'app/domain/deepblue';
 import { DeepBlueService } from 'app/service/deepblue';
 
 @Component({
-    selector: 'filtering',
+    selector: 'length-filtering',
     template: '<p></p>'
 })
-export class FilteringComponent implements OnInit {
+export class LengthMenuFilterComponent implements OnInit {
 
     public min_length_form: FormGroup;
     public max_length_form: FormGroup;

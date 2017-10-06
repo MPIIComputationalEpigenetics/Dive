@@ -131,7 +131,7 @@ export class HistonesScreenComponent implements OnDestroy {
         };
     }
 
-    constructor(private deepBlueService: DeepBlueService,
+    constructor(public deepBlueService: DeepBlueService,
         public progress_element: ProgressElement, private selectedData: SelectedData) {
 
         this.epigeneticMarkSubscription = deepBlueService.epigeneticMarkValue$.subscribe(selected_epigenetic_mark => {

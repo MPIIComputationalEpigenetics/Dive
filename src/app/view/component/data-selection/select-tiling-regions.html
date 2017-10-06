@@ -1,7 +1,17 @@
-<button pButton type="button" (click)="select_click()" label="Select tiling regions with {{ val }} base pairs"></button>
-<p>Tiling size: {{ size }}</p>
+<button pButton type="button" (click)="select_click()" label="Select tiling regions with {{ size }} base pairs"></button>
+
+<p-inplace #inplace closable="closable" [style]="{'min-height':'30px'}" [active]="false">
+  <span pInplaceDisplay>
+    {{ size?.toLocaleString() }}bp (click to edit)
+  </span>
+  <span pInplaceContent>
+    <input type="text" [ngModel]="size" type="number" (ngModelChange)="size = $event"(keyup.enter)="onEnter($event)"/>
+
+  </span>
+</p-inplace>
+
+
 <p>
-  <p-slider [(ngModel)]="size" [animate]=true [step]="100" [min]="100" [max]="25000">
+  <p-slider [(ngModel)]="size" [animate]=true [step]="500" [min]="min" [max]="max">
   </p-slider>
 </p>
-

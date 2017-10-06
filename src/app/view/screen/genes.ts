@@ -43,7 +43,7 @@ export class GenesScreen implements OnDestroy {
     data: any;
     hasData = false;
 
-    constructor(private deepBlueService: DeepBlueService,
+    constructor(public deepBlueService: DeepBlueService,
         public progress_element: ProgressElement, private selectedData: SelectedData) {
 
         this.genomeSubscription = deepBlueService.genomeValue$.subscribe(genome => {
