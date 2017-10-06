@@ -35,7 +35,7 @@ export class AppMenuComponent {
     constructor( @Inject(forwardRef(() => AppComponent)) public app: AppComponent,
         public menuService: MenuService) {
 
-        menuService.genomeValue$.subscribe((menuItems: Object[]) => this.model = menuItems);
+        menuService.menuValue$.subscribe((menuItems: Object[]) => this.model = menuItems);
     }
 
     changeTheme(theme: string) {
@@ -74,6 +74,11 @@ export class AppMenuComponent {
                     <label>{{ child.label }}</label>
                 </form>
 
+                <form novalidate *ngIf="child.type == 'text'" [formGroup]=child.group (ngSubmit)="child.submit()">
+                    <input type="{{ child.type }}" [formControlName]="child.control_name" pInputText/>
+                    <label>{{ child.label }}</label>
+                </form>
+
                 <ul app-submenu [item]="child" *ngIf="child.items" [@children]="isActive(i) ? 'visible' : 'hidden'" [visible]="isActive(i)" [reset]="reset"></ul>
             </li>
         </ng-template>
@@ -105,7 +110,7 @@ export class AppSubMenu {
 
     constructor( @Inject(forwardRef(() => AppComponent)) public app: AppComponent, public router: Router, public location: Location) { }
 
-    itemClick(event: Event, item: MenuItem, index: number)  {
+    itemClick(event: Event, item: MenuItem, index: number) {
         //avoid processing disabled items
         if (item.disabled) {
             event.preventDefault();

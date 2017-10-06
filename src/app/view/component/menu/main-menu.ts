@@ -29,6 +29,7 @@ import { IMenu } from 'app/domain/interfaces';
   selector: 'dive-menu',
   template: `
           <length-filtering></length-filtering>
+          <dna-pattern-filtering></dna-pattern-filtering>
           `,
 })
 export class DiveStatus {

@@ -40,7 +40,7 @@ export class MenuService {
   ];
 
   public menuItems = new BehaviorSubject<Object[]>(this.model);
-  genomeValue$: Observable<Object[]> = this.menuItems.asObservable();
+  menuValue$: Observable<Object[]> = this.menuItems.asObservable();
 
   findMenu(parentName: string): any {
     for (const subMenu of this.model) {

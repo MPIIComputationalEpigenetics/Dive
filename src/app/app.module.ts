@@ -119,6 +119,7 @@ import { SelectDatabasesComponent } from 'app/view/component/data-selection/sele
 import { DataInfoBoxComponent } from 'app/view/component/data-info-box';
 import { SelectedDataView, SelectedDataButton } from 'app/view/component/deepblue';
 import { LengthMenuFilterComponent } from 'app/view/component/menu/length-filtering';
+import { DnaPatternMenuFilterComponent } from 'app/view/component/menu/dna-pattern-filtering';
 
 
 @NgModule({
@@ -222,7 +223,8 @@ import { LengthMenuFilterComponent } from 'app/view/component/menu/length-filter
         SelectedDataView,
         SelectedDataButton,
         DataInfoBoxComponent,
-        LengthMenuFilterComponent
+        LengthMenuFilterComponent,
+        DnaPatternMenuFilterComponent
     ],
     providers: [
         { provide: LocationStrategy, useClass: HashLocationStrategy },
