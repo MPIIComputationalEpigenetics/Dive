@@ -37,7 +37,7 @@ export class DnaPatternMenuFilterComponent implements OnInit {
 
     save_dna_pattern_filter(form_content: any) {
         event.preventDefault();
-        this.selectedData.activeStackSubject.getValue().filter_regions('@LENGTH', '>=', form_content['dna_pattern'], 'number');
+        this.selectedData.activeStackSubject.getValue().filter_by_dna_motif(form_content['dna_pattern']);
     }
 
     ngOnInit() {

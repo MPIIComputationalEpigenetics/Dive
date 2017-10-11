@@ -91,8 +91,7 @@ export class DataStack {
                 this.deepBlueService.countRegionsRequest(cached_data, this.progress_element, request_count).subscribe((total) => {
                     const totalSelectedRegtions = total['result']['count'];
                     const dataStackItem: DataStackItem = new DataStackItem(cached_data, 'overlap',
-                        'Overlap with ' + operation.data().name() + ' overlapping with XXX',
-                        totalSelectedRegtions);
+                        'Overlap with ' + operation.text(), totalSelectedRegtions);
                     this._data.push(dataStackItem);
                     this.topStackSubject.next(dataStackItem);
                 });
@@ -151,6 +150,21 @@ export class DataStack {
             });
 
     }
+
+    filter_by_dna_motif(pattern: string) {
+        const request_count = 0;
+        this.progress_element.reset(4, request_count);
+
+        const current_op = this.getCurrentOperation();
+        if (current_op == null) {
+            return;
+        }
+
+        this.deepBlueService.findMotif(pattern, this.progress_element, request_count).subscribe((motif_op) => {
+            this.overlap(motif_op)
+        })
+    }
+
 
     remove(data: DataStackItem) {
         const query_id = data.op.queryId().id;

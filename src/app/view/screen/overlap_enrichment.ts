@@ -86,8 +86,6 @@ export class OverlapEnrichmentScreenComponent implements OnDestroy {
 
             rows.sort((a: IRow, b: IRow) => a['meanrank'] - b['meanrank']);
 
-            debugger;
-
             this.enrichment_data_from_server.push(rows);
         }
 

@@ -3,21 +3,24 @@ import { IKey, IOperation, IDataParameter } from 'app/domain/interfaces';
 import { IdName, GeneModel, Id } from 'app/domain/deepblue';
 
 export class DataParameter implements IDataParameter {
-    constructor(private _data: IdName | string[]) { }
+    constructor(private _data: IdName | string | string[]) { }
 
     name(): string {
-        let data_name = "";
+        debugger;
         if (this._data instanceof IdName) {
-            data_name = (<IdName>this._data).name;
+            return (<IdName>this._data).name;
+        } else if ('string' === typeof this._data) {
+            return (<string>this._data);
         } else {
-            data_name = (<string[]>this._data).join(",");
+            return (<string[]>this._data).join(",");
         }
-        return data_name;
     }
 
     id(): Id {
         if (this._data instanceof IdName) {
             return (<IdName>this._data).id;
+        } else if (this._data instanceof String) {
+            return new Id(<string>this._data);
         } else {
             return new Id((<string[]>this._data).join(","));
         }
@@ -162,7 +165,7 @@ export class DeepBlueRequest implements IKey {
         return new DeepBlueRequest(this._data, this.request_id, this.command, this.operation, request_count);
     }
 
-    data() : IDataParameter {
+    data(): IDataParameter {
         return this._data;
     }
 
@@ -182,7 +185,7 @@ export class DeepBlueResult implements ICloneable {
         return new DeepBlueResult(this._data, this.result, this.request, request_count);
     }
 
-    data() : IDataParameter {
+    data(): IDataParameter {
         return this._data;
     }
 

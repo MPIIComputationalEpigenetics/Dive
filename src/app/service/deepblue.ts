@@ -76,7 +76,6 @@ export class MultiKeyDataCache<T extends IKey, V extends ICloneable> {
         const key_value = keys.map((k) => k.key()).join();
         const cloneValue = value.clone(-1);
         this._data.set(key_value, cloneValue);
-        console.log(this._data);
     }
 
     get(keys: T[], request_count: number): V {
@@ -294,7 +293,7 @@ export class DeepBlueService {
     private extractBioSources(res: Response) {
         const body = res.json();
         const data = body[1] || [];
-        return data.map((value : string[]) => {
+        return data.map((value: string[]) => {
             return new BioSource(value);
         }).sort((a: BioSource, b: BioSource) => a.name.localeCompare(b.name));
     }
@@ -302,7 +301,7 @@ export class DeepBlueService {
     private extractEpigeneticMarks(res: Response) {
         const body = res.json();
         const data = body[1] || [];
-        return data.map((value : string[]) => {
+        return data.map((value: string[]) => {
             return new EpigeneticMark(value);
         }).sort((a: EpigeneticMark, b: EpigeneticMark) => a.name.localeCompare(b.name));
     }
@@ -310,7 +309,7 @@ export class DeepBlueService {
     private extractProjects(res: Response) {
         const body = res.json();
         const data = body[1] || [];
-        return data.map((value : string[]) => {
+        return data.map((value: string[]) => {
             return new Project(value);
         }).sort((a: Project, b: Project) => a.name.localeCompare(b.name));
     }
@@ -318,7 +317,7 @@ export class DeepBlueService {
     private extractExperiments(res: Response) {
         const body = res.json();
         const data = body[1] || [];
-        return data.map((value : string[]) => {
+        return data.map((value: string[]) => {
             return new Experiment(value);
         }).sort((a: Experiment, b: Experiment) => a.name.localeCompare(b.name));
     }
@@ -624,6 +623,28 @@ export class DeepBlueService {
             .catch(this.handleError);
     }
 
+    findMotif(dna_motif: string, progress_element: ProgressElement, request_count: number): Observable<DeepBlueOperation> {
+        if (!dna_motif) {
+            return Observable.empty<DeepBlueOperation>();
+        }
+
+        const params: URLSearchParams = new URLSearchParams();
+
+        params.set('motif', dna_motif);
+        params.set('genome', this.getGenome().name);
+
+        return this.http.get(this.deepBlueUrl + '/find_motif', { 'search': params })
+            .map((res: Response) => {
+                const body = res.json();
+                const response: string = body[1] || '';
+                const query_id = new Id(response);
+                progress_element.increment(request_count);
+                return new DeepBlueOperation(new DataParameter(dna_motif), query_id, 'find_motif', request_count);
+            })
+            .catch(this.handleError);
+
+    }
+
 
     cacheQuery(selected_data: IOperation, progress_element: ProgressElement, request_count: number): Observable<IOperation> {
         if (!selected_data) {
@@ -834,7 +855,7 @@ export class DeepBlueService {
             .map((res: Response) => {
                 const body = res.json();
                 const data = body[1] || [];
-                return data.map((value : string[]) => {
+                return data.map((value: string[]) => {
                     return new GeneModel(value);
                 });
             })
@@ -1012,7 +1033,7 @@ export class DeepBlueService {
                     pollSubject.complete();
                     progress_element.finish();
                 } else {
-                    let status : any = data[1];
+                    let status: any = data[1];
                     progress_element.setStatus(status['step'], status['processed'], status['total']);
                 }
             });
