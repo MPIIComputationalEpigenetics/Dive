@@ -165,12 +165,12 @@ export class HistonesScreenComponent implements OnDestroy {
         const experiments = this.selectedExperimentsSource.getValue();
 
         if (experiments.length === 0) {
-            this.reloadPlot([]);
+            this.reloadPlot(this, []);
             return;
         }
 
         if (experiments !== this.selectedExperimentsSource.getValue()) {
-            this.reloadPlot([]);
+            this.reloadPlot(this, []);
             return;
         }
 
@@ -190,19 +190,21 @@ export class HistonesScreenComponent implements OnDestroy {
         this.deepBlueService.composedCountOverlaps(current, experiments).subscribe((request_id: string) => {
             console.log('request_id from middleware', request_id);
 
-            this.deepBlueService.getComposedResultIterator(request_id, this.progress_element, 'overlaps')
+            this.deepBlueService.getComposedResultIterator(request_id, this.progress_element, 'overlaps', this.reloadPlot, this)
                 .subscribe((result: DeepBlueMiddlewareOverlapResult[]) => {
                     const end = new Date().getTime();
                     // Now calculate and output the difference
                     console.log(end - start);
                     this.currentlyProcessing = [];
                     console.log(result);
-                    this.reloadPlot(result);
+                    this.reloadPlot(this, result);
                 });
         });
     }
 
-    reloadPlot(datum: DeepBlueMiddlewareOverlapResult[]) {
+    reloadPlot(_self: HistonesScreenComponent, datum: DeepBlueMiddlewareOverlapResult[]) {
+        console.log("MAGIG???");
+
         const categories: string[] = [];
 
         const value_by_stack_biosource: Array<
@@ -217,8 +219,8 @@ export class HistonesScreenComponent implements OnDestroy {
           } = {};
 
         for (const result of datum) {
-            const stack_number = this.selectedData.getStackPosByQueryId(result.getDataQuery());
-            const experiment = this.experiments.find((se: FullExperiment) => {
+            const stack_number =  _self.selectedData.getStackPosByQueryId(result.getDataQuery());
+            const experiment = _self.experiments.find((se: FullExperiment) => {
                 if (se.name === result.getFilterName()) {
                     return true;
                 }
@@ -315,20 +317,20 @@ export class HistonesScreenComponent implements OnDestroy {
 
             series.push({
                 type: 'boxplot',
-                name: this.selectedData.getStackname(stack_pos),
+                name: _self.selectedData.getStackname(stack_pos),
                 data: stack_values_result_boxplot,
-                color: this.selectedData.getStackColor(stack_pos, '1')
+                color: _self.selectedData.getStackColor(stack_pos, '1')
             });
 
             series.push({
                 type: 'column',
-                name: this.selectedData.getStackname(stack_pos),
+                name: _self.selectedData.getStackname(stack_pos),
                 data: stack_values_result,
-                color: this.selectedData.getStackColor(stack_pos, '0.3')
+                color: _self.selectedData.getStackColor(stack_pos, '0.3')
             });
         }
 
-        this.overlapbarchart.setNewData(categories, series, result_by_dataset_stack);
+        _self.overlapbarchart.setNewData(categories, series, result_by_dataset_stack);
     }
 
     hasDataDetail(): boolean {

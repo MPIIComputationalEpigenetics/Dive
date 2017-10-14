@@ -6,7 +6,6 @@ export class DataParameter implements IDataParameter {
     constructor(private _data: IdName | string | string[]) { }
 
     name(): string {
-        debugger;
         if (this._data instanceof IdName) {
             return (<IdName>this._data).name;
         } else if ('string' === typeof this._data) {

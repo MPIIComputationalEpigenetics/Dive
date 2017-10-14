@@ -1009,7 +1009,8 @@ export class DeepBlueService {
             });
     }
 
-    public getComposedResultIterator(request_id: string, progress_element: ProgressElement, request_type: string):
+    public getComposedResultIterator(request_id: string, progress_element: ProgressElement, request_type: string,
+            callback?: any, param?: any):
         Observable<DeepBlueMiddlewareOverlapResult[] | DeepBlueMiddlewareGOEnrichtmentResult[] | DeepBlueMiddlewareOverlapEnrichtmentResult[]> {
         const pollSubject = new Subject<DeepBlueMiddlewareOverlapResult[] | DeepBlueMiddlewareGOEnrichtmentResult[] | DeepBlueMiddlewareOverlapEnrichtmentResult[]>();
 
@@ -1018,8 +1019,9 @@ export class DeepBlueService {
                 if (data[0] === 'okay') {
                     timer.unsubscribe();
                     if (request_type === 'overlaps') {
+                        (<Object[]>(data[1])).map((ee) => DeepBlueMiddlewareOverlapResult.fromObject(ee))
                         pollSubject.next(
-                            (<Object[]>(data[1])).map((ee) => DeepBlueMiddlewareOverlapResult.fromObject(ee))
+
                         );
                     } else if (request_type === 'go_enrichment') {
                         pollSubject.next(
@@ -1034,6 +1036,12 @@ export class DeepBlueService {
                     progress_element.finish();
                 } else {
                     let status: any = data[1];
+                    let partial = status["partial"];
+                    if (partial && callback) {
+                        partial = (<Object[]>(partial)).map((ee) => DeepBlueMiddlewareOverlapResult.fromObject(ee))
+                        console.log("magic....");
+                        callback(param, partial);
+                    }
                     progress_element.setStatus(status['step'], status['processed'], status['total']);
                 }
             });

@@ -54,11 +54,13 @@ export class OverlapsBarChartComponent {
                 serie['point']['events']['click'] = (ev: any) => this.clickExperimentBar(ev);
                 serie['dataLabels'] = dataLabels;
                 serie['borderWidth'] = 0;
+                serie['animation'] = false;
                 this.chart['addSeries'](serie, false);
             } else if (serie['type'] === 'boxplot') {
                 console.log('bloxplot');
                 serie['tooltip'] = { headerFormat: '<em>Experiment No {point.key}</em><br/>' };
                 serie['backgroundColor'] = 'red';
+                serie['animation'] = false;
                 this.chart['addSeries'](serie, false);
             }
         }
