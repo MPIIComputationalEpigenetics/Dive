@@ -318,14 +318,18 @@ export class DeepBlueMiddlewareOverlapEnrichtmentResult {
 export class DeepBlueMiddlewareOverlapEnrichtmentResultItem {
     static fromObject(obj: any): DeepBlueMiddlewareOverlapEnrichtmentResultItem {
         return new DeepBlueMiddlewareOverlapEnrichtmentResultItem(
-            obj['dataset'], obj['description'], obj['experiment_size'], obj['database_name'],
+            obj['dataset'], obj['description'],
+            obj['biosource'], obj['epigenetic_mark'],
+            obj['experiment_size'], obj['database_name'],
             obj['p_value_log'], obj['log_odds_ratio'], obj['support'],
             obj['b'], obj['c'], obj['d'],
             obj['support_rank'], obj['log_rank'], obj['odd_rank'],
             obj['max_rank'], obj['mean_rank'], obj);
     }
 
-    constructor(public dataset: string, public description: string, public experiment_size: number, public database_name: string,
+    constructor(public dataset: string,
+        public biosource: string, public epigenetic_mark: string,
+        public description: string, public experiment_size: number, public database_name: string,
         public p_value_log: number, public log_odds_ratio: number, public support: number,
         public b: number, public c: number, public d: number,
         public support_rank: number, public log_rank: number, public odd_rank: number,
@@ -337,6 +341,8 @@ export class DeepBlueMiddlewareOverlapEnrichtmentResultItem {
     static asColumns() {
         return [
             { name: 'dataset', prop: 'dataset', column_type: 'string' },
+            { name: 'biosource', prop: 'biosource', column_type: 'string' },
+            { name: 'epigenetic_mark', prop: 'epigeneticmark', column_type: 'string' },
             { name: 'description', prop: 'description', column_type: 'string' },
             { name: 'experiment_size', prop: 'experimentsize', column_type: 'integer' },
             { name: 'database_name', prop: 'databasename', column_type: 'string' },
