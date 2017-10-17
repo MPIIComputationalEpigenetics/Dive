@@ -203,7 +203,7 @@ export class DeepBlueService {
                 const body = res.json();
                 const data = body[1] || [];
                 // Remove the numbers and the _
-                return Object.keys(data.result.distinct).map((k) => [k, k.replace(/_/g, " ")]).sort();
+                return Object.keys(data).map((k) => [k, k.replace(/[0-9]+_/, "").replace(/_/g, " ")]).sort();
             })
             .catch(this.handleError);
     }
