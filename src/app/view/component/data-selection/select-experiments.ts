@@ -87,7 +87,7 @@ export class SelectExperimentsComponent {
         this.techniques_suggestions = this.all_techniques;
     }
 
-    handle_dropdown_project(event: any) {
+    handle_dropdown_projects(event: any) {
         this.projects_suggestions = this.all_projects;
     }
 
