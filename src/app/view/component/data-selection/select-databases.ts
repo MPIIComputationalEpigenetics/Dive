@@ -18,6 +18,7 @@ export class SelectDatabasesComponent implements OnDestroy {
               return;
           }
           this.deepBlueService.composedOverlapEnrichmentDatabase(genome).subscribe(databases => {
+              debugger;
               this.sourceDatabases = databases;
           });
       });

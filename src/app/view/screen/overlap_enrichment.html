@@ -6,7 +6,7 @@
   <p-tabView>
 
     <p-tabPanel header="Datasets">
-      <select-datasets-component (queryIdSelected)="selectQuery($event)"></select-datasets-component>
+      <select-datasets-component [selectMode]="'single'" (queryIdSelected)="selectQuery($event)"></select-datasets-component>
     </p-tabPanel>
 
     <p-tabPanel header="Experiments">
