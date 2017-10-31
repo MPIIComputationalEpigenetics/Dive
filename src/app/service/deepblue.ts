@@ -482,7 +482,7 @@ export class DeepBlueService {
         const params: URLSearchParams = new URLSearchParams();
         for (let experiment of experiments) {
             console.log(experiment);
-            params.set('experiment_name', experiment);
+            params.append('experiment_name', experiment);
         }
         params.set('genome', this.getGenome().name);
 
@@ -504,12 +504,41 @@ export class DeepBlueService {
         const observableBatch: Observable<IOperation>[] = [];
 
         experiments.forEach((experiment, key) => {
-            console.log(experiment);
             progress_element.increment(request_count);
             observableBatch.push(this.selectExperiment(experiment, progress_element, request_count));
         });
 
         return Observable.forkJoin(observableBatch);
+    }
+
+
+    mergeQueries(queries_id: IOperation[], progress_element: ProgressElement, request_count: number): Observable<IOperation> {
+        if (!queries_id || queries_id.length == 0) {
+            return Observable.empty<DeepBlueOperation>();
+        }
+
+        if (queries_id.length == 1) {
+            return Observable.of(queries_id[0]);
+        }
+
+        const params: URLSearchParams = new URLSearchParams();
+
+        params.append('query_a_id', queries_id[0].queryId().id);
+
+        for (let query_b of queries_id.slice(1)) {
+            console.log(query_b);
+            params.append('query_b_id', query_b.queryId().id);
+        }
+
+        return this.http.get(this.deepBlueUrl + '/merge_queries', { 'search': params })
+            .map((res: Response) => {
+                const body = res.json();
+                const response: string = body[1] || '';
+                const query_id = new Id(response);
+                progress_element.increment(request_count);
+                return new DeepBlueOperation(new DataParameter("Merged queries"), query_id, 'merge_queries', request_count);
+            })
+            .catch(this.handleError);
     }
 
     filter_region(data: IOperation, field: string, operation: string,
