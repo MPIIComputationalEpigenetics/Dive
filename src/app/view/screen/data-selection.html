@@ -3,9 +3,6 @@
         <div class="ui-g-12">
             <div class="card card-w-title">
                 <h1>Select the data to DIVE in</h1>
-                <!--
-                    <select-annotations-component [toCompare]="true" (annotationSelected)="selectAnnotation($event)" (comparedAnnotationSelected)="selectAnnotationForComparison($event)"></select-annotations-component>
-                -->
 
                 <h1>{{ selected_data?.text() }} </h1>
 
@@ -36,7 +33,7 @@
                     </p-tabPanel>
 
                     <p-tabPanel header="Upload">
-
+                        <regions-upload></regions-upload>
                     </p-tabPanel>
 
                 </p-tabView>

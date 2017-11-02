@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, OnDestroy } from '@angular/core';
 
 import {
     Annotation,
@@ -11,13 +11,14 @@ import {
 } from 'app/domain/deepblue';
 
 import { DeepBlueService } from 'app/service/deepblue';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'select-experiments-component',
     templateUrl: './select-experiments.html'
 })
 
-export class SelectExperimentsComponent {
+export class SelectExperimentsComponent implements OnDestroy {
     all_epigenetic_marks = new Array<EpigeneticMark>();
     epigenetic_marks = new Array<EpigeneticMark>();
     epigenetic_marks_suggestions = new Array<EpigeneticMark>();
@@ -44,11 +45,18 @@ export class SelectExperimentsComponent {
     experiments: Experiment[] = [];
     selected_experiment: Experiment[] = [];
 
+    genomeSubscription: Subscription;
+
     constructor(private deepBlueService: DeepBlueService) {
-        this.deepBlueService.listEpigeneticMarks().subscribe(data => this.all_epigenetic_marks = data);
-        this.deepBlueService.listBioSources().subscribe(data => this.all_biosources = data);
-        this.deepBlueService.listTechniques().subscribe(data => this.all_techniques = data);
-        this.deepBlueService.listProjects().subscribe(data => this.all_projects = data);
+        this.genomeSubscription = deepBlueService.genomeValue$.subscribe(genome => {
+            if (genome === null) {
+                return;
+            }
+            this.deepBlueService.listEpigeneticMarks().subscribe(data => this.all_epigenetic_marks = data);
+            this.deepBlueService.listBioSources().subscribe(data => this.all_biosources = data);
+            this.deepBlueService.listTechniques().subscribe(data => this.all_techniques = data);
+            this.deepBlueService.listProjects().subscribe(data => this.all_projects = data);
+        })
     }
 
     search_epigenetic_marks(event: any) {
@@ -92,6 +100,7 @@ export class SelectExperimentsComponent {
     }
 
     content_changed(event: any) {
+        debugger;
         console.log(event);
         setTimeout(() =>
             this.deepBlueService.listExperiments(this.epigenetic_marks, this.biosources, this.techniques, this.projects).subscribe((exps: Experiment[]) => {
@@ -101,5 +110,9 @@ export class SelectExperimentsComponent {
 
     select_click() {
         console.log(this.selected_experiment[0]);
+    }
+
+    ngOnDestroy() {
+        this.genomeSubscription.unsubscribe();
     }
 }
