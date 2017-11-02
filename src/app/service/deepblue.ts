@@ -932,6 +932,28 @@ export class DeepBlueService {
             .catch(this.handleError);
     }
 
+    inputRegions(region_set: string, progress_element: ProgressElement, request_count: number): Observable<DeepBlueOperation> {
+        if (!region_set) {
+            return Observable.empty<DeepBlueOperation>();
+        }
+
+        var headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+
+        let request = {
+            "genome": this.getGenome().name,
+            "region_set": region_set
+        }
+
+        return this.http.post(this.deepBlueUrl + '/composed_commands/input_regions', request, { headers: headers })
+            .map((res: Response) => {
+                const body = res.json();
+                const response: string = body[1] || '';
+                const query_id = new Id(body[1]);
+                progress_element.increment(request_count);
+                return new DeepBlueOperation(new DataParameter("User Data"), query_id, 'input_regions', -1)
+            });
+    }
 
     private handleError(error: Response | any) {
         let errMsg: string;
@@ -1043,7 +1065,7 @@ export class DeepBlueService {
     }
 
     public getComposedResultIterator(request_id: string, progress_element: ProgressElement, request_type: string,
-            callback?: any, param?: any):
+        callback?: any, param?: any):
         Observable<DeepBlueMiddlewareOverlapResult[] | DeepBlueMiddlewareGOEnrichtmentResult[] | DeepBlueMiddlewareOverlapEnrichtmentResult[]> {
         const pollSubject = new Subject<DeepBlueMiddlewareOverlapResult[] | DeepBlueMiddlewareGOEnrichtmentResult[] | DeepBlueMiddlewareOverlapEnrichtmentResult[]>();
 
