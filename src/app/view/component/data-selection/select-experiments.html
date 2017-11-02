@@ -7,22 +7,22 @@
     </ul>
 
   <p-autoComplete pInputText placeholder="Epigenetic Marks" [(ngModel)]="epigenetic_marks" [suggestions]="epigenetic_marks_suggestions"
-    [multiple]="true" (completeMethod)="search_epigenetic_marks($event)" [dropdown]="true" (onDropdownClick)="handle_dropdown_epigenetic_marks(event)"
-    [size]="30" delay="0" field="name" (onSelect)="content_changed(event)" (onUnselect)="content_changed(event)"> </p-autoComplete>
+    [multiple]="true" (completeMethod)="search_epigenetic_marks($event)" [dropdown]="true" (onDropdownClick)="handle_dropdown_epigenetic_marks($event)"
+    [size]="30" delay="0" field="name" (onSelect)="content_changed($event)" (onUnselect)="content_changed($event)"> </p-autoComplete>
 
   <p-autoComplete pInputText placeholder="BioSources" [(ngModel)]="biosources" [suggestions]="biosources_suggestions" [multiple]="true"
-    (completeMethod)="search_biosources($event)" [dropdown]="true" (onDropdownClick)="handle_dropdown_biosources(event)" [size]="30"
-    delay="0" field="name" (onSelect)="content_changed(event)" (onUnselect)="content_changed(event)">
+    (completeMethod)="search_biosources($event)" [dropdown]="true" (onDropdownClick)="handle_dropdown_biosources($event)" [size]="30"
+    delay="0" field="name" (onSelect)="content_changed($event)" (onUnselect)="content_changed($event)">
   </p-autoComplete>
 
   <p-autoComplete pInputText placeholder="Techniques" [(ngModel)]="techniques" [suggestions]="techniques_suggestions" [multiple]="true"
-    (completeMethod)="search_techniques($event)" [dropdown]="true" (onDropdownClick)="handle_dropdown_techniques(event)" [size]="30"
-    delay="0" field="name" (onSelect)="content_changed(event)" (onUnselect)="content_changed(event)">
+    (completeMethod)="search_techniques($event)" [dropdown]="true" (onDropdownClick)="handle_dropdown_techniques($event)" [size]="30"
+    delay="0" field="name" (onSelect)="content_changed($event)" (onUnselect)="content_changed($event)">
   </p-autoComplete>
 
   <p-autoComplete pInputText placeholder="Projects" [(ngModel)]="projects" [suggestions]="projects_suggestions" [multiple]="true"
-    (completeMethod)="search_projects($event)" [dropdown]="true" (onDropdownClick)="handle_dropdown_projects(event)" [size]="30"
-    delay="0" field="name" (onSelect)="content_changed(event)" (onUnselect)="content_changed(event)">
+    (completeMethod)="search_projects($event)" [dropdown]="true" (onDropdownClick)="handle_dropdown_projects($event)" [size]="30"
+    delay="0" field="name" (onSelect)="content_changed($event)" (onUnselect)="content_changed($event)">
   </p-autoComplete>
 </div>
 
