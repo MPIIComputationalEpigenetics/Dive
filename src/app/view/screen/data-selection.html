@@ -33,8 +33,9 @@
                     </p-tabPanel>
 
                     <p-tabPanel header="Upload">
-                        <regions-upload></regions-upload>
+                        <regions-upload (queryIdSelected)="selectQuery($event)"></regions-upload>
                     </p-tabPanel>
+
 
                 </p-tabView>
 

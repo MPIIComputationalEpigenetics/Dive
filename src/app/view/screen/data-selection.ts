@@ -17,7 +17,6 @@ export class DataSelectionScreen {
 
     selectQuery(event: IOperation) {
         this.selected_data = event;
-        console.log(this.selected_data);
         this.selectAnnotation(this.selected_data);
     }
 
