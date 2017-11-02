@@ -474,9 +474,13 @@ export class DeepBlueService {
             .catch(this.handleError);
     }
 
-    selectExperiments(experiments: string[], progress_element: ProgressElement, request_count: number): Observable<DeepBlueOperation> {
+    selectExperiments(experiments: string | string[], progress_element: ProgressElement, request_count: number): Observable<DeepBlueOperation> {
         if (!experiments || experiments.length == 0) {
             return Observable.empty<DeepBlueOperation>();
+        }
+
+        if (!Array.isArray(experiments)) {
+            experiments = [experiments];
         }
 
         const params: URLSearchParams = new URLSearchParams();
