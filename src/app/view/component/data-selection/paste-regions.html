@@ -1,0 +1,16 @@
+<div class="container">
+  <div class="ui-g">
+    <div class="ui-g-12">
+      <div class="card">
+        <h1>Paste Regions</h1>
+        <h2>
+          <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left" (click)="onUploadClick()">
+            <span class="ui-button-icon-left fa fa-upload"></span>
+            <span class="ui-button-text ui-c">Use regions</span>
+          </button>
+        </h2>
+        <textarea [rows]="25" [cols]="30" [(ngModel)]='textAreaContent' pInputTextarea></textarea>
+      </div>
+    </div>
+  </div>
+</div>

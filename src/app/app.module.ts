@@ -120,7 +120,8 @@ import { DataInfoBoxComponent } from 'app/view/component/data-info-box';
 import { SelectedDataView, SelectedDataButton } from 'app/view/component/deepblue';
 import { LengthMenuFilterComponent } from 'app/view/component/menu/length-filtering';
 import { DnaPatternMenuFilterComponent } from 'app/view/component/menu/dna-pattern-filtering';
-import { RegionsUpload } from 'app/view/component/data-selection/upload';
+import { RegionsUpload } from 'app/view/component/data-selection/upload-regions';
+import { RegionsPaste } from 'app/view/component/data-selection/paste-regions';
 
 
 @NgModule({
@@ -226,7 +227,8 @@ import { RegionsUpload } from 'app/view/component/data-selection/upload';
         DataInfoBoxComponent,
         LengthMenuFilterComponent,
         DnaPatternMenuFilterComponent,
-        RegionsUpload
+        RegionsUpload,
+        RegionsPaste
     ],
     providers: [
         { provide: LocationStrategy, useClass: HashLocationStrategy },

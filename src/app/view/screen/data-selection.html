@@ -32,10 +32,13 @@
                         <select-genes-component (queryIdSelected)="selectQuery($event)"></select-genes-component>
                     </p-tabPanel>
 
-                    <p-tabPanel header="Upload">
+                    <p-tabPanel header="Upload File">
                         <regions-upload (queryIdSelected)="selectQuery($event)"></regions-upload>
                     </p-tabPanel>
 
+                    <p-tabPanel header="Paste Regions">
+                        <regions-paste (queryIdSelected)="selectQuery($event)"></regions-paste>
+                    </p-tabPanel>
 
                 </p-tabView>
 
