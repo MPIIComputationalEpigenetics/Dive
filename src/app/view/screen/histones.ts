@@ -203,8 +203,6 @@ export class HistonesScreenComponent implements OnDestroy {
     }
 
     reloadPlot(_self: HistonesScreenComponent, datum: DeepBlueMiddlewareOverlapResult[]) {
-        console.log("MAGIG???");
-
         const categories: string[] = [];
 
         const value_by_stack_biosource: Array<

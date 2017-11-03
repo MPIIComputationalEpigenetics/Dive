@@ -100,8 +100,6 @@ export class SelectExperimentsComponent implements OnDestroy {
     }
 
     content_changed(event: any) {
-        debugger;
-        console.log(event);
         setTimeout(() =>
             this.deepBlueService.listExperiments(this.epigenetic_marks, this.biosources, this.techniques, this.projects).subscribe((exps: Experiment[]) => {
                 this.experiments = exps;
