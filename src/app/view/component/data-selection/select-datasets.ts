@@ -60,31 +60,35 @@ export class SelectDatasetsComponent {
       "data": {
         "name": dataset[0]
       },
-      "children": dataset[1].map((key: string) => {
-        if ('string' === typeof key) {
-          return this.buildLeaf(key, dataset[0]);
-        } else {
-          let key_array = <Array<any>>key;
-          if ('string' == typeof key_array[1]) {
-            return this.buildLeaf(key_array[0], dataset[0], key_array[1]);
+      "children": dataset[1].map((key: any) => {
+        let key_array = <Array<any>>key;
+        if ('string' == typeof key_array[1]) {
+          if (key_array.length == 2) {
+            return this.buildLeaf(key_array[0], key_array[1], dataset[0]);
           } else {
-            return this.buildNode(key);
+            return this.buildLeaf(key_array[0], key_array[1], dataset[0], key_array[2]);
           }
+        } else {
+          return this.buildNode(key);
         }
+
       })
     }
   }
 
-  buildLeaf(name: string, parent_name: string, _query_id?: string): TreeNode {
+  buildLeaf(id: string, name: string, parent_name: string, _query_id?: string): TreeNode {
     let o: any = {
       "data": {
+        "id": new Id(id),
         "name": name,
         "parent": parent_name,
         "leaf": true
       }
     }
     if (_query_id) {
-      o.data._query_id = new DeepBlueOperation(new DataParameter(name), new Id(_query_id), "filter", -1);;
+      let id_name = new IdName(new Id(id), name);
+      let data_parameter = new DataParameter(id_name);
+      o.data._query_id = new DeepBlueOperation(data_parameter, new Id(_query_id), "filter", -1);;
     }
 
     return o;
@@ -93,6 +97,11 @@ export class SelectDatasetsComponent {
   selectDatasets(event: any) {
 
     if (Array.isArray(this.selectedDatasets)) {
+      /*
+      -- We do not allow multiple experiments data selection.
+      -- It has the risk of the user select many experiments and too many regions.
+      -- I keep the code in case I want to revise this choise in the future.
+
       let selected = this.selectedDatasets.filter((node: TreeNode) => node.data.leaf);
 
       let selected_experiments = selected.filter((node: TreeNode) => !("query_id" in node));
@@ -113,8 +122,9 @@ export class SelectDatasetsComponent {
       } else if (e_exps) {
         e_exps.subscribe((e) => this.queryIdSelected.emit(e));
       } else if (o_exps) {
-        o_exps.subscribe((o) => this.queryIdSelected.emit(o));
+        // o_exps.subscribe((o) => this.queryIdSelected.emit(o));
       }
+      */
     } else {
       let selected_node = <TreeNode>this.selectedDatasets;
       if (!selected_node.data.leaf) {
@@ -123,7 +133,8 @@ export class SelectDatasetsComponent {
       if ("_query_id" in selected_node.data) {
         this.queryIdSelected.emit(selected_node.data._query_id);
       } else {
-        this.deepBlueService.selectExperiments(selected_node.data.name, this.progress_element, 0)
+        let id_name = new IdName(selected_node.data.id, selected_node.data.name);
+        this.deepBlueService.selectExperiment(id_name, this.progress_element, 0)
           .subscribe((q) => this.queryIdSelected.emit(q));
       }
     }
