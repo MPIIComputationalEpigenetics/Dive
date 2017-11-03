@@ -474,34 +474,6 @@ export class DeepBlueService {
             .catch(this.handleError);
     }
 
-    selectExperiments(experiments: string | string[], progress_element: ProgressElement, request_count: number): Observable<DeepBlueOperation> {
-        if (!experiments || experiments.length == 0) {
-            return Observable.empty<DeepBlueOperation>();
-        }
-
-        if (!Array.isArray(experiments)) {
-            experiments = [experiments];
-        }
-
-        const params: URLSearchParams = new URLSearchParams();
-        for (let experiment of experiments) {
-            console.log(experiment);
-            params.append('experiment_name', experiment);
-        }
-        params.set('genome', this.getGenome().name);
-
-        return this.http.get(this.deepBlueUrl + '/select_experiments', { 'search': params })
-            .map((res: Response) => {
-                const body = res.json();
-                const response: string = body[1] || '';
-                const query_id = new Id(response);
-                progress_element.increment(request_count);
-                return new DeepBlueOperation(new DataParameter(experiments), query_id, 'select_experiment', request_count);
-            })
-            .catch(this.handleError);
-    }
-
-
     selectMultipleExperiments(experiments: IdName[],
         progress_element: ProgressElement, request_count: number): Observable<IOperation[]> {
 
