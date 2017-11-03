@@ -14,8 +14,8 @@
                     [limit]="10">
                 </ngx-datatable>
 
-                <p><a href="{{ generateUCSCExportLine() }}" target="_blank">Export to genome browser</a></p>
-                <p><a href="{{ generateDownloadLink() }}" target="_blank">Download regions</a></p>
+                <p><a [hidden]="!request_id" href="{{ generateUCSCExportLine() }}" target="_blank">Export to genome browser</a></p>
+                <p><a [hidden]="!request_id" href="{{ generateDownloadLink() }}" target="_blank">Download regions</a></p>
                 <data-load-progress-bar #progressbar></data-load-progress-bar>
         </div>
     </div>
