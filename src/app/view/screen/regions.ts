@@ -31,8 +31,9 @@ export class RegionsScreen {
     // regions: Regions;
     topStackSubscription: Subscription;
 
-    columns : any[] = [];
-    rows : any[] = [];
+    columns: any[] = [];
+    rows: any[] = [];
+    request_id: string = null;
 
     constructor(private deepBlueService: DeepBlueService,
         public progress_element: ProgressElement, private selectedData: SelectedData) {
@@ -71,6 +72,35 @@ export class RegionsScreen {
         return value;
     }
 
+    generateUCSCExportLine(): string {
+        if (!this.request_id) {
+            return "";
+        }
+
+        let genome_name = this.deepBlueService.getGenome().name;
+        const actualData = this.selectedData.getActiveCurrentOperation();
+        //const actual_request_id = actualData.data().id();
+        const actual_request_id = "r823051";
+        let url = "http://deepblue.mpi-inf.mpg.de/api/composed_commands/generate_track_file?genome=" + genome_name + "&request_id=" + actual_request_id;
+        console.log(url);
+        let encodedUrl = encodeURIComponent(url);
+        var ucscLink = "http://genome.ucsc.edu/cgi-bin/hgTracks?";
+        ucscLink = ucscLink + "db=" + genome_name;
+        ucscLink = ucscLink + "&hgt.customText=" + encodedUrl;
+        return ucscLink;
+    }
+
+    generateDownloadLink(): string {
+        if (!this.request_id) {
+            return "";
+        }
+        //const actual_request_id = actualData.data().id();
+        const actual_request_id = "r823051";
+        // TODO: Get user key
+        let url = "http://deepblue.mpi-inf.mpg.de/xmlrpc/download/?r=" + actual_request_id + "&key=anonymous_key";
+        return url;
+    }
+
     processRegions() {
 
         const actualData = this.selectedData.getActiveCurrentOperation();
@@ -85,6 +115,7 @@ export class RegionsScreen {
             const columns_types = info.columns();
 
             this.deepBlueService.getRegions(actualData, format, this.progress_element, 0).subscribe((regions: DeepBlueResult) => {
+                this.request_id = regions.request.request_id.id;
                 this.progress_element.increment(0);
 
                 this.columns = format.split(",").map((c) => {
@@ -93,10 +124,10 @@ export class RegionsScreen {
 
                 this.rows = regions.resultAsString().split('\n').map((x) => {
                     const row_values = x.split('\t');
-                    const row : {[key: string]: any} = {};
+                    const row: { [key: string]: any } = {};
 
                     for (let idx = 0; idx < columns_types.length; idx++) {
-                        const column_name : string = columns_types[idx]['name'];
+                        const column_name: string = columns_types[idx]['name'];
                         const v = row_values[idx];
 
                         row[column_name.toLowerCase().replace('_', '')] = this.convert(v, columns_types[idx]['column_type'])
