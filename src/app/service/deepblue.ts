@@ -1101,4 +1101,28 @@ export class DeepBlueService {
             });
     }
 
+    public getComposedEpigeneticMarksCategories(): Observable<string[]> {
+        const params: URLSearchParams = new URLSearchParams();
+        params.set('genome', this.getGenome().name);
+
+        return this.http.get(this.deepBlueUrl + '/composed_commands/get_epigenetic_marks_categories', { 'search': params })
+            .map((res: Response) => {
+                const body = res.json();
+                return body;
+            });
+    }
+
+    public getComposedEpigeneticMarksFromCategory(category: string): Observable<FullMetadata[]> {
+        const params: URLSearchParams = new URLSearchParams();
+        params.set('category', category);
+        params.set('genome', this.getGenome().name);
+
+        return this.http.get(this.deepBlueUrl + '/composed_commands/get_epigenetic_marks_from_category', { 'search': params })
+            .map((res: Response) => {
+                const body = res.json();
+                return body;
+            });
+    }
+
+
 }
