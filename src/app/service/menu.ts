@@ -5,7 +5,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 @Injectable()
 export class MenuService {
-  model : any[] = [
+  model: any[] = [
     {
       label: 'Dashboard', icon: 'dashboard', routerLink: ['/']
     },
@@ -59,6 +59,17 @@ export class MenuService {
     }
   }
 
+  add(parentName: string) {
+    let item = {
+      name: parentName,
+      label: parentName,
+      icon: 'change_history',
+      items: new Array<Object>()
+    };
+
+    this.model.push(item);
+  }
+
   clean(parentName: string) {
     const subMenu = this.findMenu(parentName);
     if (!subMenu) {
@@ -75,7 +86,7 @@ export class MenuService {
       return;
     }
 
-    const item : any = { 'label': label };
+    const item: any = { 'label': label };
     if (icon) {
       item['icon'] = icon;
     }
