@@ -33,40 +33,27 @@ export class IdName implements IKey {
     }
 }
 
-export class IdNameCount extends IdName {
-    count: number;
-
+export class EpigeneticMark extends IdName {
     constructor(data: string[]) {
         super(new Id(data[0]), data[1]);
-        if (data.length >= 2) {
-            this.count = parseInt(data[2]);
-        } else {
-            this.count = -1;
-        }
     }
 }
 
-export class EpigeneticMark extends IdNameCount {
+export class BioSource extends IdName {
     constructor(data: string[]) {
-        super(data);
+        super(new Id(data[0]), data[1]);
     }
 }
 
-export class BioSource extends IdNameCount {
+export class Technique extends IdName {
     constructor(data: string[]) {
-        super(data);
+        super(new Id(data[0]), data[1]);
     }
 }
 
-export class Technique extends IdNameCount {
+export class Project extends IdName {
     constructor(data: string[]) {
-        super(data);
-    }
-}
-
-export class Project extends IdNameCount {
-    constructor(data: string[]) {
-        super(data);
+        super(new Id(data[0]), data[1]);
     }
 }
 
@@ -111,6 +98,10 @@ export class Gene extends IdName {
 
 export class FullMetadata extends IdName {
     values: any;
+
+    static fromObject(o: any): FullMetadata {
+        return new FullMetadata(o.values);
+    }
 
     constructor(data: any) {
         super(new Id(data["_id"]), data["name"]);
@@ -178,5 +169,19 @@ export class FullExperiment extends FullMetadata {
 
     project(): string {
         return this.values['project'];
+    }
+}
+
+
+export class IdNameCount extends IdName {
+    count: number;
+
+    constructor(data: string[]) {
+        super(new Id(data[0]), data[1]);
+        if (data.length >= 2) {
+            this.count = parseInt(data[2]);
+        } else {
+            this.count = -1;
+        }
     }
 }
