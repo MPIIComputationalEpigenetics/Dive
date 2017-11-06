@@ -339,6 +339,14 @@ export class DeepBlueService {
         }).sort((a: IdName, b: IdName) => a.name.localeCompare(b.name));
     };
 
+    private extractFullMetadata(res: Response) {
+        const body = res.json();
+        const data = body[1] || [];
+        return data.map((value: string[]) => {
+            return FullMetadata.fromObject(value);
+        }).sort((a: FullMetadata, b: FullMetadata) => a.name.localeCompare(b.name));
+    }
+
     getGenomes(): Observable<Genome[]> {
         const params: URLSearchParams = new URLSearchParams();
         params.set('controlled_vocabulary', 'genomes');
@@ -364,7 +372,7 @@ export class DeepBlueService {
         }).sort((a: IdName, b: IdName) => a.name.localeCompare(b.name));
     }
 
-    getExperiments(genome: Genome, epigenetic_mark: EpigeneticMark | string): Observable<IdName[]> {
+    getExperiments(genome: Genome, epigenetic_mark: IdName | string): Observable<IdName[]> {
         if (!genome) {
             return Observable.empty<IdName[]>();
         }
@@ -373,8 +381,10 @@ export class DeepBlueService {
             return Observable.empty<IdName[]>();
         }
 
+        debugger;
+
         let epigenetic_mark_name = "";
-        if (epigenetic_mark instanceof EpigeneticMark) {
+        if (epigenetic_mark instanceof IdName) {
             epigenetic_mark_name = epigenetic_mark.name;
         } else {
             epigenetic_mark_name = epigenetic_mark;
@@ -1118,10 +1128,8 @@ export class DeepBlueService {
         params.set('genome', this.getGenome().name);
 
         return this.http.get(this.deepBlueUrl + '/composed_commands/get_epigenetic_marks_from_category', { 'search': params })
-            .map((res: Response) => {
-                const body = res.json();
-                return body;
-            });
+            .map(this.extractFullMetadata)
+            .catch(this.handleError);
     }
 
 
