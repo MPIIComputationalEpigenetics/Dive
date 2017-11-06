@@ -100,8 +100,8 @@ export class EpigeneticMarkMenu implements IMenu {
                         for (let em of ems) {
 
                             this.menuService.includeItem(category, em.name, 'fiber_manual_record',
-                                (event: any) => this.selectItem(null),
-                                ['/'+em],
+                                (event: any) => this.selectItem(em),
+                                ['/peaks_overlap'],
                                 null
                             );
                         }
@@ -113,8 +113,8 @@ export class EpigeneticMarkMenu implements IMenu {
         })
     }
 
-    selectItem(histone: EpigeneticMark) {
-        this.deepBlueService.setEpigeneticMark(histone);
+    selectItem(epigenetic_mark: EpigeneticMark) {
+        this.deepBlueService.setEpigeneticMark(epigenetic_mark);
     }
 }
 
