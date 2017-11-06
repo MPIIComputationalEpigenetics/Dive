@@ -122,6 +122,7 @@ import { LengthMenuFilterComponent } from 'app/view/component/menu/length-filter
 import { DnaPatternMenuFilterComponent } from 'app/view/component/menu/dna-pattern-filtering';
 import { RegionsUpload } from 'app/view/component/data-selection/upload-regions';
 import { RegionsPaste } from 'app/view/component/data-selection/paste-regions';
+import { PeaksOverlapScreenComponent } from 'app/view/screen/peaks-overlap';
 
 
 @NgModule({
@@ -222,6 +223,7 @@ import { RegionsPaste } from 'app/view/component/data-selection/paste-regions';
         GenesScreen,
         GoEnrichmentScreenComponent,
         OverlapEnrichmentScreenComponent,
+        PeaksOverlapScreenComponent,
         SelectedDataView,
         SelectedDataButton,
         DataInfoBoxComponent,

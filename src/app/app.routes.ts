@@ -7,6 +7,7 @@ import { HistonesScreenComponent } from 'app/view/screen/histones';
 import { ChromatinStatesScreenComponent } from 'app/view/screen/chromatin_states';
 import { GenesScreen } from 'app/view/screen/genes';
 import { OverlapEnrichmentScreenComponent } from "app/view/screen/overlap_enrichment";
+import { PeaksOverlapScreenComponent } from 'app/view/screen/peaks-overlap';
 
 export const routes: Routes = [
     { path: '', component: DataSelectionScreen },
@@ -15,7 +16,8 @@ export const routes: Routes = [
     { path: 'genes', component: GenesScreen },
     { path: 'go_enrichment', component: GoEnrichmentScreenComponent },
     { path: 'chromatin_states', component: ChromatinStatesScreenComponent },
-    { path: 'overlap_enrichment', component: OverlapEnrichmentScreenComponent }
+    { path: 'overlap_enrichment', component: OverlapEnrichmentScreenComponent },
+    { path: 'peaks_overlap', component: PeaksOverlapScreenComponent }
 ];
 
 export const AppRoutes: ModuleWithProviders = RouterModule.forRoot(routes);
