@@ -37,7 +37,6 @@ export class DiveStatus {
     constructor(private deepBlueService: DeepBlueService, private menuService: MenuService) {
         this.menus = [
             new GenomeSelectorMenu(this.deepBlueService, this.menuService),
-            new HistoneExperimentsMenu(this.deepBlueService, this.menuService),
             new CSSExperimentsMenu(this.deepBlueService, this.menuService),
             new EpigeneticMarkMenu(this.deepBlueService, this.menuService)
         ];
@@ -81,8 +80,10 @@ class GenomeSelectorMenu implements IMenu {
 
 export class EpigeneticMarkMenu implements IMenu {
     errorMessage: string;
-    selectHistones: EpigeneticMark[];
     genomeSubscription: Subscription;
+    actualItems = new Array<string>();
+
+    private static readonly SPECIAL_CASES = ['DNA Methylation', 'State Segmentation'];
 
     constructor(private deepBlueService: DeepBlueService, private menuService: MenuService) { }
 
@@ -93,7 +94,24 @@ export class EpigeneticMarkMenu implements IMenu {
                 return;
             }
             this.deepBlueService.getComposedEpigeneticMarksCategories().subscribe((categories: string[]) => {
+
+                if (this.actualItems.length > 0) {
+                    for (let item of this.actualItems) {
+                        console.log("removing", item);
+                        this.menuService.remove(item);
+                    }
+                }
+
+                this.actualItems = categories;
                 for (let category of categories) {
+
+                    // Do not include the SPECIAL CASES menu
+                    console.log(category);
+                    if (EpigeneticMarkMenu.SPECIAL_CASES.indexOf(category) > -1) {
+                        console.log(category);
+                        continue;
+                    }
+
                     this.deepBlueService.getComposedEpigeneticMarksFromCategory(category).subscribe(ems => {
                         this.menuService.add(category);
 
@@ -118,41 +136,8 @@ export class EpigeneticMarkMenu implements IMenu {
     }
 }
 
-export class HistoneExperimentsMenu implements IMenu {
-    errorMessage: string;
-    selectHistones: EpigeneticMark[];
-    genomeSubscription: Subscription;
-
-    constructor(private deepBlueService: DeepBlueService, private menuService: MenuService) { }
-
-    loadMenu(): any {
-        this.genomeSubscription = this.deepBlueService.genomeValue$.subscribe(genome => {
-            if (genome === null) {
-                return;
-            }
-            this.deepBlueService.getHistones().subscribe(histones => {
-                this.menuService.clean('histones');
-                for (let histone of histones) {
-
-                    this.menuService.includeItem('histones', histone.name, 'fiber_manual_record',
-                        (event: any) => this.selectItem(histone),
-                        ['/histonemark'], /* router link */
-                        null /* url */
-                    );
-                }
-            },
-                error => this.errorMessage = <any>error);
-        });
-    }
-
-    selectItem(histone: EpigeneticMark) {
-        this.deepBlueService.setEpigeneticMark(histone);
-    }
-}
-
 export class CSSExperimentsMenu implements IMenu {
     errorMessage: string;
-    selectHistones: EpigeneticMark[];
     genomeSubscription: Subscription;
 
     constructor(private deepBlueService: DeepBlueService, private menuService: MenuService) { }
@@ -163,13 +148,18 @@ export class CSSExperimentsMenu implements IMenu {
                 return;
             }
             this.deepBlueService.getChromatinStateSegments().subscribe((csss: string[]) => {
-                this.menuService.clean('css');
-                for (let css of csss) {
-                    this.menuService.includeItem('css', css[1], 'fiber_manual_record',
-                        (event: any) => { this.selectItem(css[0]) },
-                        ['/chromatin_states'], /* router link */
-                        null /* url */
-                    );
+
+                this.menuService.remove('css');
+
+                if (csss.length > 0) {
+                    this.menuService.add('css', 'Chromatin State Segmentation', 'change_history');
+                    for (let css of csss) {
+                        this.menuService.includeItem('css', css[1], 'fiber_manual_record',
+                            (event: any) => { this.selectItem(css[0]) },
+                            ['/chromatin_states'], /* router link */
+                            null /* url */
+                        );
+                    }
                 }
             });
         },
