@@ -21,14 +21,6 @@ export class MenuService {
       items: []
     },
     {
-      name: 'histones', label: 'Histone Modification', icon: 'change_history',
-      items: []
-    },
-    {
-      name: 'css', label: 'Chromatin State Segmentation', icon: 'change_history',
-      items: []
-    },
-    {
       name: 'genes', label: 'Genes', icon: 'lens', routerLink: ['/genes']
     },
     {
@@ -43,12 +35,11 @@ export class MenuService {
   menuValue$: Observable<Object[]> = this.menuItems.asObservable();
 
   findMenu(parentName: string): any {
-    for (const subMenu of this.model) {
-      if (subMenu['name'] === parentName) {
-        return subMenu;
-      }
-    }
-    return null;
+    return this.model.find(m => m.name == parentName);
+  }
+
+  findMenuPos(parentName: string): number {
+    return this.model.findIndex(m => m.name == parentName);
   }
 
   pushItem(subMenu: any, item: any) {
@@ -59,7 +50,7 @@ export class MenuService {
     }
   }
 
-  add(parentName: string) {
+  add(parentName: string, label?: string, icon?: string) {
     let item = {
       name: parentName,
       label: parentName,
@@ -67,7 +58,22 @@ export class MenuService {
       items: new Array<Object>()
     };
 
+    if (label) {
+      item.label = label;
+    }
+
+    if (icon) {
+      item.icon = icon
+    }
+
     this.model.push(item);
+  }
+
+  remove(parentName: string) {
+    let pos = this.findMenuPos(parentName);
+    if (pos > -1) {
+      this.model.splice(pos, 1);
+    }
   }
 
   clean(parentName: string) {
@@ -102,8 +108,6 @@ export class MenuService {
 
     this.pushItem(subMenu, item);
   }
-
-
 
   includeObject(parentName: string, item: Object) {
     const subMenu = this.findMenu(parentName);
