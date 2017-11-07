@@ -60,22 +60,22 @@ export class PeaksOverlapScreenComponent implements OnDestroy {
     @ViewChild('multiselect') multiselect: MultiSelect;
 
     constructor(public deepBlueService: DeepBlueService,
-      public progress_element: ProgressElement, private selectedData: SelectedData) {
+        public progress_element: ProgressElement, private selectedData: SelectedData) {
 
-      this.epigeneticMarkSubscription = deepBlueService.epigeneticMarkValue$.subscribe(selected_epigenetic_mark => {
-          this.deepBlueService.getExperiments(deepBlueService.getGenome(), selected_epigenetic_mark).subscribe(experiments_ids => {
-              const ids = experiments_ids.map((e) => e.id.id);
-              this.deepBlueService.getExperimentsInfos(ids).subscribe(full_info => {
-                  this.experiments = <FullExperiment[]>full_info;
-                  this.segregated_data = this.segregate(<FullExperiment[]>full_info);
-              });
-          },
-              error => this.errorMessage = <any>error);
-      });
+        this.epigeneticMarkSubscription = deepBlueService.epigeneticMarkValue$.subscribe(selected_epigenetic_mark => {
+            this.deepBlueService.getExperiments(deepBlueService.getGenome(), selected_epigenetic_mark).subscribe(experiments_ids => {
+                const ids = experiments_ids.map((e) => e.id.id);
+                this.deepBlueService.getExperimentsInfos(ids).subscribe(full_info => {
+                    this.experiments = <FullExperiment[]>full_info;
+                    this.segregated_data = this.segregate(<FullExperiment[]>full_info);
+                });
+            },
+                error => this.errorMessage = <any>error);
+        });
 
-      this.selectedExperimentsValue$.debounceTime(250).subscribe(() => this.processOverlaps());
-      this.selectedData.getActiveTopStackValue().subscribe((dataStackItem) => this.processOverlaps());
-  }
+        this.selectedExperimentsValue$.debounceTime(250).subscribe(() => this.processOverlaps());
+        this.selectedData.getActiveTopStackValue().subscribe((dataStackItem) => this.processOverlaps());
+    }
 
     segregate(experiments: FullExperiment[]) {
 
@@ -203,21 +203,24 @@ export class PeaksOverlapScreenComponent implements OnDestroy {
     }
 
     reloadPlot(_self: PeaksOverlapScreenComponent, datum: DeepBlueMiddlewareOverlapResult[]) {
+        if (!datum) {
+            return;
+        }
         const categories: string[] = [];
 
         const value_by_stack_biosource: Array<
-        {
-          [key: string]: DeepBlueMiddlewareOverlapResult[]
-        }> = [];
+            {
+                [key: string]: DeepBlueMiddlewareOverlapResult[]
+            }> = [];
 
         const result_by_dataset_stack: {
             [key: string]: {
-              [key: string]: DeepBlueMiddlewareOverlapResult[]
+                [key: string]: DeepBlueMiddlewareOverlapResult[]
             }
-          } = {};
+        } = {};
 
         for (const result of datum) {
-            const stack_number =  _self.selectedData.getStackPosByQueryId(result.getDataQuery());
+            const stack_number = _self.selectedData.getStackPosByQueryId(result.getDataQuery());
             const experiment = _self.experiments.find((se: FullExperiment) => {
                 if (se.name === result.getFilterName()) {
                     return true;
