@@ -1,4 +1,3 @@
-import { HistonesScreenComponent } from './view/screen/histones';
 import { DataStackViewComponent } from 'app/view/component/datastack';
 import { DataStackFactory } from 'app/service/datastack';
 import { SelectedData } from 'app/service/selecteddata';
@@ -96,7 +95,7 @@ import { GoEnrichmentScreenComponent } from 'app/view/screen/go_enrichment';
 import { OverlapEnrichmentScreenComponent } from 'app/view/screen/overlap_enrichment';
 
 
-import { DiveStatus, HistoneExperimentsMenu, CSSExperimentsMenu} from 'app/view/component/menu/main-menu';
+import { DiveStatus, CSSExperimentsMenu} from 'app/view/component/menu/main-menu';
 
 import { DataLoadProgressBar } from 'app/view/component/progressbar';
 
@@ -218,7 +217,6 @@ import { PeaksOverlapScreenComponent } from 'app/view/screen/peaks-overlap';
         DataSelectionScreen,
         RegionsScreen,
         BioSourcesScreenComponent,
-        HistonesScreenComponent,
         ChromatinStatesScreenComponent,
         GenesScreen,
         GoEnrichmentScreenComponent,
