@@ -17,11 +17,8 @@ export class DataSelectionScreen {
 
     selectQuery(event: IOperation) {
         this.selected_data = event;
-        this.selectAnnotation(this.selected_data);
-    }
-
-    selectAnnotation(selectedAnnotation: any) {
-        this.deepBlueService.setDataToDive(selectedAnnotation);
+        this.deepBlueService.setDataToDive(this.selected_data);
+        this.deepBlueService.composedCalculateFastsEnrichment(this.selected_data).subscribe((ss) => console.log(ss));
     }
 
     selectAnnotationForComparison(selectedAnnotation: any) {

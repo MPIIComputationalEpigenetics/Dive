@@ -1021,11 +1021,30 @@ export class DeepBlueService {
         let request = {
             "queries_id": queries.map((op) => op.queryId().id),
             "universe_id": universe_id.id,
+            "genome": this.genomeSource.getValue().name,
             "datasets": datasets
         }
 
         return this.http.post(this.deepBlueUrl + '/composed_commands/enrich_regions_overlap', request, { headers: headers })
             .map((res: Response) => {
+                const body = res.json();
+                const response: string = body[1] || '';
+                return response;
+            });
+    }
+
+    public composedCalculateFastsEnrichment(op: IOperation): Observable<string> {
+        var headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+
+        let request = {
+            "query_id": op.queryId().id,
+            "genome": this.genomeSource.getValue().name
+        }
+
+        return this.http.post(this.deepBlueUrl + '/composed_commands/enrich_regions_fast', request, { headers: headers })
+            .map((res: Response) => {
+                debugger;
                 const body = res.json();
                 const response: string = body[1] || '';
                 return response;
