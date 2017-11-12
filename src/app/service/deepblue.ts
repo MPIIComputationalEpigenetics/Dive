@@ -40,7 +40,8 @@ import {
     DeepBlueTiling,
     DeepBlueGenes,
     DeepBlueMiddlewareOverlapEnrichtmentResult,
-    DataParameter
+    DataParameter,
+    DeepBlueMiddlewareOverlapEnrichtmentResultItem
 } from '../domain/operations';
 
 import { ProgressElement } from '../service/progresselement';
@@ -82,7 +83,6 @@ export class MultiKeyDataCache<T extends IKey, V extends ICloneable> {
         const key_value = keys.map((k) => k.key()).join();
         const value: V = this._data.get(key_value);
         if (value) {
-            console.log('multikey cache hit', value);
             return value.clone(request_count);
         } else {
             return null;
@@ -381,8 +381,6 @@ export class DeepBlueService {
             return Observable.empty<IdName[]>();
         }
 
-        debugger;
-
         let epigenetic_mark_name = "";
         if (epigenetic_mark instanceof IdName) {
             epigenetic_mark_name = epigenetic_mark.name;
@@ -461,7 +459,6 @@ export class DeepBlueService {
         }
 
         if (this.idNamesQueryCache.get(experiment, request_count)) {
-            console.log('selectExperiment hit');
             progress_element.increment(request_count);
             const cached_operation = this.idNamesQueryCache.get(experiment, request_count);
             return Observable.of(cached_operation);
@@ -512,7 +509,6 @@ export class DeepBlueService {
         params.append('query_a_id', queries_id[0].queryId().id);
 
         for (let query_b of queries_id.slice(1)) {
-            console.log(query_b);
             params.append('query_b_id', query_b.queryId().id);
         }
 
@@ -574,7 +570,6 @@ export class DeepBlueService {
                 const cache_key = [current, selected];
 
                 if (this.intersectsQueryCache.get(cache_key, request_count)) {
-                    console.log('overlapSelected hit');
                     progress_element.increment(request_count);
                     const cached_operation = this.intersectsQueryCache.get(cache_key, request_count);
                     o = Observable.of(new StackValue(stack_pos, cached_operation));
@@ -611,7 +606,6 @@ export class DeepBlueService {
         const cache_key = new DeepBlueMultiParametersOperation(data_one, data_two, parameters, 'overlap', request_count);
 
         if (this.overlapsQueryCache.get(cache_key, request_count)) {
-            console.log('overlap hit');
             progress_element.increment(request_count);
             const cached_operation = this.overlapsQueryCache.get(cache_key, request_count);
             return Observable.of(cached_operation);
@@ -667,7 +661,6 @@ export class DeepBlueService {
         }
 
         if (this.operationCache.get(selected_data, request_count)) {
-            console.log('cacheQuery hit');
             progress_element.increment(request_count);
             const cached_operation = this.operationCache.get(selected_data, request_count);
             return Observable.of(cached_operation);
@@ -696,7 +689,6 @@ export class DeepBlueService {
         const pollSubject = new Subject<DeepBlueResult>();
 
         if (this.resultCache.get(op_request, request_count)) {
-            console.log('getResult hit');
             progress_element.increment(request_count);
             const cached_result = this.resultCache.get(op_request, request_count);
             return Observable.of(cached_result);
@@ -942,7 +934,7 @@ export class DeepBlueService {
         if (error instanceof Response) {
             const body = error.json() || '';
             const err = body.error || JSON.stringify(body);
-            errMsg = `${err.status} - ${err.statusText || ''} ${err}`;
+            errMsg = "${err.status} - ${err.statusText || ''} ${err}";
         } else {
             errMsg = error.message ? error.message : error.toString();
         }
@@ -1044,7 +1036,6 @@ export class DeepBlueService {
 
         return this.http.post(this.deepBlueUrl + '/composed_commands/enrich_regions_fast', request, { headers: headers })
             .map((res: Response) => {
-                debugger;
                 const body = res.json();
                 const response: string = body[1] || '';
                 return response;
@@ -1059,7 +1050,6 @@ export class DeepBlueService {
         return this.http.get(this.deepBlueUrl + '/composed_commands/get_request', { 'search': params })
             .map((res: Response) => {
                 const body = res.json();
-                console.log(body);
                 const response: [string, string | DeepBlueMiddlewareOverlapResult[]] = body;
                 return response;
             });
@@ -1069,7 +1059,7 @@ export class DeepBlueService {
         Observable<DeepBlueMiddlewareOverlapResult[] | DeepBlueMiddlewareGOEnrichtmentResult[] | DeepBlueMiddlewareOverlapEnrichtmentResult[]> {
         const pollSubject = new Subject<DeepBlueMiddlewareOverlapResult[] | DeepBlueMiddlewareGOEnrichtmentResult[] | DeepBlueMiddlewareOverlapEnrichtmentResult[]>();
 
-        const timer = Observable.timer(0, 400).concatMap(() => {
+        const timer = Observable.timer(0, 1000).concatMap(() => {
             return this.getComposedResult(request_id).map((data: [string, string | DeepBlueMiddlewareOverlapResult[]]) => {
                 if (data[0] === 'okay') {
                     timer.unsubscribe();
@@ -1090,11 +1080,16 @@ export class DeepBlueService {
                     progress_element.finish();
                 } else {
                     let status: any = data[1];
-                    let partial = status["partial"];
+                    let partial : any[] = status["partial"];
                     if (partial && callback) {
-                        partial = (<Object[]>(partial)).map((ee) => DeepBlueMiddlewareOverlapResult.fromObject(ee))
+                        if (request_type === 'overlaps') {
+                            partial = (<Object[]>partial.map((ee) => DeepBlueMiddlewareOverlapResult.fromObject(ee)));
+                        } else if (request_type === 'go_enrichment') {
+                            partial = (<Object[]>partial.map((ee) => DeepBlueMiddlewareGOEnrichtmentResult.fromObject(ee)));
+                        } else if (request_type === 'overlaps_enrichment') {
+                            partial = (<Object[]>partial.map((ee) => DeepBlueMiddlewareOverlapEnrichtmentResultItem.fromObject(ee)));
+                        }
                         pollSubject.next(partial);
-                        console.log("magic....");
                         callback(param, partial);
                     }
                     progress_element.setStatus(status['step'], status['processed'], status['total']);
