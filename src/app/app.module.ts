@@ -87,12 +87,13 @@ import { DeepBlueService } from 'app/service/deepblue';
 import { ProgressElement } from 'app/service/progresselement';
 
 import { OverlapsBarChartComponent } from 'app/view/component/charts/overlappingbar';
+import { SimilarityBarChartComponent } from 'app/view/component/charts/similarity';
 
 import { DataSelectionScreen } from 'app/view/screen/data-selection';
 import { RegionsScreen } from 'app/view/screen/regions';
 import { GenesScreen } from 'app/view/screen/genes';
-import { GoEnrichmentScreenComponent } from 'app/view/screen/go_enrichment';
-import { OverlapEnrichmentScreenComponent } from 'app/view/screen/overlap_enrichment';
+import { GoEnrichmentScreenComponent } from 'app/view/screen/go-enrichment';
+import { OverlapEnrichmentScreenComponent } from 'app/view/screen/overlap-enrichment';
 
 
 import { DiveStatus, CSSExperimentsMenu} from 'app/view/component/menu/main-menu';
@@ -208,6 +209,7 @@ import { PeaksOverlapScreenComponent } from 'app/view/screen/peaks-overlap';
         DataStackViewComponent,
         DataLoadProgressBar,
         OverlapsBarChartComponent,
+        SimilarityBarChartComponent,
         SelectAnnotationsComponent,
         SelectDatasetsComponent,
         SelectExperimentsComponent,

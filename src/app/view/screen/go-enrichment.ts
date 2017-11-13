@@ -23,7 +23,7 @@ import { Utils } from 'app/service/utils';
 
 @Component({
     changeDetection: ChangeDetectionStrategy.OnPush,
-    templateUrl: './go_enrichment.html'
+    templateUrl: './go-enrichment.html'
 })
 export class GoEnrichmentScreenComponent implements OnDestroy {
     errorMessage: string;

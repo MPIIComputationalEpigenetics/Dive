@@ -1,11 +1,11 @@
-import { GoEnrichmentScreenComponent } from './view/screen/go_enrichment';
 import { Routes, RouterModule } from '@angular/router';
 import { ModuleWithProviders } from '@angular/core';
 import { DataSelectionScreen } from 'app/view/screen/data-selection';
 import { RegionsScreen } from 'app/view/screen/regions';
 import { ChromatinStatesScreenComponent } from 'app/view/screen/chromatin_states';
 import { GenesScreen } from 'app/view/screen/genes';
-import { OverlapEnrichmentScreenComponent } from "app/view/screen/overlap_enrichment";
+import { OverlapEnrichmentScreenComponent } from "app/view/screen/overlap-enrichment";
+import { GoEnrichmentScreenComponent } from './view/screen/go-enrichment';
 import { PeaksOverlapScreenComponent } from 'app/view/screen/peaks-overlap';
 
 export const routes: Routes = [

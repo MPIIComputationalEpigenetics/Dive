@@ -23,7 +23,7 @@ import { IOperation, IRow } from 'app/domain/interfaces';
 import { Utils } from 'app/service/utils';
 
 @Component({
-    templateUrl: './overlap_enrichment.html'
+    templateUrl: './overlap-enrichment.html'
 })
 export class OverlapEnrichmentScreenComponent implements OnDestroy {
 
