@@ -190,7 +190,7 @@ export class PeaksOverlapScreenComponent implements OnDestroy {
         this.deepBlueService.composedCountOverlaps(current, experiments).subscribe((request_id: string) => {
             console.log('request_id from middleware', request_id);
 
-            this.deepBlueService.getComposedResultIterator(request_id, this.progress_element, 'overlaps_enrichment', this.reloadPlot, this)
+            this.deepBlueService.getComposedResultIterator(request_id, this.progress_element, 'overlaps', this.reloadPlot, this)
                 .subscribe((result: DeepBlueMiddlewareOverlapResult[]) => {
                     const end = new Date().getTime();
                     // Now calculate and output the difference
