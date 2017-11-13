@@ -19,6 +19,9 @@ export class OverlapsBarChartComponent {
 
     setNewData(categories: any, series: any, result_by_dataset_stack: any) {
 
+        debugger;
+
+
         this.result_by_dataset_stack = result_by_dataset_stack;
 
         this.chart['xAxis'][0].setCategories(categories, false);
@@ -82,7 +85,7 @@ export class OverlapsBarChartComponent {
     constructor(private deepBlueService: DeepBlueService) {
         this.options = {
             title: {
-                text: `Overlapping with ${deepBlueService.getDivingData().data().name()}`
+                text: `Overlapping with ${deepBlueService.getDivingData() ? deepBlueService.getDivingData().data().name() : ""}`
             },
             xAxis: {
                 categories: []

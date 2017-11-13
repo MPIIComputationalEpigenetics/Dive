@@ -56,7 +56,6 @@ export class DataCache<T extends IKey, V extends ICloneable> {
     put(key: T, value: V) {
         const cloneValue = value.clone(-1);
         this._data.set(key.key(), cloneValue);
-        console.log(this._data);
     }
 
     get(key: T, request_count: number): V {
@@ -432,7 +431,6 @@ export class DeepBlueService {
         }
 
         if (this.idNamesQueryCache.get(annotation, request_count)) {
-            console.log('idnamecache hit');
             progress_element.increment(request_count);
             const cached_operation = this.idNamesQueryCache.get(annotation, request_count);
             return Observable.of(cached_operation);
@@ -1081,16 +1079,20 @@ export class DeepBlueService {
                 } else {
                     let status: any = data[1];
                     let partial : any[] = status["partial"];
+debugger;
                     if (partial && callback) {
                         if (request_type === 'overlaps') {
                             partial = (<Object[]>partial.map((ee) => DeepBlueMiddlewareOverlapResult.fromObject(ee)));
                         } else if (request_type === 'go_enrichment') {
                             partial = (<Object[]>partial.map((ee) => DeepBlueMiddlewareGOEnrichtmentResult.fromObject(ee)));
                         } else if (request_type === 'overlaps_enrichment') {
-                            partial = (<Object[]>partial.map((ee) => DeepBlueMiddlewareOverlapEnrichtmentResultItem.fromObject(ee)));
+                            //partial = (<Object[]>partial.map((ee) => DeepBlueMiddlewareOverlapEnrichtmentResultItem.fromObject(ee)));
+                            partial = status["summarized"];
                         }
-                        pollSubject.next(partial);
-                        callback(param, partial);
+                        if (partial) {
+                            pollSubject.next(partial);
+                            callback(param, partial);
+                        }
                     }
                     progress_element.setStatus(status['step'], status['processed'], status['total']);
                 }
