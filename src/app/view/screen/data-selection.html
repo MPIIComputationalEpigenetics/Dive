@@ -1,3 +1,10 @@
+<p-sidebar [(visible)]="visibleSidebar2" position="right" [baseZIndex]="10000">
+    <h1 style="font-weight:normal">Right Sidebar</h1>
+    <button pButton type="button" (click)="visibleSidebar2 = false" label="Save" class="ui-button-success"></button>
+    <button pButton type="button" (click)="visibleSidebar2 = false" label="Cancel" class="ui-button-secondary"></button>
+</p-sidebar>
+
+
 <div class="ui-fluid">
     <div class="ui-g">
         <div class="ui-g-12">
@@ -44,8 +51,17 @@
 
             </div>
 
-            <app-similarity-bar-chart #biosourcessimilaritybarchart> </app-similarity-bar-chart>
-            <app-similarity-bar-chart #emssimilaritybarchart> </app-similarity-bar-chart>
+            <p-tabView>
+                <p-tabPanel header="Biosources">
+                    <app-similarity-bar-chart #biosourcessimilaritybarchart> </app-similarity-bar-chart>
+                </p-tabPanel>
+                <p-tabPanel header="Epigenetic Marks">
+                    <app-similarity-bar-chart #emssimilaritybarchart> </app-similarity-bar-chart>
+                </p-tabPanel>
+                <p-tabPanel header="All experiments">
+                    Content 3
+                </p-tabPanel>
+            </p-tabView>
 
             <app-biosources-screen></app-biosources-screen>
         </div>
