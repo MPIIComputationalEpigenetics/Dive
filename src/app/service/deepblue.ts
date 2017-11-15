@@ -402,6 +402,13 @@ export class DeepBlueService {
             .catch(this.handleError);
     }
 
+    addSelectedBiosource(biosource: BioSource) {
+        let bs = this.selectedBioSources.value;
+        if (bs.indexOf(biosource) == -1) {
+            bs.push(biosource);
+        }
+    }
+
     setSelectedBioSources(biosources: BioSource[]) {
         this.selectedBioSources.next(biosources);
     }
@@ -1053,9 +1060,11 @@ export class DeepBlueService {
             });
     }
 
+
+    // TODO: Move the logic of converting the data to the function callers
     public getComposedResultIterator(request_id: string, progress_element: ProgressElement, request_type: string, callback?: any, param?: any):
-        Observable<DeepBlueMiddlewareOverlapResult[] | DeepBlueMiddlewareGOEnrichtmentResult[] | DeepBlueMiddlewareOverlapEnrichtmentResult[]> {
-        const pollSubject = new Subject<DeepBlueMiddlewareOverlapResult[] | DeepBlueMiddlewareGOEnrichtmentResult[] | DeepBlueMiddlewareOverlapEnrichtmentResult[]>();
+        Observable<DeepBlueMiddlewareOverlapResult[] | DeepBlueMiddlewareGOEnrichtmentResult[] | DeepBlueMiddlewareOverlapEnrichtmentResultItem[] | DeepBlueMiddlewareOverlapEnrichtmentResult[]> {
+        const pollSubject = new Subject<DeepBlueMiddlewareOverlapResult[] | DeepBlueMiddlewareGOEnrichtmentResult[] | DeepBlueMiddlewareOverlapEnrichtmentResultItem[] | DeepBlueMiddlewareOverlapEnrichtmentResult[]>();
 
         const timer = Observable.timer(0, 1000).concatMap(() => {
             return this.getComposedResult(request_id).map((data: [string, string | DeepBlueMiddlewareOverlapResult[]]) => {
@@ -1069,6 +1078,10 @@ export class DeepBlueService {
                         pollSubject.next(
                             (<Object[]>(data[1])).map((ee) => DeepBlueMiddlewareGOEnrichtmentResult.fromObject(ee))
                         );
+                    } else if (request_type === 'overlaps_enrichment_fast') {
+                        pollSubject.next(
+                            (<Object[]>(data[1])).map((ee) => DeepBlueMiddlewareOverlapEnrichtmentResultItem.fromObject(ee))
+                        );
                     } else if (request_type === 'overlaps_enrichment') {
                         pollSubject.next(
                             (<Object[]>(data[1])).map((ee) => DeepBlueMiddlewareOverlapEnrichtmentResult.fromObject(ee))
@@ -1077,18 +1090,21 @@ export class DeepBlueService {
                     pollSubject.complete();
                     progress_element.finish();
                 } else {
+
                     let status: any = data[1];
                     let partial : any[] = status["partial"];
-debugger;
+
                     if (partial && callback) {
                         if (request_type === 'overlaps') {
-                            partial = (<Object[]>partial.map((ee) => DeepBlueMiddlewareOverlapResult.fromObject(ee)));
+                            partial = (<Object[]>(partial)).map((ee) => DeepBlueMiddlewareOverlapResult.fromObject(ee));
                         } else if (request_type === 'go_enrichment') {
-                            partial = (<Object[]>partial.map((ee) => DeepBlueMiddlewareGOEnrichtmentResult.fromObject(ee)));
+                            partial =  (<Object[]>(partial)).map((ee) => DeepBlueMiddlewareGOEnrichtmentResult.fromObject(ee))
+                        } else if (request_type === 'overlaps_enrichment_fast') {
+                            partial =  (<Object[]>(partial)).map((ee) => DeepBlueMiddlewareOverlapEnrichtmentResultItem.fromObject(ee))
                         } else if (request_type === 'overlaps_enrichment') {
-                            //partial = (<Object[]>partial.map((ee) => DeepBlueMiddlewareOverlapEnrichtmentResultItem.fromObject(ee)));
-                            partial = status["summarized"];
+                            partial =  (<Object[]>(partial)).map((ee) => DeepBlueMiddlewareOverlapEnrichtmentResult.fromObject(ee))
                         }
+
                         if (partial) {
                             pollSubject.next(partial);
                             callback(param, partial);
