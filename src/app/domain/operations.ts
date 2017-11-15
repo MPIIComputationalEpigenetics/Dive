@@ -318,9 +318,9 @@ export class DeepBlueMiddlewareOverlapEnrichtmentResult {
 export class DeepBlueMiddlewareOverlapEnrichtmentResultItem {
     static fromObject(obj: any): DeepBlueMiddlewareOverlapEnrichtmentResultItem {
         return new DeepBlueMiddlewareOverlapEnrichtmentResultItem(
-            obj['dataset'], obj['description'],
+            obj['dataset'],
             obj['biosource'], obj['epigenetic_mark'],
-            obj['experiment_size'], obj['database_name'],
+            obj['description'], obj['experiment_size'],  obj['database_name'],
             obj['p_value_log'], obj['log_odds_ratio'], obj['support'],
             obj['b'], obj['c'], obj['d'],
             obj['support_rank'], obj['log_rank'], obj['odd_rank'],
@@ -336,6 +336,7 @@ export class DeepBlueMiddlewareOverlapEnrichtmentResultItem {
         public max_rank: number, public mean_rank: number, public data: any) {
         // JSON does not send infinity values, so we have to fix it manually.
         this.p_value_log = this.p_value_log != null ? this.p_value_log : Infinity;
+        this.log_odds_ratio = this.log_odds_ratio != null ? this.log_odds_ratio : Infinity;
     }
 
     static asColumns() {
