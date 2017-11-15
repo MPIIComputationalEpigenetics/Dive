@@ -73,6 +73,7 @@ import { ToolbarModule } from 'primeng/primeng';
 import { TooltipModule } from 'primeng/primeng';
 import { TreeModule } from 'primeng/primeng';
 import { TreeTableModule } from 'primeng/primeng';
+import { SidebarModule } from 'primeng/primeng';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -182,6 +183,7 @@ import { PeaksOverlapScreenComponent } from 'app/view/screen/peaks-overlap';
         ReactiveFormsModule,
         ScheduleModule,
         SelectButtonModule,
+        SidebarModule,
         SlideMenuModule,
         SliderModule,
         SpinnerModule,
