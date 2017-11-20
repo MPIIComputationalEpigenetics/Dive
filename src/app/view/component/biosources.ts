@@ -43,7 +43,6 @@ export class BioSourcesScreenComponent implements OnDestroy {
         this.deepBlueService.setSelectedBioSources(this.targetBioSources);
     }
 
-
     onMoveToTarget($event: any) {
         this.deepBlueService.setSelectedBioSources(this.targetBioSources);
     }

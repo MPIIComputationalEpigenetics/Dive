@@ -44,7 +44,6 @@ export class DataSelectionScreen {
         if ((!datum) || (datum.length == 0)) {
             return;
         }
-        debugger;
 
         datum.sort((a: DeepBlueMiddlewareOverlapEnrichtmentResultItem, b: DeepBlueMiddlewareOverlapEnrichtmentResultItem) => b.p_value_log - a.p_value_log)
         let position = 0;
@@ -118,8 +117,6 @@ export class DataSelectionScreen {
             ems[em].push(rank);
         }
 
-        debugger;
-
         let biosources_stats: { [key: string]: IStatsResult } = {};
         let ems_stats : { [key: string]: IStatsResult } = {};
 
@@ -135,13 +132,13 @@ export class DataSelectionScreen {
 
 
         let biosources_data = Object.keys(biosources_stats).map((biosource) => [biosource, biosources_stats[biosource]]).sort((a: any, b: any) => a[1].mean - b[1].mean);
-        _self.plot(biosources_data, _self.biosourcessimilaritybarchart)
+        _self.plot(biosources_data, _self.biosourcessimilaritybarchart, _self.biosourceElementClick)
 
         let ems_data = Object.keys(ems_stats).map((em) => [em, ems_stats[em]]).sort((a: any, b: any) => a[1].mean - b[1].mean);
-        _self.plot(ems_data, _self.emssimilaritybarchart)
+        _self.plot(ems_data, _self.emssimilaritybarchart, _self.epigeneticMarkElementClick)
     }
 
-    plot(datum: any, chart: SimilarityBarChartComponent) {
+    plot(datum: any, chart: SimilarityBarChartComponent, clickCallback: any) {
         if (!datum) {
             return;
         }
@@ -168,11 +165,20 @@ export class DataSelectionScreen {
             data: stack_values_result_boxplot,
         });
 
-        chart.setNewData(categories, series, null, this.elementClick);
+        chart.setNewData(categories, series, null, clickCallback);
     }
 
-    elementClick(_self: SimilarityBarChartComponent, event: any) {
+    biosourceElementClick(click: any) {
+        const point = click.point;
+        const category = point.category;
+        console.log("biosource:", category);
 
+    }
+
+    epigeneticMarkElementClick(click: any) {
+        const point = click.point;
+        const category = point.category;
+        console.log("em:", category);
     }
 
     selectAnnotationForComparison(selectedAnnotation: any) {

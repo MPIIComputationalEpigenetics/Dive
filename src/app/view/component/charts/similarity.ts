@@ -18,10 +18,7 @@ export class SimilarityBarChartComponent {
     chart: any;
     result_by_dataset_stack: any;
 
-    setNewData(categories: any, series: any, result_by_dataset_stack: any) {
-
-        debugger;
-
+    setNewData(categories: any, series: any, result_by_dataset_stack: any, callback_function: any) {
 
         this.result_by_dataset_stack = result_by_dataset_stack;
 
@@ -58,12 +55,16 @@ export class SimilarityBarChartComponent {
                 serie['dataLabels'] = dataLabels;
                 serie['borderWidth'] = 0;
                 serie['animation'] = false;
+                serie['point'] = point;
+                serie['point']['events']['click'] = (ev: any) => callback_function(ev);
                 this.chart['addSeries'](serie, false);
             } else if (serie['type'] === 'boxplot') {
                 console.log('bloxplot');
                 serie['tooltip'] = { headerFormat: '<em>Experiment No {point.key}</em><br/>' };
                 serie['backgroundColor'] = 'red';
                 serie['animation'] = false;
+                serie['point'] = point;
+                serie['point']['events']['click'] = (ev: any) => callback_function(ev);
                 this.chart['addSeries'](serie, false);
             }
         }
