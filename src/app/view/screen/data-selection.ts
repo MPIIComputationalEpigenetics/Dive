@@ -133,13 +133,13 @@ export class DataSelectionScreen {
 
 
         let biosources_data = Object.keys(biosources_stats).map((biosource) => [biosource, biosources_stats[biosource]]).sort((a: any, b: any) => a[1].mean - b[1].mean);
-        _self.plot(biosources_data, _self.biosourcessimilaritybarchart, _self.biosourceElementClick)
+        _self.plot("Similar Biosources", biosources_data, _self.biosourcessimilaritybarchart, _self.biosourceElementClick)
 
         let ems_data = Object.keys(ems_stats).map((em) => [em, ems_stats[em]]).sort((a: any, b: any) => a[1].mean - b[1].mean);
-        _self.plot(ems_data, _self.emssimilaritybarchart, _self.epigeneticMarkElementClick)
+        _self.plot("Similar Epigenetic Marks", ems_data, _self.emssimilaritybarchart, _self.epigeneticMarkElementClick)
     }
 
-    plot(datum: any, chart: SimilarityBarChartComponent, clickCallback: any) {
+    plot(title: string, datum: any, chart: SimilarityBarChartComponent, clickCallback: any) {
         if (!datum) {
             return;
         }
@@ -166,7 +166,7 @@ export class DataSelectionScreen {
             data: stack_values_result_boxplot,
         });
 
-        chart.setNewData(categories, series, this, clickCallback);
+        chart.setNewData(title, categories, series, this, clickCallback);
     }
 
     biosourceElementClick(click: any, _self: DataSelectionScreen) {

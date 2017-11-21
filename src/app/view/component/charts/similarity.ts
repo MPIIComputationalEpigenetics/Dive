@@ -14,11 +14,11 @@ import { Component } from '@angular/core';
     `
 })
 export class SimilarityBarChartComponent {
-    options: Object;
+    options: any;
     chart: any;
     _self: any;
 
-    setNewData(categories: any, series: any, _self: any, callback_function: any) {
+    setNewData(title: string, categories: any, series: any, _self: any, callback_function: any) {
 
         this._self = _self;
 
@@ -69,6 +69,9 @@ export class SimilarityBarChartComponent {
             }
         }
 
+
+        this.chart['setTitle']({'text':title});
+
         this.chart['redraw']();
     }
 
@@ -99,7 +102,7 @@ export class SimilarityBarChartComponent {
             yAxis: {
                 min: 0,
                 title: {
-                    text: 'Overlaped peaks (regions)'
+                    text: 'Ranking experiments'
                 }
             },
             legend: {
