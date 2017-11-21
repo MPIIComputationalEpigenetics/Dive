@@ -8,6 +8,7 @@ import { ProgressElement } from 'app/service/progresselement';
 import { SimilarityBarChartComponent } from 'app/view/component/charts/similarity';
 import { DeepBlueMiddlewareOverlapEnrichtmentResultItem, DeepBlueMiddlewareOverlapResult } from 'app/domain/operations';
 import { Statistics, IStatsResult } from 'app/service/statistics';
+import { BioSource } from 'app/domain/deepblue';
 
 @Component({
     templateUrl: './data-selection.html'
@@ -165,17 +166,18 @@ export class DataSelectionScreen {
             data: stack_values_result_boxplot,
         });
 
-        chart.setNewData(categories, series, null, clickCallback);
+        chart.setNewData(categories, series, this, clickCallback);
     }
 
-    biosourceElementClick(click: any) {
+    biosourceElementClick(click: any, _self: DataSelectionScreen) {
         const point = click.point;
         const category = point.category;
-        console.log("biosource:", category);
 
+        let bs = _self.deepBlueService.getBioSourceByName(category);
+        _self.deepBlueService.addSelectedBiosource(bs);
     }
 
-    epigeneticMarkElementClick(click: any) {
+    epigeneticMarkElementClick(click: any, _self: DataSelectionScreen) {
         const point = click.point;
         const category = point.category;
         console.log("em:", category);

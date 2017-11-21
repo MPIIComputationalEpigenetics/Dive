@@ -18,7 +18,9 @@ export class OverlapsBarChartComponent {
     result_by_dataset_stack: any;
 
     setNewData(categories: any, series: any, result_by_dataset_stack: any) {
+
         this.result_by_dataset_stack = result_by_dataset_stack;
+
         this.chart['xAxis'][0].setCategories(categories, false);
 
         const point = {

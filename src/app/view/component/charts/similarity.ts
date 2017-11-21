@@ -16,11 +16,11 @@ import { Component } from '@angular/core';
 export class SimilarityBarChartComponent {
     options: Object;
     chart: any;
-    result_by_dataset_stack: any;
+    _self: any;
 
-    setNewData(categories: any, series: any, result_by_dataset_stack: any, callback_function: any) {
+    setNewData(categories: any, series: any, _self: any, callback_function: any) {
 
-        this.result_by_dataset_stack = result_by_dataset_stack;
+        this._self = _self;
 
         this.chart['xAxis'][0].setCategories(categories, false);
 
@@ -56,7 +56,7 @@ export class SimilarityBarChartComponent {
                 serie['borderWidth'] = 0;
                 serie['animation'] = false;
                 serie['point'] = point;
-                serie['point']['events']['click'] = (ev: any) => callback_function(ev);
+                serie['point']['events']['click'] = (ev: any) => callback_function(ev, _self);
                 this.chart['addSeries'](serie, false);
             } else if (serie['type'] === 'boxplot') {
                 console.log('bloxplot');
@@ -64,7 +64,7 @@ export class SimilarityBarChartComponent {
                 serie['backgroundColor'] = 'red';
                 serie['animation'] = false;
                 serie['point'] = point;
-                serie['point']['events']['click'] = (ev: any) => callback_function(ev);
+                serie['point']['events']['click'] = (ev: any) => callback_function(ev, _self);
                 this.chart['addSeries'](serie, false);
             }
         }

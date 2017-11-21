@@ -116,6 +116,8 @@ export class DeepBlueService {
     requestCache = new DataCache<IOperation, DeepBlueRequest>();
     resultCache = new DataCache<DeepBlueRequest, DeepBlueResult>();
 
+    biosourcesCache: Array<BioSource> = null;
+
     setDataInfoSelected(cliked_data: any) {
         this.dataInfoSelectedSource.next(cliked_data);
     }
@@ -228,7 +230,17 @@ export class DeepBlueService {
         params.set('type', 'peaks');
         return this.http.get(this.deepBlueUrl + '/collection_experiments_count', { 'search': params })
             .map(this.extractBioSources)
+            .do((biosources) => this.biosourcesCache = biosources)
             .catch(this.handleError);
+    }
+
+    getBioSourceByName(name: string): BioSource {
+        for (let biosource of this.biosourcesCache) {
+            if (biosource.name == name) {
+                return biosource;
+            }
+        }
+        return null;
     }
 
     listTechniques(): Observable<Technique[]> {
@@ -403,9 +415,30 @@ export class DeepBlueService {
     }
 
     addSelectedBiosource(biosource: BioSource) {
+        debugger;
+        let bss = this.selectedBioSources.value;
+
+        let found = false;
+        for (let bs of bss) {
+            if (bs.id.id == biosource.id.id) {
+                found = true;
+            }
+        }
+
+        if (!found) {
+            bss.push(biosource.clone());
+            this.selectedBioSources.next(bss);
+        }
+    }
+
+
+    removeSelectedBiosource(biosource: BioSource) {
+        debugger;
         let bs = this.selectedBioSources.value;
-        if (bs.indexOf(biosource) == -1) {
-            bs.push(biosource);
+        let index = bs.indexOf(biosource);
+        if (index >= -1) {
+            bs.splice(index, 1);
+            this.selectedBioSources.next(bs);
         }
     }
 
@@ -1092,17 +1125,17 @@ export class DeepBlueService {
                 } else {
 
                     let status: any = data[1];
-                    let partial : any[] = status["partial"];
+                    let partial: any[] = status["partial"];
 
                     if (partial && callback) {
                         if (request_type === 'overlaps') {
                             partial = (<Object[]>(partial)).map((ee) => DeepBlueMiddlewareOverlapResult.fromObject(ee));
                         } else if (request_type === 'go_enrichment') {
-                            partial =  (<Object[]>(partial)).map((ee) => DeepBlueMiddlewareGOEnrichtmentResult.fromObject(ee))
+                            partial = (<Object[]>(partial)).map((ee) => DeepBlueMiddlewareGOEnrichtmentResult.fromObject(ee))
                         } else if (request_type === 'overlaps_enrichment_fast') {
-                            partial =  (<Object[]>(partial)).map((ee) => DeepBlueMiddlewareOverlapEnrichtmentResultItem.fromObject(ee))
+                            partial = (<Object[]>(partial)).map((ee) => DeepBlueMiddlewareOverlapEnrichtmentResultItem.fromObject(ee))
                         } else if (request_type === 'overlaps_enrichment') {
-                            partial =  (<Object[]>(partial)).map((ee) => DeepBlueMiddlewareOverlapEnrichtmentResult.fromObject(ee))
+                            partial = (<Object[]>(partial)).map((ee) => DeepBlueMiddlewareOverlapEnrichtmentResult.fromObject(ee))
                         }
 
                         if (partial) {
