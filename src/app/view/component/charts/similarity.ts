@@ -69,9 +69,7 @@ export class SimilarityBarChartComponent {
             }
         }
 
-
         this.chart['setTitle']({'text':title});
-
         this.chart['redraw']();
     }
 

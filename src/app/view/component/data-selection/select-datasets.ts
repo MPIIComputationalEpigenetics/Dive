@@ -40,10 +40,7 @@ export class SelectDatasetsComponent {
   @Output() queryIdSelected = new EventEmitter();
   @Output() datasetsSelected = new EventEmitter();
 
-  JSON: any;
-
   constructor(private deepBlueService: DeepBlueService, private progress_element: ProgressElement) {
-    this.JSON = JSON;
     this.genomeSubscription = deepBlueService.genomeValue$.subscribe(genome => {
       if (genome === null) {
         return;
@@ -64,9 +61,9 @@ export class SelectDatasetsComponent {
         let key_array = <Array<any>>key;
         if ('string' == typeof key_array[1]) {
           if (key_array.length == 2) {
-            return this.buildLeaf(key_array[0], key_array[1], dataset[0]);
-          } else {
             return this.buildLeaf(key_array[0], key_array[1], dataset[0], key_array[2]);
+          } else {
+            return this.buildLeaf(key_array[0], key_array[1], dataset[0], key_array[2], key_array[3]);
           }
         } else {
           return this.buildNode(key);
@@ -76,11 +73,12 @@ export class SelectDatasetsComponent {
     }
   }
 
-  buildLeaf(id: string, name: string, parent_name: string, _query_id?: string): TreeNode {
+  buildLeaf(id: string, name: string, parent_name: string, biosource: string, _query_id?: string): TreeNode {
     let o: any = {
       "data": {
         "id": new Id(id),
         "name": name,
+        "biosource": biosource,
         "parent": parent_name,
         "leaf": true
       }
