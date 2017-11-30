@@ -20,6 +20,7 @@ import { ProgressElement } from 'app/service/progresselement';
 import { DeepBlueOperation } from 'app/domain/operations';
 import { DeepBlueResult } from 'app/domain/operations';
 import { Utils } from 'app/service/utils';
+import { RequestManager } from 'app/service/requests-manager';
 
 @Component({
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -52,7 +53,7 @@ export class GoEnrichmentScreenComponent implements OnDestroy {
     selectedGeneModelSource = new BehaviorSubject<GeneModel>(null);
     selectedGeneModelValue$: Observable<GeneModel> = this.selectedGeneModelSource.asObservable();
 
-    constructor(private deepBlueService: DeepBlueService,
+    constructor(private deepBlueService: DeepBlueService, public requestManager: RequestManager,
         public progress_element: ProgressElement, private selectedData: SelectedData) {
 
         this.genomeSubscription = deepBlueService.genomeValue$.subscribe(genome => {
@@ -126,6 +127,7 @@ export class GoEnrichmentScreenComponent implements OnDestroy {
         const current = this.selectedData.getStacksTopOperation();
 
         this.deepBlueService.composedCalculateGenesEnrichment(current, gene_model).subscribe((request: DeepBlueMiddlewareRequest) => {
+            this.requestManager.enqueueRequest(request);
             this.deepBlueService.getComposedResultIterator(request, this.progress_element, 'go_enrichment')
                 .subscribe((result: DeepBlueMiddlewareGOEnrichtmentResult[]) => {
                     const end = new Date().getTime();

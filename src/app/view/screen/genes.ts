@@ -20,6 +20,7 @@ import { OverlapsBarChartComponent } from 'app/view/component/charts/overlapping
 
 import { DeepBlueOperation } from 'app/domain/operations';
 import { DeepBlueResult } from 'app/domain/operations';
+import { RequestManager } from 'app/service/requests-manager';
 
 @Component({
     templateUrl: './genes.html'
@@ -43,7 +44,7 @@ export class GenesScreen implements OnDestroy {
     data: any;
     hasData = false;
 
-    constructor(public deepBlueService: DeepBlueService,
+    constructor(public deepBlueService: DeepBlueService, public requestManager: RequestManager,
         public progress_element: ProgressElement, private selectedData: SelectedData) {
 
         this.genomeSubscription = deepBlueService.genomeValue$.subscribe(genome => {
@@ -98,7 +99,7 @@ export class GenesScreen implements OnDestroy {
         const current = this.selectedData.getStacksTopOperation();
 
         this.deepBlueService.composedCountGenesOverlaps(current, gene_model).subscribe((request: DeepBlueMiddlewareRequest) => {
-
+            this.requestManager.enqueueRequest(request);
             this.deepBlueService.getComposedResultIterator(request, this.progress_element, 'overlaps')
                 .subscribe((result: DeepBlueMiddlewareOverlapResult[]) => {
                     const end = new Date().getTime();

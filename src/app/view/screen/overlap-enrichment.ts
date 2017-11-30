@@ -21,6 +21,7 @@ import { DeepBlueOperation, DeepBlueMiddlewareRequest } from 'app/domain/operati
 import { DeepBlueResult, DeepBlueMiddlewareOverlapEnrichtmentResult, DeepBlueMiddlewareOverlapEnrichtmentResultItem, DeepBlueMiddlewareGOEnrichtmentResult, DeepBlueMiddlewareOverlapResult } from 'app/domain/operations';
 import { IOperation, IRow } from 'app/domain/interfaces';
 import { Utils } from 'app/service/utils';
+import { RequestManager } from 'app/service/requests-manager';
 
 @Component({
     templateUrl: './overlap-enrichment.html'
@@ -35,7 +36,7 @@ export class OverlapEnrichmentScreenComponent implements OnDestroy {
 
     columns = DeepBlueMiddlewareOverlapEnrichtmentResultItem.asColumns();
 
-    constructor(private deepBlueService: DeepBlueService,
+    constructor(private deepBlueService: DeepBlueService, public requestManager: RequestManager,
         public progress_element: ProgressElement, public selectedData: SelectedData) {
 
     }
@@ -56,6 +57,7 @@ export class OverlapEnrichmentScreenComponent implements OnDestroy {
 
         this.deepBlueService
             .composedCalculateOverlapsEnrichment(current, this.selected_data.queryId(), this.selected_datasets).subscribe((request: DeepBlueMiddlewareRequest) => {
+                this.requestManager.enqueueRequest(request);
                 this.deepBlueService.getComposedResultIterator(request, this.progress_element, 'overlaps_enrichment')
                     .subscribe((result: DeepBlueMiddlewareOverlapEnrichtmentResult[]) => {
                         console.log(result);

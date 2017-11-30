@@ -1114,7 +1114,6 @@ export class DeepBlueService {
         const timer = Observable.timer(0, 1000).concatMap(() => {
 
             if (request.isCanceled()) {
-                console.log("getComposedResultIterator canceled", request.requestId());
                 timer.unsubscribe();
                 return null;
             }

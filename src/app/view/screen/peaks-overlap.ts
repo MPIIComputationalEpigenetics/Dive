@@ -25,6 +25,7 @@ import { SelectedData } from 'app/service/selecteddata';
 import { ProgressElement } from 'app/service/progresselement';
 
 import { Statistics } from 'app/service/statistics';
+import { RequestManager } from 'app/service/requests-manager';
 
 
 @Component({
@@ -59,7 +60,7 @@ export class PeaksOverlapScreenComponent implements OnDestroy {
     @ViewChild('overlapbarchart') overlapbarchart: OverlapsBarChartComponent;
     @ViewChild('multiselect') multiselect: MultiSelect;
 
-    constructor(public deepBlueService: DeepBlueService,
+    constructor(public deepBlueService: DeepBlueService, public requestManager: RequestManager,
         public progress_element: ProgressElement, private selectedData: SelectedData) {
 
         this.epigeneticMarkSubscription = deepBlueService.epigeneticMarkValue$.subscribe(selected_epigenetic_mark => {
@@ -185,6 +186,7 @@ export class PeaksOverlapScreenComponent implements OnDestroy {
         const current = this.selectedData.getStacksTopOperation();
 
         this.deepBlueService.composedCountOverlaps(current, experiments).subscribe((request: DeepBlueMiddlewareRequest) => {
+            this.requestManager.enqueueRequest(request);
             this.deepBlueService.getComposedResultIterator(request, this.progress_element, 'overlaps', this.reloadPlot, this)
                 .subscribe((result: DeepBlueMiddlewareOverlapResult[]) => {
                     const end = new Date().getTime();

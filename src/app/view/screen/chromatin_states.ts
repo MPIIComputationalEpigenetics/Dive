@@ -27,6 +27,7 @@ import { SelectedData } from 'app/service/selecteddata';
 import { ProgressElement } from 'app/service/progresselement';
 
 import { Statistics } from 'app/service/statistics';
+import { RequestManager } from 'app/service/requests-manager';
 
 
 @Component({
@@ -130,7 +131,7 @@ export class ChromatinStatesScreenComponent {
     };
   }
 
-  constructor(public deepBlueService: DeepBlueService,
+  constructor(public deepBlueService: DeepBlueService, public requestManager: RequestManager,
     public progress_element: ProgressElement, private selectedData: SelectedData) {
 
     this.epigeneticMarkSubscription = deepBlueService.epigeneticMarkValue$.subscribe(css => {
@@ -189,7 +190,7 @@ export class ChromatinStatesScreenComponent {
     let state = this.deepBlueService.epigeneticMarkSource.getValue();
     let filter = new FilterParameter("NAME", "==", state.name, "string");
     this.deepBlueService.composedCountOverlaps(current, experiments, [filter]).subscribe((request: DeepBlueMiddlewareRequest) => {
-
+      this.requestManager.enqueueRequest(request);
       this.deepBlueService.getComposedResultIterator(request, this.progress_element, 'overlaps')
         .subscribe((result: DeepBlueMiddlewareOverlapResult[]) => {
           const end = new Date().getTime();
