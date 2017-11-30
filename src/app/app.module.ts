@@ -124,6 +124,7 @@ import { DnaPatternMenuFilterComponent } from 'app/view/component/menu/dna-patte
 import { RegionsUpload } from 'app/view/component/data-selection/upload-regions';
 import { RegionsPaste } from 'app/view/component/data-selection/paste-regions';
 import { PeaksOverlapScreenComponent } from 'app/view/screen/peaks-overlap';
+import { RequestManager } from 'app/service/requests-manager';
 
 
 @NgModule({
@@ -244,7 +245,8 @@ import { PeaksOverlapScreenComponent } from 'app/view/screen/peaks-overlap';
         DeepBlueService,
         ProgressElement,
         DataStackFactory,
-        SelectedData
+        SelectedData,
+        RequestManager
     ],
     bootstrap: [AppComponent]
 })
