@@ -1,4 +1,4 @@
-import { DeepBlueMiddlewareOverlapResult } from '../../domain/operations';
+import { DeepBlueMiddlewareOverlapResult, DeepBlueMiddlewareRequest } from '../../domain/operations';
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -97,10 +97,9 @@ export class GenesScreen implements OnDestroy {
 
         const current = this.selectedData.getStacksTopOperation();
 
-        this.deepBlueService.composedCountGenesOverlaps(current, gene_model).subscribe((request_id: string) => {
-            console.log('request_id from middleware', request_id);
+        this.deepBlueService.composedCountGenesOverlaps(current, gene_model).subscribe((request: DeepBlueMiddlewareRequest) => {
 
-            this.deepBlueService.getComposedResultIterator(request_id, this.progress_element, 'overlaps')
+            this.deepBlueService.getComposedResultIterator(request, this.progress_element, 'overlaps')
                 .subscribe((result: DeepBlueMiddlewareOverlapResult[]) => {
                     const end = new Date().getTime();
                     // Now calculate and output the difference

@@ -1,5 +1,5 @@
 import { OverlapsBarChartComponent } from '../component/charts/overlappingbar';
-import { DeepBlueMiddlewareOverlapResult } from '../../domain/operations';
+import { DeepBlueMiddlewareOverlapResult, DeepBlueMiddlewareRequest } from '../../domain/operations';
 import { Experiment } from '../../domain/deepblue';
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 
@@ -89,9 +89,6 @@ export class ChromatinStatesScreenComponent {
           value: { name: experiment_biosource, experiments: biosources[experiment_biosource] }
         };
         this.biosourcesItems.push(l);
-
-        console.log(l.label);
-        console.log(pre_selected_biosources);
 
         if (pre_selected_biosources.indexOf(l.label) > -1) {
           event_items.push(l.value);
@@ -191,10 +188,9 @@ export class ChromatinStatesScreenComponent {
 
     let state = this.deepBlueService.epigeneticMarkSource.getValue();
     let filter = new FilterParameter("NAME", "==", state.name, "string");
-    this.deepBlueService.composedCountOverlaps(current, experiments, [filter]).subscribe((request_id: string) => {
-      console.log('request_id from middleware', request_id);
+    this.deepBlueService.composedCountOverlaps(current, experiments, [filter]).subscribe((request: DeepBlueMiddlewareRequest) => {
 
-      this.deepBlueService.getComposedResultIterator(request_id, this.progress_element, 'overlaps')
+      this.deepBlueService.getComposedResultIterator(request, this.progress_element, 'overlaps')
         .subscribe((result: DeepBlueMiddlewareOverlapResult[]) => {
           const end = new Date().getTime();
           // Now calculate and output the difference

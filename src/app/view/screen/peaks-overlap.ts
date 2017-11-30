@@ -1,5 +1,5 @@
 import { OverlapsBarChartComponent } from '../component/charts/overlappingbar';
-import { DeepBlueMiddlewareOverlapResult } from '../../domain/operations';
+import { DeepBlueMiddlewareOverlapResult, DeepBlueMiddlewareRequest } from '../../domain/operations';
 import { Experiment } from '../../domain/deepblue';
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 
@@ -106,9 +106,6 @@ export class PeaksOverlapScreenComponent implements OnDestroy {
                 };
                 this.biosourcesItems.push(l);
 
-                console.log(l.label);
-                console.log(pre_selected_biosources);
-
                 if (pre_selected_biosources.indexOf(l.label) > -1) {
                     event_items.push(l.value);
                     this.selectedMultiSelectBiosources.push(l.value);
@@ -187,10 +184,8 @@ export class PeaksOverlapScreenComponent implements OnDestroy {
 
         const current = this.selectedData.getStacksTopOperation();
 
-        this.deepBlueService.composedCountOverlaps(current, experiments).subscribe((request_id: string) => {
-            console.log('request_id from middleware', request_id);
-
-            this.deepBlueService.getComposedResultIterator(request_id, this.progress_element, 'overlaps', this.reloadPlot, this)
+        this.deepBlueService.composedCountOverlaps(current, experiments).subscribe((request: DeepBlueMiddlewareRequest) => {
+            this.deepBlueService.getComposedResultIterator(request, this.progress_element, 'overlaps', this.reloadPlot, this)
                 .subscribe((result: DeepBlueMiddlewareOverlapResult[]) => {
                     const end = new Date().getTime();
                     // Now calculate and output the difference

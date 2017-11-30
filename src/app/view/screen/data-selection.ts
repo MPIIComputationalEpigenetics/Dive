@@ -9,6 +9,7 @@ import { SimilarityBarChartComponent } from 'app/view/component/charts/similarit
 import { DeepBlueMiddlewareOverlapEnrichtmentResultItem, DeepBlueMiddlewareOverlapResult } from 'app/domain/operations';
 import { Statistics, IStatsResult } from 'app/service/statistics';
 import { BioSource } from 'app/domain/deepblue';
+import { RequestManager } from 'app/service/requests-manager';
 
 @Component({
     templateUrl: './data-selection.html'
@@ -20,8 +21,8 @@ export class DataSelectionScreen {
     @ViewChild('biosourcessimilaritybarchart') biosourcessimilaritybarchart: SimilarityBarChartComponent;
     @ViewChild('emssimilaritybarchart') emssimilaritybarchart: SimilarityBarChartComponent;
 
-    constructor(private deepBlueService: DeepBlueService, public progress_element: ProgressElement,
-        private selectedData: SelectedData) {
+    constructor(private deepBlueService: DeepBlueService, public requestManager: RequestManager,
+        public progress_element: ProgressElement, private selectedData: SelectedData) {
     }
 
     visibleSidebar2 = false;
@@ -29,16 +30,15 @@ export class DataSelectionScreen {
     selectQuery(event: IOperation) {
         this.selected_data = event;
         this.deepBlueService.setDataToDive(this.selected_data);
-        this.deepBlueService.composedCalculateFastsEnrichment(this.selected_data).subscribe((request_id) =>
-
-            this.deepBlueService.getComposedResultIterator(request_id, this.progress_element, 'overlaps_enrichment_fast', this.reloadData, this)
+        this.deepBlueService.composedCalculateFastsEnrichment(this.selected_data).subscribe((request) => {
+            this.requestManager.enqueueRequest(request)
+            this.deepBlueService.getComposedResultIterator(request, this.progress_element, 'overlaps_enrichment_fast', this.reloadData, this)
                 .subscribe((result: DeepBlueMiddlewareOverlapEnrichtmentResultItem[]) => {
                     const end = new Date().getTime();
                     // Now calculate and output the difference
-                    console.log(result);
                     this.reloadData(this, result);
                 })
-        )
+        })
     }
 
     reloadData(_self: DataSelectionScreen, datum: DeepBlueMiddlewareOverlapEnrichtmentResultItem[]) {
@@ -100,7 +100,7 @@ export class DataSelectionScreen {
         console.log(cutoff, datum.length, filtered_data.length);
 
         let biosources: { [key: string]: number[] } = {};
-        let ems : { [key: string]: number[] } = {};
+        let ems: { [key: string]: number[] } = {};
 
         for (let ds of filtered_data) {
             let biosource = ds.biosource;
@@ -119,7 +119,7 @@ export class DataSelectionScreen {
         }
 
         let biosources_stats: { [key: string]: IStatsResult } = {};
-        let ems_stats : { [key: string]: IStatsResult } = {};
+        let ems_stats: { [key: string]: IStatsResult } = {};
 
         for (let bs in biosources) {
             const results = biosources[bs];

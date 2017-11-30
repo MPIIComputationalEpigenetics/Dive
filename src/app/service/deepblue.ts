@@ -41,7 +41,9 @@ import {
     DeepBlueGenes,
     DeepBlueMiddlewareOverlapEnrichtmentResult,
     DataParameter,
-    DeepBlueMiddlewareOverlapEnrichtmentResultItem
+    DeepBlueMiddlewareOverlapEnrichtmentResultItem,
+    DeepBlueMiddlewareRequest,
+    AbstractDeepBlueRequest
 } from '../domain/operations';
 
 import { ProgressElement } from '../service/progresselement';
@@ -992,7 +994,7 @@ export class DeepBlueService {
             });
     }
 
-    public composedCountOverlaps(queries: IOperation[], experiments: IdName[], filters?: FilterParameter[]): Observable<string> {
+    public composedCountOverlaps(queries: IOperation[], experiments: IdName[], filters?: FilterParameter[]): Observable<DeepBlueMiddlewareRequest> {
         const params: URLSearchParams = new URLSearchParams();
         for (const query_op_id of queries) {
             params.append('queries_id', query_op_id.queryId().id);
@@ -1010,11 +1012,11 @@ export class DeepBlueService {
             .map((res: Response) => {
                 const body = res.json();
                 const response: string = body[1] || '';
-                return response;
+                return new DeepBlueMiddlewareRequest(params, "count_overlaps", new Id(response));;
             });
     }
 
-    public composedCountGenesOverlaps(queries: IOperation[], gene_model: GeneModel): Observable<string> {
+    public composedCountGenesOverlaps(queries: IOperation[], gene_model: GeneModel): Observable<DeepBlueMiddlewareRequest> {
         const params: URLSearchParams = new URLSearchParams();
         for (const query_op_id of queries) {
             params.append('queries_id', query_op_id.queryId().id);
@@ -1025,11 +1027,11 @@ export class DeepBlueService {
             .map((res: Response) => {
                 const body = res.json();
                 const response: string = body[1] || '';
-                return response;
+                return new DeepBlueMiddlewareRequest(params, "count_genes_overlaps", new Id(response));
             });
     }
 
-    public composedCalculateGenesEnrichment(queries: IOperation[], gene_model: GeneModel): Observable<string> {
+    public composedCalculateGenesEnrichment(queries: IOperation[], gene_model: GeneModel): Observable<DeepBlueMiddlewareRequest> {
         const params: URLSearchParams = new URLSearchParams();
         for (const query_op_id of queries) {
             params.append('queries_id', query_op_id.queryId().id);
@@ -1040,11 +1042,11 @@ export class DeepBlueService {
             .map((res: Response) => {
                 const body = res.json();
                 const response: string = body[1] || '';
-                return response;
+                return new DeepBlueMiddlewareRequest(params, "enrich_regions_go_terms", new Id(response));
             });
     }
 
-    public composedCalculateOverlapsEnrichment(queries: IOperation[], universe_id: Id, datasets: Object): Observable<string> {
+    public composedCalculateOverlapsEnrichment(queries: IOperation[], universe_id: Id, datasets: Object): Observable<DeepBlueMiddlewareRequest> {
         var headers = new Headers();
         headers.append('Content-Type', 'application/json');
 
@@ -1059,11 +1061,11 @@ export class DeepBlueService {
             .map((res: Response) => {
                 const body = res.json();
                 const response: string = body[1] || '';
-                return response;
+                return new DeepBlueMiddlewareRequest(request, "enrich_regions_overlap", new Id(response));
             });
     }
 
-    public composedCalculateFastsEnrichment(op: IOperation): Observable<string> {
+    public composedCalculateFastsEnrichment(op: IOperation): Observable<DeepBlueMiddlewareRequest> {
         var headers = new Headers();
         headers.append('Content-Type', 'application/json');
 
@@ -1076,14 +1078,24 @@ export class DeepBlueService {
             .map((res: Response) => {
                 const body = res.json();
                 const response: string = body[1] || '';
-                return response;
+                return new DeepBlueMiddlewareRequest(request, "enrich_regions_fast", new Id(response));
             });
     }
 
-    public getComposedResult(request_id: string): Observable<[string, string | DeepBlueMiddlewareOverlapResult[]]> {
-
+    composedCancel(request: AbstractDeepBlueRequest): Observable<string[]> {
         const params: URLSearchParams = new URLSearchParams();
-        params.set('request_id', request_id);
+        params.append('id', request.requestId());
+
+        return this.http.get(this.deepBlueUrl + '/composed_commands/cancel', { 'search': params })
+            .map((res: Response) => {
+                return res.json();
+            })
+            .catch(this.handleError);
+    }
+
+    public getComposedResult(request: DeepBlueMiddlewareRequest): Observable<[string, string | DeepBlueMiddlewareOverlapResult[]]> {
+        const params: URLSearchParams = new URLSearchParams();
+        params.set('request_id', request.requestId());
 
         return this.http.get(this.deepBlueUrl + '/composed_commands/get_request', { 'search': params })
             .map((res: Response) => {
@@ -1095,12 +1107,19 @@ export class DeepBlueService {
 
 
     // TODO: Move the logic of converting the data to the function callers
-    public getComposedResultIterator(request_id: string, progress_element: ProgressElement, request_type: string, callback?: any, param?: any):
+    public getComposedResultIterator(request: DeepBlueMiddlewareRequest, progress_element: ProgressElement, request_type: string, callback?: any, param?: any):
         Observable<DeepBlueMiddlewareOverlapResult[] | DeepBlueMiddlewareGOEnrichtmentResult[] | DeepBlueMiddlewareOverlapEnrichtmentResultItem[] | DeepBlueMiddlewareOverlapEnrichtmentResult[]> {
         const pollSubject = new Subject<DeepBlueMiddlewareOverlapResult[] | DeepBlueMiddlewareGOEnrichtmentResult[] | DeepBlueMiddlewareOverlapEnrichtmentResultItem[] | DeepBlueMiddlewareOverlapEnrichtmentResult[]>();
 
         const timer = Observable.timer(0, 1000).concatMap(() => {
-            return this.getComposedResult(request_id).map((data: [string, string | DeepBlueMiddlewareOverlapResult[]]) => {
+
+            if (request.isCanceled()) {
+                console.log("getComposedResultIterator canceled", request.requestId());
+                timer.unsubscribe();
+                return null;
+            }
+
+            return this.getComposedResult(request).map((data: [string, string | DeepBlueMiddlewareOverlapResult[]]) => {
                 if (data[0] === 'okay') {
                     timer.unsubscribe();
                     if (request_type === 'overlaps') {

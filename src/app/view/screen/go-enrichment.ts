@@ -1,5 +1,5 @@
 import { OverlapsBarChartComponent } from '../component/charts/overlappingbar';
-import { DeepBlueMiddlewareGOEnrichtmentResult, DeepBlueMiddlewareOverlapResult } from '../../domain/operations';
+import { DeepBlueMiddlewareGOEnrichtmentResult, DeepBlueMiddlewareOverlapResult, DeepBlueMiddlewareRequest } from '../../domain/operations';
 import { Component, OnInit, ViewChild, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -125,10 +125,8 @@ export class GoEnrichmentScreenComponent implements OnDestroy {
 
         const current = this.selectedData.getStacksTopOperation();
 
-        this.deepBlueService.composedCalculateGenesEnrichment(current, gene_model).subscribe((request_id: string) => {
-            console.log('request_id from middleware', request_id);
-
-            this.deepBlueService.getComposedResultIterator(request_id, this.progress_element, 'go_enrichment')
+        this.deepBlueService.composedCalculateGenesEnrichment(current, gene_model).subscribe((request: DeepBlueMiddlewareRequest) => {
+            this.deepBlueService.getComposedResultIterator(request, this.progress_element, 'go_enrichment')
                 .subscribe((result: DeepBlueMiddlewareGOEnrichtmentResult[]) => {
                     const end = new Date().getTime();
                     console.log(result[0].getResults()['enrichment']['go_terms'].length);

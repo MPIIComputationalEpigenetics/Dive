@@ -156,9 +156,42 @@ export class DeepBlueMultiParametersOperation implements IKey {
     }
 }
 
-export class DeepBlueRequest implements IKey {
+export class AbstractDeepBlueRequest implements IKey {
+
+    canceled = false;
+
+    constructor(public request_id: Id, public command: string) { }
+
+    requestId(): string {
+        return this.request_id.id;
+    }
+
+    isCanceled() : boolean {
+        return this.canceled;
+    }
+
+    cancel() {
+        this.canceled = true;
+    }
+
+    key(): string {
+        return this.request_id.id;
+    }
+
+    clone(request_count: number) {
+        throw new Error("Method not implemented.");
+    }
+
+    text(): string {
+        return "Request - " + this.command + "("+this.request_id+")";
+    }
+}
+
+export class DeepBlueRequest extends AbstractDeepBlueRequest {
     constructor(public _data: IDataParameter, public request_id: Id,
-        public command: string, public operation: IOperation, public request_count: number) { }
+        public command: string, public operation: IOperation, public request_count: number) {
+        super(request_id, command);
+    }
 
     clone(request_count: number = -1): DeepBlueRequest {
         return new DeepBlueRequest(this._data, this.request_id, this.command, this.operation, request_count);
@@ -167,15 +200,19 @@ export class DeepBlueRequest implements IKey {
     data(): IDataParameter {
         return this._data;
     }
+}
 
-    key(): string {
-        return this.request_id.id;
+export class DeepBlueMiddlewareRequest extends AbstractDeepBlueRequest {
+
+    constructor(public parameters: object, public command: string, public request_id: Id) {
+        super(request_id, command);
     }
 
-    text(): string {
-        return "Request data: " + this.operation;
+    clone(request_count: number) {
+        return new DeepBlueMiddlewareRequest(this.parameters, this.command, this.request_id);
     }
 }
+
 
 export class DeepBlueResult implements ICloneable {
     constructor(public _data: IDataParameter, public result: any, public request: DeepBlueRequest, public request_count: number) { }
@@ -223,7 +260,6 @@ export class StackValue {
         return <DeepBlueResult>this.value;
     }
 }
-
 
 export class DeepBlueMiddlewareOverlapResult {
 
@@ -320,7 +356,7 @@ export class DeepBlueMiddlewareOverlapEnrichtmentResultItem {
         return new DeepBlueMiddlewareOverlapEnrichtmentResultItem(
             obj['dataset'],
             obj['biosource'], obj['epigenetic_mark'],
-            obj['description'], obj['experiment_size'],  obj['database_name'],
+            obj['description'], obj['experiment_size'], obj['database_name'],
             obj['p_value_log'], obj['log_odds_ratio'], obj['support'],
             obj['b'], obj['c'], obj['d'],
             obj['support_rank'], obj['log_rank'], obj['odd_rank'],
