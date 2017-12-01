@@ -52,7 +52,12 @@ export class SelectDatasetsComponent {
     })
   }
 
-  buildNode(dataset: Dataset): TreeNode {
+  buildNode(dataset: Dataset, epigenetic_mark?: string): TreeNode {
+
+    if (!epigenetic_mark) {
+      epigenetic_mark = dataset[0];
+    }
+
     return {
       "data": {
         "name": dataset[0]
@@ -61,25 +66,26 @@ export class SelectDatasetsComponent {
         let key_array = <Array<any>>key;
         if ('string' == typeof key_array[1]) {
           if (key_array.length == 2) {
-            return this.buildLeaf(key_array[0], key_array[1], dataset[0], key_array[2]);
+            return this.buildLeaf(key_array[0], key_array[1], dataset[0], epigenetic_mark, key_array[2]);
           } else {
-            return this.buildLeaf(key_array[0], key_array[1], dataset[0], key_array[2], key_array[3]);
+            return this.buildLeaf(key_array[0], key_array[1], dataset[0], key_array[2], epigenetic_mark, key_array[3]);
           }
         } else {
-          return this.buildNode(key);
+          return this.buildNode(key, epigenetic_mark);
         }
 
       })
     }
   }
 
-  buildLeaf(id: string, name: string, parent_name: string, biosource: string, _query_id?: string): TreeNode {
+  buildLeaf(id: string, name: string, parent_name: string, biosource: string, epigenetic_mark: string, _query_id?: string): TreeNode {
     let o: any = {
       "data": {
         "id": new Id(id),
         "name": name,
         "biosource": biosource,
         "parent": parent_name,
+        "epigeneticmark": epigenetic_mark,
         "leaf": true
       }
     }
