@@ -1,7 +1,7 @@
 import { OverlapsBarChartComponent } from '../component/charts/overlappingbar';
 import { DeepBlueMiddlewareOverlapResult, DeepBlueMiddlewareRequest } from '../../domain/operations';
 import { Experiment } from '../../domain/deepblue';
-import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, AfterViewInit } from '@angular/core';
 
 import { Subscription } from 'rxjs/Subscription';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
@@ -26,12 +26,13 @@ import { ProgressElement } from 'app/service/progresselement';
 
 import { Statistics } from 'app/service/statistics';
 import { RequestManager } from 'app/service/requests-manager';
+import { AfterViewChecked } from '@angular/core/src/metadata/lifecycle_hooks';
 
 
 @Component({
     templateUrl: './peaks-overlap.html'
 })
-export class PeaksOverlapScreenComponent implements OnDestroy {
+export class PeaksOverlapScreenComponent implements AfterViewInit, OnDestroy {
     errorMessage: string;
     experiments: FullExperiment[];
     segregated_data: Object;
@@ -60,6 +61,7 @@ export class PeaksOverlapScreenComponent implements OnDestroy {
     @ViewChild('overlapbarchart') overlapbarchart: OverlapsBarChartComponent;
     @ViewChild('multiselect') multiselect: MultiSelect;
 
+
     constructor(public deepBlueService: DeepBlueService, public requestManager: RequestManager,
         public progress_element: ProgressElement, private selectedData: SelectedData) {
 
@@ -73,10 +75,13 @@ export class PeaksOverlapScreenComponent implements OnDestroy {
             },
                 error => this.errorMessage = <any>error);
         });
+    }
 
+    ngAfterViewInit() {
         this.selectedExperimentsValue$.debounceTime(250).subscribe(() => this.processOverlaps());
         this.selectedData.getActiveTopStackValue().subscribe((dataStackItem) => this.processOverlaps());
     }
+
 
     segregate(experiments: FullExperiment[]) {
 

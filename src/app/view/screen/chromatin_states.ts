@@ -1,7 +1,7 @@
 import { OverlapsBarChartComponent } from '../component/charts/overlappingbar';
 import { DeepBlueMiddlewareOverlapResult, DeepBlueMiddlewareRequest } from '../../domain/operations';
 import { Experiment } from '../../domain/deepblue';
-import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, AfterViewInit } from '@angular/core';
 
 import { Subscription } from 'rxjs/Subscription';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
@@ -33,7 +33,7 @@ import { RequestManager } from 'app/service/requests-manager';
 @Component({
   templateUrl: './chromatin_states.html'
 })
-export class ChromatinStatesScreenComponent {
+export class ChromatinStatesScreenComponent implements AfterViewInit, OnDestroy {
   errorMessage: string;
   experiments: FullExperiment[];
   segregated_data: Object;
@@ -144,7 +144,9 @@ export class ChromatinStatesScreenComponent {
       },
         error => this.errorMessage = <any>error);
     });
+  }
 
+  ngAfterViewInit() {
     this.selectedExperimentsValue$.debounceTime(250).subscribe(() => this.processOverlaps());
     this.selectedData.getActiveTopStackValue().subscribe((dataStackItem) => this.processOverlaps());
   }
@@ -165,12 +167,12 @@ export class ChromatinStatesScreenComponent {
     const experiments = this.selectedExperimentsSource.getValue();
 
     if (experiments.length === 0) {
-      this.reloadPlot([]);
+      this.reloadPlot(this, []);
       return;
     }
 
     if (experiments !== this.selectedExperimentsSource.getValue()) {
-      this.reloadPlot([]);
+      this.reloadPlot(this, []);
       return;
     }
 
@@ -191,19 +193,19 @@ export class ChromatinStatesScreenComponent {
     let filter = new FilterParameter("NAME", "==", state.name, "string");
     this.deepBlueService.composedCountOverlaps(current, experiments, [filter]).subscribe((request: DeepBlueMiddlewareRequest) => {
       this.requestManager.enqueueRequest(request);
-      this.deepBlueService.getComposedResultIterator(request, this.progress_element, 'overlaps')
+      this.deepBlueService.getComposedResultIterator(request, this.progress_element, 'overlaps', this.reloadPlot, this)
         .subscribe((result: DeepBlueMiddlewareOverlapResult[]) => {
           const end = new Date().getTime();
           // Now calculate and output the difference
           console.log(end - start);
           this.currentlyProcessing = [];
           console.log(result);
-          this.reloadPlot(result);
+          this.reloadPlot(this, result);
         });
     });
   }
 
-  reloadPlot(datum: DeepBlueMiddlewareOverlapResult[]) {
+  reloadPlot(_self: ChromatinStatesScreenComponent, datum: DeepBlueMiddlewareOverlapResult[]) {
     const categories: string[] = [];
 
     const value_by_stack_biosource: Array<
@@ -219,8 +221,8 @@ export class ChromatinStatesScreenComponent {
 
 
     for (const result of datum) {
-      const stack_number = this.selectedData.getStackPosByQueryId(result.getDataQuery());
-      const experiment = this.experiments.find((se: FullExperiment) => {
+      const stack_number = _self.selectedData.getStackPosByQueryId(result.getDataQuery());
+      const experiment = _self.experiments.find((se: FullExperiment) => {
         if (se.name === result.getFilterName()) {
           return true;
         }
@@ -317,20 +319,20 @@ export class ChromatinStatesScreenComponent {
 
       series.push({
         type: 'boxplot',
-        name: this.selectedData.getStackname(stack_pos),
+        name: _self.selectedData.getStackname(stack_pos),
         data: stack_values_result_boxplot,
-        color: this.selectedData.getStackColor(stack_pos, '1')
+        color: _self.selectedData.getStackColor(stack_pos, '1')
       });
 
       series.push({
         type: 'column',
-        name: this.selectedData.getStackname(stack_pos),
+        name: _self.selectedData.getStackname(stack_pos),
         data: stack_values_result,
-        color: this.selectedData.getStackColor(stack_pos, '0.3')
+        color: _self.selectedData.getStackColor(stack_pos, '0.3')
       });
     }
 
-    this.overlapbarchart.setNewData(categories, series, result_by_dataset_stack);
+    _self.overlapbarchart.setNewData(categories, series, result_by_dataset_stack);
   }
 
   hasDataDetail(): boolean {
