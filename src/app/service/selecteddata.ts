@@ -24,7 +24,7 @@ export class SelectedData implements OnDestroy {
   public activeStackSubject = new BehaviorSubject<DataStack>(null);
   public activeStackValue$: Observable<DataStack> = this.activeStackSubject.asObservable();
 
-  public activeTopStackSubject = new Subject<DataStackItem>();
+  public activeTopStackSubject = new BehaviorSubject<DataStackItem>(null);
   public activeTopStackValue$: Observable<DataStackItem> = this.activeTopStackSubject.asObservable();
 
   annotationSubscription: Subscription;
