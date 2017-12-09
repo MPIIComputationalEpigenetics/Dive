@@ -87,7 +87,7 @@ export class SimilarityBarChartComponent {
     constructor(private deepBlueService: DeepBlueService) {
         this.options = {
             title: {
-                text: `Stuff`
+                text: `Loading Similar Data...`
             },
             xAxis: {
                 categories: []
