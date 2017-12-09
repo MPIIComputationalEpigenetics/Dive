@@ -1,73 +1,10 @@
-<p-sidebar [(visible)]="visibleSidebar2" position="right" [baseZIndex]="10000">
-    <h1 style="font-weight:normal">Right Sidebar</h1>
-    <button pButton type="button" (click)="visibleSidebar2 = false" label="Save" class="ui-button-success"></button>
-    <button pButton type="button" (click)="visibleSidebar2 = false" label="Cancel" class="ui-button-secondary"></button>
-</p-sidebar>
-
-
 <div class="ui-fluid">
     <div class="ui-g">
         <div class="ui-g-12">
             <div class="card card-w-title">
-                <h1>Select the data to DIVE in</h1>
-
-                <h1>{{ selected_data?.text() }} </h1>
-
-                <p-tabView>
-
-                    <p-tabPanel header="Datasets">
-                        <select-datasets-component [selectMode]="'single'" (queryIdSelected)="selectQuery($event)"></select-datasets-component>
-                    </p-tabPanel>
-
-                    <p-tabPanel header="Experiments">
-                        <select-experiments-component (queryIdSelected)="selectQuery($event)"></select-experiments-component>
-                    </p-tabPanel>
-
-                    <p-tabPanel header="Annotations">
-                        <select-annotations-component [toCompare]="false" (queryIdSelected)="selectQuery($event)"></select-annotations-component>
-                    </p-tabPanel>
-
-                    <p-tabPanel header="Tiling Regions">
-                        <select-tiling-component (queryIdSelected)="selectQuery($event)"></select-tiling-component>
-                    </p-tabPanel>
-
-                    <p-tabPanel header="Query ID">
-
-                    </p-tabPanel>
-
-                    <p-tabPanel header="Genes">
-                        <select-genes-component (queryIdSelected)="selectQuery($event)"></select-genes-component>
-                    </p-tabPanel>
-
-                    <p-tabPanel header="Upload File">
-                        <regions-upload (queryIdSelected)="selectQuery($event)"></regions-upload>
-                    </p-tabPanel>
-
-                    <p-tabPanel header="Paste Regions">
-                        <regions-paste (queryIdSelected)="selectQuery($event)"></regions-paste>
-                    </p-tabPanel>
-
-                </p-tabView>
-
+                <h1>Select the data to DIVE</h1>
+                <data-selection-main (queryIdSelected)="selectQuery($event)"></data-selection-main>
             </div>
-
-            <div class="card card-w-title">
-                Select data by similarity
-                <p-tabView>
-                    <p-tabPanel header="Biosources">
-                        <app-similarity-bar-chart #biosourcessimilaritybarchart> </app-similarity-bar-chart>
-                    </p-tabPanel>
-                    <p-tabPanel header="Epigenetic Marks">
-                        <app-similarity-bar-chart #emssimilaritybarchart> </app-similarity-bar-chart>
-                    </p-tabPanel>
-                    <p-tabPanel header="All experiments">
-                        Content 3
-                    </p-tabPanel>
-                </p-tabView>
-                <data-load-progress-bar #progressbar></data-load-progress-bar>
-            </div>
-
-            <app-biosources-screen></app-biosources-screen>
         </div>
     </div>
 </div>

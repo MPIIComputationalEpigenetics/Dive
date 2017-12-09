@@ -1,0 +1,33 @@
+<p-tabView>
+    <p-tabPanel header="Datasets">
+        <select-datasets-component [selectMode]="'single'" (queryIdSelected)="selectQuery($event)"></select-datasets-component>
+    </p-tabPanel>
+
+    <p-tabPanel header="Experiments">
+        <select-experiments-component (queryIdSelected)="selectQuery($event)"></select-experiments-component>
+    </p-tabPanel>
+
+    <p-tabPanel header="Annotations">
+        <select-annotations-component [toCompare]="false" (queryIdSelected)="selectQuery($event)"></select-annotations-component>
+    </p-tabPanel>
+
+    <p-tabPanel header="Tiling Regions">
+        <select-tiling-component (queryIdSelected)="selectQuery($event)"></select-tiling-component>
+    </p-tabPanel>
+
+    <p-tabPanel header="Query ID">
+
+    </p-tabPanel>
+
+    <p-tabPanel header="Genes">
+        <select-genes-component (queryIdSelected)="selectQuery($event)"></select-genes-component>
+    </p-tabPanel>
+
+    <p-tabPanel header="Upload File">
+        <regions-upload (queryIdSelected)="selectQuery($event)"></regions-upload>
+    </p-tabPanel>
+
+    <p-tabPanel header="Paste Regions">
+        <regions-paste (queryIdSelected)="selectQuery($event)"></regions-paste>
+    </p-tabPanel>
+</p-tabView>

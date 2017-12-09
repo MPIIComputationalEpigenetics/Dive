@@ -95,6 +95,7 @@ import { RegionsScreen } from 'app/view/screen/regions';
 import { GenesScreen } from 'app/view/screen/genes';
 import { GoEnrichmentScreenComponent } from 'app/view/screen/go-enrichment';
 import { OverlapEnrichmentScreenComponent } from 'app/view/screen/overlap-enrichment';
+import { SimilarFinder } from 'app/view/screen/similar-finder';
 
 
 import { DiveStatus, CSSExperimentsMenu} from 'app/view/component/menu/main-menu';
@@ -125,6 +126,7 @@ import { RegionsUpload } from 'app/view/component/data-selection/upload-regions'
 import { RegionsPaste } from 'app/view/component/data-selection/paste-regions';
 import { PeaksOverlapScreenComponent } from 'app/view/screen/peaks-overlap';
 import { RequestManager } from 'app/service/requests-manager';
+import { DataSelectionMainComponent } from 'app/view/component/data-selection/data-selection-main';
 
 
 @NgModule({
@@ -211,6 +213,7 @@ import { RequestManager } from 'app/service/requests-manager';
         DiveStatus,
         DataStackViewComponent,
         DataLoadProgressBar,
+        DataSelectionMainComponent,
         OverlapsBarChartComponent,
         SimilarityBarChartComponent,
         SelectAnnotationsComponent,
@@ -221,6 +224,7 @@ import { RequestManager } from 'app/service/requests-manager';
         SelectDatabasesComponent,
         DataSelectionScreen,
         RegionsScreen,
+        SimilarFinder,
         BioSourcesScreenComponent,
         ChromatinStatesScreenComponent,
         GenesScreen,
