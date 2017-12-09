@@ -1,8 +1,22 @@
+<p-sidebar [(visible)]="visibleSidebar2" position="right" [baseZIndex]="10000" styleClass="ui-sidebar-md">
+  <h1 style="font-weight:normal">{{selectedRow?.text()}}</h1>
+  <button pButton type="button" icon="ui-icon-check-circle" label="Select Dataset" (click)="selectDatasets($event)"></button>
+  <button pButton type="button" (click)="visibleSidebar2 = false" label="Cancel" class="ui-button-secondary"></button>
+
+  <h4>{{ selectedRow?.epigenetic_mark() }}</h4>
+  <h4>{{ selectedRow?.biosource() }}</h4>
+  <h4>{{ selectedRow?.sample_info() | json }}</h4>
+  <h4>{{ selectedRow?.technique() }}</h4>
+  <h4>{{ selectedRow?.project() }}</h4>
+  <h4>{{ selectedRow?.columns() | json }}</h4>
+
+</p-sidebar>
+
 <div class="content-section implementation">
 
-  <button pButton type="button" icon="ui-icon-check-circle" label="Select Datasets" (click)="selectDatasets($event)"></button>
+  <button pButton type="button" icon="ui-icon-check-circle" label="Select Dataset" (click)="selectDatasets($event)"></button>
 
-  <p-treeTable [value]="datasets" selectionMode="{{selectMode}}" [(selection)]="selectedDatasets">
+  <p-treeTable [value]="datasets" selectionMode="{{selectMode}}" [(selection)]="selectedDatasets" (onNodeSelect)="nodeSelect($event)">
     <p-column field="name" header="Name"></p-column>
     <p-column field="biosource" header="BiosSurce"></p-column>
     <p-column field="epigeneticmark" header="Epigenetic Mark"></p-column>

@@ -9,6 +9,8 @@ import {
   Technique,
   Project,
   Id,
+  FullMetadata,
+  FullExperiment,
 } from 'app/domain/deepblue';
 
 import { DeepBlueService } from 'app/service/deepblue';
@@ -32,6 +34,9 @@ export class SelectDatasetsComponent {
     { name: 'name', prop: 'name', column_type: 'string' }
   ];
 
+  visibleSidebar2 = false;
+  selectedRow: FullExperiment;
+
   genomeSubscription: Subscription;
   datasets: TreeNode[] = [];
   selectedDatasets: any = [];
@@ -51,6 +56,18 @@ export class SelectDatasetsComponent {
 
     })
   }
+
+  nodeSelect(event: any) {
+    if (event.node.data.leaf) {
+      this.deepBlueService.getInfo(event.node.data.id).subscribe((info) => {
+        console.log(info);
+        this.selectedRow = <FullExperiment>info;
+        this.visibleSidebar2 = true;
+      })
+    }
+    //event.node = selected node
+  }
+
 
   buildNode(dataset: Dataset, epigenetic_mark?: string): TreeNode {
 
