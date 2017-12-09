@@ -7,7 +7,10 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 export class MenuService {
   model: any[] = [
     {
-      label: 'Dashboard', icon: 'dashboard', routerLink: ['/']
+      label: 'Data Selection', icon: 'dashboard', routerLink: ['/dataselection']
+    },
+    {
+      label: 'Similar Data', icon: 'compare_arrows', routerLink: ['/similarfinder']
     },
     {
       name: 'genomes', label: 'Genomes', icon: 'lens',

@@ -7,9 +7,12 @@ import { GenesScreen } from 'app/view/screen/genes';
 import { OverlapEnrichmentScreenComponent } from "app/view/screen/overlap-enrichment";
 import { GoEnrichmentScreenComponent } from './view/screen/go-enrichment';
 import { PeaksOverlapScreenComponent } from 'app/view/screen/peaks-overlap';
+import { SimilarFinder } from 'app/view/screen/similar-finder';
 
 export const routes: Routes = [
     { path: '', component: DataSelectionScreen },
+    { path: 'dataselection', component: DataSelectionScreen },
+    { path: 'similarfinder', component: SimilarFinder },
     { path: 'regions', component: RegionsScreen },
     { path: 'genes', component: GenesScreen },
     { path: 'go_enrichment', component: GoEnrichmentScreenComponent },
