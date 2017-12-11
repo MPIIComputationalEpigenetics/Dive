@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 
+import { ConfirmDialogModule, ConfirmationService } from 'primeng/primeng';
 import { MenuItem } from 'primeng/primeng';
 import { DeepBlueService } from "app/service/deepblue";
 import { SelectedData } from "app/service/selecteddata";
@@ -19,7 +20,8 @@ export class SimilarFinder {
     @ViewChild('biosourcessimilaritybarchart') biosourcessimilaritybarchart: SimilarityBarChartComponent;
     @ViewChild('emssimilaritybarchart') emssimilaritybarchart: SimilarityBarChartComponent;
 
-    constructor(private deepBlueService: DeepBlueService, public requestManager: RequestManager,
+    constructor(private confirmationService: ConfirmationService,
+        private deepBlueService: DeepBlueService, public requestManager: RequestManager,
         public progress_element: ProgressElement, private selectedData: SelectedData) {
         this.selectedData.getActiveTopStackValue().subscribe((dataStackItem) => {
             if (dataStackItem) {
@@ -170,6 +172,19 @@ export class SimilarFinder {
 
         let bs = _self.deepBlueService.getBioSourceByName(category);
         _self.deepBlueService.addSelectedBiosource(bs);
+        _self.deepBlueService.getRelatedBioSources(bs).subscribe((bss) => {
+            if (bss[1].length > 1) {
+                _self.confirmationService.confirm({
+                    message: 'Are you sure that you want to perform this action? ' + JSON.stringify(bss[1]),
+                    accept: () => {
+                        for (let similar of bss[1]) {
+                            let bs = _self.deepBlueService.getBioSourceByName(similar);
+                            _self.deepBlueService.addSelectedBiosource(bs);
+                        }
+                    }
+                });
+            }
+        });
     }
 
     epigeneticMarkElementClick(click: any, _self: SimilarFinder) {

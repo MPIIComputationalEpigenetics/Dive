@@ -7,7 +7,7 @@ import { HttpModule } from '@angular/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 import { AppRoutes } from './app.routes';
-import { InplaceModule } from 'primeng/primeng';
+import { InplaceModule, ConfirmationService } from 'primeng/primeng';
 
 import 'rxjs/Rx';
 
@@ -246,6 +246,7 @@ import { DataSelectionMainComponent } from 'app/view/component/data-selection/da
             useFactory: highchartsFactory
         },
         MenuService,
+        ConfirmationService,
         DeepBlueService,
         ProgressElement,
         DataStackFactory,

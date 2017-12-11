@@ -417,7 +417,6 @@ export class DeepBlueService {
     }
 
     addSelectedBiosource(biosource: BioSource) {
-        debugger;
         let bss = this.selectedBioSources.value;
 
         let found = false;
@@ -435,7 +434,6 @@ export class DeepBlueService {
 
 
     removeSelectedBiosource(biosource: BioSource) {
-        debugger;
         let bs = this.selectedBioSources.value;
         let index = bs.indexOf(biosource);
         if (index >= -1) {
@@ -857,7 +855,7 @@ export class DeepBlueService {
             .catch(this.handleError);
     }
 
-    getInfo(id: Id): Observable<Object> {
+    getInfo(id: Id): Observable<FullMetadata> {
         const params: URLSearchParams = new URLSearchParams();
         params.set('id', id.id);
         return this.http.get(this.deepBlueUrl + '/info', { 'search': params })
@@ -1198,10 +1196,7 @@ export class DeepBlueService {
         params.set('genome', this.getGenome().name);
 
         return this.http.get(this.deepBlueUrl + '/composed_commands/get_epigenetic_marks_categories', { 'search': params })
-            .map((res: Response) => {
-                const body = res.json();
-                return body;
-            });
+            .map((res: Response) => res.json());
     }
 
     public getComposedEpigeneticMarksFromCategory(category: string): Observable<FullMetadata[]> {
@@ -1211,6 +1206,16 @@ export class DeepBlueService {
 
         return this.http.get(this.deepBlueUrl + '/composed_commands/get_epigenetic_marks_from_category', { 'search': params })
             .map(this.extractFullMetadata)
+            .catch(this.handleError);
+    }
+
+    public getRelatedBioSources(biosource: BioSource): Observable<string[]> {
+        const params: URLSearchParams = new URLSearchParams();
+        params.set('biosource', biosource.name);
+        params.set('genome', this.getGenome().name);
+
+        return this.http.get(this.deepBlueUrl + '/composed_commands/get_related_biosources', { 'search': params })
+            .map((res: Response) => res.json())
             .catch(this.handleError);
     }
 

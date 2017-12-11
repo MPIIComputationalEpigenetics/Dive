@@ -72,7 +72,6 @@ export class BioSourcesScreenComponent implements OnDestroy {
     }
 
     onMoveToTarget($event: any) {
-        debugger;
         let items = $event.items;
         for (let item of items) {
             this.deepBlueService.addSelectedBiosource(item);
