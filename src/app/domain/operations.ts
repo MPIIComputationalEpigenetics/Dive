@@ -722,15 +722,15 @@ export class DeepBlueMiddlewareRequest extends AbstractDeepBlueRequest {
     }
 
     requestId(): Id {
-        throw new Error("Method not implemented.");
+        return this._id;
     }
 
     key(): string {
-        throw new Error("Method not implemented.");
+        return this._id.id;
     }
 
     text(): string {
-        throw new Error("Method not implemented.");
+        return "MiddlewareRequest: " + this._id.id;
     }
 }
 
