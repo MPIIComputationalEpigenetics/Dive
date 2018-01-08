@@ -104,8 +104,8 @@ export class DeepBlueDataParameter implements IDataParameter {
 
     name(): string {
         if (this._data instanceof Name) {
-            return (<IdName>this._data).name;
-        } else if ('string' === typeof this._data) {
+            return (<Name>this._data).name;
+        } else if (typeof this._data === 'string') {
             return (<string>this._data);
         } else {
             return (<string[]>this._data).join(",");
@@ -117,7 +117,7 @@ export class DeepBlueDataParameter implements IDataParameter {
             return (<IdName>this._data).id;
         } if (this._data instanceof Name) {
             return new Id((<Name>this._data).name);
-        } else if (this._data instanceof String) {
+        } else if (typeof this._data === 'string') {
             return new Id(<string>this._data);
         } else {
             return new Id((<string[]>this._data).join(","));
@@ -136,7 +136,6 @@ export class DeepBlueDataParameter implements IDataParameter {
         return stringify(this._data);
     }
 }
-
 
 export class DeepBlueOperationArgs implements IDataParameter {
 
