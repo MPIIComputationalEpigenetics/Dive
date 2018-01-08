@@ -17,7 +17,7 @@ import { DeepBlueService } from 'app/service/deepblue';
 import { Subscription } from 'rxjs';
 import { TreeNode } from 'primeng/primeng';
 import { ProgressElement } from 'app/service/progresselement';
-import { DeepBlueOperation, FilterParameter, DataParameter } from 'app/domain/operations';
+import { DeepBlueOperation, FilterParameter, DeepBlueDataParameter } from 'app/domain/operations';
 import { Observable } from 'rxjs/Observable';
 import { IOperation } from 'app/domain/interfaces';
 
@@ -108,7 +108,7 @@ export class SelectDatasetsComponent {
     }
     if (_query_id) {
       let id_name = new IdName(new Id(id), name);
-      let data_parameter = new DataParameter(id_name);
+      let data_parameter = new DeepBlueDataParameter(id_name);
       o.data._query_id = new DeepBlueOperation(data_parameter, new Id(_query_id), "filter", -1);;
     }
 

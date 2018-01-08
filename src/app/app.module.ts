@@ -127,6 +127,7 @@ import { RegionsPaste } from 'app/view/component/data-selection/paste-regions';
 import { PeaksOverlapScreenComponent } from 'app/view/screen/peaks-overlap';
 import { RequestManager } from 'app/service/requests-manager';
 import { DataSelectionMainComponent } from 'app/view/component/data-selection/data-selection-main';
+import { InitialScreenComponent } from 'app/view/screen/initial';
 
 
 @NgModule({
@@ -222,6 +223,7 @@ import { DataSelectionMainComponent } from 'app/view/component/data-selection/da
         SelectTilingRegionsComponent,
         SelectGenesComponent,
         SelectDatabasesComponent,
+        InitialScreenComponent,
         DataSelectionScreen,
         RegionsScreen,
         SimilarFinder,

@@ -1,4 +1,5 @@
-import { IKey } from 'app/domain/interfaces';
+import { IKey } from '../domain/interfaces';
+
 
 export class Id implements IKey {
     constructor(public id: string) { }
@@ -11,14 +12,32 @@ export class Id implements IKey {
         return new Id(this.id);
     }
 
-    text() : string {
+    text(): string {
         return 'ID: ' + this.id;
     }
 }
 
+export class Name implements IKey {
 
-export class IdName implements IKey {
-    constructor(public id: Id, public name: string) { }
+    constructor(public name: string) { }
+
+    key(): string {
+        return this.name;
+    }
+
+    text(): string {
+        throw name;
+    }
+
+    clone(): Name {
+        return new Name(this.name);
+    }
+}
+
+export class IdName extends Name {
+    constructor(public id: Id, public name: string) {
+        super(name)
+    }
 
     key(): string {
         return this.id.id;
@@ -28,10 +47,39 @@ export class IdName implements IKey {
         return new IdName(this.id, this.name);
     }
 
-    text() : string {
+    text(): string {
         return this.name + "(" + this.id + ")";
     }
 }
+
+export class IdNameCount extends IdName {
+    /*
+
+            count: number;
+
+            constructor(data: string[]) {
+                super(new Id(data[0]), data[1]);
+                if (data.length >= 2) {
+                    this.count = parseInt(data[2]);
+                } else {
+                    this.count = -1;
+                }
+            }
+        }
+    */
+    constructor(public id: Id, public name: string, public count: number) {
+        super(id, name);
+    }
+
+    Count(): number {
+        return this.count;
+    }
+
+    clone(): IdName {
+        return new IdNameCount(this.id, this.name, this.count);
+    }
+}
+
 
 export class EpigeneticMark extends IdName {
     constructor(data: string[]) {
@@ -172,16 +220,3 @@ export class FullExperiment extends FullMetadata {
     }
 }
 
-
-export class IdNameCount extends IdName {
-    count: number;
-
-    constructor(data: string[]) {
-        super(new Id(data[0]), data[1]);
-        if (data.length >= 2) {
-            this.count = parseInt(data[2]);
-        } else {
-            this.count = -1;
-        }
-    }
-}

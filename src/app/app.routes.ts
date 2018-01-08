@@ -8,9 +8,10 @@ import { OverlapEnrichmentScreenComponent } from "app/view/screen/overlap-enrich
 import { GoEnrichmentScreenComponent } from './view/screen/go-enrichment';
 import { PeaksOverlapScreenComponent } from 'app/view/screen/peaks-overlap';
 import { SimilarFinder } from 'app/view/screen/similar-finder';
+import { InitialScreenComponent } from 'app/view/screen/initial';
 
 export const routes: Routes = [
-    { path: '', component: DataSelectionScreen },
+    { path: '', component: InitialScreenComponent },
     { path: 'dataselection', component: DataSelectionScreen },
     { path: 'similarfinder', component: SimilarFinder },
     { path: 'regions', component: RegionsScreen },

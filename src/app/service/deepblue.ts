@@ -30,20 +30,18 @@ import { IKey } from '../domain/interfaces';
 import {
     DeepBlueMiddlewareGOEnrichtmentResult,
     DeepBlueMiddlewareOverlapResult,
-    DeepBlueMultiParametersOperation,
     DeepBlueOperation,
-    DeepBlueParametersOperation,
     DeepBlueRequest,
     DeepBlueResult,
     FilterParameter,
-    StackValue,
     DeepBlueTiling,
-    DeepBlueGenes,
     DeepBlueMiddlewareOverlapEnrichtmentResult,
-    DataParameter,
-    DeepBlueMiddlewareOverlapEnrichtmentResultItem,
+    DeepBlueDataParameter,
+    DeepBlueOperationArgs,
+    StackValue,
     DeepBlueMiddlewareRequest,
-    AbstractDeepBlueRequest
+    DeepBlueMiddlewareOverlapEnrichtmentResultItem,
+    AbstractDeepBlueRequest,
 } from '../domain/operations';
 
 import { ProgressElement } from '../service/progresselement';
@@ -485,7 +483,7 @@ export class DeepBlueService {
                 const response: string = body[1] || '';
                 const query_id = new Id(response);
                 progress_element.increment(request_count);
-                return new DeepBlueOperation(new DataParameter(annotation), query_id, 'select_annotation', request_count);
+                return new DeepBlueOperation(new DeepBlueDataParameter(annotation), query_id, 'select_annotation', request_count);
             })
             .do((operation) => this.idNamesQueryCache.put(annotation, operation))
             .catch(this.handleError);
@@ -511,7 +509,7 @@ export class DeepBlueService {
                 const response: string = body[1] || '';
                 const query_id = new Id(response);
                 progress_element.increment(request_count);
-                return new DeepBlueOperation(new DataParameter(experiment), query_id, 'select_experiment', request_count);
+                return new DeepBlueOperation(new DeepBlueDataParameter(experiment), query_id, 'select_experiment', request_count);
             })
             .do((operation) => {
                 this.idNamesQueryCache.put(experiment, operation);
@@ -556,7 +554,7 @@ export class DeepBlueService {
                 const response: string = body[1] || '';
                 const query_id = new Id(response);
                 progress_element.increment(request_count);
-                return new DeepBlueOperation(new DataParameter("Merged queries"), query_id, 'merge_queries', request_count);
+                return new DeepBlueOperation(new DeepBlueDataParameter("Merged queries"), query_id, 'merge_queries', request_count);
             })
             .catch(this.handleError);
     }
@@ -567,7 +565,7 @@ export class DeepBlueService {
 
         const parameters = [field, operation, value, type];
 
-        const cache_key = new DeepBlueParametersOperation(data, parameters, 'filter', request_count);
+        const cache_key = new DeepBlueOperationArgs([data, parameters, 'filter']);
 
         if (this.filtersQueryCache.get(cache_key, request_count)) {
             progress_element.increment(request_count);
@@ -641,7 +639,7 @@ export class DeepBlueService {
 
         const parameters = [overlap, amount, amount_type];
 
-        const cache_key = new DeepBlueMultiParametersOperation(data_one, data_two, parameters, 'overlap', request_count);
+        const cache_key = new DeepBlueOperationArgs([data_one, data_two, parameters, 'overlap']);
 
         if (this.overlapsQueryCache.get(cache_key, request_count)) {
             progress_element.increment(request_count);
@@ -686,7 +684,7 @@ export class DeepBlueService {
                 const response: string = body[1] || '';
                 const query_id = new Id(response);
                 progress_element.increment(request_count);
-                return new DeepBlueOperation(new DataParameter(dna_motif), query_id, 'find_motif', request_count);
+                return new DeepBlueOperation(new DeepBlueDataParameter(dna_motif), query_id, 'find_motif', request_count);
             })
             .catch(this.handleError);
 
@@ -722,7 +720,7 @@ export class DeepBlueService {
 
     getResult(op_request: DeepBlueRequest, progress_element: ProgressElement, request_count: number): Observable<DeepBlueResult> {
         const params: URLSearchParams = new URLSearchParams();
-        params.set('request_id', op_request.request_id.id);
+        params.set('request_id', op_request.id().id);
 
         const pollSubject = new Subject<DeepBlueResult>();
 
@@ -739,7 +737,7 @@ export class DeepBlueService {
                 const status = body[0] || 'error';
                 if (status === 'okay') {
                     progress_element.increment(request_count);
-                    const op_result = new DeepBlueResult(op_request.data(), body[1], op_request, request_count);
+                    const op_result = new DeepBlueResult(op_request, body[1], request_count);
                     this.resultCache.put(op_request, op_result);
                     expand.unsubscribe();
                     pollSubject.next(op_result);
@@ -769,7 +767,7 @@ export class DeepBlueService {
                     const body = res.json();
                     const request_id = new Id(body[1]);
                     progress_element.increment(request_count);
-                    const deepblue_request = new DeepBlueRequest(op_exp.data(), request_id, 'count_regions', op_exp, request_count);
+                    const deepblue_request = new DeepBlueRequest(op_exp, request_id, 'count_regions', request_count);
                     this.requestCache.put(op_exp, deepblue_request);
                     return deepblue_request;
                 })
@@ -793,7 +791,7 @@ export class DeepBlueService {
                 const body = res.json();
                 const request_id = new Id(body[1]);
                 progress_element.increment(request_count);
-                const deepblue_request = new DeepBlueRequest(data.data(), request_id, 'get_regions', data, request_count);
+                const deepblue_request = new DeepBlueRequest(data, request_id, 'get_regions', request_count);
                 return deepblue_request;
             })
             .flatMap((deepblue_request) => {
@@ -939,7 +937,7 @@ export class DeepBlueService {
                 const response: string = body[1] || '';
                 const query_id = new Id(body[1]);
                 progress_element.increment(request_count);
-                return new DeepBlueGenes(genes, gene_model, query_id, request_count);
+                return new DeepBlueOperation(new DeepBlueOperationArgs({ genes: genes, gene_model: gene_model }), query_id, 'select_genes', request_count);
             })
             .catch(this.handleError);
     }
@@ -963,7 +961,7 @@ export class DeepBlueService {
                 const response: string = body[1] || '';
                 const query_id = new Id(body[1]);
                 progress_element.increment(request_count);
-                return new DeepBlueOperation(new DataParameter("User Data"), query_id, 'input_regions', -1)
+                return new DeepBlueOperation(new DeepBlueDataParameter("User Data"), query_id, 'input_regions', -1)
             });
     }
 
@@ -1006,11 +1004,13 @@ export class DeepBlueService {
             params.append("filters", JSON.stringify(filters));
         }
 
+        params.rawParams
+
         return this.http.get(this.deepBlueUrl + '/composed_commands/count_overlaps', { 'search': params })
             .map((res: Response) => {
                 const body = res.json();
                 const response: string = body[1] || '';
-                return new DeepBlueMiddlewareRequest(params, "count_overlaps", new Id(response));;
+                return new DeepBlueMiddlewareRequest(params.paramsMap, "count_overlaps", new Id(response));;
             });
     }
 
@@ -1025,7 +1025,7 @@ export class DeepBlueService {
             .map((res: Response) => {
                 const body = res.json();
                 const response: string = body[1] || '';
-                return new DeepBlueMiddlewareRequest(params, "count_genes_overlaps", new Id(response));
+                return new DeepBlueMiddlewareRequest(params.paramsMap, "count_genes_overlaps", new Id(response));
             });
     }
 
@@ -1040,7 +1040,7 @@ export class DeepBlueService {
             .map((res: Response) => {
                 const body = res.json();
                 const response: string = body[1] || '';
-                return new DeepBlueMiddlewareRequest(params, "enrich_regions_go_terms", new Id(response));
+                return new DeepBlueMiddlewareRequest(params.paramsMap, "enrich_regions_go_terms", new Id(response));
             });
     }
 
@@ -1048,18 +1048,23 @@ export class DeepBlueService {
         var headers = new Headers();
         headers.append('Content-Type', 'application/json');
 
-        let request = {
+        let request : { [key: string]: any } = {
             "queries_id": queries.map((op) => op.queryId().id),
             "universe_id": universe_id.id,
             "genome": this.genomeSource.getValue().name,
             "datasets": datasets
         }
 
+        let request_map = new Map<string, any>();
+        for (let key of Object.keys(request)) {
+            request_map.set(key, request[key]);
+        }
+
         return this.http.post(this.deepBlueUrl + '/composed_commands/enrich_regions_overlap', request, { headers: headers })
             .map((res: Response) => {
                 const body = res.json();
                 const response: string = body[1] || '';
-                return new DeepBlueMiddlewareRequest(request, "enrich_regions_overlap", new Id(response));
+                return new DeepBlueMiddlewareRequest(request_map, "enrich_regions_overlap", new Id(response));
             });
     }
 
@@ -1067,22 +1072,27 @@ export class DeepBlueService {
         var headers = new Headers();
         headers.append('Content-Type', 'application/json');
 
-        let request = {
+        let request : { [key: string]: any } = {
             "query_id": op.queryId().id,
             "genome": this.genomeSource.getValue().name
+        }
+
+        let request_map = new Map<string, any>();
+        for (let key of Object.keys(request)) {
+            request_map.set(key, request[key]);
         }
 
         return this.http.post(this.deepBlueUrl + '/composed_commands/enrich_regions_fast', request, { headers: headers })
             .map((res: Response) => {
                 const body = res.json();
                 const response: string = body[1] || '';
-                return new DeepBlueMiddlewareRequest(request, "enrich_regions_fast", new Id(response));
+                return new DeepBlueMiddlewareRequest(request_map, "enrich_regions_fast", new Id(response));
             });
     }
 
     composedCancel(request: AbstractDeepBlueRequest): Observable<string[]> {
         const params: URLSearchParams = new URLSearchParams();
-        params.append('id', request.requestId());
+        params.append('id', request.id().id);
 
         return this.http.get(this.deepBlueUrl + '/composed_commands/cancel', { 'search': params })
             .map((res: Response) => {
@@ -1093,7 +1103,7 @@ export class DeepBlueService {
 
     public getComposedResult(request: DeepBlueMiddlewareRequest): Observable<[string, string | DeepBlueMiddlewareOverlapResult[]]> {
         const params: URLSearchParams = new URLSearchParams();
-        params.set('request_id', request.requestId());
+        params.set('request_id', request.requestId().id);
 
         return this.http.get(this.deepBlueUrl + '/composed_commands/get_request', { 'search': params })
             .map((res: Response) => {

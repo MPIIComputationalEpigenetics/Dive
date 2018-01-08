@@ -10,7 +10,7 @@ import { MultiSelect } from 'primeng/primeng';
 import { SelectedData } from 'app/service/selecteddata';
 import { ProgressElement } from 'app/service/progresselement';
 
-import { IdName } from 'app/domain/deepblue';
+import { IdName, Id } from 'app/domain/deepblue';
 import { BioSource } from 'app/domain/deepblue';
 import { EpigeneticMark } from 'app/domain/deepblue';
 import { FullExperiment } from 'app/domain/deepblue';
@@ -33,7 +33,7 @@ export class RegionsScreen {
 
     columns: any[] = [];
     rows: any[] = [];
-    request_id: string = null;
+    request_id: Id = null;
 
     constructor(private deepBlueService: DeepBlueService,
         public progress_element: ProgressElement, private selectedData: SelectedData) {
@@ -79,7 +79,7 @@ export class RegionsScreen {
 
         let genome_name = this.deepBlueService.getGenome().name;
         const actualData = this.selectedData.getActiveCurrentOperation();
-        //const actual_request_id = actualData.data().id();
+        //const actual_request_id = this.request_id.id;
         const actual_request_id = "r823051";
         let url = "http://deepblue.mpi-inf.mpg.de/api/composed_commands/generate_track_file?genome=" + genome_name + "&request_id=" + actual_request_id;
         console.log(url);
@@ -115,7 +115,7 @@ export class RegionsScreen {
             const columns_types = info.columns();
 
             this.deepBlueService.getRegions(actualData, format, this.progress_element, 0).subscribe((regions: DeepBlueResult) => {
-                this.request_id = regions.request.request_id.id;
+                this.request_id = regions.getRequestId();
                 this.progress_element.increment(0);
 
                 this.columns = format.split(",").map((c) => {
