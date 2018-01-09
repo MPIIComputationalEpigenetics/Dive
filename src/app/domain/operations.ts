@@ -739,7 +739,7 @@ export class DeepBlueMiddlewareOverlapEnrichtmentResultItem {
             obj['dataset'],
             obj['biosource'], obj['epigenetic_mark'],
             obj['description'], obj['experiment_size'], obj['database_name'],
-            obj['p_value_log'], obj['log_odds_ratio'], obj['support'],
+            obj['p_value_log'], obj['odds_ratio'], obj['support'],
             obj['b'], obj['c'], obj['d'],
             obj['support_rank'], obj['log_rank'], obj['odd_rank'],
             obj['max_rank'], obj['mean_rank'], obj);
@@ -748,13 +748,13 @@ export class DeepBlueMiddlewareOverlapEnrichtmentResultItem {
     constructor(public dataset: string,
         public biosource: string, public epigenetic_mark: string,
         public description: string, public experiment_size: number, public database_name: string,
-        public p_value_log: number, public log_odds_ratio: number, public support: number,
+        public p_value_log: number, public odds_ratio: number, public support: number,
         public b: number, public c: number, public d: number,
         public support_rank: number, public log_rank: number, public odd_rank: number,
         public max_rank: number, public mean_rank: number, public data: any) {
         // JSON does not send infinity values, so we have to fix it manually.
         this.p_value_log = this.p_value_log != null ? this.p_value_log : Infinity;
-        this.log_odds_ratio = this.log_odds_ratio != null ? this.log_odds_ratio : Infinity;
+        this.odds_ratio = this.odds_ratio != null ? this.odds_ratio : Infinity;
     }
 
     static asColumns() {
@@ -766,7 +766,7 @@ export class DeepBlueMiddlewareOverlapEnrichtmentResultItem {
             { name: 'experiment_size', prop: 'experimentsize', column_type: 'integer' },
             { name: 'database_name', prop: 'databasename', column_type: 'string' },
             { name: 'p_value_log', prop: 'pvaluelog', column_type: 'double' },
-            { name: 'log_odds_ratio', prop: 'logoddsratio', column_type: 'double' },
+            { name: 'odds_ratio', prop: 'oddsratio', column_type: 'double' },
             { name: 'support', prop: 'support', column_type: 'integer' },
             { name: 'b', prop: 'b', column_type: 'integer' },
             { name: 'c', prop: 'c', column_type: 'integer' },

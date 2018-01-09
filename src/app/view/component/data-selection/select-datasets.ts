@@ -173,7 +173,8 @@ export class SelectDatasetsComponent {
       }
       if (selected.data.leaf) {
         if (selected.data._query_id) {
-          actual.data.push([selected.data.name, selected.data._query_id]);
+          debugger;
+          actual.data.push([selected.data._query_id.query_id.id, selected.data.name]);
         } else {
           actual.data.push(selected.data.name);
         }

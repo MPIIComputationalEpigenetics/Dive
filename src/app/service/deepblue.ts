@@ -1044,7 +1044,7 @@ export class DeepBlueService {
             });
     }
 
-    public composedCalculateOverlapsEnrichment(queries: IOperation[], universe_id: Id, datasets: Object): Observable<DeepBlueMiddlewareRequest> {
+    public composedCalculateOverlapsEnrichment(queries: IOperation[], universe_id: Id, datasets: Object[]): Observable<DeepBlueMiddlewareRequest> {
         var headers = new Headers();
         headers.append('Content-Type', 'application/json');
 

@@ -29,7 +29,7 @@ import { RequestManager } from 'app/service/requests-manager';
 export class OverlapEnrichmentScreenComponent implements OnDestroy {
 
     selected_data: IOperation;
-    selected_datasets: Object;
+    selected_datasets: Object[];
 
     enrichment_data: Object[][] = new Array<Object[]>();
     enrichment_data_from_server: Object[][] = new Array<DeepBlueMiddlewareOverlapEnrichtmentResultItem[]>();
@@ -46,8 +46,9 @@ export class OverlapEnrichmentScreenComponent implements OnDestroy {
         console.log(this.selected_data);
     }
 
-    selectDatasets(event: Object) {
+    selectDatasets(event: Object[]) {
         this.selected_datasets = event;
+        debugger;
         console.log(this.selected_datasets);
     }
 

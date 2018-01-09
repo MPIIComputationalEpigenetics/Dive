@@ -1,6 +1,6 @@
 import { OverlapsBarChartComponent } from '../component/charts/overlappingbar';
 import { DeepBlueMiddlewareGOEnrichtmentResult, DeepBlueMiddlewareOverlapResult, DeepBlueMiddlewareRequest } from '../../domain/operations';
-import { Component, OnInit, ViewChild, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, ChangeDetectionStrategy, AfterViewInit } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 
 import { MultiSelect } from 'primeng/primeng';
@@ -26,7 +26,7 @@ import { RequestManager } from 'app/service/requests-manager';
     changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './go-enrichment.html'
 })
-export class GoEnrichmentScreenComponent implements OnDestroy {
+export class GoEnrichmentScreenComponent implements AfterViewInit, OnDestroy {
     errorMessage: string;
     geneModels: GeneModel[];
     menuGeneModel: SelectItem[];
@@ -73,7 +73,9 @@ export class GoEnrichmentScreenComponent implements OnDestroy {
             },
                 error => this.errorMessage = <any>error);
         });
+    }
 
+    ngAfterViewInit() {
         this.selectedGeneModelValue$.debounceTime(250).subscribe(() => this.processEnrichment());
         this.selectedData.getActiveTopStackValue().subscribe((dataStackItem: DataStackItem) => this.processEnrichment());
     }
@@ -104,7 +106,7 @@ export class GoEnrichmentScreenComponent implements OnDestroy {
 
         const filtered_data = [];
         for (let idx = 0; idx < value.length; idx++) {
-            const row : any = value[idx];
+            const row: any = value[idx];
 
             if ((row['gooverlap'] >= go_overlap) &&
                 (row['ratio'] >= ratio)) {
@@ -120,6 +122,10 @@ export class GoEnrichmentScreenComponent implements OnDestroy {
 
     processEnrichment() {
         const gene_model = this.selectedGeneModelSource.getValue();
+
+        if (!gene_model) {
+            return;
+        }
 
         // Each experiment is started, selected, overlaped, count, get request data (4 times each)
         const start = new Date().getTime();
@@ -150,7 +156,7 @@ export class GoEnrichmentScreenComponent implements OnDestroy {
             const rows: any[] = data.getResults()['enrichment']['go_terms'].filter((x: any) => {
                 return x['go_overlap'] !== 0
             }).map((x: any) => {
-                const row : {[key: string]: any} = {};
+                const row: { [key: string]: any } = {};
                 for (let idx = 0; idx < this.columns.length; idx++) {
                     const column_name = this.columns[idx]['name'];
                     const v = x[column_name];
@@ -173,10 +179,10 @@ export class GoEnrichmentScreenComponent implements OnDestroy {
 
         for (let stack = 0; stack < this.enrichment_data.length; stack++) {
             const data = this.enrichment_data[stack];
-            const values_by_category : {[key: string]: any} = {};
+            const values_by_category: { [key: string]: any } = {};
 
             for (let term_pos = 0; term_pos < data.length; term_pos++) {
-                const term : any = data[term_pos];
+                const term: any = data[term_pos];
 
                 const id = term['id'];
                 const name = term['name'];

@@ -60,13 +60,13 @@ export class SimilarFinder {
             datum[i].log_rank = position + 1;
         }
 
-        datum.sort((a: DeepBlueMiddlewareOverlapEnrichtmentResultItem, b: DeepBlueMiddlewareOverlapEnrichtmentResultItem) => b.log_odds_ratio - a.log_odds_ratio);
+        datum.sort((a: DeepBlueMiddlewareOverlapEnrichtmentResultItem, b: DeepBlueMiddlewareOverlapEnrichtmentResultItem) => b.odds_ratio - a.odds_ratio);
         position = 0;
-        value = datum[0].log_odds_ratio;
+        value = datum[0].odds_ratio;
         for (let i = 0; i < datum.length; i++) {
-            if (datum[i].log_odds_ratio != value) {
+            if (datum[i].odds_ratio != value) {
                 position = i;
-                value = datum[i].log_odds_ratio;
+                value = datum[i].odds_ratio;
             }
             datum[i]['odd_rank'] = position + 1;
         }
