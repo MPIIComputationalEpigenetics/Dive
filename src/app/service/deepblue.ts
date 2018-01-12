@@ -542,10 +542,10 @@ export class DeepBlueService {
 
         const params: URLSearchParams = new URLSearchParams();
 
-        params.append('query_a_id', queries_id[0].queryId().id);
+        params.append('query_a_id', queries_id[0].id().id);
 
         for (let query_b of queries_id.slice(1)) {
-            params.append('query_b_id', query_b.queryId().id);
+            params.append('query_b_id', query_b.id().id);
         }
 
         return this.http.get(this.deepBlueUrl + '/merge_queries', { 'search': params })
@@ -575,7 +575,7 @@ export class DeepBlueService {
 
         const params: URLSearchParams = new URLSearchParams();
 
-        params.set('query_id', data.queryId().id);
+        params.set('query_id', data.id().id);
         params.set('field', field);
         params.set('operation', operation);
         params.set('value', value);
@@ -650,8 +650,8 @@ export class DeepBlueService {
         const params: URLSearchParams = new URLSearchParams();
 
         // overlap ( query_data_id, query_filter_id, overlap, amount, amount_type, user_key )
-        params.set('query_data_id', data_one.queryId().id);
-        params.set('query_filter_id', data_two.queryId().id);
+        params.set('query_data_id', data_one.id().id);
+        params.set('query_filter_id', data_two.id().id);
         params.set('overlap', overlap);
         params.set('amount', '1'); // TODO:  receive this parameter
         params.set('amount_type', 'bp'); // TODO:  receive this parameter
@@ -703,7 +703,7 @@ export class DeepBlueService {
         }
 
         const params: URLSearchParams = new URLSearchParams();
-        params.set('query_id', selected_data.queryId().id);
+        params.set('query_id', selected_data.id().id);
         params.set('cache', 'true');
         return this.http.get(this.deepBlueUrl + '/query_cache', { 'search': params })
             .map((res: Response) => {
@@ -754,7 +754,7 @@ export class DeepBlueService {
 
     countRegionsRequest(op_exp: IOperation, progress_element: ProgressElement, request_count: number): Observable<DeepBlueResult> {
         const params: URLSearchParams = new URLSearchParams();
-        params.set('query_id', op_exp.queryId().id);
+        params.set('query_id', op_exp.id().id);
 
         if (this.requestCache.get(op_exp, request_count)) {
             progress_element.increment(request_count);
@@ -783,7 +783,7 @@ export class DeepBlueService {
     getRegions(data: IOperation, format: string,
         progress_element: ProgressElement, request_count: number): Observable<DeepBlueResult> {
         const params: URLSearchParams = new URLSearchParams();
-        params.set('query_id', data.queryId().id);
+        params.set('query_id', data.id().id);
         params.set('output_format', format);
 
         const request: Observable<DeepBlueResult> = this.http.get(this.deepBlueUrl + '/get_regions', { 'search': params })
@@ -874,7 +874,6 @@ export class DeepBlueService {
 
             }).catch(this.handleError);
     }
-
 
     getGeneModelsInfo(ids: string[]): Observable<FullGeneModel[]> {
         const params: URLSearchParams = new URLSearchParams();
@@ -993,7 +992,7 @@ export class DeepBlueService {
     public composedCountOverlaps(queries: IOperation[], experiments: IdName[], filters?: FilterParameter[]): Observable<DeepBlueMiddlewareRequest> {
         const params: URLSearchParams = new URLSearchParams();
         for (const query_op_id of queries) {
-            params.append('queries_id', query_op_id.queryId().id);
+            params.append('queries_id', query_op_id.id().id);
         }
 
         for (const exp of experiments) {
@@ -1017,7 +1016,7 @@ export class DeepBlueService {
     public composedCountGenesOverlaps(queries: IOperation[], gene_model: GeneModel): Observable<DeepBlueMiddlewareRequest> {
         const params: URLSearchParams = new URLSearchParams();
         for (const query_op_id of queries) {
-            params.append('queries_id', query_op_id.queryId().id);
+            params.append('queries_id', query_op_id.id().id);
         }
         params.append('gene_model_name', gene_model.name);
 
@@ -1032,7 +1031,7 @@ export class DeepBlueService {
     public composedCalculateGenesEnrichment(queries: IOperation[], gene_model: GeneModel): Observable<DeepBlueMiddlewareRequest> {
         const params: URLSearchParams = new URLSearchParams();
         for (const query_op_id of queries) {
-            params.append('queries_id', query_op_id.queryId().id);
+            params.append('queries_id', query_op_id.id().id);
         }
         params.append('gene_model_name', gene_model.name);
 
@@ -1048,8 +1047,8 @@ export class DeepBlueService {
         var headers = new Headers();
         headers.append('Content-Type', 'application/json');
 
-        let request : { [key: string]: any } = {
-            "queries_id": queries.map((op) => op.queryId().id),
+        let request: { [key: string]: any } = {
+            "queries_id": queries.map((op) => op.id().id),
             "universe_id": universe_id.id,
             "genome": this.genomeSource.getValue().name,
             "datasets": datasets
@@ -1072,8 +1071,8 @@ export class DeepBlueService {
         var headers = new Headers();
         headers.append('Content-Type', 'application/json');
 
-        let request : { [key: string]: any } = {
-            "query_id": op.queryId().id,
+        let request: { [key: string]: any } = {
+            "query_id": op.id().id,
             "genome": this.genomeSource.getValue().name
         }
 
@@ -1229,5 +1228,16 @@ export class DeepBlueService {
             .catch(this.handleError);
     }
 
+    getQueryInfo(id: Id): Observable<IOperation> {
+        const params: URLSearchParams = new URLSearchParams();
+        params.set('query_id', id.id);
+        console.log(params);
+        return this.http.get(this.deepBlueUrl + '/composed_commands/query_info', { 'search': params })
+            .map((res: Response) => {
+                console.log(res.json);
+                return res.json();
+            })
+            .catch (this.handleError);
+    }
 
 }

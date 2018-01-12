@@ -8,19 +8,21 @@ export interface ITextable {
     text(): string;
 }
 
+export interface INamedDataType {
+    dataType() : string;
+}
+
 export interface IKey extends ICloneable, ITextable {
     key(): string;
 }
 
-export interface IDataParameter extends IKey {
+export interface IDataParameter extends INamedDataType, IKey {
     name() : string;
     id() : Id;
 }
 
-export interface IOperation extends IKey {
+export interface IOperation extends IDataParameter {
     data() : IDataParameter;
-
-    queryId() : Id;
 
     cacheIt(query_id: Id): IOperation;
 }
@@ -30,7 +32,6 @@ export interface IFiltered extends IOperation {
 
     getFilterQuery(): Id;
 }
-
 
 export interface IRow {
     [key: string]: any

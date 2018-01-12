@@ -1,5 +1,5 @@
 import { EpigeneticMark, Name } from './deepblue';
-import { ICloneable, IOperation, IDataParameter, ITextable, IFiltered } from '../domain/interfaces'
+import { ICloneable, IOperation, IDataParameter, ITextable, IFiltered, INamedDataType } from '../domain/interfaces'
 import { IKey } from '../domain/interfaces';
 import { IdName, FullMetadata, Id } from '../domain/deepblue';
 import { request } from 'https';
@@ -97,10 +97,21 @@ export class DeepBlueCommandExecutionResult<T> {
     }
 }
 
+export class AbstractNamedDataType implements INamedDataType {
+    constructor(public _data_type: string) {
 
-export class DeepBlueDataParameter implements IDataParameter {
+    }
 
-    constructor(private _data: Name | string | string[]) { }
+    dataType(): string {
+        return this._data_type;
+    }
+}
+
+export class DeepBlueDataParameter extends AbstractNamedDataType implements IDataParameter {
+
+    constructor(private _data: Name | string | string[]) {
+        super("data_parameter");
+    }
 
     name(): string {
         if (this._data instanceof Name) {
@@ -137,9 +148,11 @@ export class DeepBlueDataParameter implements IDataParameter {
     }
 }
 
-export class DeepBlueOperationArgs implements IDataParameter {
+export class DeepBlueOperationArgs extends AbstractNamedDataType implements IDataParameter {
 
-    constructor(public args: Object) { }
+    constructor(public args: Object) {
+        super("operation_args");
+    }
 
     key(): string {
         return textify(this.args);
@@ -168,10 +181,12 @@ export class DeepBlueOperationArgs implements IDataParameter {
 }
 
 
-export class DeepBlueMetadataParameters implements IDataParameter {
+export class DeepBlueMetadataParameters extends AbstractNamedDataType implements IDataParameter {
 
     constructor(public genome: string, public type: string, public epigenetic_mark: string,
-        public biosource: string, public sample: string, public technique: string, public project: string) { }
+        public biosource: string, public sample: string, public technique: string, public project: string) {
+        super("metadata_parameters");
+    }
 
     key(): string {
         let key = "";
@@ -232,10 +247,11 @@ export class DeepBlueMetadataParameters implements IDataParameter {
     }
 }
 
-
-export class DeepBlueOperation implements IOperation {
-    constructor(private _data: IDataParameter, public query_id: Id,
-        public command: string, public request_count?: number, public cached = false) { }
+export class DeepBlueOperation extends AbstractNamedDataType implements IOperation {
+    constructor(public _data: IDataParameter, public query_id: Id,
+        public command: string, public request_count?: number, public cached = false) {
+        super("data_operation");
+    }
 
     data(): IDataParameter {
         return this._data;
@@ -257,15 +273,20 @@ export class DeepBlueOperation implements IOperation {
         return this.command + " " + this._data.name();
     }
 
-    queryId(): Id {
+    name(): string {
+        return this.text();
+    }
+    id(): Id {
         return this.query_id;
     }
 }
 
 
-export class DeepBlueTiling implements IOperation {
+export class DeepBlueTiling extends AbstractNamedDataType implements IOperation {
     constructor(public size: number, public genome: string, public chromosomes: string[], public query_id: Id,
-        public request_count?: number, public cached = false) { }
+        public request_count?: number, public cached = false) {
+        super("tiling");
+    }
 
     data(): IDataParameter {
         return new DeepBlueDataParameter(new IdName(this.query_id, "Tiling Regions of " + this.size.toLocaleString() + "bp"));
@@ -288,11 +309,14 @@ export class DeepBlueTiling implements IOperation {
         return "Tiling regions of " + this.size;
     }
 
-    queryId(): Id {
+    name(): string {
+        return this.text();
+    }
+
+    id(): Id {
         return this.query_id;
     }
 }
-
 
 
 export class DeepBlueIntersection extends DeepBlueOperation {
@@ -310,16 +334,12 @@ export class DeepBlueIntersection extends DeepBlueOperation {
         );
     }
 
-    queryId(): Id {
-        return this.query_id;
-    }
-
     data(): IDataParameter {
         return this._subject.data();
     }
 
     key(): string {
-        return "intersect_" + this._subject.queryId().id + '_' + this._filter.queryId().id;
+        return "intersect_" + this._subject.id().id + '_' + this._filter.id().id;
     }
 
     getDataName(): string {
@@ -335,7 +355,7 @@ export class DeepBlueIntersection extends DeepBlueOperation {
     }
 
     getFilterQuery(): Id {
-        return this._filter.queryId();
+        return this._filter.id();
     }
 
     cacheIt(query_id: Id): DeepBlueIntersection {
@@ -349,24 +369,20 @@ export class DeepBlueIntersection extends DeepBlueOperation {
 
 export class DeepBlueFilter extends DeepBlueOperation {
 
-    constructor(private _subject: IOperation, public _params: FilterParameter, public query_id: Id, public cached = false) {
-        super(_subject.data(), query_id, "regions_filter")
+    constructor(public _data: IOperation, public _params: FilterParameter, public query_id: Id, public cached = false) {
+        super(_data, query_id, "regions_filter")
     }
 
-    queryId(): Id {
-        return this.query_id;
-    };
-
     data(): IDataParameter {
-        return this._subject.data();
+        return this._data.data();
     }
 
     getDataName(): string {
-        return this._subject.data().name();
+        return this._data.data().name();
     }
 
     getDataId(): Id {
-        return this._subject.data().id();
+        return this._data.data().id();
     }
 
     getFilterName(): string {
@@ -378,12 +394,12 @@ export class DeepBlueFilter extends DeepBlueOperation {
     }
 
     key(): string {
-        return "filter_" + this.queryId().id;
+        return "filter_" + this.id().id;
     }
 
     clone(): DeepBlueFilter {
         return new DeepBlueFilter(
-            this._subject.clone(),
+            this._data.clone(),
             this._params.clone(),
             this.query_id,
             this.cached
@@ -391,11 +407,11 @@ export class DeepBlueFilter extends DeepBlueOperation {
     }
 
     cacheIt(query_id: Id): DeepBlueFilter {
-        return new DeepBlueFilter(this._subject, this._params, this.query_id, this.cached);
+        return new DeepBlueFilter(this._data, this._params, this.query_id, this.cached);
     }
 
     text(): string {
-        return this._subject.text() + "(" + this._params.text() + ")";
+        return this._data.text() + "(" + this._params.text() + ")";
     }
 
 }
@@ -560,7 +576,7 @@ export class DeepBlueMiddlewareGOEnrichtmentResult {
         return this.gene_model;
     }
 
-    getResults(): {[key: string]: any} {
+    getResults(): { [key: string]: any } {
         return this.results;
     }
 }
@@ -621,6 +637,10 @@ export class FilterParameter implements ITextable {
     }
 }
 
+function toClass(object: any) : IOperation {
+    return null;
+}
+
 
 export class AbstractDeepBlueRequest implements IKey {
 
@@ -648,7 +668,7 @@ export class AbstractDeepBlueRequest implements IKey {
         return "Request - " + this.command + "(" + this.id + ")";
     }
 
-    id() : Id {
+    id(): Id {
         return this._id;
     }
 }

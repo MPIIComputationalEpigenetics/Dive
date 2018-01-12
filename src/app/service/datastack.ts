@@ -171,11 +171,11 @@ export class DataStack {
 
 
     remove(data: DataStackItem) {
-        const query_id = data.op.queryId().id;
+        const query_id = data.op.id().id;
         // find position
         let i = this._data.length - 1;
         for (; i >= 0; i--) {
-            if (this._data[i].op.queryId().id === query_id) {
+            if (this._data[i].op.id().id === query_id) {
                 break;
             }
         }
