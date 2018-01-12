@@ -74,6 +74,7 @@ import { TooltipModule } from 'primeng/primeng';
 import { TreeModule } from 'primeng/primeng';
 import { TreeTableModule } from 'primeng/primeng';
 import { SidebarModule } from 'primeng/primeng';
+import { OrganizationChartModule } from 'primeng/primeng';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -98,7 +99,7 @@ import { OverlapEnrichmentScreenComponent } from 'app/view/screen/overlap-enrich
 import { SimilarFinder } from 'app/view/screen/similar-finder';
 
 
-import { DiveStatus, CSSExperimentsMenu} from 'app/view/component/menu/main-menu';
+import { DiveStatus, CSSExperimentsMenu } from 'app/view/component/menu/main-menu';
 
 import { DataLoadProgressBar } from 'app/view/component/progressbar';
 
@@ -124,6 +125,7 @@ import { LengthMenuFilterComponent } from 'app/view/component/menu/length-filter
 import { DnaPatternMenuFilterComponent } from 'app/view/component/menu/dna-pattern-filtering';
 import { RegionsUpload } from 'app/view/component/data-selection/upload-regions';
 import { RegionsPaste } from 'app/view/component/data-selection/paste-regions';
+import { SelectQuery } from 'app/view/component/data-selection/select-query';
 import { PeaksOverlapScreenComponent } from 'app/view/screen/peaks-overlap';
 import { RequestManager } from 'app/service/requests-manager';
 import { DataSelectionMainComponent } from 'app/view/component/data-selection/data-selection-main';
@@ -204,6 +206,7 @@ import { InitialScreenComponent } from 'app/view/screen/initial';
         TreeTableModule,
         ChartModule,
         BrowserAnimationsModule,
+        OrganizationChartModule
     ],
     declarations: [
         AppComponent,
@@ -239,7 +242,8 @@ import { InitialScreenComponent } from 'app/view/screen/initial';
         LengthMenuFilterComponent,
         DnaPatternMenuFilterComponent,
         RegionsUpload,
-        RegionsPaste
+        RegionsPaste,
+        SelectQuery
     ],
     providers: [
         { provide: LocationStrategy, useClass: HashLocationStrategy },
