@@ -6,6 +6,7 @@ import { DeepBlueService } from 'app/service/deepblue';
 import { ProgressElement } from 'app/service/progresselement';
 import { OnInit } from '@angular/core/src/metadata/lifecycle_hooks';
 import { Id } from 'app/domain/deepblue';
+import { IDataParameter, IOperation } from 'app/domain/interfaces';
 
 @Component({
   templateUrl: './select-query.html',
@@ -125,9 +126,10 @@ export class SelectQuery implements OnInit {
 
     if (o._params) {
       node.data = { parameters: Object.keys(o._params).map((k: string) => k + ": " + o._params[k]) };
+      debugger;
       this.deepBlueService.countRegionsRequest(o, this.progress_element, 0).subscribe((result) => {
-        node.data.count = result.resultAsCount();
-        console.log(node.data.count);
+        node.data.parameters.unshift("Total Regions: " + result.resultAsCount());
+        console.log(node.data.parameters);
       });
     }
     //node.type = o.query_id.id;
@@ -145,6 +147,10 @@ export class SelectQuery implements OnInit {
     if (o._data._data_type == "operation_args") {
       delete o._data.args['cache'];
       node.data = { parameters: Object.keys(o._data.args).map((k: string) => k + ": " + o._data.args[k]) };
+      this.deepBlueService.countRegionsRequest(o, this.progress_element, 0).subscribe((result) => {
+        node.data.parameters.unshift("Total Regions: " + result.resultAsCount());
+        console.log(node.data.parameters);
+      });
     } else {
       lookup_keys.push("_data");
     }
@@ -160,10 +166,7 @@ export class SelectQuery implements OnInit {
       node.children = children;
     }
 
-    console.log(node);
-
     return node;
-
   }
 
   build_tree(o: any): TreeNode {
@@ -180,78 +183,7 @@ export class SelectQuery implements OnInit {
     }
   }
 
-
-
   ngOnInit() {
     this.data = [];
-
-    [{
-      label: 'CEO',
-      type: 'person',
-      styleClass: 'ui-person',
-      expanded: true,
-      data: { name: 'Walter White', 'avatar': 'walter.jpg' },
-      children: [
-        {
-          label: 'CFO',
-          type: 'person',
-          styleClass: 'ui-person',
-          expanded: true,
-          data: { name: 'Saul Goodman', 'avatar': 'saul.jpg' },
-          children: [{
-            label: 'Tax',
-            styleClass: 'department-cfo'
-          },
-          {
-            label: 'Legal',
-            styleClass: 'department-cfo'
-          }],
-        },
-        {
-          label: 'COO',
-          type: 'person',
-          styleClass: 'ui-person',
-          expanded: true,
-          data: { name: 'Mike E.', 'avatar': 'mike.jpg' },
-          children: [{
-            label: 'Operations',
-            styleClass: 'department-coo'
-          }]
-        },
-        {
-          label: 'CTO',
-          type: 'person',
-          styleClass: 'ui-person',
-          expanded: true,
-          data: { name: 'Jesse Pinkman', 'avatar': 'jesse.jpg' },
-          children: [{
-            label: 'Development',
-            styleClass: 'department-cto',
-            expanded: true,
-            children: [{
-              label: 'Analysis',
-              styleClass: 'department-cto'
-            },
-            {
-              label: 'Front End',
-              styleClass: 'department-cto'
-            },
-            {
-              label: 'Back End',
-              styleClass: 'department-cto'
-            }]
-          },
-          {
-            label: 'QA',
-            styleClass: 'department-cto'
-          },
-          {
-            label: 'R&D',
-            styleClass: 'department-cto'
-          }]
-        }
-      ]
-    }];
-
   }
 }
