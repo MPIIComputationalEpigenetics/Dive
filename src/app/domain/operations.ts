@@ -637,10 +637,6 @@ export class FilterParameter implements ITextable {
     }
 }
 
-function toClass(object: any) : IOperation {
-    return null;
-}
-
 
 export class AbstractDeepBlueRequest implements IKey {
 
@@ -797,5 +793,63 @@ export class DeepBlueMiddlewareOverlapEnrichtmentResultItem {
             { name: 'max_rank', prop: 'maxrank', column_type: 'integer' },
             { name: 'mean_rank', prop: 'meanrank', column_type: 'integer' }
         ]
+    }
+}
+
+
+export function toClass(o: any): IDataParameter {
+    switch (o._data_type) {
+        case 'data_parameter': {
+            let data;
+            if (o._data.name) {
+                data = new Name(o._data.name);
+            } else {
+                data = o._data;
+            }
+            return new DeepBlueDataParameter(data);
+        }
+
+        case 'operation_args': {
+            return new DeepBlueOperationArgs(o.args);
+        }
+
+        case 'metadata_parameters': {
+            return new DeepBlueMetadataParameters(o.genome, o.type, o.epigenetic_mark,
+                o.biosource, o.sample, o.technique, o.project);
+        }
+
+        case 'tiling': {
+            return new DeepBlueTiling(o.size, o.genome, o.chromosomes, new Id(o.query_id.id),
+                o.request_count, o.cached);
+        }
+
+        case 'data_operation': {
+            switch (o.command) {
+                case 'intersection': {
+                    let subject = toClass(o._subject);
+                    let filter = toClass(o._filter);
+                    let query_id = new Id(o.query_id.id);
+
+                    return new DeepBlueIntersection(<IOperation>subject, <IOperation>filter, query_id, o.cached);
+                }
+                case 'regions_filter': {
+                    let data = toClass(o._data);
+                    let filter = FilterParameter.fromObject(o._params);
+                    let query_id = new Id(o.query_id.id);
+
+                    return new DeepBlueFilter(<IOperation>data, filter, query_id, o.cached);
+                }
+
+                default: {
+                    let data = toClass(o._data);
+                    let query_id = new Id(o.query_id.id);
+                    return new DeepBlueOperation(data, query_id, o.command, o.request_count, o.cached);
+                }
+            }
+        }
+
+        default: {
+            console.log("Invalid type: ", o._data_type);
+        }
     }
 }

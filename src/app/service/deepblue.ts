@@ -42,6 +42,7 @@ import {
     DeepBlueMiddlewareRequest,
     DeepBlueMiddlewareOverlapEnrichtmentResultItem,
     AbstractDeepBlueRequest,
+    toClass,
 } from '../domain/operations';
 
 import { ProgressElement } from '../service/progresselement';
@@ -1234,8 +1235,7 @@ export class DeepBlueService {
         console.log(params);
         return this.http.get(this.deepBlueUrl + '/composed_commands/query_info', { 'search': params })
             .map((res: Response) => {
-                console.log(res.json);
-                return res.json();
+                return toClass(res.json());
             })
             .catch (this.handleError);
     }
