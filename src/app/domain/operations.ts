@@ -171,11 +171,11 @@ export class DeepBlueOperationArgs extends AbstractNamedDataType implements IDat
     }
 
     name(): string {
-        throw new Error("Method not implemented.");
+        return this.text();
     }
 
     id(): Id {
-        throw new Error("Method not implemented.");
+        throw new Id(this.text());
     }
 
 }
@@ -335,7 +335,7 @@ export class DeepBlueIntersection extends DeepBlueOperation {
     }
 
     data(): IDataParameter {
-        return this._subject.data();
+        return this._subject;
     }
 
     key(): string {
@@ -343,11 +343,11 @@ export class DeepBlueIntersection extends DeepBlueOperation {
     }
 
     getDataName(): string {
-        return this._subject.data.name;
+        return this._subject.name();
     }
 
     getDataId(): Id {
-        return this._subject.data().id();
+        return this._subject.id();
     }
 
     getFilterName(): string {
@@ -374,15 +374,15 @@ export class DeepBlueFilter extends DeepBlueOperation {
     }
 
     data(): IDataParameter {
-        return this._data.data();
+        return this._data;
     }
 
     getDataName(): string {
-        return this._data.data().name();
+        return this._data.name();
     }
 
     getDataId(): Id {
-        return this._data.data().id();
+        return this._data.id();
     }
 
     getFilterName(): string {
