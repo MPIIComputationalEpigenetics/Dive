@@ -22,7 +22,6 @@ export class RegionsPaste {
   };
 
   onUploadClick(event: any) {
-    console.log(this.textAreaContent);
     this.deepBlueService.inputRegions(this.textAreaContent, this.progress_element, -1).subscribe((op) =>
       this.queryIdSelected.emit(op))
   }

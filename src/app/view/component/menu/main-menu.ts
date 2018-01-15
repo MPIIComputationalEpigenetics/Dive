@@ -1,4 +1,3 @@
-import { DeepBlueMiddlewareOverlapResult } from 'app/domain/operations';
 import { Component, ViewChild, OnInit, Input, OnDestroy } from '@angular/core';
 
 import { Subscription } from 'rxjs/Subscription';
@@ -97,7 +96,6 @@ export class EpigeneticMarkMenu implements IMenu {
 
                 if (this.actualItems.length > 0) {
                     for (let item of this.actualItems) {
-                        console.log("removing", item);
                         this.menuService.remove(item);
                     }
                 }
@@ -106,9 +104,7 @@ export class EpigeneticMarkMenu implements IMenu {
                 for (let category of categories) {
 
                     // Do not include the SPECIAL CASES menu
-                    console.log(category);
                     if (EpigeneticMarkMenu.SPECIAL_CASES.indexOf(category) > -1) {
-                        console.log(category);
                         continue;
                     }
 

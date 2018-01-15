@@ -1,5 +1,5 @@
 import { OverlapsBarChartComponent } from '../component/charts/overlappingbar';
-import { DeepBlueMiddlewareOverlapResult, DeepBlueMiddlewareRequest } from '../../domain/operations';
+import { DeepBlueMiddlewareRequest, DeepBlueError } from '../../domain/operations';
 import { Experiment } from '../../domain/deepblue';
 import { Component, OnInit, ViewChild, OnDestroy, AfterViewInit } from '@angular/core';
 
@@ -193,18 +193,15 @@ export class PeaksOverlapScreenComponent implements AfterViewInit, OnDestroy {
         this.deepBlueService.composedCountOverlaps(current, experiments).subscribe((request: DeepBlueMiddlewareRequest) => {
             this.requestManager.enqueueRequest(request);
             this.deepBlueService.getComposedResultIterator(request, this.progress_element, 'overlaps', this.reloadPlot, this)
-                .subscribe((result: DeepBlueMiddlewareOverlapResult[]) => {
+                .subscribe((result: DeepBlueResult[]) => {
                     const end = new Date().getTime();
-                    // Now calculate and output the difference
-                    console.log(end - start);
                     this.currentlyProcessing = [];
-                    console.log(result);
                     this.reloadPlot(this, result);
                 });
         });
     }
 
-    reloadPlot(_self: PeaksOverlapScreenComponent, datum: DeepBlueMiddlewareOverlapResult[]) {
+    reloadPlot(_self: PeaksOverlapScreenComponent, datum: DeepBlueResult[]) {
         if (!datum) {
             return;
         }
@@ -212,19 +209,19 @@ export class PeaksOverlapScreenComponent implements AfterViewInit, OnDestroy {
 
         const value_by_stack_biosource: Array<
             {
-                [key: string]: DeepBlueMiddlewareOverlapResult[]
+                [key: string]: DeepBlueResult[]
             }> = [];
 
         const result_by_dataset_stack: {
             [key: string]: {
-                [key: string]: DeepBlueMiddlewareOverlapResult[]
+                [key: string]: DeepBlueResult[]
             }
         } = {};
 
         for (const result of datum) {
-            const stack_number = _self.selectedData.getStackPosByQueryId(result.getDataQuery());
+            const stack_number = _self.selectedData.getStackPosByQueryId(result.getData().id());
             const experiment = _self.experiments.find((se: FullExperiment) => {
-                if (se.name === result.getFilterName()) {
+                if (se.name === result.getFilter().name()) {
                     return true;
                 }
                 return false;
@@ -268,7 +265,7 @@ export class PeaksOverlapScreenComponent implements AfterViewInit, OnDestroy {
 
                     const values: Array<number> = [];
                     for (const result of results) {
-                        const count = result.getCount();
+                        const count = result.resultAsCount();
                         if (count < low) {
                             low = count;
                         }

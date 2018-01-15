@@ -60,7 +60,6 @@ export class SelectDatasetsComponent {
   nodeSelect(event: any) {
     if (event.node.data.leaf) {
       this.deepBlueService.getInfo(event.node.data.id).subscribe((info) => {
-        console.log(info);
         this.selectedRow = <FullExperiment>info;
         this.visibleSidebar2 = true;
       })
@@ -149,7 +148,7 @@ export class SelectDatasetsComponent {
     } else {
       let selected_node = <TreeNode>this.selectedDatasets;
       if (!selected_node.data.leaf) {
-        console.log("selected data isnt leaf");
+        console.warn("selected data isnt leaf");
       }
       if ("_query_id" in selected_node.data) {
         this.queryIdSelected.emit(selected_node.data._query_id);
@@ -173,7 +172,6 @@ export class SelectDatasetsComponent {
       }
       if (selected.data.leaf) {
         if (selected.data._query_id) {
-          debugger;
           actual.data.push([selected.data._query_id.query_id.id, selected.data.name]);
         } else {
           actual.data.push(selected.data.name);

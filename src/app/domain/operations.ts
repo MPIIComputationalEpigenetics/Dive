@@ -177,9 +177,49 @@ export class DeepBlueOperationArgs extends AbstractNamedDataType implements IDat
     id(): Id {
         throw new Id(this.text());
     }
-
 }
 
+export class FilterParameter extends AbstractNamedDataType implements IDataParameter {
+
+    constructor(public field: string, public operation: string, public value: string, public type: string) {
+        super("filter_parameter");
+    }
+
+    static fromObject(o: any): FilterParameter {
+        return new FilterParameter(o.field, o.operation, o.value, o.type);
+    }
+
+    asKeyValue(): Object {
+        let params: any = {};
+
+        params["field"] = this.field;
+        params["operation"] = this.operation;
+        params["value"] = this.value;
+        params["type"] = this.type;
+
+        return params;
+    }
+
+    text() {
+        return this.field + " " + this.operation + " " + this.value + "(" + this.type + ")";
+    }
+
+    clone(): FilterParameter {
+        return new FilterParameter(this.field, this.operation, this.value, this.type);
+    }
+
+    name(): string {
+        return this.text();
+    }
+
+    id(): Id {
+        throw new Id(this.text());
+    }
+
+    key(): string {
+        throw this.text();
+    }
+}
 
 export class DeepBlueMetadataParameters extends AbstractNamedDataType implements IDataParameter {
 
@@ -276,10 +316,12 @@ export class DeepBlueOperation extends AbstractNamedDataType implements IOperati
     name(): string {
         return this.text();
     }
+
     id(): Id {
         return this.query_id;
     }
 }
+
 
 
 export class DeepBlueTiling extends AbstractNamedDataType implements IOperation {
@@ -319,7 +361,7 @@ export class DeepBlueTiling extends AbstractNamedDataType implements IOperation 
 }
 
 
-export class DeepBlueIntersection extends DeepBlueOperation {
+export class DeepBlueIntersection extends DeepBlueOperation implements IFiltered {
 
     constructor(private _subject: IOperation, public _filter: IOperation, public query_id: Id, public cached = false) {
         super(_subject.data(), query_id, "intersection")
@@ -354,8 +396,8 @@ export class DeepBlueIntersection extends DeepBlueOperation {
         return this._filter.data().name();
     }
 
-    getFilterQuery(): Id {
-        return this._filter.id();
+    getFilter(): IDataParameter {
+        return this._filter;
     }
 
     cacheIt(query_id: Id): DeepBlueIntersection {
@@ -363,11 +405,11 @@ export class DeepBlueIntersection extends DeepBlueOperation {
     }
 
     text(): string {
-        return this._subject.text() + " filtered by " + this._filter.text();
+        return "Intersecting with " + this._filter.text();
     }
 }
 
-export class DeepBlueFilter extends DeepBlueOperation {
+export class DeepBlueFilter extends DeepBlueOperation implements IFiltered {
 
     constructor(public _data: IOperation, public _params: FilterParameter, public query_id: Id, public cached = false) {
         super(_data, query_id, "regions_filter")
@@ -385,12 +427,8 @@ export class DeepBlueFilter extends DeepBlueOperation {
         return this._data.id();
     }
 
-    getFilterName(): string {
-        return "filter_regions";
-    }
-
-    getFilterQuery(): Id {
-        return new Id(this._params.toString());
+    getFilter(): IDataParameter {
+        return this._params;
     }
 
     key(): string {
@@ -411,9 +449,8 @@ export class DeepBlueFilter extends DeepBlueOperation {
     }
 
     text(): string {
-        return this._data.text() + "(" + this._params.text() + ")";
+        return "Filtering " + this._params.text();
     }
-
 }
 
 export interface IResult {
@@ -421,12 +458,17 @@ export interface IResult {
 }
 
 export class DeepBlueResult implements ICloneable {
-    constructor(private _request: DeepBlueRequest, public result: IResult | string, public request_count?: number) {
+    constructor(public request: DeepBlueRequest, public result: IResult | string, public request_count?: number) {
+    }
+
+    static fromObject(obj: any): DeepBlueResult {
+        return new DeepBlueResult(
+            DeepBlueRequest.fromObject(obj['request']), obj['result']);
     }
 
     clone(): DeepBlueResult {
         return new DeepBlueResult(
-            this._request.clone(),
+            this.request.clone(),
             this.result,
             this.request_count
         );
@@ -467,29 +509,19 @@ export class DeepBlueResult implements ICloneable {
         return [];
     }
 
-    data(): DeepBlueRequest {
-        return this._request;
-    }
 
     getRequestId(): Id {
-        return this._request._id;
+        return this.request._id;
     }
 
-    getDataName(): string {
-        return this._request.getDataName();
+    getData(): IDataParameter {
+        return this.request.getData();
     }
 
-    getDataId(): Id {
-        return this._request.getDataId();
+    getFilter(): IDataParameter {
+        return this.request.getFilter();
     }
 
-    getFilterName(): string {
-        return this._request.getFilterName();
-    }
-
-    getFilterQuery(): Id {
-        return this._request.getFilterQuery();
-    }
 }
 
 export class StackValue {
@@ -511,52 +543,12 @@ export class StackValue {
 
 
 export class DeepBlueError extends DeepBlueResult {
-    constructor(private request: DeepBlueRequest, public error: string, public request_count: number) {
+    constructor(public request: DeepBlueRequest, public error: string, public request_count: number) {
         super(request, error, request_count);
     }
 
     getError() {
         return this.error;
-    }
-}
-
-export class DeepBlueMiddlewareOverlapResult {
-    constructor(public data_name: string, public data_query: Id,
-        public filter_name: string, public filter_query: Id,
-        public count: number) {
-    }
-
-    static fromObject(obj: any): DeepBlueMiddlewareOverlapResult {
-        return new DeepBlueMiddlewareOverlapResult(obj['data_name'], new Id(obj['data_query'].id),
-            obj['filter_name'], new Id(obj['filter_query'].id), obj['count']);
-    }
-
-    getDataName(): string {
-        return this.data_name;
-    }
-
-    getDataQuery(): Id {
-        return this.data_query;
-    }
-
-    getFilterName(): string {
-        return this.filter_name;
-    }
-
-    getFilterQuery(): Id {
-        return this.filter_query;
-    }
-
-    getCount(): number {
-        return this.count;
-    }
-
-    toDeepBlueOperation(): DeepBlueOperation {
-        return new DeepBlueOperation(
-            new DeepBlueDataParameter(
-                new IdName(this.filter_query, this.filter_name)
-            ),
-            this.filter_query, 'Select Experiment Data', -1);
     }
 }
 
@@ -611,32 +603,6 @@ export class DeepBlueMiddlewareOverlapEnrichtmentResult {
     }
 }
 
-export class FilterParameter implements ITextable {
-    constructor(public field: string, public operation: string, public value: string, public type: string) { }
-
-    static fromObject(o: any): FilterParameter {
-        return new FilterParameter(o.field, o.operation, o.value, o.type);
-    }
-    asKeyValue(): Object {
-        let params: any = {};
-
-        params["field"] = this.field;
-        params["operation"] = this.operation;
-        params["value"] = this.value;
-        params["type"] = this.type;
-
-        return params;
-    }
-
-    text() {
-        return JSON.stringify(this.asKeyValue());
-    }
-
-    clone(): FilterParameter {
-        return new FilterParameter(this.field, this.operation, this.value, this.type);
-    }
-}
-
 
 export class AbstractDeepBlueRequest implements IKey {
 
@@ -676,6 +642,13 @@ export class DeepBlueRequest extends AbstractDeepBlueRequest {
         super(_id, command);
     }
 
+    static fromObject(obj: any): DeepBlueRequest {
+        return new DeepBlueRequest(
+            <IOperation>toClass(obj['_operation']), new Id(obj['_id']), obj['command']
+        );
+    }
+
+
     clone(request_count?: number): DeepBlueRequest {
         return new DeepBlueRequest(
             this._operation.clone(),
@@ -693,25 +666,13 @@ export class DeepBlueRequest extends AbstractDeepBlueRequest {
         return this._operation;
     }
 
-    getDataName(): string {
-        return this._operation.data().name();
+    getData(): IDataParameter {
+        return this._operation.data();
     }
 
-    getDataId(): Id {
-        return this._operation.data().id();
-    }
-
-    getFilterName(): string {
-        if ((<IFiltered>this._operation).getFilterName) {
-            return (<IFiltered>this._operation).getFilterName();
-        } else {
-            return null;
-        }
-    }
-
-    getFilterQuery(): Id {
-        if ((<IFiltered>this._operation).getFilterName) {
-            return (<IFiltered>this._operation).getFilterQuery();
+    getFilter(): IDataParameter {
+        if ((<IFiltered>this._operation).getFilter) {
+            return (<IFiltered>this._operation).getFilter();
         } else {
             return null;
         }
@@ -849,7 +810,7 @@ export function toClass(o: any): IDataParameter {
         }
 
         default: {
-            console.log("Invalid type: ", o._data_type);
+            console.warn("Invalid type: ", o._data_type);
         }
     }
 }

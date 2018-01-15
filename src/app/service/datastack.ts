@@ -12,7 +12,7 @@ import { DeepBlueOperation, StackValue } from 'app/domain/operations';
 
 import { DeepBlueService } from 'app/service/deepblue';
 import { ProgressElement } from 'app/service/progresselement';
-import { IOperation } from 'app/domain/interfaces';
+import { IOperation, IDataParameter } from 'app/domain/interfaces';
 
 declare var randomColor: any;
 
@@ -70,18 +70,33 @@ export class DataStack {
         this.deepBlueService.cacheQuery(data, this.progress_element, request_count).subscribe((cached_data) => {
             this.deepBlueService.countRegionsRequest(cached_data, this.progress_element, request_count).subscribe((total) => {
                 const totalSelectedRegtions = total.resultAsCount();
-                const dataStackItem: DataStackItem = new DataStackItem(cached_data, 'select', 'Selection', totalSelectedRegtions);
+                const dataStackItem: DataStackItem = new DataStackItem(cached_data, data.dataType(), data.text(), totalSelectedRegtions);
                 this._data.push(dataStackItem);
                 this.topStackSubject.next(dataStackItem);
+                this.stackOperations(data.data());
             });
         });
+    }
+
+    stackOperations(data: IDataParameter): Observable<IDataParameter> {
+
+        if (!(data instanceof DeepBlueOperation)) {
+            return;
+        } else {
+            this.deepBlueService.countRegionsRequest(data, this.progress_element, -1).subscribe((total) => {
+                const totalSelectedRegtions = total.resultAsCount();
+                const dataStackItem: DataStackItem = new DataStackItem(data, data.dataType(), data.text(), totalSelectedRegtions);
+                this._data.unshift(dataStackItem);
+                this.stackOperations(data.data());
+            });
+        }
     }
 
     setInitialDataArray(data: DataStackItem[]) {
         this._data = data;
     }
 
-    overlap(operation: DeepBlueOperation) {
+    overlap(operation: IOperation) {
         const current_op: IOperation = this.getCurrentOperation();
         if (current_op == null) {
             return;
@@ -94,8 +109,7 @@ export class DataStack {
             this.deepBlueService.cacheQuery(overlap_operation, this.progress_element, request_count).subscribe((cached_data) => {
                 this.deepBlueService.countRegionsRequest(cached_data, this.progress_element, request_count).subscribe((total) => {
                     const totalSelectedRegtions = total.resultAsCount();
-                    const dataStackItem: DataStackItem = new DataStackItem(cached_data, 'overlap',
-                        'Overlap with ' + operation.text(), totalSelectedRegtions);
+                    const dataStackItem: DataStackItem = new DataStackItem(cached_data, cached_data.dataType(), operation.text(), totalSelectedRegtions);
                     this._data.push(dataStackItem);
                     this.topStackSubject.next(dataStackItem);
                 });
@@ -103,7 +117,7 @@ export class DataStack {
         });
     }
 
-    non_overlap(operation: DeepBlueOperation) {
+    non_overlap(operation: IOperation) {
         // TODO: use/make a generic method for experiments and annotations
         const current_op = this.getCurrentOperation();
         if (current_op == null) {
@@ -118,9 +132,7 @@ export class DataStack {
                 this.deepBlueService.cacheQuery(overlap_operation, this.progress_element, request_count).subscribe((cached_data) => {
                     this.deepBlueService.countRegionsRequest(cached_data, this.progress_element, request_count).subscribe((total) => {
                         const totalSelectedRegtions = total.resultAsCount();
-                        const dataStackItem: DataStackItem = new DataStackItem(cached_data, 'not-overlap',
-                            'Not-overlap with ' + operation.data().name() + ' overlapping with XXX',
-                            totalSelectedRegtions);
+                        const dataStackItem: DataStackItem = new DataStackItem(cached_data, cached_data.dataType(), operation.text(), totalSelectedRegtions);
                         this._data.push(dataStackItem);
                         this.topStackSubject.next(dataStackItem);
                     });
@@ -146,7 +158,7 @@ export class DataStack {
                             text = 'length';
                         }
                         const dataStackItem: DataStackItem =
-                            new DataStackItem(cached_data, 'filter', text + ' ' + operation + ' ' + value, totalSelectedRegtions);
+                            new DataStackItem(cached_data, cached_data.dataType(), cached_data.text(), totalSelectedRegtions);
                         this._data.push(dataStackItem);
                         this.topStackSubject.next(dataStackItem);
                     });

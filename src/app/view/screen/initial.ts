@@ -4,7 +4,7 @@ import { IOperation } from 'app/domain/interfaces';
 @Component({
   templateUrl: './initial.html'
 })
-export class InitialScreenComponent implements OnDestroy {
+export class InitialScreenComponent {
 
   @Output() queryIdSelected = new EventEmitter();
   display: boolean = false;
@@ -15,9 +15,5 @@ export class InitialScreenComponent implements OnDestroy {
 
   selectQuery(event: IOperation) {
     this.queryIdSelected.emit(event);
-  }
-
-  ngOnDestroy() {
-    console.log("Destroyuing Initial Screen");
   }
 }

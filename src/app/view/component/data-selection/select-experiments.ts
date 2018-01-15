@@ -107,7 +107,7 @@ export class SelectExperimentsComponent implements OnDestroy {
     }
 
     select_click() {
-        console.log(this.selected_experiment[0]);
+        console.debug(this.selected_experiment[0]);
     }
 
     ngOnDestroy() {

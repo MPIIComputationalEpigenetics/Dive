@@ -1,4 +1,3 @@
-import { DeepBlueMiddlewareOverlapResult } from '../../domain/operations';
 import { Component, ViewChild, OnInit, Input, OnDestroy } from '@angular/core';
 
 import { Subscription } from 'rxjs/Subscription';
@@ -14,7 +13,7 @@ import { FullMetadata } from 'app/domain/deepblue';
 import { Genome } from 'app/domain/deepblue';
 import { IdName } from 'app/domain/deepblue';
 
-import { StackValue } from 'app/domain/operations';
+import { StackValue, DeepBlueResult, DeepBlueOperation } from 'app/domain/operations';
 import { MenuService } from 'app/service/menu';
 
 import { DataCache } from 'app/service/deepblue';
@@ -30,7 +29,7 @@ import { DataStack } from 'app/service/datastack';
           <h2>Data overlapping with {{ getStackName() }}</h2>
 
           <li *ngFor="let result of results">
-              {{ result.getFilterName() }} - {{ result.getCount() }}
+              {{ result.getFilter().name() }} - {{ result.resultAsCount() }}
           <p><button pButton type="button" (click)="filterOverlapping(result)" label="Filter overlapping"></button>
           <p><button pButton type="button" (click)="filterNonOverlapping(result)" label="Filter not-overlapping"></button>
           </li>
@@ -42,27 +41,30 @@ export class DataInfoBoxComponent implements OnDestroy {
 
   biosource: string = null;
   value: Object = null;
-  results: DeepBlueMiddlewareOverlapResult[] = [];
+  results: DeepBlueResult[] = [];
 
   constructor(private deepBlueService: DeepBlueService, private selectedData: SelectedData) {
     this.dataSelectedSubscription = deepBlueService.dataInfoSelectedValue$.subscribe((data: any) => {
       this.biosource = data['biosource'];
       this.value = data['value'];
       this.results = data['results']
-        .sort((a: DeepBlueMiddlewareOverlapResult, b: DeepBlueMiddlewareOverlapResult) => a.getCount() - b.getCount());
-
-      console.log(this.results);
+        .sort((a: DeepBlueResult, b: DeepBlueResult) => a.resultAsCount() - b.resultAsCount());
     });
   }
 
-  filterOverlapping(result: DeepBlueMiddlewareOverlapResult) {
-    let op = result.toDeepBlueOperation();
-    this.selectedData.activeStackSubject.getValue().overlap(op);
+  filterOverlapping(result: DeepBlueResult) {
+    let filter = result.getFilter();
+    if (filter instanceof DeepBlueOperation) {
+      this.selectedData.activeStackSubject.getValue().overlap(<DeepBlueOperation>filter);
+    }
+
   }
 
-  filterNonOverlapping(result: DeepBlueMiddlewareOverlapResult) {
-    let op = result.toDeepBlueOperation();
-    this.selectedData.activeStackSubject.getValue().non_overlap(op);
+  filterNonOverlapping(result: DeepBlueResult) {
+    let filter = result.getFilter();
+    if (filter instanceof DeepBlueOperation) {
+      this.selectedData.activeStackSubject.getValue().non_overlap(<DeepBlueOperation>filter);
+    }
   }
 
   getStackName(): string {

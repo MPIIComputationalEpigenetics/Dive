@@ -28,10 +28,8 @@ export class DnaPatternMenuFilterComponent implements OnInit {
     }
 
     validateDNAPattern(c: FormControl) {
-        console.log(c.value)
         let regexp = new RegExp('^[a-zA-Z][a-zA-Z]+$')
         let x = regexp.test(c.value) ? null : { valid: false }
-        console.log(c.value, x);
         return x;
     };
 

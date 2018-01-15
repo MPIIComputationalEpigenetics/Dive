@@ -1,4 +1,3 @@
-import { DeepBlueMiddlewareOverlapResult } from '../../domain/operations';
 import { Component, ViewChild, OnInit, Input, OnDestroy } from '@angular/core';
 
 import { Subscription } from 'rxjs/Subscription';
@@ -87,12 +86,11 @@ export class SelectedDataButton implements OnInit {
     }
 
     save() {
-        console.log('save this stack');
+        console.trace('save this stack');
     }
 
     remove() {
         this.selectedData.removeStack(this.dataStack);
-        console.log('remove this stack');
     }
 
 }

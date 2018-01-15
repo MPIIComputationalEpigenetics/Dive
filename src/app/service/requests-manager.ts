@@ -15,7 +15,6 @@ export class RequestManager {
       if (val instanceof NavigationEnd) {
         this.cancelAllRequest();
       }
-      console.log(val)
     });
   }
 
@@ -26,7 +25,7 @@ export class RequestManager {
   cancelAllRequest() {
     for (let request of this.requests) {
       request.cancel();
-      this.deepBlueService.composedCancel(request).subscribe((id) => console.log(id));
+      this.deepBlueService.composedCancel(request).subscribe((id) => console.trace("Canceled: " + id));
     }
     this.requests = [];
   }

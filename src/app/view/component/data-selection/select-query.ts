@@ -100,37 +100,39 @@ import { IDataParameter, IOperation } from 'app/domain/interfaces';
 })
 export class SelectQuery implements OnInit {
 
-  query_id: string;
 
+  query_id: string;
+  selected_query: IOperation;
+  messages: Message[];
   @Output() queryIdSelected = new EventEmitter();
 
   constructor(public deepBlueService: DeepBlueService, private progress_element: ProgressElement) {
   };
 
   onEnter(event: any) {
-    console.log(this.query_id);
     this.deepBlueService.getQueryInfo(new Id(this.query_id)).subscribe((op) => {
       this.data = [this.build_tree(op)];
-      console.log(this.data);
+      this.selected_query = <IOperation>op;
     })
   }
 
   data: TreeNode[];
+  selectedNode: TreeNode;
 
   build_data_operation_node(o: any): TreeNode {
     let node: TreeNode = {};
 
     node.label = o.command + " (" + o.query_id.id + ")";
     node.type = 'person';
-    node.data = {}
+    node.data = {};
+    node.data.parameters = [];
+
+    this.deepBlueService.countRegionsRequest(o, this.progress_element, 0).subscribe((result) => {
+      node.data.parameters.unshift("Total Regions: " + result.resultAsCount());
+    });
 
     if (o._params) {
       node.data = { parameters: Object.keys(o._params).map((k: string) => k + ": " + o._params[k]) };
-      debugger;
-      this.deepBlueService.countRegionsRequest(o, this.progress_element, 0).subscribe((result) => {
-        node.data.parameters.unshift("Total Regions: " + result.resultAsCount());
-        console.log(node.data.parameters);
-      });
     }
     //node.type = o.query_id.id;
     node.styleClass = 'ui-person';
@@ -142,15 +144,11 @@ export class SelectQuery implements OnInit {
     if (o.command == "intersection") {
       lookup_keys.push("_subject");
       lookup_keys.push("_filter");
-    }
 
-    if (o._data._data_type == "operation_args") {
+    } else if (o._data._data_type == "operation_args") {
       delete o._data.args['cache'];
       node.data = { parameters: Object.keys(o._data.args).map((k: string) => k + ": " + o._data.args[k]) };
-      this.deepBlueService.countRegionsRequest(o, this.progress_element, 0).subscribe((result) => {
-        node.data.parameters.unshift("Total Regions: " + result.resultAsCount());
-        console.log(node.data.parameters);
-      });
+
     } else {
       lookup_keys.push("_data");
     }
@@ -177,13 +175,21 @@ export class SelectQuery implements OnInit {
     switch (o._data_type) {
       case 'data_operation': return this.build_data_operation_node(o);
       default: {
-        console.log("unknow:", o);
+        console.error("unknow:", o);
         return null;
       }
     }
   }
 
+  onNodeSelect(event: any) {
+    this.messages = [{ severity: 'success', summary: 'Node Selected', detail: event.node.label }];
+  }
+
   ngOnInit() {
     this.data = [];
+  }
+
+  useQuery() {
+    this.queryIdSelected.emit(this.selected_query);
   }
 }

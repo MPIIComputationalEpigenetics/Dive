@@ -82,7 +82,7 @@ export class RegionsScreen {
         //const actual_request_id = this.request_id.id;
         const actual_request_id = "r823051";
         let url = "http://deepblue.mpi-inf.mpg.de/api/composed_commands/generate_track_file?genome=" + genome_name + "&request_id=" + actual_request_id;
-        console.log(url);
+        console.debug("Download URL", url);
         let encodedUrl = encodeURIComponent(url);
         var ucscLink = "http://genome.ucsc.edu/cgi-bin/hgTracks?";
         ucscLink = ucscLink + "db=" + genome_name;

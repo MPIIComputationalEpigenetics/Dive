@@ -29,7 +29,6 @@ export class LengthMenuFilterComponent implements OnInit {
     }
 
     validateMinNumber(c: FormControl) {
-        console.log(c.value)
         return c.value < 1 ? null : { valid: false }
     };
 

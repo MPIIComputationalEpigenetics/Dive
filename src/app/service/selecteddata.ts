@@ -42,7 +42,6 @@ export class SelectedData implements OnDestroy {
   }
 
   ngOnDestroy() {
-    console.log('SelectedData destroyed');
     this.annotationSubscription.unsubscribe();
   }
 
@@ -63,7 +62,7 @@ export class SelectedData implements OnDestroy {
   setActiveStack(stack: DataStack) {
     const index = this._stacks.indexOf(stack, 0);
     if (index <= -1) {
-      console.log(stack, 'not found');
+      console.warn("(setActiveStack)", stack, 'not found');
       return;
     }
     this.activeStackSubject.next(stack);

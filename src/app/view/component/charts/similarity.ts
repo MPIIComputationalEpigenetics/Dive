@@ -59,7 +59,6 @@ export class SimilarityBarChartComponent {
                 serie['point']['events']['click'] = (ev: any) => callback_function(ev, _self);
                 this.chart['addSeries'](serie, false);
             } else if (serie['type'] === 'boxplot') {
-                console.log('bloxplot');
                 serie['tooltip'] = { headerFormat: '<em>Experiment No {point.key}</em><br/>' };
                 serie['backgroundColor'] = 'red';
                 serie['animation'] = false;

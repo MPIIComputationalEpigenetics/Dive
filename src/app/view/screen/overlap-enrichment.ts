@@ -18,7 +18,7 @@ import { SelectedData } from 'app/service/selecteddata';
 import { ProgressElement } from 'app/service/progresselement';
 
 import { DeepBlueOperation, DeepBlueMiddlewareRequest } from 'app/domain/operations';
-import { DeepBlueResult, DeepBlueMiddlewareOverlapEnrichtmentResult, DeepBlueMiddlewareOverlapEnrichtmentResultItem, DeepBlueMiddlewareGOEnrichtmentResult, DeepBlueMiddlewareOverlapResult } from 'app/domain/operations';
+import { DeepBlueResult, DeepBlueMiddlewareOverlapEnrichtmentResult, DeepBlueMiddlewareOverlapEnrichtmentResultItem, DeepBlueMiddlewareGOEnrichtmentResult } from 'app/domain/operations';
 import { IOperation, IRow } from 'app/domain/interfaces';
 import { Utils } from 'app/service/utils';
 import { RequestManager } from 'app/service/requests-manager';
@@ -43,15 +43,11 @@ export class OverlapEnrichmentScreenComponent implements OnDestroy {
 
     selectQuery(event: IOperation) {
         this.selected_data = event;
-        console.log(this.selected_data);
     }
 
     selectDatasets(event: Object[]) {
         this.selected_datasets = event;
-        debugger;
-        console.log(this.selected_datasets);
     }
-
 
     process() {
         const current: IOperation[] = this.selectedData.getStacksTopOperation();
@@ -61,7 +57,6 @@ export class OverlapEnrichmentScreenComponent implements OnDestroy {
                 this.requestManager.enqueueRequest(request);
                 this.deepBlueService.getComposedResultIterator(request, this.progress_element, 'overlaps_enrichment')
                     .subscribe((result: DeepBlueMiddlewareOverlapEnrichtmentResult[]) => {
-                        console.log(result);
                         this.prepare_data(result);
                     });
             });

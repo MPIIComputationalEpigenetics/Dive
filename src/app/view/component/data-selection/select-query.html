@@ -1,3 +1,5 @@
+<p-growl [(value)]="messages"></p-growl>
+
 <div class="container">
   <div class="ui-g">
     <div class="ui-g-12">
@@ -7,10 +9,13 @@
           <div class="ui-inputgroup">
             <input type="text" pInputText placeholder="Query ID" (keyup.enter)="onEnter()" [(ngModel)]="query_id">
             <button pButton type="button" icon="fa-superpowers" class="ui-button-secondary"></button>
-        </div>
+          </div>
+          <div class="Ui-inputgroup">
+            <p><button pButton type="button" (click)="useQuery()" label="Load Query"></button>
+          </div>
         </h2>
 
-        <p-organizationChart [value]="data" selectionMode="single" styleClass="company">
+        <p-organizationChart [value]="data" selectionMode="single" styleClass="company" [(selection)]="selectedNode" (onNodeSelect)="onNodeSelect($event)">
           <ng-template let-node pTemplate="person">
             <div class="node-header ui-corner-top"> {{node.label}} </div>
             <div class="node-content">

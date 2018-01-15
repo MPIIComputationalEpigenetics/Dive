@@ -29,7 +29,6 @@ import { IKey } from '../domain/interfaces';
 
 import {
     DeepBlueMiddlewareGOEnrichtmentResult,
-    DeepBlueMiddlewareOverlapResult,
     DeepBlueOperation,
     DeepBlueRequest,
     DeepBlueResult,
@@ -157,7 +156,7 @@ export class DeepBlueService {
     //
 
     constructor(private http: Http, public progress_element: ProgressElement) {
-        console.log('NEW DEEPBLUE SERVICE');
+        console.trace('Starting DeepBlue Service');
     }
 
     // Functions to select data from the Server
@@ -733,7 +732,7 @@ export class DeepBlueService {
 
         const pollData = this.http.get(this.deepBlueUrl + '/get_request_data', { 'search': params })
             .map((res: Response) => {
-                console.log('polling...');
+                console.trace('polling...');
                 const body = res.json();
                 const status = body[0] || 'error';
                 if (status === 'okay') {
@@ -869,7 +868,7 @@ export class DeepBlueService {
                 } else if (id.id[0] === 'g' && id.id[1] === 's') {
                     return new FullGeneModel(data[0]);
                 } else {
-                    console.log('UNKNOW TYPE: ' + id);
+                    console.warn('UNKNOW TYPE: ' + id);
                     return new FullExperiment(data[0]);
                 }
 
@@ -970,11 +969,11 @@ export class DeepBlueService {
         if (error instanceof Response) {
             const body = error.json() || '';
             const err = body.error || JSON.stringify(body);
-            errMsg = "${err.status} - ${err.statusText || ''} ${err}";
+            errMsg = err;
         } else {
             errMsg = error.message ? error.message : error.toString();
         }
-        console.log(errMsg);
+        console.error(errMsg);
         return Observable.throw(errMsg);
     }
 
@@ -1101,14 +1100,14 @@ export class DeepBlueService {
             .catch(this.handleError);
     }
 
-    public getComposedResult(request: DeepBlueMiddlewareRequest): Observable<[string, string | DeepBlueMiddlewareOverlapResult[]]> {
+    public getComposedResult(request: DeepBlueMiddlewareRequest): Observable<[string, string | DeepBlueResult[]]> {
         const params: URLSearchParams = new URLSearchParams();
         params.set('request_id', request.requestId().id);
 
         return this.http.get(this.deepBlueUrl + '/composed_commands/get_request', { 'search': params })
             .map((res: Response) => {
                 const body = res.json();
-                const response: [string, string | DeepBlueMiddlewareOverlapResult[]] = body;
+                const response: [string, string | DeepBlueResult[]] = body;
                 return response;
             });
     }
@@ -1116,8 +1115,8 @@ export class DeepBlueService {
 
     // TODO: Move the logic of converting the data to the function callers
     public getComposedResultIterator(request: DeepBlueMiddlewareRequest, progress_element: ProgressElement, request_type: string, callback?: any, param?: any):
-        Observable<DeepBlueMiddlewareOverlapResult[] | DeepBlueMiddlewareGOEnrichtmentResult[] | DeepBlueMiddlewareOverlapEnrichtmentResultItem[] | DeepBlueMiddlewareOverlapEnrichtmentResult[]> {
-        const pollSubject = new Subject<DeepBlueMiddlewareOverlapResult[] | DeepBlueMiddlewareGOEnrichtmentResult[] | DeepBlueMiddlewareOverlapEnrichtmentResultItem[] | DeepBlueMiddlewareOverlapEnrichtmentResult[]>();
+        Observable<DeepBlueResult[] | DeepBlueMiddlewareGOEnrichtmentResult[] | DeepBlueMiddlewareOverlapEnrichtmentResultItem[] | DeepBlueMiddlewareOverlapEnrichtmentResult[]> {
+        const pollSubject = new Subject<DeepBlueResult[] | DeepBlueMiddlewareGOEnrichtmentResult[] | DeepBlueMiddlewareOverlapEnrichtmentResultItem[] | DeepBlueMiddlewareOverlapEnrichtmentResult[]>();
 
         const timer = Observable.timer(0, 1000).concatMap(() => {
 
@@ -1126,12 +1125,12 @@ export class DeepBlueService {
                 return null;
             }
 
-            return this.getComposedResult(request).map((data: [string, string | DeepBlueMiddlewareOverlapResult[]]) => {
+            return this.getComposedResult(request).map((data: [string, string | DeepBlueResult[]]) => {
                 if (data[0] === 'okay') {
                     timer.unsubscribe();
                     if (request_type === 'overlaps') {
                         pollSubject.next(
-                            (<Object[]>(data[1])).map((ee) => DeepBlueMiddlewareOverlapResult.fromObject(ee))
+                            (<Object[]>(data[1])).map((ee) => DeepBlueResult.fromObject(ee))
                         );
                     } else if (request_type === 'go_enrichment') {
                         pollSubject.next(
@@ -1155,7 +1154,7 @@ export class DeepBlueService {
 
                     if (partial && callback) {
                         if (request_type === 'overlaps') {
-                            partial = (<Object[]>(partial)).map((ee) => DeepBlueMiddlewareOverlapResult.fromObject(ee));
+                            partial = (<Object[]>(partial)).map((ee) => DeepBlueResult.fromObject(ee));
                         } else if (request_type === 'go_enrichment') {
                             partial = (<Object[]>(partial)).map((ee) => DeepBlueMiddlewareGOEnrichtmentResult.fromObject(ee))
                         } else if (request_type === 'overlaps_enrichment_fast') {
@@ -1232,7 +1231,6 @@ export class DeepBlueService {
     getQueryInfo(id: Id): Observable<IOperation> {
         const params: URLSearchParams = new URLSearchParams();
         params.set('query_id', id.id);
-        console.log(params);
         return this.http.get(this.deepBlueUrl + '/composed_commands/query_info', { 'search': params })
             .map((res: Response) => {
                 return toClass(res.json());

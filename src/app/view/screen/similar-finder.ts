@@ -7,7 +7,7 @@ import { SelectedData } from "app/service/selecteddata";
 import { IOperation } from 'app/domain/interfaces';
 import { ProgressElement } from 'app/service/progresselement';
 import { SimilarityBarChartComponent } from 'app/view/component/charts/similarity';
-import { DeepBlueMiddlewareOverlapEnrichtmentResultItem, DeepBlueMiddlewareOverlapResult } from 'app/domain/operations';
+import { DeepBlueMiddlewareOverlapEnrichtmentResultItem } from 'app/domain/operations';
 import { Statistics, IStatsResult } from 'app/service/statistics';
 import { BioSource } from 'app/domain/deepblue';
 import { RequestManager } from 'app/service/requests-manager';
@@ -45,11 +45,14 @@ export class SimilarFinder {
     }
 
     reloadData(_self: SimilarFinder, datum: DeepBlueMiddlewareOverlapEnrichtmentResultItem[]) {
+
         if ((!datum) || (datum.length == 0)) {
             return;
         }
 
-        datum.sort((a: DeepBlueMiddlewareOverlapEnrichtmentResultItem, b: DeepBlueMiddlewareOverlapEnrichtmentResultItem) => b.p_value_log - a.p_value_log)
+        debugger;
+
+        datum.sort((a, b) => b.p_value_log - a.p_value_log)
         let position = 0;
         let value = datum[0].p_value_log;
         for (let i = 0; i < datum.length; i++) {
@@ -60,7 +63,7 @@ export class SimilarFinder {
             datum[i].log_rank = position + 1;
         }
 
-        datum.sort((a: DeepBlueMiddlewareOverlapEnrichtmentResultItem, b: DeepBlueMiddlewareOverlapEnrichtmentResultItem) => b.odds_ratio - a.odds_ratio);
+        datum.sort((a, b) => b.odds_ratio - a.odds_ratio);
         position = 0;
         value = datum[0].odds_ratio;
         for (let i = 0; i < datum.length; i++) {
@@ -68,18 +71,18 @@ export class SimilarFinder {
                 position = i;
                 value = datum[i].odds_ratio;
             }
-            datum[i]['odd_rank'] = position + 1;
+            datum[i].odd_rank = position + 1;
         }
 
-        datum.sort((a, b) => b['support'] - a['support']);
+        datum.sort((a, b) => b.support - a.support);
         position = 0;
-        value = datum[0]['support'];
+        value = datum[0].support;
         for (let i = 0; i < datum.length; i++) {
-            if (datum[i]['support'] != value) {
+            if (datum[i].support != value) {
                 position = i;
-                value = datum[i]['support'];
+                value = datum[i].support;
             }
-            datum[i]['support_rank'] = position + 1;
+            datum[i].support_rank = position + 1;
         }
 
         for (let ds of datum) {
@@ -89,7 +92,8 @@ export class SimilarFinder {
 
         datum.sort((a, b) => a.mean_rank - b.mean_rank);
 
-        let cutoff = Statistics.percentile(datum.map((o: DeepBlueMiddlewareOverlapEnrichtmentResultItem) => o.mean_rank), 0.20);
+
+        let cutoff = Statistics.percentile(datum.map((o: DeepBlueMiddlewareOverlapEnrichtmentResultItem) => o.mean_rank), 0.2);
         let filtered_data = []
         for (let d of datum) {
             if (d["mean_rank"] <= cutoff) {
@@ -190,6 +194,5 @@ export class SimilarFinder {
     epigeneticMarkElementClick(click: any, _self: SimilarFinder) {
         const point = click.point;
         const category = point.category;
-        console.log("em:", category);
     }
 }

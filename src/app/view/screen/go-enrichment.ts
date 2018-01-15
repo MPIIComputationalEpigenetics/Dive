@@ -1,5 +1,5 @@
 import { OverlapsBarChartComponent } from '../component/charts/overlappingbar';
-import { DeepBlueMiddlewareGOEnrichtmentResult, DeepBlueMiddlewareOverlapResult, DeepBlueMiddlewareRequest } from '../../domain/operations';
+import { DeepBlueMiddlewareGOEnrichtmentResult, DeepBlueMiddlewareRequest } from '../../domain/operations';
 import { Component, OnInit, ViewChild, OnDestroy, ChangeDetectionStrategy, AfterViewInit } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -137,10 +137,6 @@ export class GoEnrichmentScreenComponent implements AfterViewInit, OnDestroy {
             this.deepBlueService.getComposedResultIterator(request, this.progress_element, 'go_enrichment')
                 .subscribe((result: DeepBlueMiddlewareGOEnrichtmentResult[]) => {
                     const end = new Date().getTime();
-                    console.log(result[0].getResults()['enrichment']['go_terms'].length);
-                    // Now calculate and output the difference
-                    console.log(end - start);
-                    console.log(result);
                     this.prepare_data(result);
                 });
         });
@@ -196,7 +192,6 @@ export class GoEnrichmentScreenComponent implements AfterViewInit, OnDestroy {
                     categories.push(category);
                     values_by_category[category] = go_overlap;
                 } else if (stack > 0 && categories.indexOf(category) !== -1) {
-                    console.log(values_by_category[category]);
                     values_by_category[category] = go_overlap;
                 }
             }

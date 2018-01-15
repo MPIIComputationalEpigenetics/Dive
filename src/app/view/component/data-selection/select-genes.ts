@@ -77,7 +77,6 @@ export class SelectGenesComponent implements OnDestroy {
         if (gene_name.length < 3) {
             return;
         }
-        console.log(this.selectedGeneModel.name, event.query);
         this.deepBlueService.getComposedListGenes(this.selectedGeneModel.name, event.query).subscribe((genes: Gene[]) => {
             this.genes_suggestions = genes
         });
@@ -87,7 +86,6 @@ export class SelectGenesComponent implements OnDestroy {
         let gene_names = this.selected_genes.map((gene: Gene) => gene.name);
         this.deepBlueService.selectGenes(gene_names, this.selectedGeneModel, this.progress_element, 0).subscribe((operation: DeepBlueOperation) => {
             this.queryIdSelected.emit(operation);
-            console.log(operation);
         });
     }
 
@@ -101,7 +99,7 @@ export class SelectGenesComponent implements OnDestroy {
     }
 
     select_click() {
-        console.log(this.gene);
+        console.debug(this.gene);
     }
 
     ngOnDestroy() {

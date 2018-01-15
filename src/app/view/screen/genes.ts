@@ -1,4 +1,4 @@
-import { DeepBlueMiddlewareOverlapResult, DeepBlueMiddlewareRequest } from '../../domain/operations';
+import { DeepBlueMiddlewareRequest } from '../../domain/operations';
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -70,7 +70,6 @@ export class GenesScreen implements OnDestroy {
     }
 
     selectGeneModel(event: any) {
-        console.log(event.value);
         this.selectedGeneModelSource.next(event.value);
     }
 
@@ -101,12 +100,10 @@ export class GenesScreen implements OnDestroy {
         this.deepBlueService.composedCountGenesOverlaps(current, gene_model).subscribe((request: DeepBlueMiddlewareRequest) => {
             this.requestManager.enqueueRequest(request);
             this.deepBlueService.getComposedResultIterator(request, this.progress_element, 'overlaps')
-                .subscribe((result: DeepBlueMiddlewareOverlapResult[]) => {
+                .subscribe((result: DeepBlueResult[]) => {
                     const end = new Date().getTime();
                     // Now calculate and output the difference
-                    console.log(end - start);
                     this.currentlyProcessing = null;
-                    console.log(result);
                     this.reloadPlot(result);
                 });
         });
@@ -118,20 +115,20 @@ export class GenesScreen implements OnDestroy {
         this.currentlyProcessing = gene_model;
     }
 
-    reloadPlot(datum: DeepBlueMiddlewareOverlapResult[]) {
+    reloadPlot(datum: DeepBlueResult[]) {
 
         const series: Array<Object> = [];
 
-        datum.forEach((result: DeepBlueMiddlewareOverlapResult, index: number) => {
+        datum.forEach((result: DeepBlueResult, index: number) => {
             series.push({
                 type: 'column',
                 name: this.selectedData.getStackname(index),
-                data: [result.getCount()],
+                data: [result.resultAsCount()],
                 color: this.selectedData.getStackColor(index, '0.3')
             });
         });
 
-        const categories = datum.map((r: DeepBlueMiddlewareOverlapResult) => r.getFilterName());
+        const categories = datum.map((r: DeepBlueResult) => r.getFilter().name());
 
         this.overlapbarchart.setNewData(categories, series, null);
     }
