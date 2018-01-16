@@ -165,6 +165,7 @@ export class PeaksOverlapScreenComponent implements AfterViewInit, OnDestroy {
     }
 
     processOverlaps() {
+
         const experiments = this.selectedExperimentsSource.getValue();
 
         if (experiments.length === 0) {

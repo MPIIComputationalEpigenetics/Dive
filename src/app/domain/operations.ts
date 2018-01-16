@@ -314,7 +314,7 @@ export class DeepBlueOperation extends AbstractNamedDataType implements IOperati
     }
 
     name(): string {
-        return this.text();
+        return this._data.name();
     }
 
     id(): Id {
@@ -521,7 +521,6 @@ export class DeepBlueResult implements ICloneable {
     getFilter(): IDataParameter {
         return this.request.getFilter();
     }
-
 }
 
 export class StackValue {

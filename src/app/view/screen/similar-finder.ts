@@ -50,8 +50,6 @@ export class SimilarFinder {
             return;
         }
 
-        debugger;
-
         datum.sort((a, b) => b.p_value_log - a.p_value_log)
         let position = 0;
         let value = datum[0].p_value_log;
