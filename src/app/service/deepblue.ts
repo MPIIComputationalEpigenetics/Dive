@@ -32,7 +32,7 @@ import {
     DeepBlueOperation,
     DeepBlueRequest,
     DeepBlueResult,
-    FilterParameter,
+    DeepBlueFilterParameters,
     DeepBlueTiling,
     DeepBlueMiddlewareOverlapEnrichtmentResult,
     DeepBlueDataParameter,
@@ -989,7 +989,7 @@ export class DeepBlueService {
             });
     }
 
-    public composedCountOverlaps(queries: IOperation[], experiments: IdName[], filters?: FilterParameter[]): Observable<DeepBlueMiddlewareRequest> {
+    public composedCountOverlaps(queries: IOperation[], experiments: IdName[], filters?: DeepBlueFilterParameters[]): Observable<DeepBlueMiddlewareRequest> {
         const params: URLSearchParams = new URLSearchParams();
         for (const query_op_id of queries) {
             params.append('queries_id', query_op_id.id().id);

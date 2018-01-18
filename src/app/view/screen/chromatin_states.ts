@@ -19,7 +19,7 @@ import { IdName } from 'app/domain/deepblue';
 import { DeepBlueOperation } from 'app/domain/operations';
 import { DeepBlueResult } from 'app/domain/operations';
 import { StackValue } from 'app/domain/operations';
-import { FilterParameter } from 'app/domain/operations';
+import { DeepBlueFilterParameters } from 'app/domain/operations';
 
 import { DeepBlueService } from 'app/service/deepblue';
 import { DataStack } from 'app/service/datastack';
@@ -190,7 +190,7 @@ export class ChromatinStatesScreenComponent implements AfterViewInit, OnDestroy 
     const current = this.selectedData.getStacksTopOperation();
 
     let state = this.deepBlueService.epigeneticMarkSource.getValue();
-    let filter = new FilterParameter("NAME", "==", state.name, "string");
+    let filter = new DeepBlueFilterParameters("NAME", "==", state.name, "string");
     this.deepBlueService.composedCountOverlaps(current, experiments, [filter]).subscribe((request: DeepBlueMiddlewareRequest) => {
       this.requestManager.enqueueRequest(request);
       this.deepBlueService.getComposedResultIterator(request, this.progress_element, 'overlaps', this.reloadPlot, this)

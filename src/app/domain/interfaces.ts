@@ -1,8 +1,7 @@
 import { Id, Name } from "app/domain/deepblue";
-import { DeepBlueDataParameter, DeepBlueOperationArgs, DeepBlueMetadataParameters, DeepBlueOperation, DeepBlueTiling, DeepBlueIntersection, FilterParameter, DeepBlueFilter } from "app/domain/operations";
 
 export interface ICloneable {
-    clone(request_count?: number): any;
+    clone (request_count?: number): any;
 }
 
 export interface ITextable {
@@ -10,7 +9,7 @@ export interface ITextable {
 }
 
 export interface INamedDataType {
-    dataType(): string;
+    dataType() : string;
 }
 
 export interface IKey extends ICloneable, ITextable {
@@ -18,18 +17,21 @@ export interface IKey extends ICloneable, ITextable {
 }
 
 export interface IDataParameter extends INamedDataType, IKey {
-    name(): string;
-    id(): Id;
+    name() : string;
+
+    id() : Id;
 }
 
 export interface IOperation extends IDataParameter {
-    data(): IDataParameter;
+    data() : IDataParameter;
+
+    mainOperation() : IOperation;
 
     cacheIt(query_id: Id): IOperation;
 }
 
 export interface IFiltered extends IOperation {
-    getFilter(): IDataParameter;
+    filter(): IDataParameter;
 }
 
 export interface IRow {
