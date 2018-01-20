@@ -55,7 +55,6 @@ export class SelectDatasetsComponent {
       this.deepBlueService.getComposedEnrichmentDatabases(genome.name).subscribe((datasets: Dataset[]) => {
         this.datasets = <TreeNode[]>datasets.map((dataset: Dataset) => this.buildNode(dataset));
       });
-
     })
   }
 
@@ -64,9 +63,10 @@ export class SelectDatasetsComponent {
       this.deepBlueService.getInfo(event.node.data.id).subscribe((info) => {
         this.selectedRow = <FullExperiment>info;
         this.visibleSidebar = true;
-
         if (event.node.data._query_id) {
           this.clicked_query_id = event.node.data._query_id.query_id.id;
+        } else {
+          this.clicked_query_id = "";
         }
       })
     }
@@ -93,7 +93,6 @@ export class SelectDatasetsComponent {
         } else {
           return this.buildNode(key, epigenetic_mark);
         }
-
       })
     }
   }
