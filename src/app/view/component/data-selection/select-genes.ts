@@ -1,4 +1,4 @@
-import { Component, OnDestroy, ViewChild, Output, EventEmitter } from '@angular/core';
+import { Component, OnDestroy, ViewChild, Output, EventEmitter, OnInit, AfterViewInit } from '@angular/core';
 
 import {
     Annotation,
@@ -23,7 +23,7 @@ import { DeepBlueOperation } from 'app/domain/operations';
     templateUrl: './select-genes.html'
 })
 
-export class SelectGenesComponent implements OnDestroy {
+export class SelectGenesComponent implements AfterViewInit, OnDestroy {
     errorMessage: any;
 
     @ViewChild('geneModelDropdown') geneModelDropdown: Dropdown;
@@ -49,7 +49,10 @@ export class SelectGenesComponent implements OnDestroy {
     ];
 
     constructor(private deepBlueService: DeepBlueService, private progress_element: ProgressElement) {
-        this.genomeSubscription = deepBlueService.genomeValue$.subscribe(genome => {
+    }
+
+    ngAfterViewInit() {
+        this.genomeSubscription = this.deepBlueService.genomeValue$.subscribe(genome => {
             if (genome === null) {
                 return;
             }
