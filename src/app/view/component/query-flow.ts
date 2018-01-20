@@ -111,13 +111,16 @@ export class QueryFlow implements OnInit {
   set queryId(queryId: string) {
     let _queryId = (queryId && queryId.trim()) || null;
 
+    this.data = [];
+
     if (!_queryId) {
       return;
     }
 
     this.deepBlueService.getQueryInfo(new Id(_queryId)).subscribe((op) => {
-      this.data = [this.build_tree(op)];
-      this.queryOp.emit(op);
+      setTimeout(() => {
+        this.data = [this.build_tree(op)];
+      }, 0);
     })
   }
 
