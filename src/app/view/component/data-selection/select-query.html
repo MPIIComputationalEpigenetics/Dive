@@ -1,5 +1,3 @@
-<p-growl [(value)]="messages"></p-growl>
-
 <div class="container">
   <div class="ui-g">
     <div class="ui-g-12">
@@ -7,26 +5,15 @@
         <h1>Paste Regions</h1>
         <h2>
           <div class="ui-inputgroup">
-            <input type="text" pInputText placeholder="Query ID" (keyup.enter)="onEnter()" [(ngModel)]="query_id">
+            <input type="text" pInputText placeholder="Query ID" (keyup.enter)="onEnter()" [(ngModel)]="model_query_id">
             <button pButton type="button" icon="fa-superpowers" class="ui-button-secondary"></button>
           </div>
           <div class="Ui-inputgroup">
-            <p><button pButton type="button" (click)="useQuery()" label="Load Query"></button>
+            <p>
+              <button pButton type="button" (click)="useQuery()" label="Load Query"></button>
           </div>
         </h2>
-
-        <p-organizationChart [value]="data" selectionMode="single" styleClass="company" [(selection)]="selectedNode" (onNodeSelect)="onNodeSelect($event)">
-          <ng-template let-node pTemplate="person">
-            <div class="node-header ui-corner-top"> {{node.label}} </div>
-            <div class="node-content">
-              <div *ngFor="let parameter of node.data.parameters">{{parameter}}</div>
-            </div>
-          </ng-template>
-          <ng-template let-node pTemplate="department">
-            {{ node.label }}
-          </ng-template>
-        </p-organizationChart>
-
+      <query-flow [queryId]="query_id" (queryOp)="loadQuery($event)"></query-flow>
       </div>
     </div>
   </div>

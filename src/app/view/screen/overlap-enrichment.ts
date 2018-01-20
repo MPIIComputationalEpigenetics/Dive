@@ -52,8 +52,8 @@ export class OverlapEnrichmentScreenComponent implements OnDestroy {
     process() {
         const current: IOperation[] = this.selectedData.getStacksTopOperation();
 
-        this.deepBlueService
-            .composedCalculateOverlapsEnrichment(current, this.selected_data.id(), this.selected_datasets).subscribe((request: DeepBlueMiddlewareRequest) => {
+        this.deepBlueService.composedCalculateOverlapsEnrichment(current, this.selected_data.id(), this.selected_datasets)
+            .subscribe((request: DeepBlueMiddlewareRequest) => {
                 this.requestManager.enqueueRequest(request);
                 this.deepBlueService.getComposedResultIterator(request, this.progress_element, 'overlaps_enrichment')
                     .subscribe((result: DeepBlueMiddlewareOverlapEnrichtmentResult[]) => {
