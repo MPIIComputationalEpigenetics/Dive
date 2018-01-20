@@ -34,12 +34,14 @@ export class SelectDatasetsComponent {
     { name: 'name', prop: 'name', column_type: 'string' }
   ];
 
-  visibleSidebar2 = false;
+  visibleSidebar = false;
   selectedRow: FullExperiment;
 
   genomeSubscription: Subscription;
   datasets: TreeNode[] = [];
   selectedDatasets: any = [];
+
+  clicked_query_id: string;
 
   @Input() selectMode = "checkbox"
   @Output() queryIdSelected = new EventEmitter();
@@ -61,11 +63,14 @@ export class SelectDatasetsComponent {
     if (event.node.data.leaf) {
       this.deepBlueService.getInfo(event.node.data.id).subscribe((info) => {
         this.selectedRow = <FullExperiment>info;
-        this.visibleSidebar2 = true;
+        this.visibleSidebar = true;
+
+        if (event.node.data._query_id) {
+          this.clicked_query_id = event.node.data._query_id.query_id.id;
+        }
       })
     }
   }
-
 
   buildNode(dataset: Dataset, epigenetic_mark?: string): TreeNode {
 

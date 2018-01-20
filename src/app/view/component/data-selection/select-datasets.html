@@ -1,4 +1,4 @@
-<p-sidebar [(visible)]="visibleSidebar2" position="right" [baseZIndex]="10000" styleClass="ui-sidebar-md">
+<p-sidebar [(visible)]="visibleSidebar" position="right" [baseZIndex]="10000" styleClass="ui-sidebar-md">
   <h1 style="font-weight:normal">{{selectedRow?.text()}}</h1>
   <button pButton type="button" icon="ui-icon-check-circle" label="Select Dataset" (click)="selectDatasets($event)"></button>
   <button pButton type="button" (click)="visibleSidebar2 = false" label="Cancel" class="ui-button-secondary"></button>
@@ -9,6 +9,8 @@
   <h4>{{ selectedRow?.technique() }}</h4>
   <h4>{{ selectedRow?.project() }}</h4>
   <h4>{{ selectedRow?.columns() | json }}</h4>
+
+  <query-flow [queryId]="clicked_query_id"></query-flow>
 
 </p-sidebar>
 
