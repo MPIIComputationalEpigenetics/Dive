@@ -17,7 +17,7 @@ import { DeepBlueService } from 'app/service/deepblue';
 import { Subscription } from 'rxjs';
 import { TreeNode } from 'primeng/primeng';
 import { ProgressElement } from 'app/service/progresselement';
-import { DeepBlueOperation, FilterParameter, DeepBlueDataParameter } from 'app/domain/operations';
+import { DeepBlueOperation, DeepBlueDataParameter } from 'app/domain/operations';
 import { Observable } from 'rxjs/Observable';
 import { IOperation } from 'app/domain/interfaces';
 
@@ -64,7 +64,6 @@ export class SelectDatasetsComponent {
         this.visibleSidebar2 = true;
       })
     }
-    //event.node = selected node
   }
 
 
