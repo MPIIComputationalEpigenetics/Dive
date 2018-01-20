@@ -130,6 +130,7 @@ import { PeaksOverlapScreenComponent } from 'app/view/screen/peaks-overlap';
 import { RequestManager } from 'app/service/requests-manager';
 import { DataSelectionMainComponent } from 'app/view/component/data-selection/data-selection-main';
 import { InitialScreenComponent } from 'app/view/screen/initial';
+import { QueryFlow } from 'app/view/component/query-flow';
 
 
 @NgModule({
@@ -243,6 +244,7 @@ import { InitialScreenComponent } from 'app/view/screen/initial';
         DnaPatternMenuFilterComponent,
         RegionsUpload,
         RegionsPaste,
+        QueryFlow,
         SelectQuery
     ],
     providers: [
