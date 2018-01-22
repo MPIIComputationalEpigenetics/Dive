@@ -156,7 +156,7 @@ export class DeepBlueService {
     //
 
     constructor(private http: Http, public progress_element: ProgressElement) {
-        console.trace('Starting DeepBlue Service');
+        console.info('Starting DeepBlue Service');
     }
 
     // Functions to select data from the Server
@@ -732,7 +732,7 @@ export class DeepBlueService {
 
         const pollData = this.http.get(this.deepBlueUrl + '/get_request_data', { 'search': params })
             .map((res: Response) => {
-                console.trace('polling...');
+                console.info('polling...', op_request.id().id);
                 const body = res.json();
                 const status = body[0] || 'error';
                 if (status === 'okay') {
