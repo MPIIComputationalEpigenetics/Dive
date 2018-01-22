@@ -9,17 +9,18 @@ import { GoEnrichmentScreenComponent } from './view/screen/go-enrichment';
 import { PeaksOverlapScreenComponent } from 'app/view/screen/peaks-overlap';
 import { SimilarFinder } from 'app/view/screen/similar-finder';
 import { InitialScreenComponent } from 'app/view/screen/initial';
+import { RouterGuard } from 'app/service/router-guard';
 
 export const routes: Routes = [
     { path: '', component: InitialScreenComponent },
     { path: 'dataselection', component: DataSelectionScreen },
-    { path: 'similarfinder', component: SimilarFinder },
-    { path: 'regions', component: RegionsScreen },
-    { path: 'genes', component: GenesScreen },
-    { path: 'go_enrichment', component: GoEnrichmentScreenComponent },
-    { path: 'chromatin_states', component: ChromatinStatesScreenComponent },
-    { path: 'overlap_enrichment', component: OverlapEnrichmentScreenComponent },
-    { path: 'peaks_overlap', component: PeaksOverlapScreenComponent }
+    { path: 'similarfinder', component: SimilarFinder, canActivate: [RouterGuard] },
+    { path: 'regions', component: RegionsScreen, canActivate: [RouterGuard] },
+    { path: 'genes', component: GenesScreen, canActivate: [RouterGuard] },
+    { path: 'go_enrichment', component: GoEnrichmentScreenComponent, canActivate: [RouterGuard] },
+    { path: 'chromatin_states', component: ChromatinStatesScreenComponent, canActivate: [RouterGuard] },
+    { path: 'overlap_enrichment', component: OverlapEnrichmentScreenComponent, canActivate: [RouterGuard] },
+    { path: 'peaks_overlap', component: PeaksOverlapScreenComponent, canActivate: [RouterGuard] }
 ];
 
 export const AppRoutes: ModuleWithProviders = RouterModule.forRoot(routes);
