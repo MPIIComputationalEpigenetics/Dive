@@ -14,7 +14,6 @@ import { Genome } from 'app/domain/deepblue';
 import { IdName } from 'app/domain/deepblue';
 
 import { StackValue, DeepBlueResult, DeepBlueOperation } from 'app/domain/operations';
-import { MenuService } from 'app/service/menu';
 
 import { DataCache } from 'app/service/deepblue';
 import { DeepBlueService } from 'app/service/deepblue';

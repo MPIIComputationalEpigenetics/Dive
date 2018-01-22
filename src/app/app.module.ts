@@ -84,7 +84,6 @@ import { AppFooter } from './app.footer.component';
 
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
-import { MenuService } from 'app/service/menu';
 import { DeepBlueService } from 'app/service/deepblue';
 import { ProgressElement } from 'app/service/progresselement';
 
@@ -97,9 +96,6 @@ import { GenesScreen } from 'app/view/screen/genes';
 import { GoEnrichmentScreenComponent } from 'app/view/screen/go-enrichment';
 import { OverlapEnrichmentScreenComponent } from 'app/view/screen/overlap-enrichment';
 import { SimilarFinder } from 'app/view/screen/similar-finder';
-
-
-import { DiveStatus, CSSExperimentsMenu } from 'app/view/component/menu/main-menu';
 
 import { DataLoadProgressBar } from 'app/view/component/progressbar';
 
@@ -131,6 +127,7 @@ import { RequestManager } from 'app/service/requests-manager';
 import { DataSelectionMainComponent } from 'app/view/component/data-selection/data-selection-main';
 import { InitialScreenComponent } from 'app/view/screen/initial';
 import { QueryFlow } from 'app/view/component/query-flow';
+import { DiveMenuService } from 'app/service/menu';
 
 
 @NgModule({
@@ -215,7 +212,6 @@ import { QueryFlow } from 'app/view/component/query-flow';
         AppSubMenu,
         AppTopBar,
         AppFooter,
-        DiveStatus,
         DataStackViewComponent,
         DataLoadProgressBar,
         DataSelectionMainComponent,
@@ -253,7 +249,7 @@ import { QueryFlow } from 'app/view/component/query-flow';
             provide: HighchartsStatic,
             useFactory: highchartsFactory
         },
-        MenuService,
+        DiveMenuService,
         ConfirmationService,
         DeepBlueService,
         ProgressElement,

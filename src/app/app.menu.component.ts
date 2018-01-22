@@ -16,14 +16,15 @@ import { Router } from '@angular/router';
 import { MenuItem } from 'primeng/primeng';
 
 import { AppComponent } from 'app/app.component';
-import { MenuService } from 'app/service/menu';
+import { DiveMenuService } from 'app/service/menu';
 
 @Component({
     selector: 'app-menu',
     template: `
     <app-data-stack></app-data-stack>
-        <ul app-submenu [item]="model" root="true" class="ultima-menu ultima-main-menu clearfix" [reset]="reset" visible="true"></ul>
-    <dive-menu></dive-menu>
+    <ul app-submenu [item]="model" root="true" class="ultima-menu ultima-main-menu clearfix" [reset]="reset" visible="true"></ul>
+    <length-filtering></length-filtering>
+    <dna-pattern-filtering></dna-pattern-filtering>
     `
 })
 export class AppMenuComponent {
@@ -33,7 +34,7 @@ export class AppMenuComponent {
     model: any[];
 
     constructor( @Inject(forwardRef(() => AppComponent)) public app: AppComponent,
-        public menuService: MenuService) {
+        public menuService: DiveMenuService) {
 
         menuService.menuValue$.subscribe((menuItems: Object[]) => this.model = menuItems);
     }
@@ -45,7 +46,6 @@ export class AppMenuComponent {
         themeLink.href = 'assets/theme/theme-' + theme + '.css';
         layoutLink.href = 'assets/layout/css/layout-' + theme + '.css';
     }
-
 }
 
 @Component({

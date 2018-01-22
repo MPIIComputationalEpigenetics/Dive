@@ -14,14 +14,12 @@ import { Genome } from 'app/domain/deepblue';
 import { IdName } from 'app/domain/deepblue';
 
 import { StackValue } from 'app/domain/operations';
-import { MenuService } from 'app/service/menu';
 
 import { DataCache } from 'app/service/deepblue';
 import { DeepBlueService } from 'app/service/deepblue';
 import { MultiKeyDataCache } from 'app/service/deepblue';
 import { SelectedData } from 'app/service/selecteddata';
 import { DataStack } from 'app/service/datastack';
-import { IMenu } from 'app/domain/interfaces';
 
 
 @Component({
@@ -86,7 +84,7 @@ export class SelectedDataButton implements OnInit {
     }
 
     save() {
-        console.trace('save this stack');
+        console.info('save this stack');
     }
 
     remove() {

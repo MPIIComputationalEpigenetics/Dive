@@ -3,7 +3,6 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import { Subscription } from 'rxjs/Subscription';
 
 import { SelectedData } from 'app/service/selecteddata';
-import { MenuService } from 'app/service/menu';
 import {
     SimpleChanges,
     Component,
@@ -15,6 +14,7 @@ import {
 
 import { Annotation } from 'app/domain/deepblue';
 import { DeepBlueService } from 'app/service/deepblue';
+import { DiveMenuService } from 'app/service/menu';
 
 @Component({
     selector: 'dna-pattern-filtering',
@@ -24,7 +24,8 @@ export class DnaPatternMenuFilterComponent implements OnInit {
 
     public pattern_form: FormGroup;
 
-    constructor(private fb: FormBuilder, private selectedData: SelectedData, private menuService: MenuService) {
+    constructor(private deepBlueService: DeepBlueService, private fb: FormBuilder,
+        private selectedData: SelectedData, private diveMenuService: DiveMenuService) {
     }
 
     validateDNAPattern(c: FormControl) {
@@ -39,14 +40,20 @@ export class DnaPatternMenuFilterComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.pattern_form = this.fb.group({
-            dna_pattern: [0, [this.validateDNAPattern]]
-        });
+        this.deepBlueService.dataToDiveValue$.subscribe(data => {
+            if (data === null) {
+                return;
+            }
 
-        this.menuService.includeObject('filtering',
-            {
-                label: 'DNA Pattern', type: 'text', group: this.pattern_form, control_name: 'dna_pattern',
-                submit: (event: any) => { this.save_dna_pattern_filter(this.pattern_form.value); }
+            this.pattern_form = this.fb.group({
+                dna_pattern: [0, [this.validateDNAPattern]]
             });
+
+            this.diveMenuService.includeObject('filtering',
+                {
+                    label: 'DNA Pattern', type: 'text', group: this.pattern_form, control_name: 'dna_pattern',
+                    submit: (event: any) => { this.save_dna_pattern_filter(this.pattern_form.value); }
+                });
+        })
     }
 }

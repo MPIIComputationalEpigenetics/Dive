@@ -38,8 +38,3 @@ export interface IRow {
     [key: string]: any
 }
 
-export interface IMenu {
-    loadMenu(): any;
-    selectItem(item: any): any;
-}
-

@@ -82,7 +82,6 @@ export class PeaksOverlapScreenComponent implements AfterViewInit, OnDestroy {
         this.selectedData.getActiveTopStackValue().subscribe((dataStackItem) => this.processOverlaps());
     }
 
-
     segregate(experiments: FullExperiment[]) {
 
         const biosources: { [key: string]: FullExperiment[] } = {};
@@ -165,6 +164,8 @@ export class PeaksOverlapScreenComponent implements AfterViewInit, OnDestroy {
     }
 
     processOverlaps() {
+
+        debugger;
 
         const experiments = this.selectedExperimentsSource.getValue();
 
