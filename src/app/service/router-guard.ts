@@ -15,7 +15,7 @@ export class RouterGuard implements CanActivate {
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     if (this.deepBlueService.dataToDiveSource.getValue() === null) {
-      this.router.navigate(['/dataselection']);
+      this.router.navigate(['/']);
       return false;
     }
     return true;
