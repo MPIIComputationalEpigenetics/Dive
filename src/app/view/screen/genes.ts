@@ -1,5 +1,5 @@
 import { DeepBlueMiddlewareRequest } from '../../domain/operations';
-import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, AfterViewInit } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 
 import { MultiSelect } from 'primeng/primeng';
@@ -25,7 +25,7 @@ import { RequestManager } from 'app/service/requests-manager';
 @Component({
     templateUrl: './genes.html'
 })
-export class GenesScreen implements OnDestroy {
+export class GenesScreen implements AfterViewInit, OnDestroy {
     errorMessage: string;
     geneModels: GeneModel[];
     menuGeneModel: SelectItem[];
@@ -51,20 +51,23 @@ export class GenesScreen implements OnDestroy {
             if (genome === null) {
                 return;
             }
-            this.deepBlueService.getGeneModels().subscribe((geneModels: GeneModel[]) => {
+            this.deepBlueService.getGeneModelsBySelectedGenome().subscribe((geneModels: GeneModel[]) => {
                 if (geneModels.length === 0) {
                     return;
                 }
                 this.geneModels = geneModels;
                 this.menuGeneModel = geneModels.map((geneModel: GeneModel) => {
                     const l = { label: geneModel.name, value: geneModel };
+                    // Always select the last gene model
                     this.geneModelDropdown.selectItem(null, l);
                     return l;
                 });
             },
                 error => this.errorMessage = <any>error);
         });
+    }
 
+    ngAfterViewInit() {
         this.selectedGeneModelValue$.debounceTime(250).subscribe(() => this.processOverlaps());
         this.selectedData.getActiveTopStackValue().subscribe((dataStackItem: DataStackItem) => this.processOverlaps());
     }
