@@ -28,12 +28,11 @@
 
 
 
-<p-dialog header="Title" [(visible)]="display">
+<p-dialog header="Upload your own dataset" [(visible)]="display" [width]="800" [height]="1200">
   <p-tabView>
     <p-tabPanel header="Upload File">
         <regions-upload (queryIdSelected)="selectQuery($event)"></regions-upload>
     </p-tabPanel>
-
     <p-tabPanel header="Paste Regions">
         <regions-paste (queryIdSelected)="selectQuery($event)"></regions-paste>
     </p-tabPanel>

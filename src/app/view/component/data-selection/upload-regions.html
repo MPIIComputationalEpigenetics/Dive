@@ -7,7 +7,7 @@
         <h2>
           <!-- We send the genome name as the file name -->
           <p-fileUpload name="{{deepBlueService.getGenome()?.name}}" url="api/composed_commands/upload_regions" (onUpload)="onUpload($event)"
-            multiple="false" accept="text/plain,.csv,.bed,.txt" maxFileSize="10000000" auto="true">
+            accept="text/plain,.csv,.bed,.txt" maxFileSize="10000000" auto="true">
 
             <ng-template pTemplate="content">
               <ul *ngIf="uploadedFiles.length">

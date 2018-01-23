@@ -47,8 +47,6 @@ export class DiveMenuService {
 
 
     this.deepBlueService.dataToDiveValue$.subscribe(data => {
-
-      debugger;
       this.remove("filtering");
 
       this.model = BASIC_MENU;
@@ -106,9 +104,6 @@ export class DiveMenuService {
     if (pos > -1) {
       this.model.splice(pos, 1);
     }
-
-    debugger;
-    console.log(this.model);
   }
 
   clean(parentName: string) {

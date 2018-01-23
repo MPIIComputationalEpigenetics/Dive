@@ -1,12 +1,15 @@
 import { Component, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { IOperation } from 'app/domain/interfaces';
+import { DeepBlueService } from 'app/service/deepblue';
+import { Router } from '@angular/router';
 
 @Component({
   templateUrl: './initial.html'
 })
 export class InitialScreenComponent {
 
-  @Output() queryIdSelected = new EventEmitter();
+  constructor(private deepBlueService: DeepBlueService, private router: Router) { }
+
   display: boolean = false;
 
   showDialog() {
@@ -14,6 +17,7 @@ export class InitialScreenComponent {
   }
 
   selectQuery(event: IOperation) {
-    this.queryIdSelected.emit(event);
+    this.deepBlueService.setDataToDive(event);
+    this.router.navigate(['/similarfinder']);
   }
 }

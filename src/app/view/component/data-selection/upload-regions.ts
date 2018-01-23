@@ -23,12 +23,14 @@ export class RegionsUpload {
   };
 
   onUpload(event: any) {
+    debugger;
     for (let file of event.files) {
       this.uploadedFiles.push(file);
     }
 
     let response = JSON.parse(event.xhr.response);
     let query_id: string = response[1];
+    debugger;
     this.queryIdSelected.emit(new DeepBlueOperation(new DeepBlueDataParameter("User Data"), new Id(query_id), 'input_regions', -1));
   }
 }
