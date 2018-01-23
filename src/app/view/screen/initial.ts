@@ -39,6 +39,10 @@ export class InitialScreenComponent {
     this.showDemo = true;
   }
 
+  showExistingDataset() {
+    this.router.navigate(['/dataselection']);
+  }
+
   showUploadDialog() {
     this.showUpload = true;
   }
