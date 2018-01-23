@@ -8,7 +8,7 @@
         <div class="ui-g">
 
           <div class="ui-g-4">
-            <button pButton type="button" label="Use demonstration Dataset (CpG Islands, hg10)" style="height: 80px"></button>
+            <button pButton type="button" (click)="showDemoDialog()" label="Use demonstration Dataset (CpG Islands)" style="height: 80px"></button>
           </div>
 
           <div class="ui-g-4">
@@ -16,7 +16,7 @@
           </div>
 
           <div class="ui-g-4">
-            <button type="text" (click)="showDialog()" pButton icon="fa-external-link-square" label="Upload your own dataset" style="height: 80px"></button>
+            <button type="text" (click)="showUploadDialog()" pButton icon="fa-external-link-square" label="Upload your own dataset" style="height: 80px"></button>
           </div>
 
         </div>
@@ -26,9 +26,7 @@
   </div>
 </div>
 
-
-
-<p-dialog header="Upload your own dataset" [(visible)]="display" [width]="800" [height]="1200">
+<p-dialog header="Upload your own dataset" [(visible)]="showUpload" [width]="800" [height]="1200">
   <p-tabView>
     <p-tabPanel header="Upload File">
         <regions-upload (queryIdSelected)="selectQuery($event)"></regions-upload>
