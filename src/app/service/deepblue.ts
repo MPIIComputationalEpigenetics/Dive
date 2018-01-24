@@ -194,7 +194,6 @@ export class DeepBlueService {
 
         return this.http.get(this.deepBlueUrl + '/composed_commands/chromatin_states_by_genome', { params: params })
             .map((data: any) => {
-                debugger;
                 let states = data[1] || [];
                 // Remove the numbers and the _
                 return Object.keys(states).map((k) => [k, k.replace(/[0-9]+_/, "").replace(/_/g, " ")]).sort();
@@ -612,7 +611,7 @@ export class DeepBlueService {
             .set('query_data_id', data_one.id().id)
             .set('query_filter_id', data_two.id().id)
             .set('overlap', overlap)
-            .set('amount', '') // TODO:  receive this parameter
+            .set('amount', amount) // TODO:  receive this parameter
             .set('amount_type', 'bp'); // TODO:  receive this parameter
 
         return this.http.get(this.deepBlueUrl + '/overlap', { params: params })
