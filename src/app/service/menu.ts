@@ -15,7 +15,7 @@ const EXTRA_MENU_ITEMS: any[] = [
   { label: 'Similar Data', icon: 'compare_arrows', routerLink: ['/similarfinder'] },
   { label: 'Get regions', icon: 'dehaze', routerLink: ['/regions'] },
   { name: 'filtering', label: 'Filtering', icon: 'filter_list', items: [] },
-  { name: 'genes', label: 'Genes', icon: 'lens', routerLink: ['/genes'] },
+  { name: 'genes', label: 'Genes', icon: 'room', routerLink: ['/genes'] },
   { name: 'go_enrichment', label: 'Gene Ontology', icon: 'view_quilt', routerLink: ['/go_enrichment'] },
   { name: 'overlap_enrichment', label: 'Overlap Enrichment', icon: 'view_quilt', routerLink: ['/overlap_enrichment'] }
 ]
@@ -247,7 +247,7 @@ export class CSSExperimentsMenu implements IMenu {
       if (data === null) {
         return;
       }
-      this.deepBlueService.getChromatinStateSegments().subscribe((csss: string[]) => {
+      this.deepBlueService.getChromatinStateSegments().subscribe((csss: string[][]) => {
         if (csss.length > 0) {
           this.diveMenu.remove('css');
           this.diveMenu.add('css', 'Chromatin State Segmentation', 'change_history');

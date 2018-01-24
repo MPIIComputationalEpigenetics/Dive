@@ -25,9 +25,7 @@ export class InitialScreenComponent {
       this.deepBlueService.getAnnotations(genome).subscribe(annotations => {
         for (let annotation of annotations) {
           if (annotation.name.toLowerCase().startsWith('cpg islands')) {
-            debugger;
             this.deepBlueService.selectAnnotation(annotation, this.progress_element, 0).subscribe((operation) => {
-              debugger;
               this.deepBlueService.setDataToDive(operation);
               this.router.navigate(['/similarfinder']);
             });
