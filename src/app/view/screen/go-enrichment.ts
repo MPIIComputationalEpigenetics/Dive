@@ -54,7 +54,7 @@ export class GoEnrichmentScreenComponent implements AfterViewInit, OnDestroy {
     selectedGeneModelValue$: Observable<GeneModel> = this.selectedGeneModelSource.asObservable();
 
     constructor(private deepBlueService: DeepBlueService, public requestManager: RequestManager,
-        public progress_element: ProgressElement, private selectedData: SelectedData) {
+        public progress_element: ProgressElement, public selectedData: SelectedData) {
 
         this.genomeSubscription = deepBlueService.genomeValue$.subscribe(genome => {
             if (genome === null) {

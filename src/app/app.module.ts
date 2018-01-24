@@ -3,7 +3,7 @@ import { DataStackFactory } from 'app/service/datastack';
 import { SelectedData } from 'app/service/selecteddata';
 import { NgModule } from '@angular/core';
 import { FormsModule, FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 import { AppRoutes } from './app.routes';
@@ -136,7 +136,7 @@ import { RouterGuard } from 'app/service/router-guard';
         BrowserModule,
         FormsModule,
         AppRoutes,
-        HttpModule,
+        HttpClientModule,
         AccordionModule,
         AutoCompleteModule,
         BreadcrumbModule,
