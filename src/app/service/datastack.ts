@@ -13,16 +13,17 @@ import { DeepBlueOperation, StackValue } from 'app/domain/operations';
 import { DeepBlueService } from 'app/service/deepblue';
 import { ProgressElement } from 'app/service/progresselement';
 import { IOperation, IDataParameter } from 'app/domain/interfaces';
+import { RequestManager } from 'app/service/requests-manager';
 
 declare var randomColor: any;
 
 @Injectable()
 export class DataStackFactory {
-    constructor(private deepBlueService: DeepBlueService, private progress_element: ProgressElement,
-        private router: Router) { }
+    constructor(private deepBlueService: DeepBlueService, private requestManager: RequestManager,
+        private progress_element: ProgressElement, private router: Router) { }
 
     public newDataStack(): DataStack {
-        return new DataStack(this.deepBlueService, this.progress_element, this.router);
+        return new DataStack(this.deepBlueService, this.requestManager, this.progress_element, this.router);
     }
 }
 
@@ -43,8 +44,8 @@ export class DataStack {
     public topStackSubject = new Subject<DataStackItem>();
     public topStackValue$: Observable<DataStackItem> = this.topStackSubject.asObservable();
 
-    constructor(private deepBlueService: DeepBlueService, private progress_element: ProgressElement,
-        private router: Router) {
+    constructor(private deepBlueService: DeepBlueService, private requestManager: RequestManager,
+        private progress_element: ProgressElement, private router: Router) {
         this.color_array = randomColor({ format: 'rgbArray', luminosity: 'dark' });
         this.color = 'rgba(' + this.color_array[0] + ',' + this.color_array[1] + ',' + this.color_array[2] + ',1)';
     }
@@ -105,6 +106,8 @@ export class DataStack {
         const request_count = 0;
         this.progress_element.reset(5, request_count);
 
+        this.requestManager.cancelAllRequest();
+
         this.deepBlueService.overlap(current_op, operation, 'true', this.progress_element, request_count).subscribe((overlap_operation) => {
             this.deepBlueService.cacheQuery(overlap_operation, this.progress_element, request_count).subscribe((cached_data) => {
                 this.deepBlueService.countRegionsRequest(cached_data, this.progress_element, request_count).subscribe((total) => {
@@ -127,6 +130,8 @@ export class DataStack {
         const request_count = 0;
         this.progress_element.reset(5, request_count);
 
+        this.requestManager.cancelAllRequest();
+
         this.deepBlueService.overlap(current_op, operation, 'false', this.progress_element, request_count)
             .subscribe((overlap_operation) => {
                 this.deepBlueService.cacheQuery(overlap_operation, this.progress_element, request_count).subscribe((cached_data) => {
@@ -148,6 +153,9 @@ export class DataStack {
         if (current_op == null) {
             return;
         }
+
+        this.requestManager.cancelAllRequest();
+
         this.deepBlueService.filter_region(current_op, field, operation, value, type, this.progress_element, request_count)
             .subscribe((filter_operation) => {
                 this.deepBlueService.cacheQuery(filter_operation, this.progress_element, request_count).subscribe((cached_data) => {
@@ -175,6 +183,8 @@ export class DataStack {
         if (current_op == null) {
             return;
         }
+
+        this.requestManager.cancelAllRequest();
 
         this.deepBlueService.findMotif(pattern, this.progress_element, request_count).subscribe((motif_op) => {
             this.overlap(motif_op)
