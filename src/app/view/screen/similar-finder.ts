@@ -11,26 +11,34 @@ import { DeepBlueMiddlewareOverlapEnrichtmentResultItem } from 'app/domain/opera
 import { Statistics, IStatsResult } from 'app/service/statistics';
 import { BioSource } from 'app/domain/deepblue';
 import { RequestManager } from 'app/service/requests-manager';
+import { Subscription } from 'rxjs';
+import { OnDestroy } from '@angular/core/src/metadata/lifecycle_hooks';
 
 @Component({
     templateUrl: './similar-finder.html'
 })
-export class SimilarFinder {
+export class SimilarFinder implements OnDestroy {
 
     @ViewChild('biosourcessimilaritybarchart') biosourcessimilaritybarchart: SimilarityBarChartComponent;
     @ViewChild('emssimilaritybarchart') emssimilaritybarchart: SimilarityBarChartComponent;
 
+    visibleSidebar2 = false;
+    stackSubscriber: Subscription;
+
     constructor(private confirmationService: ConfirmationService,
         private deepBlueService: DeepBlueService, public requestManager: RequestManager,
         public progress_element: ProgressElement, private selectedData: SelectedData) {
-        this.selectedData.getActiveTopStackValue().subscribe((dataStackItem) => {
+
+        this.stackSubscriber = this.selectedData.getActiveTopStackValue().subscribe((dataStackItem) => {
             if (dataStackItem) {
                 this.processSimilar(dataStackItem.op)
             }
         });
     }
 
-    visibleSidebar2 = false;
+    ngOnDestroy(): void {
+        this.stackSubscriber.unsubscribe();
+    }
 
     processSimilar(data: IOperation) {
         this.deepBlueService.composedCalculateFastsEnrichment(data).subscribe((request) => {
