@@ -152,6 +152,9 @@ export class PeaksOverlapScreenComponent implements AfterViewInit, OnDestroy {
     }
 
     selectBiosources(event: any) {
+
+        this.requestManager.cancelAllRequest();
+
         let experiments: IdName[] = [];
         const selected_data = event.value;
         const biosources = event.value.map((x: any) => x.name);
