@@ -1,20 +1,18 @@
 <div class="ui-g ui-fluid">
-  <div [ngClass]="{'ui-g-12': true, 'ui-lg-10': (hasDataDetail()), 'ui-lg-12': (hasDataDetail() == false) }">
-      <div class="card card-w-title">
-          <h1>Overlaping Histone {{ deepBlueService.getSelectedEpigeneticMark().name }} with {{ deepBlueService.getDivingData().data().name() }}</h1>
-          <p-multiSelect
-              #multiselect
-              [defaultLabel]="defaultSelectBiosourcesLabel"
-              [options]="biosourcesItems"
-              [(ngModel)]="selectedMultiSelectBiosources"
-              (onChange)="selectBiosources($event)">
-          </p-multiSelect>
-          <app-overlaps-bar-chart #overlapbarchart> </app-overlaps-bar-chart>
-          <data-load-progress-bar #progressbar></data-load-progress-bar>
-      </div>
-  </div>
-
-  <div *ngIf="hasDataDetail()" class="ui-g-12 ui-lg-2">
-      <app-data-info-box></app-data-info-box>
-  </div>
+    <div [ngClass]="{'ui-g-12': true}">
+        <div class="card card-w-title">
+            <h1>Overlaping Histone {{ deepBlueService.getSelectedEpigeneticMark().name }} with {{ deepBlueService.getDivingData().data().name()
+                }}</h1>
+            <p-multiSelect #multiselect [defaultLabel]="defaultSelectBiosourcesLabel" [options]="biosourcesItems" [(ngModel)]="selectedMultiSelectBiosources"
+                (onChange)="selectBiosources($event)">
+            </p-multiSelect>
+            <app-overlaps-bar-chart #overlapbarchart> </app-overlaps-bar-chart>
+            <data-load-progress-bar #progressbar></data-load-progress-bar>
+        </div>
+    </div>
 </div>
+
+
+<p-sidebar [(visible)]="hasDataDetail" position="right" [baseZIndex]="10000" styleClass="ui-sidebar-md">
+    <app-data-info-box (dataSelected)="dataSelected()"></app-data-info-box>
+</p-sidebar>
