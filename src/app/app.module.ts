@@ -7,7 +7,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 import { AppRoutes } from './app.routes';
-import { InplaceModule, ConfirmationService } from 'primeng/primeng';
+import { InplaceModule, ConfirmationService, ScrollPanelModule } from 'primeng/primeng';
 
 import 'rxjs/Rx';
 
@@ -186,6 +186,7 @@ import { RouterGuard } from 'app/service/router-guard';
         RadioButtonModule,
         RatingModule,
         ReactiveFormsModule,
+        ScrollPanelModule,
         ScheduleModule,
         SelectButtonModule,
         SidebarModule,
