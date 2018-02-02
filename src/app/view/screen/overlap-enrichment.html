@@ -42,11 +42,11 @@
   <h1>{{ selected_data?.text() }} </h1>
   <select-datasets-component (datasetsSelected)="selectDatasets($event)"></select-datasets-component>
 
-  <button pButton type="button" icon="ui-icon-check-circle" label="Enrich this shit" (click)="process($event)"></button>
+  <button pButton type="button" icon="ui-icon-check-circle" label="Enrich the data selection" (click)="process($event)"></button>
 </div>
 
 <div class="card card-w-title">
-  <h1>Shit</h1>
+  <h1>Results</h1>
   <div *ngFor="let data of enrichment_data; let i = index">
     <h2> {{ selectedData.getStackname(i) }} </h2>
     <ngx-datatable class='material' [columns]="columns" [rows]='data' [columnMode]="'force'" [limit]="50"></ngx-datatable>
