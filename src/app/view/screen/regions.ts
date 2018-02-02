@@ -79,8 +79,7 @@ export class RegionsScreen {
 
         let genome_name = this.deepBlueService.getGenome().name;
         const actualData = this.selectedData.getActiveCurrentOperation();
-        //const actual_request_id = this.request_id.id;
-        const actual_request_id = "r823051";
+        const actual_request_id = this.request_id.id;
         let url = "http://deepblue.mpi-inf.mpg.de/api/composed_commands/generate_track_file?genome=" + genome_name + "&request_id=" + actual_request_id;
         console.debug("Download URL", url);
         let encodedUrl = encodeURIComponent(url);
@@ -94,8 +93,7 @@ export class RegionsScreen {
         if (!this.request_id) {
             return "";
         }
-        //const actual_request_id = actualData.data().id();
-        const actual_request_id = "r823051";
+        const actual_request_id = this.request_id.id;
         // TODO: Get user key
         let url = "http://deepblue.mpi-inf.mpg.de/xmlrpc/download/?r=" + actual_request_id + "&key=anonymous_key";
         return url;
