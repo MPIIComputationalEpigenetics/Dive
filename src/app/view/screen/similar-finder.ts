@@ -178,14 +178,18 @@ export class SimilarFinder implements OnDestroy {
 
     biosourceElementClick(click: any, _self: SimilarFinder) {
         const point = click.point;
-        const category = point.category;
+        const category : string = point.category.trim();
 
         let bs = _self.deepBlueService.getBioSourceByName(category);
         _self.deepBlueService.addSelectedBiosource(bs);
         _self.deepBlueService.getRelatedBioSources(bs).subscribe((bss) => {
             if (bss[1].length > 1) {
+                let s : any = bss[1];
+                console.log(s)
+                let text = "<ul>" + s.map((ss: string) => "<li>" + ss + "</li>").join("") + "</ul>";
+                console.log(text);
                 _self.confirmationService.confirm({
-                    message: 'Are you sure that you want to perform this action? ' + JSON.stringify(bss[1]),
+                    message: text,
                     accept: () => {
                         for (let similar of bss[1]) {
                             let bs = _self.deepBlueService.getBioSourceByName(similar);
