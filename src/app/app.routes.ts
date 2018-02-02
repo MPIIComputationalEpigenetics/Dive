@@ -10,10 +10,12 @@ import { PeaksOverlapScreenComponent } from 'app/view/screen/peaks-overlap';
 import { SimilarFinder } from 'app/view/screen/similar-finder';
 import { InitialScreenComponent } from 'app/view/screen/initial';
 import { RouterGuard } from 'app/service/router-guard';
+import { ComparisonSelectionScreen } from 'app/view/screen/comparison-selection';
 
 export const routes: Routes = [
     { path: '', component: InitialScreenComponent },
     { path: 'dataselection', component: DataSelectionScreen },
+    { path: 'comparisonselection', component: ComparisonSelectionScreen, canActivate: [RouterGuard] },
     { path: 'similarfinder', component: SimilarFinder, canActivate: [RouterGuard] },
     { path: 'regions', component: RegionsScreen, canActivate: [RouterGuard] },
     { path: 'genes', component: GenesScreen, canActivate: [RouterGuard] },

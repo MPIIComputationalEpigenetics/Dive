@@ -129,6 +129,7 @@ import { InitialScreenComponent } from 'app/view/screen/initial';
 import { QueryFlow } from 'app/view/component/query-flow';
 import { DiveMenuService } from 'app/service/menu';
 import { RouterGuard } from 'app/service/router-guard';
+import { ComparisonSelectionScreen } from 'app/view/screen/comparison-selection';
 
 
 @NgModule({
@@ -227,6 +228,7 @@ import { RouterGuard } from 'app/service/router-guard';
         SelectDatabasesComponent,
         InitialScreenComponent,
         DataSelectionScreen,
+        ComparisonSelectionScreen,
         RegionsScreen,
         SimilarFinder,
         BioSourcesScreenComponent,

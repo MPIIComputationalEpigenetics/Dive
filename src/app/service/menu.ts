@@ -13,6 +13,7 @@ const BASIC_MENU: any[] = [
 
 const EXTRA_MENU_ITEMS: any[] = [
   { label: 'Similar Data', icon: 'compare_arrows', routerLink: ['/similarfinder'] },
+  { label: 'Comparison Selection', icon: 'compare', routerLink: ['comparisonselection'] },
   { label: 'Get regions', icon: 'dehaze', routerLink: ['/regions'] },
   { name: 'filtering', label: 'Filtering', icon: 'filter_list', items: [] },
   { name: 'genes', label: 'Genes', icon: 'room', routerLink: ['/genes'] },
