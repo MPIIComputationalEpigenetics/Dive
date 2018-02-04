@@ -1,7 +1,7 @@
 <div class="ui-g ui-fluid">
     <div [ngClass]="{'ui-g-12': true}">
         <div class="card card-w-title">
-            <h1>Overlaping Histone {{ deepBlueService.getSelectedEpigeneticMark().name }} with {{ deepBlueService.getDivingData().data().name()
+            <h1>Overlaping {{ deepBlueService.getSelectedEpigeneticMark().name }} with {{ deepBlueService.getDivingData().data().name()
                 }}</h1>
             <p-multiSelect #multiselect [defaultLabel]="defaultSelectBiosourcesLabel" [options]="biosourcesItems" [(ngModel)]="selectedMultiSelectBiosources"
                 (onChange)="selectBiosources($event)">
