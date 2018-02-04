@@ -1131,13 +1131,13 @@ export class DeepBlueService {
         return this.http.get<string[]>(this.deepBlueUrl + '/composed_commands/get_related_biosources', { params: params });
     }
 
-    getQueryInfo(id: Id): Observable<IDataParameter> {
+    getQueryInfo(id: Id): Observable<IOperation> {
         const params = new HttpParams()
             .set('query_id', id.id);
 
         return this.http.get(this.deepBlueUrl + '/composed_commands/query_info', { params: params })
             .map((body: any) => {
-                return toClass(body);
+                return <IOperation>toClass(body);
             });
     }
 }

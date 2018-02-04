@@ -120,6 +120,7 @@ export class QueryFlow implements OnInit {
     this.deepBlueService.getQueryInfo(new Id(_queryId)).subscribe((op) => {
       setTimeout(() => {
         this.data = [this.build_tree(op)];
+        this.queryOp.emit(op);
       }, 0);
     })
   }
