@@ -188,7 +188,7 @@ export class EpigeneticMarkMenu implements IMenu {
   errorMessage: string;
   actualItems = new Array<string>();
 
-  private static readonly SPECIAL_CASES = ['DNA Methylation', 'State Segmentation'];
+  private static readonly SPECIAL_CASES = ['DNA Methylation', 'State Segmentation', 'Chromatin State Segmentation'];
 
   constructor(private deepBlueService: DeepBlueService, private diveMenu: DiveMenuService) { }
 
@@ -208,7 +208,6 @@ export class EpigeneticMarkMenu implements IMenu {
 
         this.actualItems = categories;
         for (let category of categories) {
-
           // Do not include the SPECIAL CASES menu
           if (EpigeneticMarkMenu.SPECIAL_CASES.indexOf(category) > -1) {
             continue;
