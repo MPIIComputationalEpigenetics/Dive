@@ -57,7 +57,7 @@ export class ChromatinStatesScreenComponent implements AfterViewInit, OnDestroy 
 
   data: any;
 
-  hasData = false;
+  hasDataDetail = false;
 
   @ViewChild('overlapbarchart') overlapbarchart: OverlapsBarChartComponent;
   @ViewChild('multiselect') multiselect: MultiSelect;
@@ -147,6 +147,7 @@ export class ChromatinStatesScreenComponent implements AfterViewInit, OnDestroy 
   }
 
   ngAfterViewInit() {
+    this.deepBlueService.dataInfoSelectedValue$.subscribe((s) => { if (s) { this.hasDataDetail = true } })
     this.selectedExperimentsValue$.debounceTime(250).subscribe(() => this.processOverlaps());
     this.selectedData.getActiveTopStackValue().subscribe((dataStackItem) => this.processOverlaps());
   }
@@ -331,8 +332,8 @@ export class ChromatinStatesScreenComponent implements AfterViewInit, OnDestroy 
     _self.overlapbarchart.setNewData(categories, series, result_by_dataset_stack);
   }
 
-  hasDataDetail(): boolean {
-    return this.deepBlueService.getDataInfoSelected() != null;
+  dataSelected() {
+    this.hasDataDetail = false;
   }
 
   ngOnDestroy() {
