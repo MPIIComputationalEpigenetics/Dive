@@ -437,6 +437,46 @@ export class DeepBlueIntersection extends DeepBlueOperation implements IFiltered
     }
 }
 
+export class DeepBlueAggregate extends DeepBlueOperation implements IFiltered {
+
+    constructor(private _subject: IOperation, public _ranges: IOperation, public field: string, public query_id: Id, public cached = false) {
+        super(_subject.data(), query_id, "aggregate")
+    }
+
+    clone(): DeepBlueIntersection {
+        return new DeepBlueIntersection(
+            this._subject.clone(),
+            this._ranges.clone(),
+            this.query_id,
+            this.cached
+        );
+    }
+
+    data(): IDataParameter {
+        return this._subject;
+    }
+
+    key(): string {
+        return "aggreate_" + this._subject.id().id + '_' + this._ranges.id().id;
+    }
+
+    mainOperation(): IOperation {
+        return this._subject.mainOperation();
+    }
+
+    filter(): IOperation {
+        return this._ranges;
+    }
+
+    cacheIt(query_id: Id): DeepBlueIntersection {
+        return new DeepBlueIntersection(this._subject, this._ranges, this.query_id, true);
+    }
+
+    text(): string {
+        return this._subject.text() + " aggregated by " + this._ranges.text();
+    }
+}
+
 export class DeepBlueFilter extends DeepBlueOperation implements IFiltered {
 
     constructor(public _data: IOperation, public _params: DeepBlueFilterParameters, public query_id: Id, public cached = false) {
