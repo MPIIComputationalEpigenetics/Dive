@@ -1,17 +1,18 @@
-<p-sidebar [(visible)]="visibleSidebar" position="right" [baseZIndex]="10000" styleClass="ui-sidebar-md">
+<p-sidebar [(visible)]="visibleSidebar" position="right" [baseZIndex]="20000" styleClass="ui-sidebar-md">
   <h1 style="font-weight:normal">{{selectedRow?.text()}}</h1>
-  <button pButton type="button" icon="ui-icon-check-circle" label="Select Dataset" (click)="selectDatasets($event)"></button>
-  <button pButton type="button" (click)="visibleSidebar2 = false" label="Cancel" class="ui-button-secondary"></button>
+  <p-scrollPanel [style]="{height: '95%', width: '100%'}">
+    <button pButton type="button" icon="ui-icon-check-circle" label="Select Dataset" (click)="selectDatasets($event)"></button>
+    <button pButton type="button" (click)="visibleSidebar2 = false" label="Cancel" class="ui-button-secondary"></button>
 
-  <h4>{{ selectedRow?.epigenetic_mark() }}</h4>
-  <h4>{{ selectedRow?.biosource() }}</h4>
-  <h4>{{ selectedRow?.sample_info() | json }}</h4>
-  <h4>{{ selectedRow?.technique() }}</h4>
-  <h4>{{ selectedRow?.project() }}</h4>
-  <h4>{{ selectedRow?.columns() | json }}</h4>
+    <h4>{{ selectedRow?.epigenetic_mark() }}</h4>
+    <h4>{{ selectedRow?.biosource() }}</h4>
+    <h4>{{ selectedRow?.sample_info() | json }}</h4>
+    <h4>{{ selectedRow?.technique() }}</h4>
+    <h4>{{ selectedRow?.project() }}</h4>
+    <h4>{{ selectedRow?.columns() | json }}</h4>
 
-  <query-flow [queryId]="clicked_query_id"></query-flow>
-
+    <query-flow [queryId]="clicked_query_id"></query-flow>
+  </p-scrollPanel>
 </p-sidebar>
 
 <div class="content-section implementation">
