@@ -140,7 +140,7 @@ export class QueryFlow implements OnInit {
     if (o._params) {
       node.data = { parameters: Object.keys(o._params).map((k: string) => k + ": " + o._params[k]) };
     }
-    //node.type = o.query_id.id;
+
     node.styleClass = 'ui-person';
     node.expanded = true;
 
@@ -150,6 +150,12 @@ export class QueryFlow implements OnInit {
     if (o.command == "intersection") {
       lookup_keys.push("_subject");
       lookup_keys.push("_filter");
+
+    } else if (o.command == "aggregate") {
+      lookup_keys.push("_subject");
+      lookup_keys.push("_ranges");
+
+      node.data.parameters.push("field: " + o.field);
 
     } else if (o._data._data_type == "operation_args") {
       delete o._data.args['cache'];
@@ -173,6 +179,33 @@ export class QueryFlow implements OnInit {
     return node;
   }
 
+  build_tiling_node(o: any): TreeNode {
+    let node: TreeNode = {};
+
+    node.label = "tiling_regions (" + o.query_id.id + ")";
+    node.type = 'person';
+    node.data = {};
+    node.data.parameters = [];
+
+    this.deepBlueService.countRegionsRequest(o, this.progress_element, 0).subscribe((result) => {
+      node.data.parameters.unshift("Total Regions: " + result.resultAsCount());
+    });
+
+    if (o.genome) {
+      node.data.parameters.push("genome: " + o.genome);
+    }
+
+    if (o.chromosomes) {
+      node.data.parameters.push("chromosomes: " + o.chromosomes.join(","));
+    }
+
+    if (o.size) {
+      node.data.parameters.push("size: " + o.size);
+    }
+
+    return node;
+  }
+
   build_tree(o: any): TreeNode {
     if (!o) {
       return null;
@@ -180,6 +213,7 @@ export class QueryFlow implements OnInit {
 
     switch (o._data_type) {
       case 'data_operation': return this.build_data_operation_node(o);
+      case 'tiling': return this.build_tiling_node(o);
       default: {
         console.error("unknow:", o);
         return null;
