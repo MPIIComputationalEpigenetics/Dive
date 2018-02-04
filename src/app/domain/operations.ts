@@ -856,6 +856,16 @@ export function toClass(o: any): IDataParameter {
 
                     return new DeepBlueIntersection(<IOperation>subject, <IOperation>filter, query_id, o.cached);
                 }
+
+                case 'aggregate': {
+                    let subject = toClass(o._subject);
+                    let filter = toClass(o._ranges);
+                    let field = o.field;
+                    let query_id = new Id(o.query_id.id);
+
+                    return new DeepBlueAggregate(<IOperation>subject, <IOperation>filter, field, query_id, o.cached);
+                }
+
                 case 'regions_filter': {
                     let data = toClass(o._data);
                     let filter = DeepBlueFilterParameters.fromObject(o._params);
