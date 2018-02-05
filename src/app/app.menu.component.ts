@@ -23,6 +23,8 @@ import { DiveMenuService } from 'app/service/menu';
     template: `
     <app-data-stack></app-data-stack>
     <ul app-submenu [item]="model" root="true" class="ultima-menu ultima-main-menu clearfix" [reset]="reset" visible="true"></ul>
+
+    <columns-filtering></columns-filtering>
     <length-filtering></length-filtering>
     <dna-pattern-filtering></dna-pattern-filtering>
     `
@@ -70,13 +72,25 @@ export class AppMenuComponent {
                 </a>
 
                 <form novalidate *ngIf="child.type == 'number'" [formGroup]=child.group (ngSubmit)="child.submit()">
-                    <input type="{{ child.type }}" [formControlName]="child.control_name" pInputText/>
-                    <label>{{ child.label }}</label>
+                    <div class="ui-g">
+                        <div class="ui-g-4"><label>{{ child.label }}</label></div>
+                        <div class="ui-g-4"><input type="{{ child.type }}" [formControlName]="child.control_name" pInputText/></div>
+                    </div>
                 </form>
 
                 <form novalidate *ngIf="child.type == 'string'" [formGroup]=child.group (ngSubmit)="child.submit()">
-                    <input type="{{ child.type }}" [formControlName]="child.control_name" pInputText/>
-                    <label>{{ child.label }}</label>
+                    <div class="ui-g">
+                        <div class="ui-g-4"><label>{{ child.label }}</label></div>
+                        <div class="ui-g-4"><input type="{{ child.type }}" [formControlName]="child.control_name" pInputText/></div>
+                    </div>
+                </form>
+
+                <form *ngIf="child.type == 'filter_by'" [formGroup]=child.group (keydown.enter)="child.submit()" (ngSubmit)="child.submit()">
+                    <div class="ui-g">
+                        <div class="ui-g-4"><label>{{ child.label }}</label></div>
+                        <div class="ui-g-4"><p-dropdown [options]="child.options" [formControlName]="child.operation_control_name"></p-dropdown></div>
+                        <div class="ui-g-4"><input type="{{ child.type }}" [formControlName]="child.value_control_name" pInputText/></div>
+                    </div>
                 </form>
 
                 <ul app-submenu [item]="child" *ngIf="child.items" [@children]="isActive(i) ? 'visible' : 'hidden'" [visible]="isActive(i)" [reset]="reset"></ul>

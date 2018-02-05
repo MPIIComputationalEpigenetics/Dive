@@ -6,9 +6,9 @@ import { Subscription } from 'rxjs/Subscription';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subject } from 'rxjs/Subject';
 
-import { Annotation, Id } from 'app/domain/deepblue';
+import { Annotation, Id, FullMetadata } from 'app/domain/deepblue';
 
-import { DeepBlueOperation } from 'app/domain/operations'
+import { DeepBlueOperation, DeepBlueDataParameter } from 'app/domain/operations'
 
 import { DeepBlueService } from 'app/service/deepblue';
 import { DataStack, DataStackFactory, DataStackItem } from 'app/service/datastack';
@@ -109,6 +109,15 @@ export class SelectedData implements OnDestroy {
       return this.activeStackSubject.getValue().getCurrentOperation();
     }
     return null;
+  }
+
+  getActiveCurrentOperationMetadata(): Observable<FullMetadata> {
+    let currentOp = this.getActiveCurrentOperation();
+    if (currentOp != null) {
+      let param = <DeepBlueDataParameter>currentOp.mainOperation().data()
+      return this.deepBlueService.getInfo(param.id());
+    }
+    return Observable.of(null);
   }
 
   getStacksTopOperation(): IOperation[] {

@@ -15,7 +15,8 @@ const EXTRA_MENU_ITEMS: any[] = [
   { label: 'Similar Data', icon: 'compare_arrows', routerLink: ['/similarfinder'] },
   { label: 'Comparison Selection', icon: 'compare', routerLink: ['comparisonselection'] },
   { label: 'Get regions', icon: 'dehaze', routerLink: ['/regions'] },
-  { name: 'filtering', label: 'Filtering', icon: 'filter_list', items: [] },
+  { name: 'filtering', label: 'Filtering', icon: 'pause', items: [] },
+  { name: 'columns', label: 'Columns Filtering', icon: 'view_week', items: [] },
   { name: 'genes', label: 'Genes', icon: 'room', routerLink: ['/genes'] },
   { name: 'go_enrichment', label: 'Gene Ontology', icon: 'view_quilt', routerLink: ['/go_enrichment'] },
   { name: 'overlap_enrichment', label: 'Overlap Enrichment', icon: 'view_quilt', routerLink: ['/overlap_enrichment'] }
@@ -49,6 +50,7 @@ export class DiveMenuService {
 
     this.deepBlueService.dataToDiveValue$.subscribe(data => {
       this.remove("filtering");
+      this.remove("columns");
 
       this.model = BASIC_MENU;
 

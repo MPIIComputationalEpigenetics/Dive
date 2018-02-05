@@ -119,6 +119,7 @@ import { DataInfoBoxComponent } from 'app/view/component/data-info-box';
 import { SelectedDataView, SelectedDataButton } from 'app/view/component/deepblue';
 import { LengthMenuFilterComponent } from 'app/view/component/menu/length-filtering';
 import { DnaPatternMenuFilterComponent } from 'app/view/component/menu/dna-pattern-filtering';
+import { ColumnsMenuFilterComponent } from 'app/view/component/menu/columns-filtering';
 import { RegionsUpload } from 'app/view/component/data-selection/upload-regions';
 import { RegionsPaste } from 'app/view/component/data-selection/paste-regions';
 import { SelectQuery } from 'app/view/component/data-selection/select-query';
@@ -208,6 +209,7 @@ import { ComparisonSelectionScreen } from 'app/view/screen/comparison-selection'
         ChartModule,
         BrowserAnimationsModule,
         OrganizationChartModule
+        //Angulartics2Module.forRoot([Angulartics2GoogleAnalytics])
     ],
     declarations: [
         AppComponent,
@@ -242,6 +244,7 @@ import { ComparisonSelectionScreen } from 'app/view/screen/comparison-selection'
         DataInfoBoxComponent,
         LengthMenuFilterComponent,
         DnaPatternMenuFilterComponent,
+        ColumnsMenuFilterComponent,
         RegionsUpload,
         RegionsPaste,
         QueryFlow,
