@@ -51,7 +51,7 @@ export class DnaPatternMenuFilterComponent implements OnInit {
 
             this.diveMenuService.includeObject('filtering',
                 {
-                    label: 'DNA Pattern', type: 'text', group: this.pattern_form, control_name: 'dna_pattern',
+                    label: 'DNA Pattern', type: 'string', group: this.pattern_form, control_name: 'dna_pattern',
                     submit: (event: any) => { this.save_dna_pattern_filter(this.pattern_form.value); }
                 });
         })

@@ -74,7 +74,7 @@ export class AppMenuComponent {
                     <label>{{ child.label }}</label>
                 </form>
 
-                <form novalidate *ngIf="child.type == 'text'" [formGroup]=child.group (ngSubmit)="child.submit()">
+                <form novalidate *ngIf="child.type == 'string'" [formGroup]=child.group (ngSubmit)="child.submit()">
                     <input type="{{ child.type }}" [formControlName]="child.control_name" pInputText/>
                     <label>{{ child.label }}</label>
                 </form>
