@@ -50,6 +50,7 @@ export class ColumnsMenuFilterComponent implements OnInit {
   ngOnInit() {
 
     this.selectedData.getActiveTopStackValue().subscribe(data => {
+
       if (data === null) {
         return;
       }
@@ -60,6 +61,8 @@ export class ColumnsMenuFilterComponent implements OnInit {
         }
 
         let columns = metadata.columns();
+
+        this.diveMenuService.clean('columns');
 
         for (let column of columns) {
           let formGroup = this.fb.group({
@@ -83,7 +86,8 @@ export class ColumnsMenuFilterComponent implements OnInit {
             });
         }
       });
-    })
+    });
+
   }
 
 }

@@ -50,10 +50,6 @@ export class DataStack {
         this.color = 'rgba(' + this.color_array[0] + ',' + this.color_array[1] + ',' + this.color_array[2] + ',1)';
     }
 
-    public loadQuery(query_id: string) {
-
-    }
-
     getColor(alpha: string) {
         return 'rgba(' + this.color_array[0] + ',' + this.color_array[1] + ',' + this.color_array[2] + ',' + alpha + ')';
     }

@@ -49,9 +49,6 @@ export class DiveMenuService {
 
 
     this.deepBlueService.dataToDiveValue$.subscribe(data => {
-      this.remove("filtering");
-      this.remove("columns");
-
       this.model = BASIC_MENU;
 
       if (data !== null) {
@@ -148,9 +145,6 @@ export class DiveMenuService {
       console.error('Sub Menu ' + parentName + ' not found');
       return;
     }
-
-
-
     this.pushItem(subMenu, item);
   }
 }

@@ -148,7 +148,6 @@ export class DeepBlueService {
         return this.dataToDiveSource.getValue();
     }
 
-
     getSelectedEpigeneticMark(): EpigeneticMark {
         return this.epigeneticMarkSource.getValue();
     }

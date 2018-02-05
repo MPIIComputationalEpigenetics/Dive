@@ -53,7 +53,6 @@ export class LengthMenuFilterComponent implements OnInit {
             max_length: [0, []]
         });
 
-
         this.deepBlueService.dataToDiveValue$.subscribe(data => {
             if (data === null) {
                 return;
