@@ -25,6 +25,28 @@ export class SimilarFinder implements OnDestroy {
     visibleSidebar2 = false;
     stackSubscriber: Subscription;
 
+    cutoffOptions = [
+        {label: '1%', value: 1},
+        {label: '5%', value: 5},
+        {label: '10%', value: 10},
+        {label: '20%', value: 20},
+        {label: '35%', value: 35},
+        {label: '50%', value: 50},
+        {label: '65%', value: 65},
+        {label: '100%', value: 100}
+    ];
+
+    cutoffValue = 20;
+
+    orderOptions = [
+        {label: 'Most similar', value: this.desc_func},
+        {label: 'Most dissimilar', value: this.asc_func}
+    ];
+
+    orderFunction = this.desc_func;
+
+    prevDatum: DeepBlueMiddlewareOverlapEnrichtmentResultItem[] = null;
+
     constructor(private confirmationService: ConfirmationService,
         private deepBlueService: DeepBlueService, public requestManager: RequestManager,
         public progress_element: ProgressElement, private selectedData: SelectedData) {
@@ -52,13 +74,31 @@ export class SimilarFinder implements OnDestroy {
         })
     }
 
+    desc_func(a: any, b: any, column: string) {
+        return b[column] - a[column];
+    }
+
+    asc_func(a: any, b: any, column: string) {
+        return a[column] - b[column];
+    }
+
     reloadData(_self: SimilarFinder, datum: DeepBlueMiddlewareOverlapEnrichtmentResultItem[]) {
+
+        if (!_self) {
+            _self = this;
+        }
+
+        if (!datum) {
+            datum = this.prevDatum;
+        } else {
+            _self.prevDatum = datum;
+        }
 
         if ((!datum) || (datum.length == 0)) {
             return;
         }
 
-        datum.sort((a, b) => b.p_value_log - a.p_value_log)
+        datum.sort((a, b) => this.orderFunction(a, b, 'p_value_log'));
         let position = 0;
         let value = datum[0].p_value_log;
         for (let i = 0; i < datum.length; i++) {
@@ -69,7 +109,7 @@ export class SimilarFinder implements OnDestroy {
             datum[i].log_rank = position + 1;
         }
 
-        datum.sort((a, b) => b.odds_ratio - a.odds_ratio);
+        datum.sort((a, b) => this.orderFunction(a, b, 'odds_ratio'));
         position = 0;
         value = datum[0].odds_ratio;
         for (let i = 0; i < datum.length; i++) {
@@ -80,7 +120,7 @@ export class SimilarFinder implements OnDestroy {
             datum[i].odd_rank = position + 1;
         }
 
-        datum.sort((a, b) => b.support - a.support);
+        datum.sort((a, b) => this.orderFunction(a, b, 'support'));
         position = 0;
         value = datum[0].support;
         for (let i = 0; i < datum.length; i++) {
@@ -98,8 +138,7 @@ export class SimilarFinder implements OnDestroy {
 
         datum.sort((a, b) => a.mean_rank - b.mean_rank);
 
-
-        let cutoff = Statistics.percentile(datum.map((o: DeepBlueMiddlewareOverlapEnrichtmentResultItem) => o.mean_rank), 0.2);
+        let cutoff = Statistics.percentile(datum.map((o: DeepBlueMiddlewareOverlapEnrichtmentResultItem) => o.mean_rank), (this.cutoffValue / 100));
         let filtered_data = []
         for (let d of datum) {
             if (d["mean_rank"] <= cutoff) {

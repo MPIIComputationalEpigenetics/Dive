@@ -2,31 +2,47 @@
 
 
 <p-sidebar [(visible)]="visibleSidebar2" position="right" [baseZIndex]="10000">
-  <h1 style="font-weight:normal">Right Sidebar</h1>
-  <button pButton type="button" (click)="visibleSidebar2 = false" label="Save" class="ui-button-success"></button>
-  <button pButton type="button" (click)="visibleSidebar2 = false" label="Cancel" class="ui-button-secondary"></button>
+    <h1 style="font-weight:normal">Right Sidebar</h1>
+    <button pButton type="button" (click)="visibleSidebar2 = false" label="Save" class="ui-button-success"></button>
+    <button pButton type="button" (click)="visibleSidebar2 = false" label="Cancel" class="ui-button-secondary"></button>
 </p-sidebar>
 
 <div class="ui-fluid">
-  <div class="ui-g">
-      <div class="ui-g-12">
-          <div class="card card-w-title">
-              Select data by similarity
-              <p-tabView>
-                  <p-tabPanel header="Biosources">
-                      <app-similarity-bar-chart #biosourcessimilaritybarchart> </app-similarity-bar-chart>
-                  </p-tabPanel>
-                  <p-tabPanel header="Epigenetic Marks">
-                      <app-similarity-bar-chart #emssimilaritybarchart> </app-similarity-bar-chart>
-                  </p-tabPanel>
-                  <p-tabPanel header="All experiments">
-                      Content 3
-                  </p-tabPanel>
-              </p-tabView>
-              <data-load-progress-bar #progressbar></data-load-progress-bar>
-          </div>
+    <div class="ui-g">
+        <div class="ui-g-12">
+            <div class="card card-w-title">
+                Select data by similarity
+                <p-tabView>
+                    <p-tabPanel header="Biosources">
+                        <app-similarity-bar-chart #biosourcessimilaritybarchart> </app-similarity-bar-chart>
+                    </p-tabPanel>
+                    <p-tabPanel header="Epigenetic Marks">
+                        <app-similarity-bar-chart #emssimilaritybarchart> </app-similarity-bar-chart>
+                    </p-tabPanel>
+                    <p-tabPanel header="All experiments">
+                        Content 3
+                    </p-tabPanel>
+                </p-tabView>
+                <data-load-progress-bar #progressbar></data-load-progress-bar>
+            </div>
+            <div class="ui-g">
+                <div class="ui-g-1">
+                    <label>Cut-off</label>
+                </div>
+                <div class="ui-g-2">
+                    <p-dropdown [options]="cutoffOptions" [(ngModel)]="cutoffValue" [style]="{'width':'150px'}" (onChange)=reloadData()></p-dropdown>
+                </div>
+                <div class="ui-g-1"> </div>
+                <div class="ui-g-1">
+                    <label>Order</label>
+                </div>
+                <div class="ui-g-2">
+                    <p-dropdown [options]="orderOptions" [(ngModel)]="orderFunction" [style]="{'width':'150px'}" (onChange)=reloadData()></p-dropdown>
+                </div>
+            </div>
 
-          <app-biosources-screen></app-biosources-screen>
-      </div>
-  </div>
+
+            <app-biosources-screen></app-biosources-screen>
+        </div>
+    </div>
 </div>
