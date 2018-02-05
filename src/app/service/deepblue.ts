@@ -227,7 +227,7 @@ export class DeepBlueService {
 
     getBioSourceByName(name: string): BioSource {
         for (let biosource of this.biosourcesCache) {
-            if (biosource.name == name) {
+            if (biosource.name.toLowerCase().replace(/[\W_]+/g, "") == name.toLowerCase().replace(/[\W_]+/g, "")) {
                 return biosource;
             }
         }

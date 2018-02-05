@@ -87,14 +87,15 @@ export class ChromatinStatesScreenComponent implements AfterViewInit, OnDestroy 
         biosources[experiment_biosource] = [];
         const l = {
           label: experiment_biosource,
+          norm_label: experiment_biosource.toLowerCase().replace(/[\W_]+/g, ""),
           value: { name: experiment_biosource, experiments: biosources[experiment_biosource] }
         };
         this.biosourcesItems.push(l);
 
-        if (pre_selected_biosources.indexOf(l.label) > -1) {
+        if (pre_selected_biosources.map((bs) => bs.toLowerCase().replace(/[\W_]+/g, "")).indexOf(l.norm_label) > -1) {
           event_items.push(l.value);
           this.selectedMultiSelectBiosources.push(l.value);
-        }
+      }
       }
 
       if (!(experiment_sample_id in samples)) {
