@@ -12,11 +12,19 @@ declare var jQuery: any;
 
 console.info('Loading Highcharts...');
 const Highcharts = require('highcharts');
+
 console.info('Loading Highcharts-More');
 const HighchartsMore = require('highcharts/highcharts-more');
 console.info('Initializing Highcharts-More');
 HighchartsMore(Highcharts);
 console.info('Highcharts-More done');
+
+console.info('Loading Highcharts-Exporting');
+const HighchartsExporting = require('highcharts/modules/exporting');
+console.info('Initializing Highcharts-Exporting');
+HighchartsExporting(Highcharts);
+console.info('Highcharts-Exporting done');
+
 
 @Component({
     selector: 'app-root',

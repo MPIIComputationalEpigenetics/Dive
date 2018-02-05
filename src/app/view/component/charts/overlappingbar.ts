@@ -9,12 +9,13 @@ import { Component } from '@angular/core';
       }
     `],
     template: `
-        <chart [options]="options" (load)="saveInstance($event.context)">></chart>
+        <chart [options]="options" (load)="saveInstance($event.context)"></chart>
     `
 })
 export class OverlapsBarChartComponent {
     options: Object;
     chart: any;
+    chart2: any; // Backup for when exporting the data.
     result_by_dataset_stack: any;
 
     setNewData(categories: any, series: any, result_by_dataset_stack: any) {
@@ -75,7 +76,9 @@ export class OverlapsBarChartComponent {
     }
 
     saveInstance(chartInstance: any) {
-        this.chart = chartInstance;
+        if (!this.chart) {
+            this.chart = chartInstance;
+        }
     }
 
     constructor(private deepBlueService: DeepBlueService) {
