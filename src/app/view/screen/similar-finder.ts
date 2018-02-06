@@ -98,7 +98,7 @@ export class SimilarFinder implements OnDestroy {
             return;
         }
 
-        datum.sort((a, b) => this.orderFunction(a, b, 'p_value_log'));
+        datum.sort((a, b) => _self.orderFunction(a, b, 'p_value_log'));
         let position = 0;
         let value = datum[0].p_value_log;
         for (let i = 0; i < datum.length; i++) {
@@ -109,7 +109,7 @@ export class SimilarFinder implements OnDestroy {
             datum[i].log_rank = position + 1;
         }
 
-        datum.sort((a, b) => this.orderFunction(a, b, 'odds_ratio'));
+        datum.sort((a, b) => _self.orderFunction(a, b, 'odds_ratio'));
         position = 0;
         value = datum[0].odds_ratio;
         for (let i = 0; i < datum.length; i++) {
@@ -120,7 +120,7 @@ export class SimilarFinder implements OnDestroy {
             datum[i].odd_rank = position + 1;
         }
 
-        datum.sort((a, b) => this.orderFunction(a, b, 'support'));
+        datum.sort((a, b) => _self.orderFunction(a, b, 'support'));
         position = 0;
         value = datum[0].support;
         for (let i = 0; i < datum.length; i++) {
@@ -138,7 +138,7 @@ export class SimilarFinder implements OnDestroy {
 
         datum.sort((a, b) => a.mean_rank - b.mean_rank);
 
-        let cutoff = Statistics.percentile(datum.map((o: DeepBlueMiddlewareOverlapEnrichtmentResultItem) => o.mean_rank), (this.cutoffValue / 100));
+        let cutoff = Statistics.percentile(datum.map((o: DeepBlueMiddlewareOverlapEnrichtmentResultItem) => o.mean_rank), (_self.cutoffValue / 100));
         let filtered_data = []
         for (let d of datum) {
             if (d["mean_rank"] <= cutoff) {
