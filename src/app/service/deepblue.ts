@@ -42,6 +42,7 @@ import {
     DeepBlueMiddlewareOverlapEnrichtmentResultItem,
     AbstractDeepBlueRequest,
     toClass,
+    DeepBlueEmptyParameter,
 } from '../domain/operations';
 
 import { ProgressElement } from '../service/progresselement';
@@ -891,7 +892,7 @@ export class DeepBlueService {
                 const response: string = body[1] || '';
                 const query_id = new Id(body[1]);
                 progress_element.increment(request_count);
-                return new DeepBlueOperation(new DeepBlueDataParameter("User Data"), query_id, 'input_regions', -1)
+                return new DeepBlueOperation(new DeepBlueEmptyParameter(), query_id, 'input_regions', -1)
             });
     }
 

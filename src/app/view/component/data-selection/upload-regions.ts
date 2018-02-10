@@ -2,7 +2,7 @@ import { Component, Output } from '@angular/core';
 import { InputTextareaModule } from 'primeng/primeng';
 import { Message } from 'primeng/primeng';
 import { EventEmitter } from '@angular/core';
-import { DeepBlueOperation, DeepBlueDataParameter } from 'app/domain/operations';
+import { DeepBlueOperation, DeepBlueEmptyParameter } from 'app/domain/operations';
 import { Id } from 'app/domain/deepblue';
 import { DeepBlueService } from 'app/service/deepblue';
 import { ProgressElement } from 'app/service/progresselement';
@@ -26,9 +26,8 @@ export class RegionsUpload {
     for (let file of event.files) {
       this.uploadedFiles.push(file);
     }
-
     let response = JSON.parse(event.xhr.response);
     let query_id: string = response[1];
-    this.queryIdSelected.emit(new DeepBlueOperation(new DeepBlueDataParameter("User Data"), new Id(query_id), 'input_regions', -1));
+    this.queryIdSelected.emit(new DeepBlueOperation(new DeepBlueEmptyParameter(), new Id(query_id), 'input_regions', -1));
   }
 }

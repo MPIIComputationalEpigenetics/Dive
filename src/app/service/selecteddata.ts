@@ -113,7 +113,7 @@ export class SelectedData implements OnDestroy {
 
   getActiveCurrentOperationMetadata(): Observable<FullMetadata> {
     let currentOp = this.getActiveCurrentOperation();
-    if (currentOp != null) {
+    if (currentOp != null && currentOp.mainOperation().data().dataType() != "empty_parameter") {
       let param = <DeepBlueDataParameter>currentOp.mainOperation().data()
       return this.deepBlueService.getInfo(param.id());
     }

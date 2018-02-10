@@ -128,6 +128,30 @@ export abstract class AbstractDataParameter extends AbstractNamedDataType implem
     }
 }
 
+export class DeepBlueEmptyParameter extends AbstractDataParameter {
+
+    constructor() {
+         super("empty_parameter");
+    }
+
+    name(): string {
+        return "";
+    }
+    id(): Id {
+        return null;
+    }
+    key(): string {
+        return "";
+    }
+    clone(request_count?: number): AbstractDataParameter {
+        return this;
+    }
+    text(): string {
+        return "";
+    }
+}
+
+
 export class DeepBlueDataParameter extends AbstractDataParameter {
 
     constructor(private _data: Name | string | string[]) {
