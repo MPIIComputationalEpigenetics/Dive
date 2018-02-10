@@ -62,6 +62,12 @@ export class ColumnsMenuFilterComponent implements OnInit {
 
         let columns = metadata.columns();
 
+        if (!columns) {
+          // TODO: Include hardcoded CHROMSOME,START,END
+          this.diveMenuService.remove('columns');
+          return;
+        }
+
         this.diveMenuService.clean('columns');
 
         for (let column of columns) {
