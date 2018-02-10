@@ -75,6 +75,7 @@ import { TreeModule } from 'primeng/primeng';
 import { TreeTableModule } from 'primeng/primeng';
 import { SidebarModule } from 'primeng/primeng';
 import { OrganizationChartModule } from 'primeng/primeng';
+import { CardModule } from 'primeng/card';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -101,6 +102,8 @@ import { DataLoadProgressBar } from 'app/view/component/progressbar';
 
 import { HighchartsStatic } from 'angular2-highcharts/dist/HighchartsService';
 import { ChartModule } from 'angular2-highcharts';
+
+import { ColorPickerModule } from 'primeng/colorpicker';
 
 export function highchartsFactory() {
     return require('highcharts');
@@ -208,7 +211,9 @@ import { ComparisonSelectionScreen } from 'app/view/screen/comparison-selection'
         TreeTableModule,
         ChartModule,
         BrowserAnimationsModule,
-        OrganizationChartModule
+        OrganizationChartModule,
+        CardModule,
+        ColorPickerModule
         //Angulartics2Module.forRoot([Angulartics2GoogleAnalytics])
     ],
     declarations: [

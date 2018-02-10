@@ -37,8 +37,14 @@ export class DataStackItem {
 
 export class DataStack {
 
-    public color = 'blue';
-    public color_array: any;
+    public color: string;
+
+    public color_array: any = {
+        r: 0,
+        g: 0,
+        b: 0
+    };
+
     _data: DataStackItem[] = [];
 
     public topStackSubject = new Subject<DataStackItem>();
@@ -46,12 +52,24 @@ export class DataStack {
 
     constructor(private deepBlueService: DeepBlueService, private requestManager: RequestManager,
         private progress_element: ProgressElement, private router: Router) {
-        this.color_array = randomColor({ format: 'rgbArray', luminosity: 'dark' });
-        this.color = 'rgba(' + this.color_array[0] + ',' + this.color_array[1] + ',' + this.color_array[2] + ',1)';
+        let random_color = randomColor({ format: 'rgbArray', luminosity: 'dark' });
+        this.color_array = {
+            r: random_color[0],
+            g: random_color[1],
+            b: random_color[2]
+        }
+        this.color = 'rgba(' + this.color_array.r + ',' + this.color_array.g + ',' + this.color_array.b + ', 1)';
     }
 
-    getColor(alpha: string) {
-        return 'rgba(' + this.color_array[0] + ',' + this.color_array[1] + ',' + this.color_array[2] + ',' + alpha + ')';
+    getColor(alpha?: string) {
+        if (alpha) {
+            return 'rgba(' + this.color_array.r + ',' + this.color_array.g + ',' + this.color_array.b + ',' + alpha + ')';
+        }
+        return 'rgba(' + this.color_array.r + ',' + this.color_array.g + ',' + this.color_array.b + ',' + 1 + ')';
+    }
+
+    onColorChange($color: any) {
+        this.color = 'rgba(' + $color.r + ',' + $color.g + ',' + $color.b + ', 1)';
     }
 
     setInitialData(data: IOperation) {

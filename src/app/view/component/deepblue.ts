@@ -33,26 +33,19 @@ import { EventEmitter } from '@angular/core';
                     <span class="ui-panel-title" style="font-size:16px;display:inline-block;margin-top:2px">{{ dataStack.name() }}</span>
                     <p-splitButton [style]="{'float':'right'}" label="Remove" icon="fa-close" (onClick)="remove()" [model]="items"></p-splitButton>
 
-                    <!--
-                    <input readonly [(colorPicker)]="dataStack.color"
-                            [style.float]="'right'"
-                            [style.background]="dataStack.color"
-                            style="height: 38px; width: 100px; border: 0px; padding: 3px;"/>
-                    -->
+                    <p-colorPicker [(ngModel)]="dataStack.color_array" format="rgb"></p-colorPicker>
                 </div>
             </p-header>
 
             <div class="dashboard">
                 <ul class="activity-list">
-                    <li *ngFor="let data of dataStack._data">
-                        <query-flow [queryId]="data.op.id().id"></query-flow>
-                    </li>
+                    <query-flow [queryId]="dataStack._data[0]?.op.id().id"></query-flow>
                 </ul>
             </div>
         </p-panel>
     </p-overlayPanel>
 
-    <button #bt pButton type="button" [style.background]="dataStack.color" icon="ui-icon-dehaze"
+    <button #bt pButton type="button" [style.background]="dataStack.getColor()" icon="ui-icon-dehaze"
             label="{{ dataStack.name() }}"
             (click)="op.toggle($event)">
     </button>
@@ -93,39 +86,16 @@ export class SelectedDataButton implements OnInit {
     selector: 'selected-data',
     template: `
                 <p-toolbar>
-                <!-- <p-button label="Include Comparison" styleClass="ui-button-secondary" (onClick)="click($event)"></p-button> -->
                     <div class="ui-toolbar-group-left">
                         <selected-data-button
                             *ngFor="let ds of selectedData._stacks | slice:1"
                             [dataStack]="ds">
                         </selected-data-button>
                     </div>
-
-                    <!--
-                    <p-sidebar [(visible)]="includeComparisonBar" position="left" styleClass="ui-sidebar-md">>
-                        <p-scrollPanel [style]="{height: '95%', width: '100%'}">
-                            <div class="card card-w-title">
-                                <h1>Select the data to be used for comparison</h1>
-                                <data-selection-main (queryIdSelected)="selectQuery($event)"></data-selection-main>
-                            </div>
-                        </p-scrollPanel>
-                    </p-sidebar>
-                    -->
                 </p-toolbar>
     `
 })
 export class SelectedDataView {
-
     constructor(public selectedData: SelectedData) { }
-
-    includeComparisonBar = false;
-
-    click($event: any) {
-        this.includeComparisonBar = true;
-    }
-
-    selectQuery($event: any) {
-
-    }
 }
 
