@@ -67,8 +67,6 @@ export class SimilarFinder implements OnDestroy {
             this.requestManager.enqueueRequest(request)
             this.deepBlueService.getComposedResultIterator(request, this.progress_element, 'overlaps_enrichment_fast', this.reloadData, this)
                 .subscribe((result: DeepBlueMiddlewareOverlapEnrichtmentResultItem[]) => {
-                    const end = new Date().getTime();
-                    // Now calculate and output the difference
                     this.reloadData(this, result);
                 })
         })
@@ -83,7 +81,6 @@ export class SimilarFinder implements OnDestroy {
     }
 
     reloadData(_self: SimilarFinder, datum: DeepBlueMiddlewareOverlapEnrichtmentResultItem[]) {
-
         if (!_self) {
             _self = this;
         }
