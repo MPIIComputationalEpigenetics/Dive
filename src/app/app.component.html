@@ -11,11 +11,9 @@
         <app-topbar></app-topbar>
 
         <div class="layout-menu" [ngClass]="{'layout-menu-dark':darkMenu}" (click)="onMenuClick($event)">
-            <div #layoutMenuScroller class="nano">
-                <div class="nano-content menu-scroll-content">
-                    <app-menu [reset]="resetMenu"></app-menu>
-                </div>
-            </div>
+            <p-scrollPanel #scrollPanel [style]="{height: '100%'}">
+                <app-menu [reset]="resetMenu"></app-menu>
+            </p-scrollPanel>
         </div>
 
         <div class="topmenu"

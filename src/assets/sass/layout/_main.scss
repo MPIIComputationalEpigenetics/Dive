@@ -153,30 +153,6 @@ body {
         -moz-box-shadow: 3px 0 6px rgba(0, 0, 0, 0.3);
         box-shadow: 3px 0 6px rgba(0, 0, 0, 0.3);
         @include transition(margin-left .3s);
-        >.nano {
-            >.nano-content {
-                &.menu-scroll-content {
-                    display: block;
-                    height: 100%;
-                    position: relative;
-                    overflow: scroll;
-                    overflow-x: hidden;
-                }
-                ul.ultima-menu {
-                    &.ultima-main-menu {
-                        margin-top: 16px;
-                        padding-bottom: 120px;
-                    }
-                }
-            }
-            .nano-pane {
-                background: transparent;
-                .nano-slider {
-                    background-color: #aaaaaa;
-                    @include opacity(.3);
-                }
-            }
-        }
 
         &.layout-menu-dark {
             background-color: $darkMenuBgColor;
@@ -504,27 +480,6 @@ body {
                 -webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
                 -moz-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
                 box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
-                >.nano {
-                    overflow: visible;
-                    .nano-content {
-                        &.menu-scroll-content {
-                            display: inherit;
-                            height: auto;
-                            position: static;
-                            overflow: visible;
-                            overflow-x: visible;
-                        }
-                        ul.ultima-menu {
-                            &.ultima-main-menu {
-                                margin-top: 0px;
-                                padding-bottom: 0px;
-                            }
-                        }
-                    }
-                    .nano-pane {
-                        display: none !important;
-                    }
-                }
                 ul.ultima-menu {
                     &.ultima-main-menu {
                         margin-top: 0;
