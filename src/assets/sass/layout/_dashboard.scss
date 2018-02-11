@@ -296,3 +296,76 @@
         }
     }
 }
+
+.layout-rightpanel {
+    .layout-rightpanel-header {
+        background: url("../images/dashboard/sidebar-image.jpg") no-repeat;
+        background-size: cover;
+        height: 118px;
+        padding: 20px 14px;
+        @include box-sizing(border-box);
+
+        .weather-day, .weather-date {
+            color: #ffffff;
+            left: 14px;
+            font-size: 18px;
+            font-weight: 700;
+            padding-bottom: 4px;
+        }
+    }
+
+    .layout-rightpanel-content {
+        padding: 14px;
+
+        h1 {
+            font-size: 18px;
+            margin: 0 0 4px 0;
+        }
+
+        h2 {
+            font-size: 16px;
+            margin: 0;
+            color: $textSecondaryColor;
+            font-weight: normal;
+        }
+
+        .weather-today {
+            text-align: center;
+            margin-top: 28px;
+
+            .weather-today-value {
+                font-size: 36px;
+                vertical-align: middle;
+                margin-right: 14px;
+            }
+
+            img {
+                vertical-align: middle;
+            }
+        }
+
+        .weekly-weather {
+            list-style-type: none;
+            margin: 28px 0 0 0;
+            padding: 0;
+
+            li {
+                padding: 8px 14px;
+                border-bottom: 1px solid #d8dae2;
+                position: relative;
+
+                .weekly-weather-value {
+                    position: absolute;
+                    right: 40px;
+                }
+
+                img {
+                    width: 24px;
+                    position: absolute;
+                    right: 0px;
+                    top: 4px;
+                }
+            }
+        }
+    }
+}

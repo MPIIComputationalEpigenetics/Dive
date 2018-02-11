@@ -356,6 +356,44 @@ body {
             }
         }
     }
+
+    .layout-rightpanel {
+        position: fixed;
+        top: 75px;
+        height: 100%;
+        right: -240px;
+        width: 240px;
+        z-index: 100;
+        background-color: $rightPanelBgColor;
+        @include box-sizing(border-box);
+        @include transition(right $transitionDuration);
+        @include shadow(0 2px 10px 0 rgba(0, 0, 0, 0.3));
+
+        &.layout-rightpanel-active {
+            right: 0;
+            -webkit-transition-timing-function: cubic-bezier(0.86, 0, 0.07, 1);
+            transition-timing-function: cubic-bezier(0.86, 0, 0.07, 1);
+        }
+
+        .layout-rightpanel-content {
+            padding: 14px;
+            padding-bottom: 120px;
+        }
+
+        .ui-scrollpanel  {
+          border-radius: 0;
+          border: none;
+          .ui-scrollpanel-hidden {
+            display: block;
+            visibility: hidden;
+          }
+          .layout-rightpanel-wrapper{
+            width: 258px;
+            padding-right: 18px;
+          }
+        }
+
+    }
 }
 
 .ajax-loader {

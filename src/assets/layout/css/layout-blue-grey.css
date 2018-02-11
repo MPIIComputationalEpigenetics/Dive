@@ -1,3 +1,6 @@
+/* Common */
+/* Layout */
+/* Theme */
 /* Compact */
 /* roboto-300 - latin */
 @font-face {
@@ -418,6 +421,56 @@
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 2px 1px -1px rgba(0, 0, 0, 0.12);
   -webkit-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 2px 1px -1px rgba(0, 0, 0, 0.12);
   -moz-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 2px 1px -1px rgba(0, 0, 0, 0.12); }
+
+.layout-rightpanel .layout-rightpanel-header {
+  background: url("../images/dashboard/sidebar-image.jpg") no-repeat;
+  background-size: cover;
+  height: 118px;
+  padding: 20px 14px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box; }
+  .layout-rightpanel .layout-rightpanel-header .weather-day, .layout-rightpanel .layout-rightpanel-header .weather-date {
+    color: #ffffff;
+    left: 14px;
+    font-size: 18px;
+    font-weight: 700;
+    padding-bottom: 4px; }
+.layout-rightpanel .layout-rightpanel-content {
+  padding: 14px; }
+  .layout-rightpanel .layout-rightpanel-content h1 {
+    font-size: 18px;
+    margin: 0 0 4px 0; }
+  .layout-rightpanel .layout-rightpanel-content h2 {
+    font-size: 16px;
+    margin: 0;
+    color: #757575;
+    font-weight: normal; }
+  .layout-rightpanel .layout-rightpanel-content .weather-today {
+    text-align: center;
+    margin-top: 28px; }
+    .layout-rightpanel .layout-rightpanel-content .weather-today .weather-today-value {
+      font-size: 36px;
+      vertical-align: middle;
+      margin-right: 14px; }
+    .layout-rightpanel .layout-rightpanel-content .weather-today img {
+      vertical-align: middle; }
+  .layout-rightpanel .layout-rightpanel-content .weekly-weather {
+    list-style-type: none;
+    margin: 28px 0 0 0;
+    padding: 0; }
+    .layout-rightpanel .layout-rightpanel-content .weekly-weather li {
+      padding: 8px 14px;
+      border-bottom: 1px solid #d8dae2;
+      position: relative; }
+      .layout-rightpanel .layout-rightpanel-content .weekly-weather li .weekly-weather-value {
+        position: absolute;
+        right: 40px; }
+      .layout-rightpanel .layout-rightpanel-content .weekly-weather li img {
+        width: 24px;
+        position: absolute;
+        right: 0px;
+        top: 4px; }
 
 .login-body {
   background: url("../images/login/login.png") top left no-repeat #f7f7f7;
@@ -1135,6 +1188,40 @@ body {
     .layout-container .footer .footer-text-right span {
       vertical-align: middle;
       display: inline-block; }
+.layout-container .layout-rightpanel {
+  position: fixed;
+  top: 75px;
+  height: 100%;
+  right: -240px;
+  width: 240px;
+  z-index: 100;
+  background-color: #ffffff;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -moz-transition: right 0.3s;
+  -o-transition: right 0.3s;
+  -webkit-transition: right 0.3s;
+  transition: right 0.3s;
+  box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.3);
+  -moz-box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.3); }
+  .layout-container .layout-rightpanel.layout-rightpanel-active {
+    right: 0;
+    -webkit-transition-timing-function: cubic-bezier(0.86, 0, 0.07, 1);
+    transition-timing-function: cubic-bezier(0.86, 0, 0.07, 1); }
+  .layout-container .layout-rightpanel .layout-rightpanel-content {
+    padding: 14px;
+    padding-bottom: 120px; }
+  .layout-container .layout-rightpanel .ui-scrollpanel {
+    border-radius: 0;
+    border: none; }
+    .layout-container .layout-rightpanel .ui-scrollpanel .ui-scrollpanel-hidden {
+      display: block;
+      visibility: hidden; }
+    .layout-container .layout-rightpanel .ui-scrollpanel .layout-rightpanel-wrapper {
+      width: 258px;
+      padding-right: 18px; }
 
 .ajax-loader {
   font-size: 2em;
