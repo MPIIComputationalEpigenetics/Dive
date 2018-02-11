@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { SelectedData } from 'app/service/selecteddata';
 
 @Component({
-    templateUrl: './comparsion-selection.html'
+    templateUrl: './comparison-selection.html'
 })
 export class ComparisonSelectionScreen {
 
