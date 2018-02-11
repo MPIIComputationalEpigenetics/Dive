@@ -1,12 +1,12 @@
-import { Component, AfterViewInit, ElementRef, Renderer, ViewChild, OnDestroy } from '@angular/core';
-
-import { DataLoadProgressBar } from 'app/view/component/progressbar';
+import {Component, AfterViewInit, ElementRef, Renderer, ViewChild, OnDestroy, OnInit, NgZone} from '@angular/core';
+import { ScrollPanel} from 'primeng/primeng';
 
 enum MenuOrientation {
     STATIC,
     OVERLAY,
+    SLIM,
     HORIZONTAL
-};
+}
 
 declare var jQuery: any;
 
@@ -25,21 +25,20 @@ console.info('Initializing Highcharts-Exporting');
 HighchartsExporting(Highcharts);
 console.info('Highcharts-Exporting done');
 
-
 @Component({
-    selector: 'app-root',
-    templateUrl: './app.component.html',
-    styleUrls: ['./app.component.scss']
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements AfterViewInit, OnDestroy {
+export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
 
-    layoutCompact: boolean = false;
+    layoutCompact = true;
 
     layoutMode: MenuOrientation = MenuOrientation.STATIC;
 
-    darkMenu: boolean = false;
+    darkMenu = false;
 
-    profileMode: string = 'inline';
+    profileMode = 'inline';
 
     rotateMenuButton: boolean;
 
@@ -51,6 +50,10 @@ export class AppComponent implements AfterViewInit, OnDestroy {
 
     staticMenuMobileActive: boolean;
 
+    rightPanelActive = false;
+
+    rightPanelClick = false;
+
     layoutContainer: HTMLDivElement;
 
     layoutMenuScroller: HTMLDivElement;
@@ -61,41 +64,166 @@ export class AppComponent implements AfterViewInit, OnDestroy {
 
     activeTopbarItem: any;
 
-    documentClickListener: Function;
-
     resetMenu: boolean;
+
+    menuHoverActive: boolean;
 
     @ViewChild('layoutContainer') layourContainerViewChild: ElementRef;
 
-    @ViewChild('layoutMenuScroller') layoutMenuScrollerViewChild: ElementRef;
+    @ViewChild('scrollPanel') layoutMenuScrollerViewChild: ScrollPanel;
 
-    constructor(public renderer: Renderer) { }
+    rippleInitListener: any;
 
-    ngAfterViewInit() {
-        this.layoutContainer = <HTMLDivElement>this.layourContainerViewChild.nativeElement;
-        this.layoutMenuScroller = <HTMLDivElement>this.layoutMenuScrollerViewChild.nativeElement;
+    rippleMouseDownListener: any;
 
-        // hides the horizontal submenus or top menu if outside is clicked
-        this.documentClickListener = this.renderer.listenGlobal('body', 'click', (event: any) => {
-            if (!this.topbarItemClick) {
-                this.activeTopbarItem = null;
-                this.topbarMenuActive = false;
+    constructor(public renderer: Renderer, public zone: NgZone) {}
+
+    ngOnInit() {
+        this.zone.runOutsideAngular(() => {this.bindRipple(); });
+    }
+
+    bindRipple() {
+        this.rippleInitListener = this.init.bind(this);
+        document.addEventListener('DOMContentLoaded', this.rippleInitListener);
+    }
+
+    init() {
+        this.rippleMouseDownListener = this.rippleMouseDown.bind(this);
+        document.addEventListener('mousedown', this.rippleMouseDownListener, false);
+    }
+
+    rippleMouseDown(e: any) {
+        for (let target = e.target; target && target !== this; target = target['parentNode']) {
+            if (!this.isVisible(target)) {
+              continue;
             }
 
-            if (!this.menuClick && this.isHorizontal()) {
+            // Element.matches() -> https://developer.mozilla.org/en-US/docs/Web/API/Element/matches
+            if (this.selectorMatches(target, '.ripplelink, .ui-button')) {
+                const element = target;
+                this.rippleEffect(element, e);
+                break;
+            }
+        }
+    }
+
+    selectorMatches(el: any, selector: any) {
+        const p  : any = Element.prototype;
+        const f = p['matches'] || p['webkitMatchesSelector'] || p['mozMatchesSelector'] || p['msMatchesSelector'] || function (s: any) {
+            return [].indexOf.call(document.querySelectorAll(s), this) !== -1;
+        };
+        return f.call(el, selector);
+    }
+
+    isVisible(el: any) {
+        return !!(el.offsetWidth || el.offsetHeight);
+    }
+
+    rippleEffect(element: any, e: any) {
+        if (element.querySelector('.ink') === null) {
+            const inkEl = document.createElement('span');
+            this.addClass(inkEl, 'ink');
+
+            if (this.hasClass(element, 'ripplelink')) {
+                element.querySelector('span').insertAdjacentHTML('afterend', '<span class=\'ink\'></span>');
+            } else {
+                element.appendChild(inkEl);
+            }
+        }
+
+        const ink = element.querySelector('.ink');
+        this.removeClass(ink, 'ripple-animate');
+
+        if (!ink.offsetHeight && !ink.offsetWidth) {
+            const d = Math.max(element.offsetWidth, element.offsetHeight);
+            ink.style.height = d + 'px';
+            ink.style.width = d + 'px';
+        }
+
+        const x = e.pageX - this.getOffset(element).left - (ink.offsetWidth / 2);
+        const y = e.pageY - this.getOffset(element).top - (ink.offsetHeight / 2);
+
+        ink.style.top = y + 'px';
+        ink.style.left = x + 'px';
+        ink.style.pointerEvents = 'none';
+        this.addClass(ink, 'ripple-animate');
+    }
+    hasClass(element: any, className: any) {
+        if (element.classList) {
+            return element.classList.contains(className);
+        } else {
+            return new RegExp('(^| )' + className + '( |$)', 'gi').test(element.className);
+        }
+    }
+
+    addClass(element: any, className: any) {
+        if (element.classList) {
+            element.classList.add(className);
+        } else {
+            element.className += ' ' + className;
+        }
+    }
+
+    removeClass(element: any, className: any) {
+        if (element.classList) {
+            element.classList.remove(className);
+        } else {
+            element.className = element.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
+        }
+    }
+
+    getOffset(el: any) {
+        const rect = el.getBoundingClientRect();
+
+        return {
+          top: rect.top + (window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0),
+          left: rect.left + (window.pageXOffset || document.documentElement.scrollLeft || document.body.scrollLeft || 0),
+        };
+    }
+
+    unbindRipple() {
+        if (this.rippleInitListener) {
+            document.removeEventListener('DOMContentLoaded', this.rippleInitListener);
+        }
+        if (this.rippleMouseDownListener) {
+            document.removeEventListener('mousedown', this.rippleMouseDownListener);
+        }
+    }
+
+    ngAfterViewInit() {
+        this.layoutContainer = <HTMLDivElement> this.layourContainerViewChild.nativeElement;
+        setTimeout(() => {this.layoutMenuScrollerViewChild.moveBar(); }, 100);
+    }
+
+    onLayoutClick() {
+        if (!this.topbarItemClick) {
+            this.activeTopbarItem = null;
+            this.topbarMenuActive = false;
+        }
+
+        if (!this.menuClick) {
+            if (this.isHorizontal() || this.isSlim()) {
                 this.resetMenu = true;
             }
 
-            this.topbarItemClick = false;
-            this.menuClick = false;
-        });
+            if (this.overlayMenuActive || this.staticMenuMobileActive) {
+                this.hideOverlayMenu();
+            }
 
-        setTimeout(() => {
-            jQuery(this.layoutMenuScroller).nanoScroller({ flash: true });
-        }, 10);
+            this.menuHoverActive = false;
+        }
+
+        if (!this.rightPanelClick) {
+            this.rightPanelActive = false;
+        }
+
+        this.topbarItemClick = false;
+        this.menuClick = false;
+        this.rightPanelClick = false;
     }
 
     onMenuButtonClick(event: any) {
+        this.menuClick = true;
         this.rotateMenuButton = !this.rotateMenuButton;
         this.topbarMenuActive = false;
 
@@ -103,10 +231,8 @@ export class AppComponent implements AfterViewInit, OnDestroy {
             this.overlayMenuActive = !this.overlayMenuActive;
         } else {
             if (this.isDesktop()) {
-                this.staticMenuDesktopInactive = !this.staticMenuDesktopInactive;
-            } else {
-                this.staticMenuMobileActive = !this.staticMenuMobileActive;
-            }
+                this.staticMenuDesktopInactive = !this.staticMenuDesktopInactive; } else {
+                this.staticMenuMobileActive = !this.staticMenuMobileActive; }
         }
 
         event.preventDefault();
@@ -115,23 +241,13 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     onMenuClick($event: any) {
         this.menuClick = true;
         this.resetMenu = false;
-
-        if (!this.isHorizontal()) {
-            setTimeout(() => {
-                jQuery(this.layoutMenuScroller).nanoScroller();
-            }, 500);
-        }
     }
 
     onTopbarMenuButtonClick(event: any) {
         this.topbarItemClick = true;
         this.topbarMenuActive = !this.topbarMenuActive;
 
-        if (this.overlayMenuActive || this.staticMenuMobileActive) {
-            this.rotateMenuButton = false;
-            this.overlayMenuActive = false;
-            this.staticMenuMobileActive = false;
-        }
+        this.hideOverlayMenu();
 
         event.preventDefault();
     }
@@ -140,12 +256,27 @@ export class AppComponent implements AfterViewInit, OnDestroy {
         this.topbarItemClick = true;
 
         if (this.activeTopbarItem === item) {
-            this.activeTopbarItem = null;
-        } else {
-            this.activeTopbarItem = item;
-        }
+            this.activeTopbarItem = null; } else {
+            this.activeTopbarItem = item; }
 
         event.preventDefault();
+    }
+
+    onRightPanelButtonClick(event: any) {
+        debugger;
+        this.rightPanelClick = true;
+        this.rightPanelActive = !this.rightPanelActive;
+        event.preventDefault();
+    }
+
+    onRightPanelClick() {
+        this.rightPanelClick = true;
+    }
+
+    hideOverlayMenu() {
+        this.rotateMenuButton = false;
+        this.overlayMenuActive = false;
+        this.staticMenuMobileActive = false;
     }
 
     isTablet() {
@@ -169,6 +300,10 @@ export class AppComponent implements AfterViewInit, OnDestroy {
         return this.layoutMode === MenuOrientation.HORIZONTAL;
     }
 
+    isSlim() {
+        return this.layoutMode === MenuOrientation.SLIM;
+    }
+
     changeToStaticMenu() {
         this.layoutMode = MenuOrientation.STATIC;
     }
@@ -181,11 +316,12 @@ export class AppComponent implements AfterViewInit, OnDestroy {
         this.layoutMode = MenuOrientation.HORIZONTAL;
     }
 
-    ngOnDestroy() {
-        if (this.documentClickListener) {
-            this.documentClickListener();
-        }
-
-        jQuery(this.layoutMenuScroller).nanoScroller({ flash: true });
+    changeToSlimMenu() {
+        this.layoutMode = MenuOrientation.SLIM;
     }
+
+    ngOnDestroy() {
+        this.unbindRipple();
+    }
+
 }

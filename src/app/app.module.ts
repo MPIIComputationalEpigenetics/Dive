@@ -135,7 +135,6 @@ import { DiveMenuService } from 'app/service/menu';
 import { RouterGuard } from 'app/service/router-guard';
 import { ComparisonSelectionScreen } from 'app/view/screen/comparison-selection';
 
-
 @NgModule({
     imports: [
         BrowserModule,
