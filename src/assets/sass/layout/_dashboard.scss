@@ -66,42 +66,34 @@
         }
 
         &.colorbox-1 {
+            background-color: #4CAF50;
+
             div:first-child {
                 background-color: #2E7D32;
-            }
-
-            div:last-child {
-                background-color: #4CAF50;
             }
         }
 
         &.colorbox-2 {
+            background-color: #03A9F4;
+
             div:first-child {
                 background-color: #0277BD;
-            }
-
-            div:last-child {
-                background-color: #03A9F4;
             }
         }
 
         &.colorbox-3 {
+            background-color: #673AB7;
+
             div:first-child {
                 background-color: #4527A0;
-            }
-
-            div:last-child {
-                background-color: #673AB7;
             }
         }
 
         &.colorbox-4 {
+            background-color: #009688;
+
             div:first-child {
                 background-color: #00695C;
-            }
-
-            div:last-child {
-                background-color: #009688;
             }
         }
     }
