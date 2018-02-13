@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 
 import { SelectedData } from 'app/service/selecteddata';
 import { DeepBlueService } from 'app/service/deepblue';
-import { DataStack, DataStackItems } from 'app/service/datastack';
+import { DataStack, DataStackItems, DataStackItem } from 'app/service/datastack';
+import { Observable, Subscriber, Subscription } from 'rxjs';
 
 @Component({
     selector: 'app-data-stack',
@@ -70,19 +71,33 @@ export class DataStackViewComponent {
     showSidebar = false;
     preview = "";
 
+    subscription : Subscription = null;
+
+
     constructor(public deepBlueService: DeepBlueService, public selectedData: SelectedData) {
         this.selectedData.activeStackValue$.subscribe((active: DataStack) => {
+            debugger;
             if (!active) {
                 return;
             }
-            this.actualStack = active;
 
-            this.actualStack.getStackValueObserver().subscribe((dataStackItems) => {
+            this.actualStack = active;
+            if (this.subscription && !this.subscription.closed) {
+                this.subscription.unsubscribe();
+            }
+
+            this.subscription = this.actualStack.getStackValueObserver().subscribe((dataStackItems) => {
+                debugger;
                 if (dataStackItems != null) {
-                    console.log(this.actualStack.getInitialOperation().mainOperation().data().name());
-                    this.deepBlueService.previewExperiment(this.actualStack.getInitialOperation().mainOperation().data().name()).subscribe((prv) => {
-                        this.preview = prv;
-                    });
+                    let dataId = this.actualStack.getInitialOperation().mainOperation().data().id().id;
+                    if (dataId && dataId.length > 0 && dataId[0] == 'e') {
+                        this.deepBlueService.previewExperiment(this.actualStack.getInitialOperation().mainOperation().data().name()).subscribe((prv) => {
+                            this.preview = prv[1];
+                        });
+                    } else {
+                        this.preview = "(Selected data is not an experiment, preview is not available)";
+                    }
+
                 }
             });
         });

@@ -74,9 +74,9 @@ export class SelectedData implements OnDestroy {
     if (this.currentStackSubscription != null && !this.currentStackSubscription.closed) {
       this.currentStackSubscription.unsubscribe();
     }
-    this.currentStackSubscription = stack.getTopStackValueObserver().subscribe((dataStackItem: DataStackItem) =>
+    this.currentStackSubscription = stack.getTopStackValueObserver().subscribe((dataStackItem: DataStackItem) =>{
       this.activeTopStackSubject.next(dataStackItem)
-    )
+    })
 
     this.activeStackSubject.next(stack);
   }

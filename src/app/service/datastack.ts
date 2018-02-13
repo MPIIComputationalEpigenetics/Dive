@@ -39,10 +39,10 @@ export class DataStackItem {
 export class DataStackItems {
     _data: DataStackItem[] = [];
 
-    public topStackSubject = new Subject<DataStackItem>();
+    public topStackSubject = new BehaviorSubject<DataStackItem>(null);
     public topStackValue$: Observable<DataStackItem> = this.topStackSubject.asObservable();
 
-    public stackSubject = new Subject<DataStackItem[]>();
+    public stackSubject = new BehaviorSubject<DataStackItem[]>(null);
     public stackValue$: Observable<DataStackItem[]> = this.stackSubject.asObservable();
 
     public DataStackItems() {
@@ -99,7 +99,7 @@ export class DataStackItems {
             this.stackSubject.next(this._data);
             return false;
         } else {
-            this.topStackSubject.next();
+            this.topStackSubject.next(null);
             this.stackSubject.next(this._data);
             return true;
         }
