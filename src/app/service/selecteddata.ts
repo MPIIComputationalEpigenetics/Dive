@@ -74,7 +74,7 @@ export class SelectedData implements OnDestroy {
     if (this.currentStackSubscription != null && !this.currentStackSubscription.closed) {
       this.currentStackSubscription.unsubscribe();
     }
-    this.currentStackSubscription = stack.topStackValue$.subscribe((dataStackItem: DataStackItem) =>
+    this.currentStackSubscription = stack.getTopStackValueObserver().subscribe((dataStackItem: DataStackItem) =>
       this.activeTopStackSubject.next(dataStackItem)
     );
   }
@@ -98,10 +98,6 @@ export class SelectedData implements OnDestroy {
       return this.activeStackSubject.getValue().getData();
     }
     return [];
-  }
-
-  getActiveTopStackValue(): Observable<DataStackItem> {
-    return this.activeTopStackValue$;
   }
 
   getActiveCurrentOperation(): IOperation {

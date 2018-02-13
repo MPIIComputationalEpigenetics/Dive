@@ -150,7 +150,7 @@ export class ChromatinStatesScreenComponent implements AfterViewInit, OnDestroy 
   ngAfterViewInit() {
     this.deepBlueService.dataInfoSelectedValue$.subscribe((s) => { if (s) { this.hasDataDetail = true } })
     this.selectedExperimentsValue$.debounceTime(250).subscribe(() => this.processOverlaps());
-    this.selectedData.getActiveTopStackValue().subscribe((dataStackItem) => this.processOverlaps());
+    this.selectedData.activeTopStackValue$.subscribe((dataStackItem) => this.processOverlaps());
   }
 
   selectBiosources(event: any) {

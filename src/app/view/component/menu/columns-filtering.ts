@@ -49,7 +49,7 @@ export class ColumnsMenuFilterComponent implements OnInit {
 
   ngOnInit() {
 
-    this.selectedData.getActiveTopStackValue().subscribe(data => {
+    this.selectedData.activeStackValue$.subscribe(data => {
 
       if (data === null) {
         return;

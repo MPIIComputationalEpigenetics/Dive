@@ -51,7 +51,7 @@ export class SimilarFinder implements OnDestroy {
         private deepBlueService: DeepBlueService, public requestManager: RequestManager,
         public progress_element: ProgressElement, private selectedData: SelectedData) {
 
-        this.stackSubscriber = this.selectedData.getActiveTopStackValue().subscribe((dataStackItem) => {
+        this.stackSubscriber = this.selectedData.activeTopStackValue$.subscribe((dataStackItem) => {
             if (dataStackItem) {
                 this.processSimilar(dataStackItem.op)
             }

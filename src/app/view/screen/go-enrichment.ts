@@ -77,7 +77,7 @@ export class GoEnrichmentScreenComponent implements AfterViewInit, OnDestroy {
 
     ngAfterViewInit() {
         this.selectedGeneModelValue$.debounceTime(250).subscribe(() => this.processEnrichment());
-        this.selectedData.getActiveTopStackValue().subscribe((dataStackItem: DataStackItem) => this.processEnrichment());
+        this.selectedData.activeTopStackValue$.subscribe((dataStackItem: DataStackItem) => this.processEnrichment());
     }
 
     filter_enrichment_data($event: any) {

@@ -26,12 +26,15 @@ import { RequestManager } from 'app/service/requests-manager';
     templateUrl: './genes.html'
 })
 export class GenesScreen implements AfterViewInit, OnDestroy {
+    showIncludeBar: boolean;
     errorMessage: string;
     geneModels: GeneModel[];
     menuGeneModel: SelectItem[];
     selectedGeneModel: SelectItem[];
 
     genomeSubscription: Subscription;
+
+    bars: Object[];
 
     @ViewChild('overlapbarchart') overlapbarchart: OverlapsBarChartComponent;
     @ViewChild('geneModelDropdown') geneModelDropdown: Dropdown;
@@ -69,7 +72,7 @@ export class GenesScreen implements AfterViewInit, OnDestroy {
 
     ngAfterViewInit() {
         this.selectedGeneModelValue$.debounceTime(250).subscribe(() => this.processOverlaps());
-        this.selectedData.getActiveTopStackValue().subscribe((dataStackItem: DataStackItem) => this.processOverlaps());
+        this.selectedData.activeTopStackValue$.subscribe((dataStackItem: DataStackItem) => this.processOverlaps());
     }
 
     selectGeneModel(event: any) {
@@ -142,5 +145,18 @@ export class GenesScreen implements AfterViewInit, OnDestroy {
 
     ngOnDestroy() {
         this.genomeSubscription.unsubscribe();
+    }
+
+
+    directions = [
+        {name: 'Backward', code: 'BACKWARD'},
+        {name: 'Forward', code: 'FORWARD'},
+        {name: 'Both', code: 'BOTH'},
+    ]
+
+    selectedDirection : any = null;
+
+    includeBar() {
+        this.showIncludeBar = true;
     }
 }

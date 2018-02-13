@@ -35,6 +35,98 @@ export class DataStackItem {
     }
 }
 
+
+export class DataStackItems {
+    _data: DataStackItem[] = [];
+
+    public topStackSubject = new Subject<DataStackItem>();
+    public topStackValue$: Observable<DataStackItem> = this.topStackSubject.asObservable();
+
+    public stackSubject = new Subject<DataStackItem[]>();
+    public stackValue$: Observable<DataStackItem[]> = this.stackSubject.asObservable();
+
+    public DataStackItems() {
+        this._data = [];
+    }
+
+    init(data?: DataStackItem[]) {
+        if (data) {
+            this._data = data;
+        } else {
+            this._data = [];
+        }
+    }
+
+    getInitialOperation(): IOperation {
+        if (this._data.length > 0) {
+            return this._data[0].op;
+        }
+        return null;
+    }
+
+    getCurrentOperation(): IOperation {
+        if (this._data.length > 0) {
+            return this._data[this._data.length - 1].op;
+        }
+        return null;
+    }
+
+    push(item: DataStackItem) {
+        this._data.push(item);
+        this.topStackSubject.next(item);
+        this.stackSubject.next(this._data);
+    }
+
+    unshift(item: DataStackItem) {
+        this._data.unshift(item);
+        this.stackSubject.next(this._data);
+    }
+
+    // Return true if the stack is empty
+    remove(data: DataStackItem): boolean {
+        const query_id = data.op.id().id;
+        // find position
+        let i = this._data.length - 1;
+        for (; i >= 0; i--) {
+            if (this._data[i].op.id().id === query_id) {
+                break;
+            }
+        }
+
+        this._data = this._data.slice(0, i);
+        if (this._data.length > 0) {
+            this.topStackSubject.next(this._data[this._data.length - 1]);
+            this.stackSubject.next(this._data);
+            return false;
+        } else {
+            this.topStackSubject.next();
+            this.stackSubject.next(this._data);
+            return true;
+        }
+    }
+
+    clone(): DataStackItem[] {
+        const newStack: DataStackItem[] = [];
+        for (const item of this._data) {
+            newStack.push(item);
+        }
+        return newStack;
+    }
+
+    name(): string {
+        const top = this._data[0];
+        if (top === undefined) {
+            return '(loading..)';
+        }
+        if (this._data.length > 1) {
+            return top.op.data().name() + ' (filtered)';
+        } else {
+            return top.op.data().name();
+        }
+    }
+
+}
+
 export class DataStack {
 
     public color: string;
@@ -45,10 +137,7 @@ export class DataStack {
         b: 0
     };
 
-    _data: DataStackItem[] = [];
-
-    public topStackSubject = new Subject<DataStackItem>();
-    public topStackValue$: Observable<DataStackItem> = this.topStackSubject.asObservable();
+    _data: DataStackItems = new DataStackItems();
 
     constructor(private deepBlueService: DeepBlueService, private requestManager: RequestManager,
         private progress_element: ProgressElement, private router: Router) {
@@ -73,7 +162,7 @@ export class DataStack {
     }
 
     setInitialData(data: IOperation) {
-        this._data = [];
+        this._data.init();
         if (data == null) {
             return;
         }
@@ -87,7 +176,6 @@ export class DataStack {
                 const totalSelectedRegtions = total.resultAsCount();
                 const dataStackItem: DataStackItem = new DataStackItem(cached_data, data.dataType(), data.text(), totalSelectedRegtions);
                 this._data.push(dataStackItem);
-                this.topStackSubject.next(dataStackItem);
                 this.stackOperations(data.data());
             });
         });
@@ -108,7 +196,7 @@ export class DataStack {
     }
 
     setInitialDataArray(data: DataStackItem[]) {
-        this._data = data;
+        this._data.init(data);
     }
 
     overlap(operation: IOperation) {
@@ -128,7 +216,6 @@ export class DataStack {
                     const totalSelectedRegtions = total.resultAsCount();
                     const dataStackItem: DataStackItem = new DataStackItem(cached_data, cached_data.dataType(), operation.text(), totalSelectedRegtions);
                     this._data.push(dataStackItem);
-                    this.topStackSubject.next(dataStackItem);
                 });
             });
         });
@@ -153,7 +240,6 @@ export class DataStack {
                         const totalSelectedRegtions = total.resultAsCount();
                         const dataStackItem: DataStackItem = new DataStackItem(cached_data, cached_data.dataType(), operation.text(), totalSelectedRegtions);
                         this._data.push(dataStackItem);
-                        this.topStackSubject.next(dataStackItem);
                     });
                 });
             });
@@ -182,7 +268,6 @@ export class DataStack {
                         const dataStackItem: DataStackItem =
                             new DataStackItem(cached_data, cached_data.dataType(), cached_data.text(), totalSelectedRegtions);
                         this._data.push(dataStackItem);
-                        this.topStackSubject.next(dataStackItem);
                     });
                 });
             });
@@ -207,52 +292,36 @@ export class DataStack {
 
 
     remove(data: DataStackItem) {
-        const query_id = data.op.id().id;
-        // find position
-        let i = this._data.length - 1;
-        for (; i >= 0; i--) {
-            if (this._data[i].op.id().id === query_id) {
-                break;
-            }
-        }
-
-        this._data = this._data.slice(0, i);
-        if (this._data.length > 0) {
-            this.topStackSubject.next(this._data[this._data.length - 1]);
-        } else {
-            this.topStackSubject.next();
+        if (!this._data.remove(data)) {
             this.router.navigate(['/']);
         }
     }
 
     getData(): DataStackItem[] {
-        return this._data;
+        return this._data._data;
+    }
+
+    getInitialOperation(): IOperation {
+        return this._data.getInitialOperation();
     }
 
     getCurrentOperation(): IOperation {
-        if (this._data.length > 0) {
-            return this._data[this._data.length - 1].op;
-        }
-        return null;
+        return this._data.getCurrentOperation();
+    }
+
+    getTopStackValueObserver(): Observable<DataStackItem> {
+        return this._data.topStackValue$
+    }
+
+    getStackValueObserver(): Observable<DataStackItem[]> {
+        return this._data.stackValue$;
     }
 
     cloneStackItems(): DataStackItem[] {
-        const newStack: DataStackItem[] = [];
-        for (const item of this._data) {
-            newStack.push(item);
-        }
-        return newStack;
+        return this._data.clone();
     }
 
     name(): string {
-        const top = this._data[0];
-        if (top === undefined) {
-            return '(loading..)';
-        }
-        if (this._data.length > 1) {
-            return top.op.data().name() + ' (filtered)';
-        } else {
-            return top.op.data().name();
-        }
+        return this._data.name();
     }
 }
