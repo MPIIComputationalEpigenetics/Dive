@@ -840,6 +840,13 @@ export class DeepBlueService {
             })
     }
 
+    previewExperiment(experiment_name: string) : Observable<string> {
+        const params = new HttpParams()
+            .set('experiment_name', experiment_name);
+
+        return this.http.get<string>(this.deepBlueUrl + '/preview_experiment', { params: params });
+    }
+
     getGeneModelsBySelectedGenome(): Observable<GeneModel[]> {
         const params = new HttpParams()
             .set('genome', this.getGenome().name);
