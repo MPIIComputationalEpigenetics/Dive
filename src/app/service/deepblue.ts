@@ -43,6 +43,7 @@ import {
     AbstractDeepBlueRequest,
     toClass,
     DeepBlueEmptyParameter,
+    DeepBlueOperationError,
 } from '../domain/operations';
 
 import { ProgressElement } from '../service/progresselement';
@@ -840,7 +841,7 @@ export class DeepBlueService {
             })
     }
 
-    previewExperiment(experiment_name: string) : Observable<string[]> {
+    previewExperiment(experiment_name: string): Observable<string[]> {
         const params = new HttpParams()
             .set('experiment_name', experiment_name);
 
@@ -881,9 +882,9 @@ export class DeepBlueService {
             })
     }
 
-    inputRegions(region_set: string, progress_element: ProgressElement, request_count: number): Observable<DeepBlueOperation> {
+    inputRegions(region_set: string, progress_element: ProgressElement, request_count: number): Observable<IOperation> {
         if (!region_set) {
-            return Observable.empty<DeepBlueOperation>();
+            return Observable.empty<IOperation>();
         }
 
         var headers = new HttpHeaders();
@@ -896,10 +897,13 @@ export class DeepBlueService {
 
         return this.http.post(this.deepBlueUrl + '/composed_commands/input_regions', request, { headers: headers })
             .map((body: any) => {
-                const response: string = body[1] || '';
-                const query_id = new Id(body[1]);
                 progress_element.increment(request_count);
-                return new DeepBlueOperation(new DeepBlueEmptyParameter(), query_id, 'input_regions', -1)
+                if (body[0] == "okay") {
+                    const query_id = new Id(body[1]);
+                    return new DeepBlueOperation(new DeepBlueEmptyParameter(), query_id, 'input_regions', -1)
+                } else {
+                    return new DeepBlueOperationError(body[1]);
+                }
             });
     }
 
