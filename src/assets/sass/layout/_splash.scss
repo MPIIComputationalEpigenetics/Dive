@@ -4,18 +4,15 @@
     padding-top: 200px;
 
     .splash-container {
-        width: 383px;
+        width: 800px;
         margin: 0 auto;
         text-align: center
     }
 
     .logo {
-        display: inline-block;
-        vertical-align: middle;
-        width: 383px;
-        height: 383px;
+        height: 160px;
         background: url("../images/DB_Dive_Cover.png") top left no-repeat;
-        background-size: 383 383px;
+        background-size: contain;
     }
 
     .load-bar {

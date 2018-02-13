@@ -200,16 +200,13 @@
   height: 100%;
   padding-top: 200px; }
   .splash-screen .splash-container {
-    width: 383px;
+    width: 800px;
     margin: 0 auto;
     text-align: center; }
   .splash-screen .logo {
-    display: inline-block;
-    vertical-align: middle;
-    width: 383px;
-    height: 383px;
+    height: 160px;
     background: url("../images/DB_Dive_Cover.png") top left no-repeat;
-    background-size: 383 383px; }
+    background-size: contain; }
   .splash-screen .load-bar {
     position: relative;
     margin-top: 20px;
