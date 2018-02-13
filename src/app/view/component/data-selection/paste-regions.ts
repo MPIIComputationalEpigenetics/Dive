@@ -13,8 +13,9 @@ import { ProgressElement } from 'app/service/progresselement';
 })
 export class RegionsPaste {
 
-  uploadedFiles: any[] = [];
-  textAreaContent: any;
+  hasError = false;
+  errorMessage = "";
+  textAreaContent = "";
 
   @Output() queryIdSelected = new EventEmitter();
 
@@ -22,7 +23,13 @@ export class RegionsPaste {
   };
 
   onUploadClick(event: any) {
-    this.deepBlueService.inputRegions(this.textAreaContent, this.progress_element, -1).subscribe((op) =>
-      this.queryIdSelected.emit(op))
+    this.deepBlueService.inputRegions(this.textAreaContent.trim(), this.progress_element, -1).subscribe((op) => {
+      if (op.dataType() == "error") {
+        this.hasError = true;
+        this.errorMessage = op.text();
+      } else {
+        this.queryIdSelected.emit(op)
+      }
+    });
   }
 }

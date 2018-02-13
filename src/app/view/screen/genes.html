@@ -7,6 +7,9 @@
                 <div class="ui-g-12 ui-md-2">
                     <label for="input">Annotation Name</label>
                 </div>
+                <div class="ui-g-12 ui-md-2">
+                    <p><button pButton type="button" (click)="includeBar()" label="Filter overlapping"></button>
+                </div>
                 <div class="ui-g-12 ui-md-4">
                     <p-dropdown #geneModelDropdown [options]="menuGeneModel" [(ngModel)]="selectedGeneModel" filter="filter" [autoWidth]="false"
                         (onChange)="selectGeneModel($event)">
@@ -21,3 +24,16 @@
         <app-data-info-box></app-data-info-box>
     </div>
 </div>
+
+
+<p-dialog header="Upload your own dataset" [(visible)]="showIncludeBar" [width]="800" [height]="1200">
+    <p-tabView>
+      <p-tabPanel header="Extend">
+            Direction: <p-dropdown [options]="directions" [(ngModel)]="selectedDirection" optionLabel="name" [filter]="true" filterBy="label,value.name"></p-dropdown>
+            Length:
+      </p-tabPanel>
+      <p-tabPanel header="Paste Regions">
+            cu
+      </p-tabPanel>
+  </p-tabView>
+  </p-dialog>

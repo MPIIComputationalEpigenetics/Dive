@@ -1,22 +1,33 @@
+<p-dialog header="Error during dataset upload" [(visible)]="hasError" modal="modal" width="600" [responsive]="true" [appendTo]="'body'">
+  <p>{{ errorMessage }}.</p>
+
+  <small>
+  <p> Currently Dive allows only files with CHROMOSOME,START,END columns.</p>
+  <p> Check if the currently selected genome  ({{deepBlueService.getGenome()?.name}}) is the right genome assembly</p>
+  </small>
+
+  <p-footer>
+    <button type="button" pButton icon="fa-check" (click)="hasError=false" label="Okay"></button>
+  </p-footer>
+</p-dialog>
+
 <div class="container">
   <div class="ui-g">
     <div class="ui-g-12">
       <div class="card">
         <h1>Upload</h1>
 
-        <h2>
-          <!-- We send the genome name as the file name -->
-          <p-fileUpload name="{{deepBlueService.getGenome()?.name}}" url="api/composed_commands/upload_regions" (onUpload)="onUpload($event)"
-            accept="text/plain,.csv,.bed,.txt" maxFileSize="10000000" auto="true">
+        <!-- We send the genome name as the file name -->
+        <p-fileUpload name="{{deepBlueService.getGenome()?.name}}" url="api/composed_commands/upload_regions" (onUpload)="onUpload($event)"
+          accept="text/plain,.csv,.bed,.txt" maxFileSize="10000000" auto="true">
 
-            <ng-template pTemplate="content">
-              <ul *ngIf="uploadedFiles.length">
-                <li *ngFor="let file of uploadedFiles">{{file.name}} - {{file.size}} bytes</li>
-              </ul>
-            </ng-template>
+          <ng-template pTemplate="content">
+            <ul *ngIf="uploadedFiles.length">
+              <li *ngFor="let file of uploadedFiles">{{file.name}} - {{file.size}} bytes</li>
+            </ul>
+          </ng-template>
 
-          </p-fileUpload>
-        </h2>
+        </p-fileUpload>
 
       </div>
     </div>

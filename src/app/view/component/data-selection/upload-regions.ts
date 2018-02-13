@@ -16,6 +16,9 @@ export class RegionsUpload {
   uploadedFiles: any[] = [];
   textAreaContent: any;
 
+  hasError = false;
+  errorMessage = "";
+
   @Output() queryIdSelected = new EventEmitter();
 
 
@@ -27,7 +30,14 @@ export class RegionsUpload {
       this.uploadedFiles.push(file);
     }
     let response = JSON.parse(event.xhr.response);
-    let query_id: string = response[1];
-    this.queryIdSelected.emit(new DeepBlueOperation(new DeepBlueEmptyParameter(), new Id(query_id), 'input_regions', -1));
+    if (response[0] == "error") {
+      this.uploadedFiles = [];
+      this.hasError = true;
+      this.errorMessage = response[1];
+    } else {
+      let query_id: string = response[1];
+      this.queryIdSelected.emit(new DeepBlueOperation(new DeepBlueEmptyParameter(), new Id(query_id), 'input_regions', -1));
+    }
+
   }
 }

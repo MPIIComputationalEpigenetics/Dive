@@ -4,7 +4,6 @@ import { IOperation } from "app/domain/interfaces";
 import { TreeNode } from "primeng/primeng";
 import { ProgressElement } from "app/service/progresselement";
 import { Id } from "app/domain/deepblue";
-import { debug } from "util";
 
 @Component({
   templateUrl: './query-flow.html',

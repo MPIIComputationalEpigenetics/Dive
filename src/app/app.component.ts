@@ -270,7 +270,6 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
     }
 
     onRightPanelButtonClick(event: any) {
-        debugger;
         this.rightPanelClick = true;
         this.rightPanelActive = !this.rightPanelActive;
         event.preventDefault();

@@ -76,7 +76,6 @@ export class DataStackViewComponent {
 
     constructor(public deepBlueService: DeepBlueService, public selectedData: SelectedData) {
         this.selectedData.activeStackValue$.subscribe((active: DataStack) => {
-            debugger;
             if (!active) {
                 return;
             }
@@ -87,7 +86,6 @@ export class DataStackViewComponent {
             }
 
             this.subscription = this.actualStack.getStackValueObserver().subscribe((dataStackItems) => {
-                debugger;
                 if (dataStackItems != null) {
                     let dataId = this.actualStack.getInitialOperation().mainOperation().data().id().id;
                     if (dataId && dataId.length > 0 && dataId[0] == 'e') {

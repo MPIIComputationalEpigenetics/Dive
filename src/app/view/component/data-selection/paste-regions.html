@@ -1,10 +1,25 @@
+<p-dialog header="Error during dataset upload" [(visible)]="hasError" modal="modal" width="600" [responsive]="true" [appendTo]="'body'">
+  <p>{{ errorMessage }}.</p>
+
+  <small>
+    <p> Currently Dive allows only files with CHROMOSOME,START,END columns.</p>
+    <p> Check if the currently selected genome ({{deepBlueService.getGenome()?.name}}) is the right genome assembly</p>
+  </small>
+
+  <p-footer>
+    <button type="button" pButton icon="fa-check" (click)="hasError=false" label="Okay"></button>
+  </p-footer>
+</p-dialog>
+
+
 <div class="container">
   <div class="ui-g">
     <div class="ui-g-12">
       <div class="card">
         <h1>Paste Regions</h1>
         <h2>
-          <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left" (click)="onUploadClick()">
+          <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left" [disabled]="textAreaContent.trim().length == 0"
+            (click)="onUploadClick()">
             <span class="ui-button-icon-left fa fa-upload"></span>
             <span class="ui-button-text ui-c">Use regions</span>
           </button>
