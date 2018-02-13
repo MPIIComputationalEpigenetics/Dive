@@ -31,7 +31,7 @@ import { EventEmitter } from '@angular/core';
             <p-header>
                 <div class="ui-helper-clearfix">
                     <span class="ui-panel-title" style="font-size:16px;display:inline-block;margin-top:2px">{{ dataStack.name() }}</span>
-                    <p-splitButton [style]="{'float':'right'}" label="Remove" icon="fa-close" (onClick)="remove()" [model]="items"></p-splitButton>
+                    <p-splitButton [style]="{'float':'right'}" label="Use as main data" (onClick)="moveToMain()" [model]="items"></p-splitButton>
 
                     <p-colorPicker [(ngModel)]="dataStack.color_array" format="rgb"></p-colorPicker>
                 </div>
@@ -49,6 +49,7 @@ import { EventEmitter } from '@angular/core';
             label="{{ dataStack.name() }}"
             (click)="op.toggle($event)">
     </button>
+
     `
 
 })
@@ -63,20 +64,27 @@ export class SelectedDataButton implements OnInit {
     ngOnInit() {
         this.items = [
             {
-                label: 'Remove', icon: 'fa-close', command: () => this.remove()
+                label: 'Use as main data', command: () => this.moveToMain()
             },
             {
-                label: 'Save', icon: 'fa-close', command: () => this.save()
+                label: 'Remove', command: () => this.remove()
+            },
+            {
+                label: 'Rename', command: () => this.rename()
             }
         ];
     }
 
-    save() {
+    remove() {
+        this.selectedData.removeStack(this.dataStack);
+    }
+
+    rename() {
         console.info('save this stack');
     }
 
-    remove() {
-        this.selectedData.removeStack(this.dataStack);
+    moveToMain() {
+        this.selectedData.setActiveStack(this.dataStack);
     }
 
 }

@@ -383,7 +383,7 @@
   margin: 0; }
   .dashboard .activity-list li {
     border-top: 1px solid #bdbdbd;
-    padding: 2px 0px 0px 0px; }
+    padding: 4px 15px 1px 0px; }
     .dashboard .activity-list li .description {
       font-size: 14px;
       font-weight: bold;

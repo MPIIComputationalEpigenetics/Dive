@@ -43,13 +43,13 @@ import { DataStack, DataStackItems } from 'app/service/datastack';
             <ul class="activity-list">
                 <li *ngFor="let data of selectedData.getActiveData() | slice:1">
                     <div class="ui-g">
-                        <div class="ui-g-10">
+                        <div class="ui-g-6">
                             <div class="description">{{ data.op.text() }}</div>
                             <p class="count"> {{data.count}} regions <p>
                         </div>
 
                         <div class="ui-g-2 button-change">
-                            <button class="red-btn" type="button" icon="ui-icon-remove" pButton (click)="infoData($event, data)"></button>
+                            <button class="red-btn" type="button" icon="ui-icon-remove" pButton (click)="removeData($event, data)"></button>
                         </div>
 
                         <div class="ui-g-2 button-change">
@@ -88,9 +88,8 @@ export class DataStackViewComponent {
         });
     }
 
-    infoData(event: any, data: any) {
-        debugger;
-        //this.selectedData.activeStackSubject.getValue().remove(data);
+    removeData(event: any, data: any) {
+        this.selectedData.activeStackSubject.getValue().remove(data);
     }
 
     saveData(event: any, data: any) {

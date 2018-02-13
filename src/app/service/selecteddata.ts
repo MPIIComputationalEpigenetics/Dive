@@ -60,23 +60,25 @@ export class SelectedData implements OnDestroy {
   }
 
   setActiveStack(stack: DataStack) {
-    const index = this._stacks.indexOf(stack, 0);
+    const index = this._stacks.indexOf(stack);
     if (index <= -1) {
       console.warn("(setActiveStack)", stack, 'not found');
       return;
     }
-    this.activeStackSubject.next(stack);
 
     const toChange = this._stacks[index];
     this._stacks[index] = this._stacks[0];
     this._stacks[0] = toChange;
+
 
     if (this.currentStackSubscription != null && !this.currentStackSubscription.closed) {
       this.currentStackSubscription.unsubscribe();
     }
     this.currentStackSubscription = stack.getTopStackValueObserver().subscribe((dataStackItem: DataStackItem) =>
       this.activeTopStackSubject.next(dataStackItem)
-    );
+    )
+
+    this.activeStackSubject.next(stack);
   }
 
   removeStack(stack: DataStack): DataStack {
