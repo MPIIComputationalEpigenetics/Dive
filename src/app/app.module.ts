@@ -135,6 +135,9 @@ import { DiveMenuService } from 'app/service/menu';
 import { RouterGuard } from 'app/service/router-guard';
 import { ComparisonSelectionScreen } from 'app/view/screen/comparison-selection';
 
+import { Angulartics2Module } from 'angulartics2';
+import { Angulartics2GoogleAnalytics } from 'angulartics2/ga';
+
 @NgModule({
     imports: [
         BrowserModule,
@@ -212,8 +215,8 @@ import { ComparisonSelectionScreen } from 'app/view/screen/comparison-selection'
         BrowserAnimationsModule,
         OrganizationChartModule,
         CardModule,
-        ColorPickerModule
-        //Angulartics2Module.forRoot([Angulartics2GoogleAnalytics])
+        ColorPickerModule,
+        Angulartics2Module.forRoot([Angulartics2GoogleAnalytics])
     ],
     declarations: [
         AppComponent,

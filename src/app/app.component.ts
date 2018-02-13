@@ -1,6 +1,7 @@
-import {Component, AfterViewInit, ElementRef, Renderer, ViewChild, OnDestroy, OnInit, NgZone} from '@angular/core';
-import { ScrollPanel} from 'primeng/primeng';
+import { Component, AfterViewInit, ElementRef, Renderer, ViewChild, OnDestroy, OnInit, NgZone } from '@angular/core';
+import { ScrollPanel } from 'primeng/primeng';
 import { Title } from '@angular/platform-browser';
+import { Angulartics2GoogleAnalytics } from 'angulartics2/ga';
 
 enum MenuOrientation {
     STATIC,
@@ -32,9 +33,9 @@ HighchartsExporting(Highcharts);
 console.info('Highcharts-Exporting done');
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
 
@@ -82,10 +83,11 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
 
     rippleMouseDownListener: any;
 
-    constructor(public renderer: Renderer, public zone: NgZone, private titleService: Title) {}
+    constructor(public renderer: Renderer, public zone: NgZone,
+        private titleService: Title, angulartics2GoogleAnalytics: Angulartics2GoogleAnalytics) { }
 
     ngOnInit() {
-        this.zone.runOutsideAngular(() => {this.bindRipple(); });
+        this.zone.runOutsideAngular(() => { this.bindRipple(); });
         this.titleService.setTitle("Dive (" + appVersion + ")");
     }
 
@@ -102,7 +104,7 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
     rippleMouseDown(e: any) {
         for (let target = e.target; target && target !== this; target = target['parentNode']) {
             if (!this.isVisible(target)) {
-              continue;
+                continue;
             }
 
             // Element.matches() -> https://developer.mozilla.org/en-US/docs/Web/API/Element/matches
@@ -115,7 +117,7 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
     }
 
     selectorMatches(el: any, selector: any) {
-        const p  : any = Element.prototype;
+        const p: any = Element.prototype;
         const f = p['matches'] || p['webkitMatchesSelector'] || p['mozMatchesSelector'] || p['msMatchesSelector'] || function (s: any) {
             return [].indexOf.call(document.querySelectorAll(s), this) !== -1;
         };
@@ -183,8 +185,8 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
         const rect = el.getBoundingClientRect();
 
         return {
-          top: rect.top + (window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0),
-          left: rect.left + (window.pageXOffset || document.documentElement.scrollLeft || document.body.scrollLeft || 0),
+            top: rect.top + (window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0),
+            left: rect.left + (window.pageXOffset || document.documentElement.scrollLeft || document.body.scrollLeft || 0),
         };
     }
 
@@ -198,8 +200,8 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
     }
 
     ngAfterViewInit() {
-        this.layoutContainer = <HTMLDivElement> this.layourContainerViewChild.nativeElement;
-        setTimeout(() => {this.layoutMenuScrollerViewChild.moveBar(); }, 100);
+        this.layoutContainer = <HTMLDivElement>this.layourContainerViewChild.nativeElement;
+        setTimeout(() => { this.layoutMenuScrollerViewChild.moveBar(); }, 100);
     }
 
     onLayoutClick() {
@@ -238,8 +240,10 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
             this.overlayMenuActive = !this.overlayMenuActive;
         } else {
             if (this.isDesktop()) {
-                this.staticMenuDesktopInactive = !this.staticMenuDesktopInactive; } else {
-                this.staticMenuMobileActive = !this.staticMenuMobileActive; }
+                this.staticMenuDesktopInactive = !this.staticMenuDesktopInactive;
+            } else {
+                this.staticMenuMobileActive = !this.staticMenuMobileActive;
+            }
         }
 
         event.preventDefault();
@@ -263,8 +267,10 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
         this.topbarItemClick = true;
 
         if (this.activeTopbarItem === item) {
-            this.activeTopbarItem = null; } else {
-            this.activeTopbarItem = item; }
+            this.activeTopbarItem = null;
+        } else {
+            this.activeTopbarItem = item;
+        }
 
         event.preventDefault();
     }
