@@ -1,5 +1,6 @@
 import {Component, AfterViewInit, ElementRef, Renderer, ViewChild, OnDestroy, OnInit, NgZone} from '@angular/core';
 import { ScrollPanel} from 'primeng/primeng';
+import { Title } from '@angular/platform-browser';
 
 enum MenuOrientation {
     STATIC,
@@ -9,6 +10,11 @@ enum MenuOrientation {
 }
 
 declare var jQuery: any;
+
+
+console.log("Loading version");
+const { version: appVersion } = require('../../package.json')
+console.log(appVersion);
 
 console.info('Loading Highcharts...');
 const Highcharts = require('highcharts');
@@ -76,10 +82,11 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
 
     rippleMouseDownListener: any;
 
-    constructor(public renderer: Renderer, public zone: NgZone) {}
+    constructor(public renderer: Renderer, public zone: NgZone, private titleService: Title) {}
 
     ngOnInit() {
         this.zone.runOutsideAngular(() => {this.bindRipple(); });
+        this.titleService.setTitle("Dive (" + appVersion + ")");
     }
 
     bindRipple() {
