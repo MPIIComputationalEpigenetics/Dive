@@ -16,6 +16,7 @@ export class RegionsUpload {
   uploadedFiles: any[] = [];
   textAreaContent: any;
 
+  isUploading = false;
   hasError = false;
   errorMessage = "";
 
@@ -29,6 +30,7 @@ export class RegionsUpload {
     for (let file of event.files) {
       this.uploadedFiles.push(file);
     }
+    this.isUploading = true;
     let response = JSON.parse(event.xhr.response);
     if (response[0] == "error") {
       this.uploadedFiles = [];

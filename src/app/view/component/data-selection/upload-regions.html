@@ -11,6 +11,16 @@
   </p-footer>
 </p-dialog>
 
+
+<p-sidebar [(visible)]="isUploading" position="bottom" [fullScreen]="true" [appendTo]="'body'">
+  <div style=" height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;" [ngStyle]="{'background-image': 'url(assets/layout/images/diving.gif)', 'background-size':'cover'}">
+    <h1>Loading, please wait</h1>
+  </div>
+</p-sidebar>
+
 <div class="container">
   <div class="ui-g">
     <div class="ui-g-12">
@@ -18,7 +28,7 @@
         <h1>Upload</h1>
 
         <!-- We send the genome name as the file name -->
-        <p-fileUpload name="{{deepBlueService.getGenome()?.name}}" url="api/composed_commands/upload_regions" (onUpload)="onUpload($event)"
+        <p-fileUpload name="{{deepBlueService.getGenome()?.name}}" url="api/composed_commands/upload_regions" (onBeforeUpload)="isUploading = true" (onUpload)="onUpload($event)"
           accept="text/plain,.csv,.bed,.txt" maxFileSize="10000000" auto="true">
 
           <ng-template pTemplate="content">
