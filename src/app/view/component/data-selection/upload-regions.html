@@ -25,7 +25,8 @@
   <div class="ui-g">
     <div class="ui-g-12">
       <div class="card">
-        <h1>Upload</h1>
+        <h1>Upload your file</h1>
+        <h3>The file must be composed of tab separated columns the columns: CHROMOSOME,START,END</h3>
 
         <!-- We send the genome name as the file name -->
         <p-fileUpload name="{{deepBlueService.getGenome()?.name}}" url="api/composed_commands/upload_regions" (onBeforeUpload)="isUploading = true" (onUpload)="onUpload($event)"
@@ -35,6 +36,27 @@
             <ul *ngIf="uploadedFiles.length">
               <li *ngFor="let file of uploadedFiles">{{file.name}} - {{file.size}} bytes</li>
             </ul>
+          </ng-template>
+
+          <ng-template pTemplate="content">
+              <br />
+              <br />
+              <br />
+              <br />
+              <br />
+              <br />
+              <br />
+              <br />
+              <br />
+              <h2 [style.text-align]="'center'">Files can be uploaded by dragging them here.</h2>
+              <br />
+              <br />
+              <br />
+              <br />
+              <br />
+              <br />
+              <br />
+              <br />
           </ng-template>
 
         </p-fileUpload>
