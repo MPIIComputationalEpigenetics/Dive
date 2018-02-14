@@ -46,7 +46,7 @@ export class DnaPatternMenuFilterComponent implements OnInit {
             }
 
             this.pattern_form = this.fb.group({
-                dna_pattern: [0, [this.validateDNAPattern]]
+                dna_pattern: ["", [this.validateDNAPattern]]
             });
 
             this.diveMenuService.includeObject('filtering',
