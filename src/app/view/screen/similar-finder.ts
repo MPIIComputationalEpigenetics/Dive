@@ -176,7 +176,7 @@ export class SimilarFinder implements OnDestroy {
         }
 
         let biosources_data = Object.keys(biosources_stats).map((biosource) => [biosource, biosources_stats[biosource]]).sort((a: any, b: any) => a[1].mean - b[1].mean);
-        _self.plot("Similar Biosources", biosources_data, _self.biosourcessimilaritybarchart, _self.biosourceElementClick)
+        _self.plot("Similar BioSources", biosources_data, _self.biosourcessimilaritybarchart, _self.biosourceElementClick)
 
         let ems_data = Object.keys(ems_stats).map((em) => [em, ems_stats[em]]).sort((a: any, b: any) => a[1].mean - b[1].mean);
         _self.plot("Similar Epigenetic Marks", ems_data, _self.emssimilaritybarchart, _self.epigeneticMarkElementClick)

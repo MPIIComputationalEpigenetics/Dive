@@ -41,7 +41,7 @@ export class ChromatinStatesScreenComponent implements AfterViewInit, OnDestroy 
   biosourcesItems: SelectItem[] = [];
   selectedMultiSelectBiosources: Object[] = [];
 
-  defaultSelectBiosourcesLabel = 'Select the Biosource';
+  defaultSelectBiosourcesLabel = 'Select the BioSource';
 
   epigeneticMarkSubscription: Subscription;
 
