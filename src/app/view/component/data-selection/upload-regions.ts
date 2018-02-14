@@ -30,7 +30,7 @@ export class RegionsUpload {
     for (let file of event.files) {
       this.uploadedFiles.push(file);
     }
-    this.isUploading = true;
+    this.isUploading = false;
     let response = JSON.parse(event.xhr.response);
     if (response[0] == "error") {
       this.uploadedFiles = [];
