@@ -38,7 +38,6 @@ export class DiveMenuService {
 
   constructor(private deepBlueService: DeepBlueService) {
     this.menus = [
-      new GenomeSelectorMenu(this.deepBlueService, this),
       new CSSExperimentsMenu(this.deepBlueService, this),
       new EpigeneticMarkMenu(this.deepBlueService, this)
     ];
@@ -146,36 +145,6 @@ export class DiveMenuService {
       return;
     }
     this.pushItem(subMenu, item);
-  }
-}
-
-
-// Building Menu Items with Genome names
-class GenomeSelectorMenu implements IMenu {
-
-  errorMessage: string;
-
-  constructor(private deepBlueService: DeepBlueService, private diveMenu: DiveMenuService) { }
-
-  reloadMenu(): any {
-    return this.deepBlueService.getGenomes().subscribe(genomes => {
-      this.deepBlueService.setGenome(genomes[0]);
-
-      for (let genome of genomes) {
-        this.diveMenu.includeItem('genomes', genome.name, 'fiber_manual_record',
-          (event: any) => { this.selectItem(genome) },
-          ['/'], /* router link */
-          null /* url */
-        );
-      }
-      return true;
-    },
-      error => this.errorMessage = <any>error
-    );
-  }
-
-  selectItem(genome: Genome) {
-    this.deepBlueService.setGenome(genome);
   }
 }
 
