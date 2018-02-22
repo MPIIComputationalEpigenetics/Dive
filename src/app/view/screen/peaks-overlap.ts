@@ -65,8 +65,27 @@ export class PeaksOverlapScreenComponent implements AfterViewInit, OnDestroy {
     constructor(public deepBlueService: DeepBlueService, public requestManager: RequestManager,
         public progress_element: ProgressElement, private selectedData: SelectedData) {
 
-        this.epigeneticMarkSubscription = deepBlueService.epigeneticMarkValue$.subscribe(selected_epigenetic_mark => {
-            this.deepBlueService.getExperiments(deepBlueService.getGenome(), selected_epigenetic_mark).subscribe(experiments_ids => {
+        this.loadExperiments();
+    }
+
+    ngAfterViewInit() {
+        this.deepBlueService.dataInfoSelectedValue$.subscribe((s) => { if (s) { this.hasDataDetail = true } })
+        this.selectedExperimentsValue$.debounceTime(250).subscribe(() => this.processOverlaps());
+        this.selectedData.activeTopStackValue$.subscribe((dataStackItem) => this.processOverlaps());
+        this.deepBlueService.projectsValue$.subscribe(() => this.loadExperiments());
+    }
+
+    ngOnDestroy() {
+        this.epigeneticMarkSubscription.unsubscribe();
+    }
+
+    loadExperiments() {
+        if (this.epigeneticMarkSubscription && !this.epigeneticMarkSubscription.closed) {
+            this.epigeneticMarkSubscription.unsubscribe();
+        }
+
+        this.epigeneticMarkSubscription = this.deepBlueService.epigeneticMarkValue$.subscribe(selected_epigenetic_mark => {
+            this.deepBlueService.getExperiments(this.deepBlueService.getGenome(), selected_epigenetic_mark).subscribe(experiments_ids => {
                 const ids = experiments_ids.map((e) => e.id.id);
                 this.deepBlueService.getExperimentsInfos(ids).subscribe(full_info => {
                     this.experiments = <FullExperiment[]>full_info;
@@ -77,17 +96,13 @@ export class PeaksOverlapScreenComponent implements AfterViewInit, OnDestroy {
         });
     }
 
-    ngAfterViewInit() {
-        this.deepBlueService.dataInfoSelectedValue$.subscribe((s) => { if (s) { this.hasDataDetail = true } })
-        this.selectedExperimentsValue$.debounceTime(250).subscribe(() => this.processOverlaps());
-        this.selectedData.activeTopStackValue$.subscribe((dataStackItem) => this.processOverlaps());
-    }
-
     dataSelected() {
         this.hasDataDetail = false;
     }
 
     segregate(experiments: FullExperiment[]) {
+
+        let projectNames = this.deepBlueService.projectsSource.getValue().map((project) => project.name);
 
         const biosources: { [key: string]: FullExperiment[] } = {};
         const samples: { [key: string]: FullExperiment[] } = {};
@@ -107,6 +122,10 @@ export class PeaksOverlapScreenComponent implements AfterViewInit, OnDestroy {
             const experiment_epigenetic_mark = experiment.epigenetic_mark();
             const experiment_technique = experiment.technique();
             const experiment_project = experiment.project();
+
+            if (projectNames.indexOf(experiment_project) < 0) {
+                continue;
+            }
 
             if (!(experiment_biosource in biosources)) {
                 biosources[experiment_biosource] = [];
@@ -339,9 +358,5 @@ export class PeaksOverlapScreenComponent implements AfterViewInit, OnDestroy {
         }
 
         _self.overlapbarchart.setNewData(categories, series, result_by_dataset_stack);
-    }
-
-    ngOnDestroy() {
-        this.epigeneticMarkSubscription.unsubscribe();
     }
 }

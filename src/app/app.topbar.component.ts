@@ -89,7 +89,6 @@ export class AppTopBar implements OnInit {
     }
 
     selectProjects($event: any) {
-        debugger;
         this.deepBlueService.setProjects($event.value);
     }
 }
