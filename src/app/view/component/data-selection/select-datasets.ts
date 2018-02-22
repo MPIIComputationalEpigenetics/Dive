@@ -86,9 +86,9 @@ export class SelectDatasetsComponent {
         let key_array = <Array<any>>key;
         if ('string' == typeof key_array[1]) {
           if (key_array.length == 2) {
-            return this.buildLeaf(key_array[0], key_array[1], dataset[0], epigenetic_mark, key_array[2]);
+            return this.buildLeaf(key_array[0], key_array[1], dataset[0], epigenetic_mark, key_array[2], key_array[3]);
           } else {
-            return this.buildLeaf(key_array[0], key_array[1], dataset[0], key_array[2], epigenetic_mark, key_array[3]);
+            return this.buildLeaf(key_array[0], key_array[1], dataset[0], key_array[2], epigenetic_mark, key_array[3], key_array[4]);
           }
         } else {
           return this.buildNode(key, epigenetic_mark);
@@ -97,12 +97,13 @@ export class SelectDatasetsComponent {
     }
   }
 
-  buildLeaf(id: string, name: string, parent_name: string, biosource: string, epigenetic_mark: string, _query_id?: string): TreeNode {
+  buildLeaf(id: string, name: string, parent_name: string, biosource: string, epigenetic_mark: string, project: string, _query_id?: string): TreeNode {
     let o: any = {
       "data": {
         "id": new Id(id),
         "name": name,
         "biosource": biosource,
+        "project": project,
         "parent": parent_name,
         "epigeneticmark": epigenetic_mark,
         "leaf": true
@@ -196,6 +197,5 @@ export class SelectDatasetsComponent {
   ngOnDestroy() {
     this.genomeSubscription.unsubscribe();
   }
-
 
 }
