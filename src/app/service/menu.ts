@@ -3,11 +3,10 @@ import { Injectable, Component } from '@angular/core';
 import { Observable } from 'rxjs/Observable'
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { DeepBlueService } from 'app/service/deepblue';
-import { EpigeneticMark, Genome } from 'app/domain/deepblue';
+import { EpigeneticMark } from 'app/domain/deepblue';
 
 
 const BASIC_MENU: any[] = [
-  { name: 'genomes', label: 'Genomes', icon: 'lens', items: [] },
   { label: 'Data Selection', icon: 'dashboard', routerLink: ['/dataselection'] }
 ];
 
