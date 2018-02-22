@@ -2,6 +2,7 @@ import { Component, Inject, forwardRef, OnInit, ViewChild } from '@angular/core'
 import { AppComponent } from './app.component';
 import { SelectItem, Dropdown } from 'primeng/primeng';
 import { DeepBlueService } from './service/deepblue';
+import { MultiSelect } from 'primeng/components/multiselect/multiselect';
 
 @Component({
     selector: 'app-topbar',
@@ -27,6 +28,11 @@ import { DeepBlueService } from './service/deepblue';
                                 <span class="ui-inputgroup-addon" style="border-style: none">Genome</span>
                                 <p-dropdown #genomesDropdown [options]="genomeItems" [style]="{'width':'75px'}" (onChange)="selectGenome($event)"  [(ngModel)]="selectedGenome"></p-dropdown>
                             </div>
+                            <div class="ui-inputgroup">
+                                <span class="ui-inputgroup-addon" style="border-style: none">Projects</span>
+                                <p-multiSelect #multiselect [defaultLabel]="defaultSelectProjects" [options]="projectItems" [(ngModel)]="selectedProjects" (onChange)="selectProjects($event)">
+                                </p-multiSelect>
+                            </div>
                         </div>
                     </p-toolbar>
 
@@ -42,7 +48,12 @@ export class AppTopBar implements OnInit {
     genomeItems: SelectItem[] = [];
     selectedGenome: any = null;
 
+    projectItems: SelectItem[] = [];
+    selectedProjects: Object[] = [];
+    defaultSelectProjects = 'Select the Projects';
+
     @ViewChild('genomesDropdown') genomesDropdown: Dropdown;
+    @ViewChild('multiselect') multiselect: MultiSelect;
 
     constructor(@Inject(forwardRef(() => AppComponent)) public app: AppComponent,
         private deepBlueService: DeepBlueService) {
@@ -53,17 +64,31 @@ export class AppTopBar implements OnInit {
             this.deepBlueService.setGenome(genomes[0]);
 
             for (let genome of genomes) {
-                let item = {label: genome.name, value: genome};
+                let item = { label: genome.name, value: genome };
                 this.genomeItems.push(item);
                 if (!this.selectedGenome) {
-                   this.genomesDropdown.selectItem(null, item);
+                    this.genomesDropdown.selectItem(null, item);
                 }
             }
-            return true;
+
+            this.deepBlueService.listProjects().subscribe((projects) => {
+                debugger;
+                for (let project of projects) {
+                    let item = { label: project.name, value: project };
+                    this.projectItems.push(item);
+                    this.selectedProjects.push(item.value);
+                }
+            })
+
         });
+
     }
 
     selectGenome($event: any) {
         this.deepBlueService.setGenome($event.value);
+    }
+
+    selectProjects($event: any) {
+        this.deepBlueService.setProjects($event.value);
     }
 }

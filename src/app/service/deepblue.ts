@@ -97,14 +97,15 @@ export class DeepBlueService {
 
     // Observable string sources
     public genomeSource = new BehaviorSubject<Genome>(null);
+    public projectsSource = new BehaviorSubject<Project[]>(null);
     public dataToDiveSource = new BehaviorSubject<IOperation>(null);
     public epigeneticMarkSource = new BehaviorSubject<EpigeneticMark>(new EpigeneticMark(['', '']));
     public dataInfoSelectedSource = new BehaviorSubject<any>(null);
-
     public selectedBioSources = new BehaviorSubject<BioSource[]>([]);
 
     // Observable string streams
     genomeValue$ = this.genomeSource.asObservable();
+    projectsValue$ = this.projectsSource.asObservable();
     dataToDiveValue$ = this.dataToDiveSource.asObservable();
     epigeneticMarkValue$ = this.epigeneticMarkSource.asObservable();
     dataInfoSelectedValue$ = this.dataInfoSelectedSource.asObservable();
@@ -131,6 +132,10 @@ export class DeepBlueService {
     // Service messages
     setGenome(genome: Genome) {
         this.genomeSource.next(genome);
+    }
+
+    setProjects(projects: Project[]) {
+        this.projectsSource.next(projects);
     }
 
     /* Define the annotation that we are going to dive */
