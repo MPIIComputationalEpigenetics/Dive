@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter, Input } from '@angular/core';
+import { Component, Output, EventEmitter, Input, OnInit } from '@angular/core';
 
 import {
   Annotation,
@@ -28,7 +28,7 @@ type Dataset = [string, string[]];
   selector: 'select-datasets-component',
   templateUrl: './select-datasets.html'
 })
-export class SelectDatasetsComponent {
+export class SelectDatasetsComponent implements OnInit {
 
   datatable_columns = [
     { name: 'name', prop: 'name', column_type: 'string' }
@@ -37,7 +37,7 @@ export class SelectDatasetsComponent {
   visibleSidebar = false;
   selectedRow: FullExperiment;
 
-  genomeSubscription: Subscription;
+  projectsSubscription: Subscription;
   datasets: TreeNode[] = [];
   selectedDatasets: any = [];
 
@@ -47,13 +47,20 @@ export class SelectDatasetsComponent {
   @Output() queryIdSelected = new EventEmitter();
   @Output() datasetsSelected = new EventEmitter();
 
-  constructor(private deepBlueService: DeepBlueService, private progress_element: ProgressElement) {
-    this.genomeSubscription = deepBlueService.genomeValue$.subscribe(genome => {
-      if (genome === null) {
+  constructor(private deepBlueService: DeepBlueService, private progress_element: ProgressElement) { }
+
+
+  ngOnInit() {
+    this.projectsSubscription = this.deepBlueService.projectsValue$.subscribe(projects => {
+      if (projects === null) {
         return;
       }
+
+      let projectNames = projects.map((project) => project.name);
+
+      let genome = this.deepBlueService.genomeSource.getValue();
       this.deepBlueService.getComposedEnrichmentDatabases(genome.name).subscribe((datasets: Dataset[]) => {
-        this.datasets = <TreeNode[]>datasets.map((dataset: Dataset) => this.buildNode(dataset));
+        this.datasets = <TreeNode[]>datasets.map((dataset: Dataset) => this.buildNode(dataset, projectNames)).filter((node) => node.children.length > 0);
       });
     })
   }
@@ -72,7 +79,7 @@ export class SelectDatasetsComponent {
     }
   }
 
-  buildNode(dataset: Dataset, epigenetic_mark?: string): TreeNode {
+  buildNode(dataset: Dataset, projectNames: string[], epigenetic_mark?: string): TreeNode {
 
     if (!epigenetic_mark) {
       epigenetic_mark = dataset[0];
@@ -86,18 +93,33 @@ export class SelectDatasetsComponent {
         let key_array = <Array<any>>key;
         if ('string' == typeof key_array[1]) {
           if (key_array.length == 2) {
-            return this.buildLeaf(key_array[0], key_array[1], dataset[0], epigenetic_mark, key_array[2], key_array[3]);
+            return this.buildLeaf(key_array[0], key_array[1], dataset[0], epigenetic_mark, key_array[2], key_array[3], projectNames);
           } else {
-            return this.buildLeaf(key_array[0], key_array[1], dataset[0], key_array[2], epigenetic_mark, key_array[3], key_array[4]);
+            return this.buildLeaf(key_array[0], key_array[1], dataset[0], key_array[2], epigenetic_mark, key_array[3], projectNames, key_array[4]);
           }
         } else {
-          return this.buildNode(key, epigenetic_mark);
+          return this.buildNode(key, projectNames, epigenetic_mark);
         }
+      }).filter((value) => {
+        if (value == null) {
+          return false;
+        }
+
+        if (value.children) {
+          return value.children.length != 0;
+        }
+
+        return true;
       })
     }
   }
 
-  buildLeaf(id: string, name: string, parent_name: string, biosource: string, epigenetic_mark: string, project: string, _query_id?: string): TreeNode {
+  buildLeaf(id: string, name: string, parent_name: string, biosource: string, epigenetic_mark: string, project: string, projectNames: string[], _query_id?: string): TreeNode {
+
+    if (projectNames.indexOf(project) < 0) {
+      return null;
+    }
+
     let o: any = {
       "data": {
         "id": new Id(id),
@@ -195,7 +217,7 @@ export class SelectDatasetsComponent {
   }
 
   ngOnDestroy() {
-    this.genomeSubscription.unsubscribe();
+    this.projectsSubscription.unsubscribe();
   }
 
 }

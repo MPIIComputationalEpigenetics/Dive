@@ -72,14 +72,14 @@ export class AppTopBar implements OnInit {
             }
 
             this.deepBlueService.listProjects().subscribe((projects) => {
-                debugger;
                 for (let project of projects) {
                     let item = { label: project.name, value: project };
                     this.projectItems.push(item);
                     this.selectedProjects.push(item.value);
                 }
+                this.selectProjects({value: projects});
+                this.multiselect.updateLabel();
             })
-
         });
 
     }
@@ -89,6 +89,7 @@ export class AppTopBar implements OnInit {
     }
 
     selectProjects($event: any) {
+        debugger;
         this.deepBlueService.setProjects($event.value);
     }
 }
