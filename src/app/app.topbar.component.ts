@@ -3,6 +3,7 @@ import { AppComponent } from './app.component';
 import { SelectItem, Dropdown } from 'primeng/primeng';
 import { DeepBlueService } from './service/deepblue';
 import { MultiSelect } from 'primeng/components/multiselect/multiselect';
+import { timeout } from 'rxjs/operator/timeout';
 
 @Component({
     selector: 'app-topbar',
@@ -21,9 +22,9 @@ import { MultiSelect } from 'primeng/components/multiselect/multiselect';
                     <i class="material-icons">menu</i>
                 </a>
 
-                <div id="rightpanel-menu-button">
+                <div id="rightpanel-menu-button" style="width:250px">
                     <p-toolbar>
-                        <div class="ui-toolbar-group-right">
+                        <div class="ui-toolbar-group-left">
                             <div class="ui-inputgroup">
                                 <span class="ui-inputgroup-addon" style="border-style: none">Genome</span>
                                 <p-dropdown #genomesDropdown [options]="genomeItems" [style]="{'width':'75px'}" (onChange)="selectGenome($event)"  [(ngModel)]="selectedGenome"></p-dropdown>
@@ -60,6 +61,8 @@ export class AppTopBar implements OnInit {
     }
 
     ngOnInit(): void {
+        this.deepBlueService.genomeValue$.subscribe(() => this.updateProjects());
+
         this.deepBlueService.getGenomes().subscribe(genomes => {
             this.deepBlueService.setGenome(genomes[0]);
 
@@ -70,18 +73,22 @@ export class AppTopBar implements OnInit {
                     this.genomesDropdown.selectItem(null, item);
                 }
             }
-
-            this.deepBlueService.listProjects().subscribe((projects) => {
-                for (let project of projects) {
-                    let item = { label: project.name, value: project };
-                    this.projectItems.push(item);
-                    this.selectedProjects.push(item.value);
-                }
-                this.selectProjects({value: projects});
-                this.multiselect.updateLabel();
-            })
         });
+    }
 
+    updateProjects() {
+        this.deepBlueService.listProjects().subscribe((projects) => {
+            this.projectItems = [];
+            this.selectedProjects = [];
+            for (let project of projects) {
+                let item = { label: project.name, value: project };
+                this.projectItems.push(item);
+                this.selectedProjects.push(item.value);
+            }
+            this.selectProjects({ value: projects });
+            this.multiselect.updateLabel();
+            console.log(this.projectItems, this.projectItems.length);
+        })
     }
 
     selectGenome($event: any) {
