@@ -56,11 +56,14 @@ export class SelectDatasetsComponent implements OnInit {
         return;
       }
 
+      this.progress_element.startIndeterminate()
       let projectNames = projects.map((project) => project.name);
 
       let genome = this.deepBlueService.genomeSource.getValue();
+      this.datasets = [];
       this.deepBlueService.getComposedEnrichmentDatabases(genome.name).subscribe((datasets: Dataset[]) => {
         this.datasets = <TreeNode[]>datasets.map((dataset: Dataset) => this.buildNode(dataset, projectNames)).filter((node) => node.children.length > 0);
+        this.progress_element.finishIndeterminate();
       });
     })
   }
