@@ -9,6 +9,9 @@ export class ProgressElement {
     public progressValueSource = new BehaviorSubject<number>(-1);
     progressValueValue$: Observable<number> = this.progressValueSource.asObservable();
 
+    public progressMode = new BehaviorSubject<string>("determinate");
+    progressModeValue$: Observable<string> = this.progressMode.asObservable();
+
     reset(total: number, request_count: number) {
         this.total_to_load = total;
         this.total_loaded = 0;
@@ -22,6 +25,21 @@ export class ProgressElement {
 
         const next_value = Math.ceil(this.total_loaded * 100 / this.total_to_load);
         this.progressValueSource.next(next_value);
+    }
+
+    setMode(mode: string) {
+        this.progressMode.next(mode);
+    }
+
+    startIndeterminate() {
+        this.setMode("indeterminate");
+        this.reset(1, -1);
+        this.setStatus("loading", 0, 1);
+    }
+
+    finishIndeterminate() {
+        this.setMode("determinate");
+        this.finish();
     }
 
     increment(request_count: number) {
