@@ -38,8 +38,9 @@ export class SelectDatasetsComponent implements OnInit {
   selectedRow: FullExperiment;
 
   projectsSubscription: Subscription;
-  datasets: TreeNode[] = [];
+  datasetTreeNodes: TreeNode[] = [];
   selectedDatasets: any = [];
+  datasets: [string, string[]][] = [];
 
   projects: Project[] = [];
   filterText = "";
@@ -60,20 +61,23 @@ export class SelectDatasetsComponent implements OnInit {
         return;
       }
 
-      this.buildItems();
+      this.progress_element.startIndeterminate()
+
+
+      let genome = this.deepBlueService.genomeSource.getValue();
+      this.datasetTreeNodes = [];
+      this.datasets = [];
+      this.deepBlueService.getComposedEnrichmentDatabases(genome.name).subscribe((datasets: Dataset[]) => {
+        this.datasets = datasets;
+        this.buildItems();
+        this.progress_element.finishIndeterminate();
+      });
     })
   }
 
   buildItems() {
-    this.progress_element.startIndeterminate()
     let projectNames = this.projects.map((project) => project.name);
-
-    let genome = this.deepBlueService.genomeSource.getValue();
-    this.datasets = [];
-    this.deepBlueService.getComposedEnrichmentDatabases(genome.name).subscribe((datasets: Dataset[]) => {
-      this.datasets = <TreeNode[]>datasets.map((dataset: Dataset) => this.buildNode(dataset, projectNames)).filter((node) => node.children.length > 0);
-      this.progress_element.finishIndeterminate();
-    });
+    this.datasetTreeNodes = <TreeNode[]>this.datasets.map((dataset: Dataset) => this.buildNode(dataset, projectNames)).filter((node) => node.children.length > 0);
   }
 
   updateFilter($event: any) {
@@ -156,9 +160,6 @@ export class SelectDatasetsComponent implements OnInit {
     if (!passFilter && this.filterText.trim().length > 0) {
       let found = false;
       for (let key of Object.keys(o.data)) {
-        if (key == "project") {
-          debugger;
-        }
         let value = o.data[key];
         if (typeof value === 'string') {
           value = value.trim().toLowerCase();
