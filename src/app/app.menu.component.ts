@@ -74,22 +74,25 @@ export class AppMenuComponent {
                 <form novalidate *ngIf="child.type == 'number'" [formGroup]=child.group (ngSubmit)="child.submit()">
                     <div class="ui-g">
                         <div class="ui-g-4"><label>{{ child.label }}</label></div>
-                        <div class="ui-g-4"><input type="{{ child.type }}" [formControlName]="child.control_name" pInputText/></div>
+                        <div class="ui-g-offset-1 ui-g-4"><input style="width:80px" type="{{ child.type }}" [formControlName]="child.control_name" pInputText/></div>
+                        <div class="ui-g-offset-1 ui-g-1"><p-button (onClick)="child.submit()" icon="fa fa-fw fa-check"></p-button></div>
                     </div>
                 </form>
 
                 <form novalidate *ngIf="child.type == 'string'" [formGroup]=child.group (ngSubmit)="child.submit()">
                     <div class="ui-g">
                         <div class="ui-g-4"><label>{{ child.label }}</label></div>
-                        <div class="ui-g-4"><input type="{{ child.type }}" [formControlName]="child.control_name" pInputText/></div>
+                        <div class="ui-g-offset-1 ui-g-4"><input style="width:80px" type="{{ child.type }}" [formControlName]="child.control_name" pInputText/></div>
+                        <div class="ui-g-offset-1 ui-g-1"><p-button (onClick)="child.submit()" icon="fa fa-fw fa-check"></p-button></div>
                     </div>
                 </form>
 
                 <form *ngIf="child.type == 'filter_by'" [formGroup]=child.group (keydown.enter)="child.submit()" (ngSubmit)="child.submit()">
                     <div class="ui-g">
-                        <div class="ui-g-4"><label>{{ child.label }}</label></div>
-                        <div class="ui-g-4"><p-dropdown [options]="child.options" [formControlName]="child.operation_control_name"></p-dropdown></div>
-                        <div class="ui-g-4"><input type="{{ child.type }}" [formControlName]="child.value_control_name" pInputText/></div>
+                        <div class="ui-g-4"><label>{{child.label}}</label></div>
+                        <div class="ui-g-offset-1 ui-g-2"><p-dropdown [style]="{'width':'40px'}" [options]="child.options" [formControlName]="child.operation_control_name"></p-dropdown></div>
+                        <div class="ui-g-offset-1 ui-g-1"><input style="width:40px" type="{{ child.type }}" [formControlName]="child.value_control_name" pInputText/></div>
+                        <div class="ui-g-offset-1 ui-g-1"><p-button (onClick)="child.submit()" icon="fa fa-fw fa-check"></p-button></div>
                     </div>
                 </form>
 
