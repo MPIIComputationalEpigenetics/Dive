@@ -15,8 +15,8 @@
   </p-scrollPanel>
 </p-sidebar>
 
+<input type='text' style='padding:8px;margin:15px auto;width:30%;' placeholder='Type to filter datasets' [(ngModel)]="filterText" (keyup)='updateFilter($event)' />
 <div class="content-section implementation">
-    <input *ngIf="datasets.length" type='text' style='padding:8px;margin:15px auto;width:30%;' placeholder='Type to filter datasets' [(ngModel)]="filterText" (keyup)='updateFilter($event)' />
     <p-treeTable *ngIf="datasets.length" [value]="datasets" selectionMode="{{selectMode}}" [(selection)]="selectedDatasets" (onNodeSelect)="nodeSelect($event)">
       <p-column field="name" header="Name"></p-column>
       <p-column field="biosource" header="BioSource"></p-column>
