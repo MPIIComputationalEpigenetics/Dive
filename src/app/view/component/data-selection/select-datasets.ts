@@ -41,6 +41,9 @@ export class SelectDatasetsComponent implements OnInit {
   datasets: TreeNode[] = [];
   selectedDatasets: any = [];
 
+  projects: Project[] = [];
+  filterText = "";
+
   clicked_query_id: string;
 
   @Input() selectMode = "checkbox"
@@ -52,20 +55,29 @@ export class SelectDatasetsComponent implements OnInit {
 
   ngOnInit() {
     this.projectsSubscription = this.deepBlueService.projectsValue$.subscribe(projects => {
+      this.projects = projects;
       if (projects === null) {
         return;
       }
 
-      this.progress_element.startIndeterminate()
-      let projectNames = projects.map((project) => project.name);
-
-      let genome = this.deepBlueService.genomeSource.getValue();
-      this.datasets = [];
-      this.deepBlueService.getComposedEnrichmentDatabases(genome.name).subscribe((datasets: Dataset[]) => {
-        this.datasets = <TreeNode[]>datasets.map((dataset: Dataset) => this.buildNode(dataset, projectNames)).filter((node) => node.children.length > 0);
-        this.progress_element.finishIndeterminate();
-      });
+      this.buildItems();
     })
+  }
+
+  buildItems() {
+    this.progress_element.startIndeterminate()
+    let projectNames = this.projects.map((project) => project.name);
+
+    let genome = this.deepBlueService.genomeSource.getValue();
+    this.datasets = [];
+    this.deepBlueService.getComposedEnrichmentDatabases(genome.name).subscribe((datasets: Dataset[]) => {
+      this.datasets = <TreeNode[]>datasets.map((dataset: Dataset) => this.buildNode(dataset, projectNames)).filter((node) => node.children.length > 0);
+      this.progress_element.finishIndeterminate();
+    });
+  }
+
+  updateFilter($event: any) {
+    this.buildItems();
   }
 
   nodeSelect(event: any) {
@@ -82,26 +94,32 @@ export class SelectDatasetsComponent implements OnInit {
     }
   }
 
-  buildNode(dataset: Dataset, projectNames: string[], epigenetic_mark?: string): TreeNode {
+  buildNode(dataset: Dataset, projectNames: string[], epigenetic_mark?: string, passFilter?: boolean): TreeNode {
 
     if (!epigenetic_mark) {
       epigenetic_mark = dataset[0];
     }
 
+    let name = dataset[0];
+
+    if (this.filterText.toLowerCase().trim().length > 0 && name.indexOf(this.filterText.toLowerCase()) >= 0) {
+      passFilter = true;
+    }
+
     return {
       "data": {
-        "name": dataset[0]
+        "name": name
       },
       "children": dataset[1].map((key: any) => {
         let key_array = <Array<any>>key;
         if ('string' == typeof key_array[1]) {
           if (key_array.length == 2) {
-            return this.buildLeaf(key_array[0], key_array[1], dataset[0], epigenetic_mark, key_array[2], key_array[3], projectNames);
+            return this.buildLeaf(key_array[0], key_array[1], dataset[0], epigenetic_mark, key_array[2], key_array[3], projectNames, passFilter);
           } else {
-            return this.buildLeaf(key_array[0], key_array[1], dataset[0], key_array[2], epigenetic_mark, key_array[3], projectNames, key_array[4]);
+            return this.buildLeaf(key_array[0], key_array[1], dataset[0], key_array[2], epigenetic_mark, key_array[3], projectNames, passFilter, key_array[4]);
           }
         } else {
-          return this.buildNode(key, projectNames, epigenetic_mark);
+          return this.buildNode(key, projectNames, epigenetic_mark, passFilter);
         }
       }).filter((value) => {
         if (value == null) {
@@ -117,7 +135,7 @@ export class SelectDatasetsComponent implements OnInit {
     }
   }
 
-  buildLeaf(id: string, name: string, parent_name: string, biosource: string, epigenetic_mark: string, project: string, projectNames: string[], _query_id?: string): TreeNode {
+  buildLeaf(id: string, name: string, parent_name: string, biosource: string, epigenetic_mark: string, project: string, projectNames: string[], passFilter?: boolean, _query_id?: string): TreeNode {
 
     if (projectNames.indexOf(project) < 0) {
       return null;
@@ -134,6 +152,28 @@ export class SelectDatasetsComponent implements OnInit {
         "leaf": true
       }
     }
+
+    if (!passFilter && this.filterText.trim().length > 0) {
+      let found = false;
+      for (let key of Object.keys(o.data)) {
+        if (key == "project") {
+          debugger;
+        }
+        let value = o.data[key];
+        if (typeof value === 'string') {
+          value = value.trim().toLowerCase();
+          if (value.indexOf(this.filterText.toLowerCase().trim()) >= 0) {
+            found = true;
+            break;
+          }
+        }
+      }
+
+      if (!found) {
+        return null;
+      }
+    }
+
     if (_query_id) {
       let id_name = new IdName(new Id(id), name);
       let data_parameter = new DeepBlueDataParameter(id_name);
@@ -222,5 +262,4 @@ export class SelectDatasetsComponent implements OnInit {
   ngOnDestroy() {
     this.projectsSubscription.unsubscribe();
   }
-
 }
