@@ -1,5 +1,4 @@
 import { DeepBlueRequest, AbstractDeepBlueRequest } from "app/domain/operations";
-import { request } from "http";
 import { Injectable } from "@angular/core";
 import { DeepBlueService } from "app/service/deepblue";
 import { Router, NavigationStart, NavigationEnd } from "@angular/router";
