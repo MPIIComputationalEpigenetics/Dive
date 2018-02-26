@@ -170,8 +170,7 @@ export class EpigeneticMarkMenu implements IMenu {
           }
 
           this.deepBlueService.getComposedEpigeneticMarksFromCategory(category).subscribe(ems => {
-            this.diveMenu.remove(category);
-            this.diveMenu.add(category);
+            this.diveMenu.clean(category);
 
             for (let em of ems) {
               this.diveMenu.includeItem(category, em.name, 'fiber_manual_record',
