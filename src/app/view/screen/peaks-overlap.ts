@@ -177,7 +177,6 @@ export class PeaksOverlapScreenComponent implements AfterViewInit, OnDestroy {
     }
 
     selectBiosources(event: any) {
-
         this.requestManager.cancelAllRequest();
 
         let experiments: IdName[] = [];
@@ -207,17 +206,17 @@ export class PeaksOverlapScreenComponent implements AfterViewInit, OnDestroy {
         if (experiments === this.currentlyProcessing) {
             return;
         }
+
         this.current_request++;
 
         // Each experiment is started, selected, overlaped, count, get request data (4 times each)
         this.progress_element.reset(experiments.length * this.selectedData.getStacksTopOperation().length * 5, this.current_request);
         this.currentlyProcessing = experiments;
-        const start = new Date().getTime();
-
 
         const current = this.selectedData.getStacksTopOperation();
 
         this.deepBlueService.composedCountOverlaps(current, experiments).subscribe((request: DeepBlueMiddlewareRequest) => {
+            this.requestManager.cancelAllRequest();
             this.requestManager.enqueueRequest(request);
             this.deepBlueService.getComposedResultIterator(request, this.progress_element, 'overlaps', this.reloadPlot, this)
                 .subscribe((result: DeepBlueResult[]) => {

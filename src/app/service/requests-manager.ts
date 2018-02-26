@@ -22,10 +22,11 @@ export class RequestManager {
   }
 
   cancelAllRequest() {
-    for (let request of this.requests) {
+    let toCancel = this.requests;
+    this.requests = [];
+    for (let request of toCancel) {
       request.cancel();
       this.deepBlueService.composedCancel(request).subscribe((id) => console.warn("Canceled: " + id));
     }
-    this.requests = [];
   }
 }

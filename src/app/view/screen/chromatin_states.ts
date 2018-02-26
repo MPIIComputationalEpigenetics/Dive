@@ -194,6 +194,7 @@ export class ChromatinStatesScreenComponent implements AfterViewInit, OnDestroy 
     let state = this.deepBlueService.epigeneticMarkSource.getValue();
     let filter = new DeepBlueFilterParameters("NAME", "==", state.name, "string");
     this.deepBlueService.composedCountOverlaps(current, experiments, [filter]).subscribe((request: DeepBlueMiddlewareRequest) => {
+      this.requestManager.cancelAllRequest();
       this.requestManager.enqueueRequest(request);
       this.deepBlueService.getComposedResultIterator(request, this.progress_element, 'overlaps', this.reloadPlot, this)
         .subscribe((result: DeepBlueResult[]) => {
