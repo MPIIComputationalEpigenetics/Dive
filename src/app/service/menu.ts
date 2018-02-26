@@ -47,9 +47,9 @@ export class DiveMenuService {
 
 
     this.deepBlueService.dataToDiveValue$.subscribe(data => {
-      this.model = BASIC_MENU;
 
       if (data !== null) {
+        this.model = BASIC_MENU;
         this.model = this.model.concat(EXTRA_MENU_ITEMS);
       }
 
@@ -150,7 +150,6 @@ export class DiveMenuService {
 
 export class EpigeneticMarkMenu implements IMenu {
   errorMessage: string;
-  actualItems = new Array<string>();
 
   private static readonly SPECIAL_CASES = ['DNA Methylation', 'State Segmentation', 'Chromatin State Segmentation'];
 
@@ -164,13 +163,6 @@ export class EpigeneticMarkMenu implements IMenu {
 
       this.deepBlueService.getComposedEpigeneticMarksCategories().subscribe((categories: string[]) => {
 
-        if (this.actualItems.length > 0) {
-          for (let item of this.actualItems) {
-            this.diveMenu.remove(item);
-          }
-        }
-
-        this.actualItems = categories;
         for (let category of categories) {
           // Do not include the SPECIAL CASES menu
           if (EpigeneticMarkMenu.SPECIAL_CASES.indexOf(category) > -1) {
@@ -178,10 +170,10 @@ export class EpigeneticMarkMenu implements IMenu {
           }
 
           this.deepBlueService.getComposedEpigeneticMarksFromCategory(category).subscribe(ems => {
+            this.diveMenu.remove(category);
             this.diveMenu.add(category);
 
             for (let em of ems) {
-
               this.diveMenu.includeItem(category, em.name, 'fiber_manual_record',
                 (event: any) => this.selectItem(em),
                 ['/peaks_overlap'],
