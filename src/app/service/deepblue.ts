@@ -49,7 +49,7 @@ import {
 import { ProgressElement } from '../service/progresselement';
 
 import { ICloneable, IOperation } from '../domain/interfaces';
-import { MiddlewareProxy } from './MiddlewareProxy';
+import { MiddlewareProxy } from './middleware-proxy';
 
 
 export class DataCache<T extends IKey, V extends ICloneable> {

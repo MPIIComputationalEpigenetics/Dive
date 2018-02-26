@@ -137,7 +137,7 @@ import { ComparisonSelectionScreen } from 'app/view/screen/comparison-selection'
 
 import { Angulartics2Module } from 'angulartics2';
 import { Angulartics2GoogleAnalytics } from 'angulartics2/ga';
-import { MiddlewareProxy } from './service/MiddlewareProxy';
+import { MiddlewareProxy } from './service/middleware-proxy';
 
 @NgModule({
     imports: [
