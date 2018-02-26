@@ -68,7 +68,7 @@ export class ColumnsMenuFilterComponent implements OnInit {
           return;
         }
 
-        this.diveMenuService.clean('columns');
+        this.diveMenuService.reset('columns');
 
         for (let column of columns) {
           let formGroup = this.fb.group({
