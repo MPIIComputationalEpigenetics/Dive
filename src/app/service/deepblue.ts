@@ -785,12 +785,14 @@ export class DeepBlueService {
     }
 
     getExperimentsInfos(ids: string[]): Observable<FullExperiment[]> {
-        let params = new HttpParams()
-        for (const id of ids) {
-            params = params.append('id', id);
+        var headers = new HttpHeaders();
+        headers.append('Content-Type', 'application/json');
+
+        let request = {
+            "id": ids
         }
 
-        return this.http.get(this.deepBlueUrl + '/info', { params: params })
+        return this.http.post(this.deepBlueUrl + '/info', request, { headers: headers })
             .map((body: any) => {
                 const data = body[1] || [];
                 return data.map((value: any) => {
