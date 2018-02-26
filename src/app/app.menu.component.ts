@@ -38,7 +38,9 @@ export class AppMenuComponent {
     constructor( @Inject(forwardRef(() => AppComponent)) public app: AppComponent,
         public menuService: DiveMenuService) {
 
-        menuService.menuValue$.subscribe((menuItems: Object[]) => this.model = menuItems);
+        menuService.menuValue$.subscribe((menuItems: Object[]) => {
+            this.model = menuItems
+        });
     }
 
     changeTheme(theme: string) {
