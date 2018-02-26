@@ -104,13 +104,13 @@ export class DiveMenuService {
     }
   }
 
-  clean(parentName: string) {
+  reset(parentName: string) {
     const subMenu = this.findMenu(parentName);
     if (!subMenu) {
-      console.error('Sub Menu ' + parentName + ' not found');
-      return;
+      this.add(parentName);
+    } else {
+      subMenu['items'] = [];
     }
-    subMenu['items'] = [];
   }
 
   includeItem(parentName: string, label: string, icon: string, command: any, routerLink: any, url: any) {
@@ -170,7 +170,7 @@ export class EpigeneticMarkMenu implements IMenu {
           }
 
           this.deepBlueService.getComposedEpigeneticMarksFromCategory(category).subscribe(ems => {
-            this.diveMenu.clean(category);
+            this.diveMenu.reset(category);
 
             for (let em of ems) {
               this.diveMenu.includeItem(category, em.name, 'fiber_manual_record',
