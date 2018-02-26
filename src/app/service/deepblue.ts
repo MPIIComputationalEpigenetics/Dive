@@ -1,7 +1,7 @@
 import { DataLoadProgressBar } from '../view/component/progressbar';
 import { Injectable } from '@angular/core';
 
-import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
+import { HttpParams } from '@angular/common/http';
 
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
@@ -49,6 +49,7 @@ import {
 import { ProgressElement } from '../service/progresselement';
 
 import { ICloneable, IOperation } from '../domain/interfaces';
+import { MiddlewareProxy } from './MiddlewareProxy';
 
 
 export class DataCache<T extends IKey, V extends ICloneable> {
@@ -93,7 +94,6 @@ export class MultiKeyDataCache<T extends IKey, V extends ICloneable> {
 
 @Injectable()
 export class DeepBlueService {
-    private deepBlueUrl = 'api';
 
     // Observable string sources
     public genomeSource = new BehaviorSubject<Genome>(null);
@@ -161,7 +161,7 @@ export class DeepBlueService {
 
     //
 
-    constructor(private http: HttpClient, public progress_element: ProgressElement) {
+    constructor(private middleware: MiddlewareProxy, public progress_element: ProgressElement) {
         console.info('Starting DeepBlue Service');
     }
 
@@ -177,7 +177,7 @@ export class DeepBlueService {
             .set('controlled_vocabulary', 'epigenetic_marks')
             .set('type', 'peaks');
 
-        return this.http.get(this.deepBlueUrl + '/collection_experiments_count', { params: params })
+        return this.middleware.get('collection_experiments_count', params)
             .map(this.extractEpigeneticMarks)
     }
 
@@ -190,7 +190,7 @@ export class DeepBlueService {
             .set('controlled_vocabulary', 'epigenetic_marks')
             .set('type', 'peaks');
 
-        return this.http.get(this.deepBlueUrl + '/collection_experiments_count', { params: params })
+        return this.middleware.get('collection_experiments_count', params)
             .map(this.extractHistone)
     }
 
@@ -198,7 +198,7 @@ export class DeepBlueService {
         const params = new HttpParams()
             .set('genome', this.getGenome().name);
 
-        return this.http.get(this.deepBlueUrl + '/composed_commands/chromatin_states_by_genome', { params: params })
+        return this.middleware.get('composed_commands/chromatin_states_by_genome', params)
             .map((data: any) => {
                 let states = data[1] || [];
                 // Remove the numbers and the _
@@ -214,7 +214,7 @@ export class DeepBlueService {
         const params = new HttpParams()
             .set('genome', genome.name);
 
-        return this.http.get(this.deepBlueUrl + '/list_annotations', { params: params })
+        return this.middleware.get('list_annotations', params)
             .map(this.extractAnnotation)
     }
 
@@ -227,7 +227,7 @@ export class DeepBlueService {
             .set('controlled_vocabulary', 'biosources')
             .set('type', 'peaks');
 
-        return this.http.get(this.deepBlueUrl + '/collection_experiments_count', { params: params })
+        return this.middleware.get('collection_experiments_count', params)
             .map(this.extractBioSources)
             .do((biosources) => this.biosourcesCache = biosources)
     }
@@ -250,7 +250,7 @@ export class DeepBlueService {
             .set('controlled_vocabulary', 'techniques')
             .set('type', 'peaks');
 
-        return this.http.get(this.deepBlueUrl + '/collection_experiments_count', { params: params })
+        return this.middleware.get('collection_experiments_count', params)
             .map(this.extractBioSources)
     }
 
@@ -263,7 +263,7 @@ export class DeepBlueService {
             .set('controlled_vocabulary', 'projects')
             .set('type', 'peaks');
 
-        return this.http.get(this.deepBlueUrl + '/collection_experiments_count', { params: params })
+        return this.middleware.get('collection_experiments_count', params)
             .map(this.extractProjects)
     }
 
@@ -293,7 +293,7 @@ export class DeepBlueService {
             params = params.append("project", pj.name);
         });
 
-        return this.http.get(this.deepBlueUrl + '/list_experiments', { params: params })
+        return this.middleware.get('list_experiments', params)
             .map(this.extractExperiments)
     }
 
@@ -353,7 +353,7 @@ export class DeepBlueService {
             .set('controlled_vocabulary', 'genomes')
             .set('type', 'peaks');
 
-        return this.http.get(this.deepBlueUrl + '/collection_experiments_count', { params: params })
+        return this.middleware.get('collection_experiments_count', params)
             .map(this.extractGenomes)
     }
 
@@ -392,7 +392,7 @@ export class DeepBlueService {
             .set('type', 'peaks')
             .set('epigenetic_mark', epigenetic_mark_name);
 
-        return this.http.get(this.deepBlueUrl + '/list_experiments', { params: params })
+        return this.middleware.get('list_experiments', params)
             .map((body: any) => {
                 const data = body[1] || [];
                 return data.map((value: string[]) => {
@@ -440,7 +440,7 @@ export class DeepBlueService {
             params = params.append('chromosome', chromosome);
         }
 
-        return this.http.get(this.deepBlueUrl + '/tiling_regions', { params: params })
+        return this.middleware.get('tiling_regions', params)
             .map((body: any) => {
                 const response: string = body[1] || '';
                 const query_id = new Id(response);
@@ -464,7 +464,7 @@ export class DeepBlueService {
             .set('annotation_name', annotation.name)
             .set('genome', this.getGenome().name);
 
-        return this.http.get(this.deepBlueUrl + '/select_annotations', { params: params })
+        return this.middleware.get('select_annotations', params)
             .map((body: any) => {
                 const response: string = body[1] || '';
                 const query_id = new Id(response);
@@ -489,7 +489,7 @@ export class DeepBlueService {
             .set('experiment_name', experiment.name)
             .set('genome', this.getGenome().name);
 
-        return this.http.get(this.deepBlueUrl + '/select_experiments', { params: params })
+        return this.middleware.get('select_experiments', params)
             .map((body: any) => {
                 const response: string = body[1] || '';
                 const query_id = new Id(response);
@@ -526,7 +526,7 @@ export class DeepBlueService {
             params = params.append('query_b_id', query_b.id().id);
         }
 
-        return this.http.get(this.deepBlueUrl + '/merge_queries', { params: params })
+        return this.middleware.get('merge_queries', params)
             .map((body: any) => {
                 const response: string = body[1] || '';
                 const query_id = new Id(response);
@@ -554,7 +554,7 @@ export class DeepBlueService {
             .set('value', value)
             .set('type', type)
 
-        return this.http.get(this.deepBlueUrl + '/filter_regions', { params: params })
+        return this.middleware.get('filter_regions', params)
             .map((body: any) => {
                 const response: string = body[1] || '';
                 const query_id = new Id(response);
@@ -583,7 +583,7 @@ export class DeepBlueService {
                         .set('query_data_id', current.query_id.id)
                         .set('query_filter_id', selected.query_id.id);
 
-                    o = this.http.get(this.deepBlueUrl + '/intersection', { params: params })
+                    o = this.middleware.get('intersection', params)
                         .map((body: any) => {
                             const response: string = body[1] || '';
                             const query_id = new Id(response);
@@ -620,7 +620,7 @@ export class DeepBlueService {
             .set('amount', amount) // TODO:  receive this parameter
             .set('amount_type', 'bp'); // TODO:  receive this parameter
 
-        return this.http.get(this.deepBlueUrl + '/overlap', { params: params })
+        return this.middleware.get('overlap', params)
             .map((body: any) => {
                 const response: string = body[1] || '';
                 const query_id = new Id(response);
@@ -639,7 +639,7 @@ export class DeepBlueService {
             .set('motif', dna_motif)
             .set('genome', this.getGenome().name);
 
-        return this.http.get(this.deepBlueUrl + '/find_motif', { params: params })
+        return this.middleware.get('find_motif', params)
             .map((body: any) => {
                 const response: string = body[1] || '';
                 const query_id = new Id(response);
@@ -663,7 +663,7 @@ export class DeepBlueService {
             .set('query_id', selected_data.id().id)
             .set('cache', 'true');
 
-        return this.http.get(this.deepBlueUrl + '/query_cache', { params: params })
+        return this.middleware.get('query_cache', params)
             .map((body: any) => {
                 const response: string = body[1] || '';
                 const query_id = new Id(response);
@@ -685,7 +685,7 @@ export class DeepBlueService {
             return Observable.of(cached_result);
         }
 
-        const pollData = this.http.get(this.deepBlueUrl + '/get_request_data', { params: params })
+        const pollData = this.middleware.get('get_request_data', params)
             .map((body: any) => {
                 console.info('polling...', op_request.id().id);
                 const status = body[0] || 'error';
@@ -716,7 +716,7 @@ export class DeepBlueService {
             return this.getResult(cached_result, progress_element, request_count);
 
         } else {
-            const request: Observable<DeepBlueResult> = this.http.get(this.deepBlueUrl + '/count_regions', { params: params })
+            const request: Observable<DeepBlueResult> = this.middleware.get('count_regions', params)
                 .map((body: any) => {
                     const request_id = new Id(body[1]);
                     progress_element.increment(request_count);
@@ -736,7 +736,7 @@ export class DeepBlueService {
             .set('query_id', data.id().id)
             .set('output_format', format);
 
-        const request: Observable<DeepBlueResult> = this.http.get(this.deepBlueUrl + '/get_regions', { params: params })
+        const request: Observable<DeepBlueResult> = this.middleware.get('get_regions', params)
             .map((body: any) => {
                 const request_id = new Id(body[1]);
                 progress_element.increment(request_count);
@@ -785,14 +785,11 @@ export class DeepBlueService {
     }
 
     getExperimentsInfos(ids: string[]): Observable<FullExperiment[]> {
-        var headers = new HttpHeaders();
-        headers.append('Content-Type', 'application/json');
-
         let request = {
             "id": ids
         }
 
-        return this.http.post(this.deepBlueUrl + '/info', request, { headers: headers })
+        return this.middleware.post('info', request)
             .map((body: any) => {
                 const data = body[1] || [];
                 return data.map((value: any) => {
@@ -805,7 +802,7 @@ export class DeepBlueService {
         const params = new HttpParams()
             .set('id', id.id);
 
-        return this.http.get(this.deepBlueUrl + '/info', { params: params })
+        return this.middleware.get('info', params)
             .map((body: any) => {
                 const data = body[1] || [];
 
@@ -829,7 +826,7 @@ export class DeepBlueService {
             params = params.append('id', id);
         }
 
-        return this.http.get(this.deepBlueUrl + '/info', { params: params })
+        return this.middleware.get('info', params)
             .map((body: any) => {
                 const data = body[1] || [];
                 return data.map((value: any) => {
@@ -839,7 +836,7 @@ export class DeepBlueService {
     }
 
     getGeneModels(): Observable<GeneModel[]> {
-        return this.http.get(this.deepBlueUrl + '/list_gene_models')
+        return this.middleware.get('list_gene_models')
             .map((body: any) => {
                 const data = body[1] || [];
                 return data.map((value: string[]) => {
@@ -852,14 +849,14 @@ export class DeepBlueService {
         const params = new HttpParams()
             .set('experiment_name', experiment_name);
 
-        return this.http.get<string[]>(this.deepBlueUrl + '/preview_experiment', { params: params });
+        return this.middleware.get<string[]>('preview_experiment');
     }
 
     getGeneModelsBySelectedGenome(): Observable<GeneModel[]> {
         const params = new HttpParams()
             .set('genome', this.getGenome().name);
 
-        return this.http.get(this.deepBlueUrl + '/composed_commands/gene_models_by_genome', { params: params })
+        return this.middleware.get('composed_commands/gene_models_by_genome', params)
             .map((body: any) => {
                 const data = body[1] || [];
                 return data.map((value: any) => {
@@ -880,7 +877,7 @@ export class DeepBlueService {
             params = params.append('genes', name);
         }
 
-        return this.http.get(this.deepBlueUrl + '/select_genes', { params: params })
+        return this.middleware.get('select_genes', params)
             .map((body: any) => {
                 const response: string = body[1] || '';
                 const query_id = new Id(body[1]);
@@ -894,15 +891,12 @@ export class DeepBlueService {
             return Observable.empty<IOperation>();
         }
 
-        var headers = new HttpHeaders();
-        headers.append('Content-Type', 'application/json');
-
         let request = {
             "genome": this.getGenome().name,
             "region_set": region_set
         }
 
-        return this.http.post(this.deepBlueUrl + '/composed_commands/input_regions', request, { headers: headers })
+        return this.middleware.post('composed_commands/input_regions', request)
             .map((body: any) => {
                 progress_element.increment(request_count);
                 if (body[0] == "okay") {
@@ -918,7 +912,7 @@ export class DeepBlueService {
         const params = new HttpParams()
             .append('genome', gene_model.name);
 
-        return this.http.get<[string, string[]][]>(this.deepBlueUrl + '/composed_commands/get_enrichment_databases', { params: params });
+        return this.middleware.get<[string, string[]][]>('composed_commands/get_enrichment_databases', params);
     }
 
     public composedCountOverlaps(queries: IOperation[], experiments: IdName[], filters?: DeepBlueFilterParameters[]): Observable<DeepBlueMiddlewareRequest> {
@@ -940,7 +934,7 @@ export class DeepBlueService {
             paramsMap.set(k, params.getAll(k));
         }
 
-        return this.http.get(this.deepBlueUrl + '/composed_commands/count_overlaps', { params: params })
+        return this.middleware.get('composed_commands/count_overlaps', params)
             .map((body: any) => {
                 const response: string = body[1] || '';
                 return new DeepBlueMiddlewareRequest(paramsMap, "count_overlaps", new Id(response));;
@@ -960,7 +954,7 @@ export class DeepBlueService {
             paramsMap.set(k, params.getAll(k));
         }
 
-        return this.http.get(this.deepBlueUrl + '/composed_commands/count_genes_overlaps', { params: params })
+        return this.middleware.get('composed_commands/count_genes_overlaps', params)
             .map((body: any) => {
                 const response: string = body[1] || '';
                 return new DeepBlueMiddlewareRequest(paramsMap, "count_genes_overlaps", new Id(response));
@@ -980,7 +974,7 @@ export class DeepBlueService {
             paramsMap.set(k, params.getAll(k));
         }
 
-        return this.http.get(this.deepBlueUrl + '/composed_commands/enrich_regions_go_terms', { params: params })
+        return this.middleware.get('composed_commands/enrich_regions_go_terms', params)
             .map((body: any) => {
                 const response: string = body[1] || '';
                 return new DeepBlueMiddlewareRequest(paramsMap, "enrich_regions_go_terms", new Id(response));
@@ -988,9 +982,6 @@ export class DeepBlueService {
     }
 
     public composedCalculateOverlapsEnrichment(queries: IOperation[], universe_id: Id, datasets: Object[]): Observable<DeepBlueMiddlewareRequest> {
-        var headers = new HttpHeaders();
-        headers.append('Content-Type', 'application/json');
-
         let request: { [key: string]: any } = {
             "queries_id": queries.map((op) => op.id().id),
             "universe_id": universe_id.id,
@@ -1003,7 +994,7 @@ export class DeepBlueService {
             request_map.set(key, request[key]);
         }
 
-        return this.http.post(this.deepBlueUrl + '/composed_commands/enrich_regions_overlap', request, { headers: headers })
+        return this.middleware.post('composed_commands/enrich_regions_overlap', request)
             .map((body: any) => {
                 const response: string = body[1] || '';
                 return new DeepBlueMiddlewareRequest(request_map, "enrich_regions_overlap", new Id(response));
@@ -1011,9 +1002,6 @@ export class DeepBlueService {
     }
 
     public composedCalculateFastsEnrichment(op: IOperation): Observable<DeepBlueMiddlewareRequest> {
-        var headers = new HttpHeaders();
-        headers.append('Content-Type', 'application/json');
-
         let request: { [key: string]: any } = {
             "query_id": op.id().id,
             "genome": this.genomeSource.getValue().name
@@ -1024,7 +1012,7 @@ export class DeepBlueService {
             request_map.set(key, request[key]);
         }
 
-        return this.http.post(this.deepBlueUrl + '/composed_commands/enrich_regions_fast', request, { headers: headers })
+        return this.middleware.post('composed_commands/enrich_regions_fast', request)
             .map((body: any) => {
                 const response: string = body[1] || '';
                 return new DeepBlueMiddlewareRequest(request_map, "enrich_regions_fast", new Id(response));
@@ -1035,14 +1023,14 @@ export class DeepBlueService {
         const params = new HttpParams()
             .append('id', request.id().id);
 
-        return this.http.get<string[]>(this.deepBlueUrl + '/composed_commands/cancel', { params: params });
+        return this.middleware.get<string[]>('composed_commands/cancel', params);
     }
 
     public getComposedResult(request: DeepBlueMiddlewareRequest): Observable<[string, string | DeepBlueResult[]]> {
         const params = new HttpParams()
             .set('request_id', request.requestId().id);
 
-        return this.http.get<[string, string | DeepBlueResult[]]>(this.deepBlueUrl + '/composed_commands/get_request', { params: params });
+        return this.middleware.get<[string, string | DeepBlueResult[]]>('composed_commands/get_request', params);
     }
 
 
@@ -1114,7 +1102,7 @@ export class DeepBlueService {
             .set('gene_model', gene_model)
             .set('gene_id_name', gene_id_name);
 
-        return this.http.get<Gene[]>(this.deepBlueUrl + '/composed_commands/list_genes', { params: params })
+        return this.middleware.get<Gene[]>('composed_commands/list_genes', params)
     }
 
 
@@ -1122,14 +1110,14 @@ export class DeepBlueService {
         const params = new HttpParams()
             .set('genome', genome);
 
-        return this.http.get<[string, string[]][]>(this.deepBlueUrl + '/composed_commands/get_enrichment_databases', { params: params })
+        return this.middleware.get<[string, string[]][]>('composed_commands/get_enrichment_databases', params)
     }
 
     public getComposedEpigeneticMarksCategories(): Observable<string[]> {
         const params = new HttpParams()
             .set('genome', this.getGenome().name);
 
-        return this.http.get<string[]>(this.deepBlueUrl + '/composed_commands/get_epigenetic_marks_categories', { params: params });
+        return this.middleware.get<string[]>('composed_commands/get_epigenetic_marks_categories', params);
     }
 
     public getComposedEpigeneticMarksFromCategory(category: string): Observable<FullMetadata[]> {
@@ -1137,7 +1125,7 @@ export class DeepBlueService {
             .set('category', category)
             .set('genome', this.getGenome().name);
 
-        return this.http.get(this.deepBlueUrl + '/composed_commands/get_epigenetic_marks_from_category', { params: params })
+        return this.middleware.get('composed_commands/get_epigenetic_marks_from_category', params)
             .map(this.extractFullMetadata)
     }
 
@@ -1146,14 +1134,14 @@ export class DeepBlueService {
             .set('biosource', biosource.name)
             .set('genome', this.getGenome().name);
 
-        return this.http.get<string[]>(this.deepBlueUrl + '/composed_commands/get_related_biosources', { params: params });
+        return this.middleware.get<string[]>('composed_commands/get_related_biosources', params);
     }
 
     getQueryInfo(id: Id): Observable<IOperation> {
         const params = new HttpParams()
             .set('query_id', id.id);
 
-        return this.http.get(this.deepBlueUrl + '/composed_commands/query_info', { params: params })
+        return this.middleware.get('composed_commands/query_info', params)
             .map((body: any) => {
                 return <IOperation>toClass(body);
             });
