@@ -916,25 +916,19 @@ export class DeepBlueService {
     }
 
     public composedCountOverlaps(queries: IOperation[], experiments: IdName[], filters?: DeepBlueFilterParameters[]): Observable<DeepBlueMiddlewareRequest> {
-        let params = new HttpParams()
-        for (const query_op_id of queries) {
-            params = params.append('queries_id', query_op_id.id().id);
+
+        let request : any = {
+            "queries_id": queries.map((op) => op.id().id),
+            "experiments_id"  :  experiments.map((exp) => exp.id.id),
+            "filters" : JSON.stringify(filters)
         }
 
-        for (const exp of experiments) {
-            params = params.append('experiments_id', exp.id.id);
+        let paramsMap = new Map<string, [string | string[]]>();
+        for (let k of Object.keys(request)) {
+            paramsMap.set(k, request[k]);
         }
 
-        if (filters) {
-            params = params.append("filters", JSON.stringify(filters));
-        }
-
-        let paramsMap = new Map<string, string | string[]>();
-        for (let k in params.keys()) {
-            paramsMap.set(k, params.getAll(k));
-        }
-
-        return this.middleware.get('composed_commands/count_overlaps', params)
+        return this.middleware.post('composed_commands/count_overlaps', request)
             .map((body: any) => {
                 const response: string = body[1] || '';
                 return new DeepBlueMiddlewareRequest(paramsMap, "count_overlaps", new Id(response));;
