@@ -2,7 +2,7 @@
   <h1 style="font-weight:normal">{{selectedRow?.text()}}</h1>
   <p-scrollPanel [style]="{height: '95%', width: '100%'}">
     <button pButton type="button" icon="ui-icon-check-circle" label="Select Dataset" (click)="selectDatasets($event)"></button>
-    <button pButton type="button" (click)="visibleSidebar2 = false" label="Cancel" class="ui-button-secondary"></button>
+    <button pButton type="button" (click)="visibleSidebar = false" label="Cancel" class="ui-button-secondary"></button>
 
     <h4>{{ selectedRow?.epigenetic_mark() }}</h4>
     <h4>{{ selectedRow?.biosource() }}</h4>
