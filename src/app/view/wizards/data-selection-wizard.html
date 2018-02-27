@@ -1,0 +1,86 @@
+<div class="ui-g">
+  <div  *ngIf="finished == false" class="ui-g-2">
+    <h2>Selected Data </h2>
+    <p>Genome: {{ getGenomeLabel() }}</p>
+    <p>Projects: {{ getProjectsLabel() }}</p>
+    <p>Query: {{ getQueryLabel() }}</p>
+  </div>
+  <div class="{{ wizardClassLength() }}">
+    <aw-wizard #wizard [navBarLocation]="'top'" [navBarLayout]="'small'">
+
+      <aw-wizard-step stepTitle="Welcome" (stepEnter)="inWizard($event)">
+
+        <navegation-menu [disablePrevious]="true"></navegation-menu>
+
+        <p-fieldset legend="Welcome">
+          Welcome to Dive, here we will guide you to select the data that you want to analyze.
+        </p-fieldset>
+
+
+      </aw-wizard-step>
+
+      <aw-wizard-step stepTitle="Select Genome" (stepEnter)="inWizard($event)">
+        <navegation-menu></navegation-menu>
+
+        <p-fieldset legend="Select Genome">
+          <div class="ui-inputgroup">
+            <span class="ui-inputgroup-addon" style="border-style: none">Genome</span>
+            <p-dropdown #genomesDropdown [options]="genomeItems" [style]="{'width':'75px'}" (onChange)="selectGenome($event)" [(ngModel)]="selectedGenome"></p-dropdown>
+          </div>
+        </p-fieldset>
+
+      </aw-wizard-step>
+
+      <aw-wizard-step stepTitle="Select Projects" (stepEnter)="inWizard($event)">
+        <navegation-menu></navegation-menu>
+
+        <p-fieldset legend="Select Genome">
+          <div class="ui-inputgroup">
+            <span class="ui-inputgroup-addon" style="border-style: none">Projects</span>
+            <p-multiSelect #multiselect [defaultLabel]="defaultSelectProjects" [options]="projectItems" [(ngModel)]="selectedProjects"
+              (onChange)="selectProjects($event)"></p-multiSelect>
+          </div>
+        </p-fieldset>
+
+      </aw-wizard-step>
+
+      <aw-wizard-step stepTitle="Select Query" (stepEnter)="inWizard($event)">
+        <navegation-menu></navegation-menu>
+
+        <p-fieldset legend="Select Query Dataset">
+          <data-selection-main (queryIdSelected)="selectQueryDataSet($event)"></data-selection-main>
+        </p-fieldset>
+
+
+      </aw-wizard-step>
+
+      <aw-wizard-step stepTitle="Select Comparison Datasets" (stepEnter)="inWizard($event)">
+        <navegation-menu></navegation-menu>
+
+        <h1>This part is not working yet</h1>
+
+        <p-fieldset legend="Select Comparisons">
+          <data-selection-main (queryIdSelected)="addComparison($event)"></data-selection-main>
+        </p-fieldset>
+
+      </aw-wizard-step>
+
+      <aw-wizard-step stepTitle="Complete" (stepEnter)="finishWizard($event)">
+          <p-toolbar>
+              <div class="ui-toolbar-group-left">
+                <button pButton type="button" awPreviousStep label="Back" icon="ui-icon-arrow-back"></button>
+              </div>
+
+              <div class="ui-toolbar-group-right">
+                <button pButton type="button" class="ui-button-success" awNextStep (click)="startAnalysis($event)" label="Start Analysis" icon="fa fa-fw fa-check"></button>
+              </div>
+            </p-toolbar>`
+
+          <h2>Selected Data </h2>
+          <p>Genome: {{ getGenomeLabel() }}</p>
+          <p>Projects: {{ getProjectsLabel() }}</p>
+          <p>Query: {{ getQueryLabel() }}</p>
+
+        </aw-wizard-step>
+
+    </aw-wizard>
