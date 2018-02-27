@@ -185,6 +185,7 @@ export class SelectDatasetsComponent implements OnInit {
   }
 
   selectDatasets(event: any) {
+    this.visibleSidebar = false;
 
     if (Array.isArray(this.selectedDatasets)) {
       /*
