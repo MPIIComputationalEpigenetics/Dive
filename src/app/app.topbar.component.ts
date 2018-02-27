@@ -30,7 +30,7 @@ import { timeout } from 'rxjs/operator/timeout';
                                     <span class="ui-inputgroup-addon" style="border-style: none">Genome</span>
                                     <p-dropdown #genomesDropdown [options]="genomeItems" [style]="{'width':'75px'}" (onChange)="selectGenome($event)"  [(ngModel)]="selectedGenome"></p-dropdown>
                                 </div>
-                                </div>
+                            </div>
                         </p-toolbar>
                     </li>
                     <li style="width:250px">
@@ -99,7 +99,6 @@ export class AppTopBar implements OnInit {
             }
             this.selectProjects({ value: projects });
             this.multiselect.updateLabel();
-            console.log(this.projectItems, this.projectItems.length);
         })
     }
 
