@@ -10,7 +10,6 @@ import { ProgressElement } from 'app/service/progresselement';
 export class InitialScreenComponent {
 
   constructor(private deepBlueService: DeepBlueService, private progress_element: ProgressElement,
-
     private router: Router) { }
 
   showDemo: boolean = false;
