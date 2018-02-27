@@ -231,7 +231,7 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
         this.rightPanelClick = false;
     }
 
-    onMenuButtonClick(event: any) {
+    onMenuButtonClick(event?: any) {
         this.menuClick = true;
         this.rotateMenuButton = !this.rotateMenuButton;
         this.topbarMenuActive = false;
@@ -246,7 +246,9 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
             }
         }
 
-        event.preventDefault();
+        if (event) {
+            event.preventDefault();
+        }
     }
 
     onMenuClick($event: any) {
