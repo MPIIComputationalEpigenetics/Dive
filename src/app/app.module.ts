@@ -3,7 +3,7 @@ import { DataStackFactory } from 'app/service/datastack';
 import { SelectedData } from 'app/service/selecteddata';
 import { NgModule } from '@angular/core';
 import { FormsModule, FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+    import { HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 import { AppRoutes } from './app.routes';
@@ -135,12 +135,16 @@ import { DiveMenuService } from 'app/service/menu';
 import { RouterGuard } from 'app/service/router-guard';
 import { ComparisonSelectionScreen } from 'app/view/screen/comparison-selection';
 
+import { ArchwizardModule } from 'ng2-archwizard';
+import { DataSelectionWizard, NavegationMenu } from 'app/view/wizards/data-selection-wizard';
+
 import { Angulartics2Module } from 'angulartics2';
 import { Angulartics2GoogleAnalytics } from 'angulartics2/ga';
 import { MiddlewareProxy } from './service/middleware-proxy';
 
 @NgModule({
     imports: [
+        ArchwizardModule,
         BrowserModule,
         FormsModule,
         AppRoutes,
@@ -256,7 +260,9 @@ import { MiddlewareProxy } from './service/middleware-proxy';
         RegionsUpload,
         RegionsPaste,
         QueryFlow,
-        SelectQuery
+        SelectQuery,
+        NavegationMenu,
+        DataSelectionWizard
     ],
     providers: [
         { provide: LocationStrategy, useClass: HashLocationStrategy },
