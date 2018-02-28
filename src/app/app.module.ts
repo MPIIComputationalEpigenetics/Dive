@@ -117,7 +117,6 @@ import { SelectExperimentsComponent } from "app/view/component/data-selection/se
 import { SelectAnnotationsComponent } from "app/view/component/data-selection/select-annotations";
 import { SelectGenesComponent } from 'app/view/component/data-selection/select-genes';
 import { SelectDatasetsComponent } from 'app/view/component/data-selection/select-datasets';
-import { SelectDatabasesComponent } from 'app/view/component/data-selection/select-databases';
 import { DataInfoBoxComponent } from 'app/view/component/data-info-box';
 import { SelectedDataView, SelectedDataButton } from 'app/view/component/deepblue';
 import { LengthMenuFilterComponent } from 'app/view/component/menu/length-filtering';
@@ -239,7 +238,6 @@ import { MiddlewareProxy } from './service/middleware-proxy';
         SelectExperimentsComponent,
         SelectTilingRegionsComponent,
         SelectGenesComponent,
-        SelectDatabasesComponent,
         InitialScreenComponent,
         DataSelectionScreen,
         ComparisonSelectionScreen,
