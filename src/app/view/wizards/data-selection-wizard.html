@@ -54,6 +54,17 @@
 
       </aw-wizard-step>
 
+
+      <aw-wizard-step stepTitle="Similar Data" (stepEnter)="inWizard($event)">
+          <navegation-menu></navegation-menu>
+
+          <p-fieldset legend="Selecting Similar Data">
+            <data-selection-main (queryIdSelected)="selectQueryDataSet($event)"></data-selection-main>
+          </p-fieldset>
+
+
+        </aw-wizard-step>
+
       <aw-wizard-step stepTitle="Select Comparison Datasets" (stepEnter)="inWizard($event)">
         <navegation-menu></navegation-menu>
 

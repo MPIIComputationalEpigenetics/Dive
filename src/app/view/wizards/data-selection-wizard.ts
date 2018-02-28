@@ -7,6 +7,9 @@ import { WizardComponent } from "ng2-archwizard";
 import { AppComponent } from "app/app.component";
 import { Router } from "@angular/router";
 import { ProgressElement } from "app/service/progresselement";
+import { SimilarDatasets } from "app/algorithms/similar-datasets";
+import { DeepBlueMiddlewareOverlapEnrichtmentResultItem } from "app/domain/operations";
+import { RequestManager } from "../../service/requests-manager";
 
 
 @Component({
@@ -53,7 +56,7 @@ export class DataSelectionWizard {
 
   constructor(@Inject(forwardRef(() => AppComponent)) public app: AppComponent,
     private router: Router, private progress_element: ProgressElement,
-    public deepBlueService: DeepBlueService) {
+    private requestManager: RequestManager, public deepBlueService: DeepBlueService) {
   }
 
   ngOnInit(): void {
@@ -64,11 +67,12 @@ export class DataSelectionWizard {
 
       this.updateProjects();
 
+      console.log("[wizard] changing genome", genome);
       this.deepBlueService.getAnnotations(genome).subscribe(annotations => {
         for (let annotation of annotations) {
           if (annotation.name.toLowerCase().startsWith('cpg islands')) {
             this.deepBlueService.selectAnnotation(annotation, this.progress_element, 0).subscribe((operation) => {
-              this.selectedQuery = operation;
+              this.selectQueryDataSet(operation, true);
             });
           }
         }
@@ -91,12 +95,12 @@ export class DataSelectionWizard {
   inWizard($event: any) {
     if (this.finished) {
       this.finished = false;
-      this.app.onMenuButtonClick();
+      setTimeout(() => this.app.onMenuButtonClick());
     }
   }
 
   finishWizard($event: any) {
-    this.app.onMenuButtonClick();
+    setTimeout(() => this.app.onMenuButtonClick());
     this.finished = true;
     this.deepBlueService.setDataToDive(this.selectedQuery);
   }
@@ -131,9 +135,18 @@ export class DataSelectionWizard {
     this.deepBlueService.setProjects($event.value);
   }
 
-  selectQueryDataSet($event: any) {
+  selectQueryDataSet($event: any, notJump?: boolean) {
     this.selectedQuery = $event;
-    this.wizard.navigation.goToNextStep();
+    SimilarDatasets.processSimilar(this.selectedQuery, this.reloadData, this, this.deepBlueService, this.requestManager, this.progress_element);
+
+    if (!notJump) {
+      this.wizard.navigation.goToNextStep();
+    }
+
+  }
+
+  reloadData(_self: DataSelectionWizard, datum: DeepBlueMiddlewareOverlapEnrichtmentResultItem[]) {
+    console.log("got", datum);
   }
 
   getGenomeLabel() {
