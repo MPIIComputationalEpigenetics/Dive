@@ -136,7 +136,6 @@ export class DeepBlueService {
     setGenome(genome: Genome) {
         let actual = this.genomeSource.getValue();
         if (genome && !genome.equals(actual)) {
-            console.log(this.genomeSource.getValue(), genome);
             this.genomeSource.next(genome);
         }
     }
@@ -150,6 +149,7 @@ export class DeepBlueService {
 
         if ((projects && !actual) || (!projects && actual)){
             this.projectsSource.next(projects);
+            return;
         }
 
         if (actual.length != projects.length) {
@@ -943,13 +943,6 @@ export class DeepBlueService {
             });
     }
 
-    public composedOverlapEnrichmentDatabase(gene_model: GeneModel): Observable<[string, string[]][]> {
-        const params = new HttpParams()
-            .append('genome', gene_model.name);
-
-        return this.middleware.get<[string, string[]][]>('composed_commands/get_enrichment_databases', params);
-    }
-
     public composedCountOverlaps(queries: IOperation[], experiments: IdName[], filters?: DeepBlueFilterParameters[]): Observable<DeepBlueMiddlewareRequest> {
 
         let request : any = {
@@ -1135,11 +1128,30 @@ export class DeepBlueService {
     }
 
 
+    genomeToDatabases = new Map<string, Observable<[string, string[]][]>>();
+    genomeToDatabasesResult = new Map<string, [string, string[]][]>();
+
     public getComposedEnrichmentDatabases(genome: string): Observable<[string, string[]][]> {
+        if (this.genomeToDatabasesResult.has(genome)) {
+            return Observable.of(this.genomeToDatabasesResult.get(genome));
+        }
+
+        if (this.genomeToDatabases.has(genome)) {
+            return this.genomeToDatabases.get(genome);
+        }
+
         const params = new HttpParams()
             .set('genome', genome);
 
-        return this.middleware.get<[string, string[]][]>('composed_commands/get_enrichment_databases', params)
+        let observable = this.middleware.get<[string, string[]][]>('composed_commands/get_enrichment_databases', params)
+            .share();
+
+        this.genomeToDatabases.set(genome, observable);
+        observable.subscribe((result) => {
+            this.genomeToDatabasesResult.set(genome, result)
+        });
+
+        return observable;
     }
 
     public getComposedEpigeneticMarksCategories(): Observable<string[]> {
