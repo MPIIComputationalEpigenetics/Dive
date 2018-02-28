@@ -15,6 +15,13 @@ export class Id implements IKey {
     text(): string {
         return 'ID: ' + this.id;
     }
+
+    equals(other: Id): boolean {
+        if (other != null) {
+            return this.id == other.id;
+        }
+        return false;
+    }
 }
 
 export class Name implements IKey {
@@ -49,6 +56,12 @@ export class IdName extends Name {
 
     text(): string {
         return this.name + "(" + this.id + ")";
+    }
+
+    equals(other: IdName): boolean {
+        if (other != null) {
+            return this.id.equals(other.id);
+        }
     }
 }
 
