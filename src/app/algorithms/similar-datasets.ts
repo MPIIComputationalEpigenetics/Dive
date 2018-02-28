@@ -24,6 +24,20 @@ export class SimilarDatasets {
     return a[column] - b[column];
   }
 
+  static processSimilar(data: IOperation,
+    callback: (_self: any, result: DeepBlueMiddlewareOverlapEnrichtmentResultItem[]) => void, _self: any,
+    deepBlueService: DeepBlueService, requestManager: RequestManager, progress_element: ProgressElement) {
+
+    deepBlueService.composedCalculateFastsEnrichment(data).subscribe((request) => {
+      requestManager.cancelAllRequest();
+      requestManager.enqueueRequest(request)
+      deepBlueService.getComposedResultIterator(request, progress_element, 'overlaps_enrichment_fast', callback, _self)
+        .subscribe((result: DeepBlueMiddlewareOverlapEnrichtmentResultItem[]) => {
+          callback(_self, result);
+        })
+    })
+  }
+
   static sortDatasets(cutoffValue: number, order: string, datum: DeepBlueMiddlewareOverlapEnrichtmentResultItem[]) {
 
     let orderFunction = this.getOrderFunction(order);

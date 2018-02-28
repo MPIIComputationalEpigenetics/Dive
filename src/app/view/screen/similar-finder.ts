@@ -63,14 +63,7 @@ export class SimilarFinder implements OnDestroy {
     }
 
     processSimilar(data: IOperation) {
-        this.deepBlueService.composedCalculateFastsEnrichment(data).subscribe((request) => {
-            this.requestManager.cancelAllRequest();
-            this.requestManager.enqueueRequest(request)
-            this.deepBlueService.getComposedResultIterator(request, this.progress_element, 'overlaps_enrichment_fast', this.reloadData, this)
-                .subscribe((result: DeepBlueMiddlewareOverlapEnrichtmentResultItem[]) => {
-                    this.reloadData(this, result);
-                })
-        })
+        SimilarDatasets.processSimilar(data, this.reloadData, this, this.deepBlueService, this.requestManager, this.progress_element);
     }
 
     reloadData(_self: SimilarFinder, datum: DeepBlueMiddlewareOverlapEnrichtmentResultItem[]) {
