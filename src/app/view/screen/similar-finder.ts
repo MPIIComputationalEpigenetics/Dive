@@ -22,7 +22,6 @@ export class SimilarFinder implements OnDestroy {
     @ViewChild('biosourcessimilaritybarchart') biosourcessimilaritybarchart: SimilarityBarChartComponent;
     @ViewChild('emssimilaritybarchart') emssimilaritybarchart: SimilarityBarChartComponent;
 
-    visibleSidebar2 = false;
     stackSubscriber: Subscription;
 
     cutoffOptions = [
