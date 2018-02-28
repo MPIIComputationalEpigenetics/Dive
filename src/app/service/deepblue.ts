@@ -121,8 +121,11 @@ export class DeepBlueService {
 
     biosourcesCache: Array<BioSource> = null;
 
-    setDataInfoSelected(cliked_data: any) {
-        this.dataInfoSelectedSource.next(cliked_data);
+    setDataInfoSelected(clickedData: any) {
+        let actual = this.dataInfoSelectedSource.getValue();
+        if (actual && !actual.equals(clickedData)) {
+            this.dataInfoSelectedSource.next(clickedData);
+        }
     }
 
     getDataInfoSelected(): Object {
@@ -131,20 +134,52 @@ export class DeepBlueService {
 
     // Service messages
     setGenome(genome: Genome) {
-        this.genomeSource.next(genome);
+        let actual = this.genomeSource.getValue();
+        if (genome && !genome.equals(actual)) {
+            console.log(this.genomeSource.getValue(), genome);
+            this.genomeSource.next(genome);
+        }
     }
 
     setProjects(projects: Project[]) {
-        this.projectsSource.next(projects);
+        let actual = this.projectsSource.getValue();
+
+        if (projects == actual) {
+            return;
+        }
+
+        if ((projects && !actual) || (!projects && actual)){
+            this.projectsSource.next(projects);
+        }
+
+        if (actual.length != projects.length) {
+            this.projectsSource.next(projects);
+        } else {
+            actual.sort();
+            projects.sort();
+            for (let i = 0; i < actual.length; i++) {
+                if (!actual[i].id.equals(projects[i].id)) {
+                    console.log("[2s] setting projects", projects);
+                    this.projectsSource.next(projects);
+                    return;
+                }
+            }
+        }
     }
 
     /* Define the annotation that we are going to dive */
     setDataToDive(dataToDive: IOperation) {
-        this.dataToDiveSource.next(dataToDive);
+        let actual = this.dataToDiveSource.getValue();
+        if (dataToDive && !dataToDive.id().equals(actual.id())) {
+            this.dataToDiveSource.next(dataToDive);
+        }
     }
 
     setEpigeneticMark(epigeneticMark: EpigeneticMark) {
-        this.epigeneticMarkSource.next(epigeneticMark);
+        let actual = this.epigeneticMarkSource.getValue();
+        if (epigeneticMark && !epigeneticMark.equals(actual)) {
+            this.epigeneticMarkSource.next(epigeneticMark);
+        }
     }
 
     getGenome(): Genome {
