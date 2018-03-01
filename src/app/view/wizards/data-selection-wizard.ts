@@ -49,7 +49,8 @@ export class DataSelectionWizard {
   selectedQuery: IOperation = null;
 
   similarOrder = "desc";
-  cutoff = 0.20;
+  cutoff = 5;
+  filterSimilarText = "";
   enrichmentData: DeepBlueMiddlewareOverlapEnrichtmentResultItem[];
   sortedEnrichmentData: {
     "all": DeepBlueMiddlewareOverlapEnrichtmentResultItem[];
@@ -161,14 +162,14 @@ export class DataSelectionWizard {
 
   changeSearch($event: any, direction: string) {
     if (direction == 'more') {
-      this.cutoff -= 0.05;
-      if (this.cutoff < 0) {
-        this.cutoff = 0;
+      this.cutoff -= 5;
+      if (this.cutoff <= 0) {
+        this.cutoff = 1;
       }
     } else {
-      this.cutoff += 0.05;
-      if (this.cutoff > 1) {
-        this.cutoff = 1;
+      this.cutoff += 5;
+      if (this.cutoff > 100) {
+        this.cutoff = 100;
       }
     }
     this.updateSimilarList();
@@ -185,6 +186,29 @@ export class DataSelectionWizard {
     return this.selectedGenome.name;
   }
 
+  getSimilarBioSources(): string[] {
+    let all: string[] = [];
+
+    if (!this.sortedEnrichmentData) {
+      return all;
+    }
+
+    for (let bs of this.sortedEnrichmentData.biosources) {
+      if (this.filterSimilar(<string>bs[0])) {
+        all.push(<string>bs[0]);
+      }
+    }
+    return all.sort();
+  }
+
+  filterSimilar(name: string) {
+    if (this.filterSimilarText.toLowerCase().trim().length == 0) {
+      return true;
+    }
+    name = name.toLowerCase();
+    return name.indexOf(this.filterSimilarText.toLowerCase()) >= 0;
+  }
+
   addBioSource(c: string) {
     this.deepBlueService.getBioSourceByNameObservable(c).subscribe((bs: BioSource) => {
       this.deepBlueService.addSelectedBiosource(bs);
@@ -197,7 +221,7 @@ export class DataSelectionWizard {
     })
   }
 
-  getSelectedBioSources() : string[] {
+  getSelectedBioSources(): string[] {
     return this.deepBlueService.selectedBioSources.getValue().map((x: BioSource) => x.name)
   }
 

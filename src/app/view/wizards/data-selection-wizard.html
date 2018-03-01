@@ -1,14 +1,14 @@
 <div class="ui-g">
   <div *ngIf="finished == false" class="ui-g-2">
     <h2>Selected Data </h2>
-    <p>Genome: {{ getGenomeLabel() }}</p>
-    <p>Projects: {{ getProjectsLabel() }}</p>
-    <p>Query: {{ getQueryLabel() }}</p>
+    <h4>Genome: {{ getGenomeLabel() }}</h4>
+    <h4>Projects: {{ getProjectsLabel() }}</h4>
+    <h4 style="word-wrap: break-word">Query: {{ getQueryLabel() }}</h4>
 
     <p-fieldset *ngIf="getSelectedBioSources().length > 0" legend="BioSources">
       <div class="ui-g" *ngFor="let c of getSelectedBioSources()">
         <div class="ui-g-8">{{ c }}</div>
-        <div class="ui-g-1">
+        <div class="ui-g-offset-1 ui-g-1">
           <button pButton type="button" icon="fa fa-fw fa-close" (click)="removeBioSource(c[0])"></button>
         </div>
       </div>
@@ -68,19 +68,10 @@
       <aw-wizard-step stepTitle="Similar Data" (stepEnter)="inWizard($event)">
         <navegation-menu></navegation-menu>
 
-        <p-fieldset legend="Selecting Similar Data">
+        <p-fieldset legend="Interesting BioSources">
           <div class="ui-g">
-            <div class="ui-g-8">
-              <h3>We found these interestiing biosources:</h3>
-
-              <div class="ui-g" *ngFor="let c of sortedEnrichmentData?.biosources">
-                <div class="ui-g-4">{{c[0]}}</div>
-                <div class="ui-g-2">
-                  <button pButton type="button" icon="fa fa-fw fa-check" label="Use this biosource" (click)="addBioSource(c[0])"></button>
-                </div>
-              </div>
-
-              Include all in your analysis? (You still can include them later)
+            <div class="ui-g-6">
+              <h3>Include all in your analysis? (You still can include them later)</h3>
               <div class="ui-g">
                 <div class="ui-g-6">
                   <p-toolbar [style]="{'background-color':'transparent'}">
@@ -95,40 +86,49 @@
                 </div>
               </div>
 
+              <h3>Include Individually:</h3>
+              <input type='text' style='padding:8px;margin:15px auto;width:60%;' placeholder='Type to filter biosources' [(ngModel)]="filterSimilarText"/>
+              <div class="ui-g" *ngFor="let c of getSimilarBioSources()">
+                <div class="ui-g-8 ">{{c}}</div>
+                <div class="ui-g-offset-1 ui-g-3">
+                  <button pButton type="button" icon="fa fa-fw fa-check" label="Select" (click)="addBioSource(c)"></button>
+                </div>
+              </div>
+
             </div>
 
-            <div class="ui-g-4">
-              <h2>Parameters</h2>
+            <div class="ui-g-offset-2 ui-g-4">
+              <p-fieldset legend="Parameters">
 
-              <h3>List data as: </h3>
-              <div class="ui-g" style="width:250px;margin-bottom:10px">
-                <div class="ui-g-12">
-                  <p-radioButton name="group2" value="desc" label="Most similar" (onClick)="updateSimilarList()" [(ngModel)]="similarOrder"
-                    inputId="preopt1"></p-radioButton>
+                <h3>List data as: </h3>
+                <div class="ui-g" style="width:250px;margin-bottom:10px">
+                  <div class="ui-g-12">
+                    <p-radioButton name="group2" value="desc" label="Most similar" (onClick)="updateSimilarList()" [(ngModel)]="similarOrder"
+                      inputId="preopt1"></p-radioButton>
+                  </div>
+                  <div class="ui-g-12">
+                    <p-radioButton name="group2" value="asc" label="Most dissimilar" (onClick)="updateSimilarList()" [(ngModel)]="similarOrder"
+                      inputId="preopt2"></p-radioButton>
+                  </div>
                 </div>
-                <div class="ui-g-12">
-                  <p-radioButton name="group2" value="asc" label="Most dissimilar" (onClick)="updateSimilarList()" [(ngModel)]="similarOrder"
-                    inputId="preopt2"></p-radioButton>
+
+
+                You can also list the terms in more or less strict way. [click here for information about the method (TODO)]
+                <div class="ui-g">
+                  <div class="ui-g-12">
+                    <p-toolbar [style]="{'background-color':'transparent'}">
+                      <div *ngIf="!disablePrevious" class="ui-toolbar-group-left">
+                        <button pButton type="button" label="More strict" (click)="changeSearch($event, 'more')" icon="ui-icon-zoom-in"></button>
+                      </div>
+
+                      <div *ngIf="!disableNext" class="ui-toolbar-group-right">
+                        <button pButton type="button" label="Less strict" (click)="changeSearch($event, 'less')" icon="ui-icon-zoom-out"></button>
+                      </div>
+                    </p-toolbar>
+                    <h1>cutoff: {{ cutoff }}</h1>
+                  </div>
                 </div>
-              </div>
-
-
-              You can also list the terms in more or less strict way. [click here for information about the method (TODO)]
-              <div class="ui-g">
-                <div class="ui-g-12">
-                  <p-toolbar [style]="{'background-color':'transparent'}">
-                    <div *ngIf="!disablePrevious" class="ui-toolbar-group-left">
-                      <button pButton type="button" label="More strict" (click)="changeSearch($event, 'more')" icon="ui-icon-zoom-in"></button>
-                    </div>
-
-                    <div *ngIf="!disableNext" class="ui-toolbar-group-right">
-                      <button pButton type="button" label="Less strict" (click)="changeSearch($event, 'less')" icon="ui-icon-zoom-out"></button>
-                    </div>
-                  </p-toolbar>
-                  <h1>cutoff: {{ cutoff }}</h1>
-                </div>
-              </div>
-
+              </p-fieldset>
             </div>
           </div>
         </p-fieldset>
