@@ -147,7 +147,7 @@ export class DeepBlueService {
             return;
         }
 
-        if ((projects && !actual) || (!projects && actual)){
+        if ((projects && !actual) || (!projects && actual)) {
             this.projectsSource.next(projects);
             return;
         }
@@ -170,6 +170,16 @@ export class DeepBlueService {
     /* Define the annotation that we are going to dive */
     setDataToDive(dataToDive: IOperation) {
         let actual = this.dataToDiveSource.getValue();
+
+        if (dataToDive == actual) {
+            return;
+        }
+
+        if ((dataToDive && !actual) || (!dataToDive && actual)) {
+            this.dataToDiveSource.next(dataToDive);
+            return;
+        }
+
         if (dataToDive && !dataToDive.id().equals(actual.id())) {
             this.dataToDiveSource.next(dataToDive);
         }
@@ -265,6 +275,14 @@ export class DeepBlueService {
         return this.middleware.get('collection_experiments_count', params)
             .map(this.extractBioSources)
             .do((biosources) => this.biosourcesCache = biosources)
+    }
+
+    getBioSourceByNameObservable(name: string): Observable<BioSource> {
+        if (!this.biosourcesCache) {
+            return this.listBioSources().flatMap(() => Observable.of(this.getBioSourceByName(name)));
+        } else {
+            return Observable.of(this.getBioSourceByName(name));
+        }
     }
 
     getBioSourceByName(name: string): BioSource {
@@ -945,10 +963,10 @@ export class DeepBlueService {
 
     public composedCountOverlaps(queries: IOperation[], experiments: IdName[], filters?: DeepBlueFilterParameters[]): Observable<DeepBlueMiddlewareRequest> {
 
-        let request : any = {
+        let request: any = {
             "queries_id": queries.map((op) => op.id().id),
-            "experiments_id"  :  experiments.map((exp) => exp.id.id),
-            "filters" : JSON.stringify(filters)
+            "experiments_id": experiments.map((exp) => exp.id.id),
+            "filters": JSON.stringify(filters)
         }
 
         let paramsMap = new Map<string, [string | string[]]>();
