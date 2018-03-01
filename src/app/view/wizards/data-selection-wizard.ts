@@ -1,7 +1,7 @@
 import { Component, OnDestroy, AfterViewInit, ViewChild, Inject, forwardRef, Input } from "@angular/core";
 import { DeepBlueService } from "app/service/deepblue";
 import { SelectItem, Dropdown, MultiSelect } from "primeng/primeng";
-import { Project } from "app/domain/deepblue";
+import { Project, BioSource } from "app/domain/deepblue";
 import { IOperation } from "app/domain/interfaces";
 import { WizardComponent } from "ng2-archwizard";
 import { AppComponent } from "app/app.component";
@@ -10,6 +10,7 @@ import { ProgressElement } from "app/service/progresselement";
 import { SimilarDatasets } from "app/algorithms/similar-datasets";
 import { DeepBlueMiddlewareOverlapEnrichtmentResultItem } from "app/domain/operations";
 import { RequestManager } from "../../service/requests-manager";
+import { IStatsResult } from "app/service/statistics";
 
 
 @Component({
@@ -47,6 +48,15 @@ export class DataSelectionWizard {
 
   selectedQuery: IOperation = null;
 
+  similarOrder = "desc";
+  cutoff = 0.20;
+  enrichmentData: DeepBlueMiddlewareOverlapEnrichtmentResultItem[];
+  sortedEnrichmentData: {
+    "all": DeepBlueMiddlewareOverlapEnrichtmentResultItem[];
+    "biosources": (string | IStatsResult)[][];
+    "epigenetic_marks": (string | IStatsResult)[][];
+  };
+
   selectedComparison: IOperation[] = [];
 
   @ViewChild('wizard') wizard: WizardComponent;
@@ -67,7 +77,6 @@ export class DataSelectionWizard {
 
       this.updateProjects();
 
-      console.log("[wizard] changing genome", genome);
       this.deepBlueService.getAnnotations(genome).subscribe(annotations => {
         for (let annotation of annotations) {
           if (annotation.name.toLowerCase().startsWith('cpg islands')) {
@@ -137,7 +146,7 @@ export class DataSelectionWizard {
 
   selectQueryDataSet($event: any, notJump?: boolean) {
     this.selectedQuery = $event;
-    SimilarDatasets.processSimilar(this.selectedQuery, this.reloadData, this, this.deepBlueService, this.requestManager, this.progress_element);
+    SimilarDatasets.processSimilar(this.selectedQuery, this.reloadData, this, this.deepBlueService, this.requestManager, this.progress_element)
 
     if (!notJump) {
       this.wizard.navigation.goToNextStep();
@@ -146,7 +155,27 @@ export class DataSelectionWizard {
   }
 
   reloadData(_self: DataSelectionWizard, datum: DeepBlueMiddlewareOverlapEnrichtmentResultItem[]) {
-    console.log("got", datum);
+    _self.enrichmentData = datum;
+    _self.sortedEnrichmentData = SimilarDatasets.sortDatasets(_self.cutoff, _self.similarOrder, _self.enrichmentData)
+  }
+
+  changeSearch($event: any, direction: string) {
+    if (direction == 'more') {
+      this.cutoff -= 0.05;
+      if (this.cutoff < 0) {
+        this.cutoff = 0;
+      }
+    } else {
+      this.cutoff += 0.05;
+      if (this.cutoff > 1) {
+        this.cutoff = 1;
+      }
+    }
+    this.updateSimilarList();
+  }
+
+  updateSimilarList() {
+    this.sortedEnrichmentData = SimilarDatasets.sortDatasets(this.cutoff, this.similarOrder, this.enrichmentData)
   }
 
   getGenomeLabel() {
@@ -154,6 +183,22 @@ export class DataSelectionWizard {
       return "";
     }
     return this.selectedGenome.name;
+  }
+
+  addBioSource(c: string) {
+    this.deepBlueService.getBioSourceByNameObservable(c).subscribe((bs: BioSource) => {
+      this.deepBlueService.addSelectedBiosource(bs);
+    })
+  }
+
+  removeBioSource(c: string) {
+    this.deepBlueService.getBioSourceByNameObservable(c).subscribe((bs: BioSource) => {
+      this.deepBlueService.removeSelectedBiosource(bs);
+    })
+  }
+
+  getSelectedBioSources() : string[] {
+    return this.deepBlueService.selectedBioSources.getValue().map((x: BioSource) => x.name)
   }
 
   getProjectsLabel() {
