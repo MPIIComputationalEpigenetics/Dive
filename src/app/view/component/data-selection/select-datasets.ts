@@ -106,7 +106,7 @@ export class SelectDatasetsComponent implements OnInit {
 
     let name = dataset[0];
 
-    if (this.filterText.toLowerCase().trim().length > 0 && name.indexOf(this.filterText.toLowerCase()) >= 0) {
+    if (this.filterText.toLowerCase().trim().length > 0 && name.toLowerCase().indexOf(this.filterText.toLowerCase()) >= 0) {
       passFilter = true;
     }
 
