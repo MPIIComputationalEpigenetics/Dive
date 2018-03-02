@@ -71,7 +71,11 @@
         <p-fieldset legend="Interesting BioSources">
           <div class="ui-g">
             <div class="ui-g-6">
-              <h3>Include all in your analysis? (You still can include them later)</h3>
+              <h2 *ngIf="progress_element.isLoading()">Analyzing dataset and searching for similar biosources...<small>You can jump to the next step</small></h2>
+
+
+              <!--
+              <h3>Include all following BioSources in your analysis? (You still can include them later)</h3>
               <div class="ui-g">
                 <div class="ui-g-6">
                   <p-toolbar [style]="{'background-color':'transparent'}">
@@ -85,9 +89,16 @@
                   </p-toolbar>
                 </div>
               </div>
+            -->
 
-              <h3>Include Individually:</h3>
+              <h3>Include similar biosources:</h3>
               <input type='text' style='padding:8px;margin:15px auto;width:60%;' placeholder='Type to filter biosources' [(ngModel)]="filterSimilarText"/>
+              <div *ngIf="getSimilarBioSources().length > 0" class="ui-g">
+                  <div class="ui-g-8 "><b>Include all</b></div>
+                  <div class="ui-g-offset-1 ui-g-3">
+                    <button pButton type="button" icon="fa fa-fw fa-check" label="Include all" (click)="addAllBioSources()"></button>
+                  </div>
+              </div>
               <div class="ui-g" *ngFor="let c of getSimilarBioSources()">
                 <div class="ui-g-8 ">{{c}}</div>
                 <div class="ui-g-offset-1 ui-g-3">

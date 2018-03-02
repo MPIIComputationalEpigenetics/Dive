@@ -49,7 +49,7 @@ export class DataSelectionWizard {
   selectedQuery: IOperation = null;
 
   similarOrder = "desc";
-  cutoff = 5;
+  cutoff = 1;
   filterSimilarText = "";
   enrichmentData: DeepBlueMiddlewareOverlapEnrichtmentResultItem[];
   sortedEnrichmentData: {
@@ -66,7 +66,7 @@ export class DataSelectionWizard {
 
 
   constructor(@Inject(forwardRef(() => AppComponent)) public app: AppComponent,
-    private router: Router, private progress_element: ProgressElement,
+    private router: Router, public progress_element: ProgressElement,
     private requestManager: RequestManager, public deepBlueService: DeepBlueService) {
   }
 
@@ -189,13 +189,16 @@ export class DataSelectionWizard {
   getSimilarBioSources(): string[] {
     let all: string[] = [];
 
+    let selected = this.deepBlueService.selectedBioSources.getValue().map((bs) => bs.name);
+
     if (!this.sortedEnrichmentData) {
       return all;
     }
 
     for (let bs of this.sortedEnrichmentData.biosources) {
-      if (this.filterSimilar(<string>bs[0])) {
-        all.push(<string>bs[0]);
+      let biosource = <string>bs[0];
+      if (this.filterSimilar(biosource) && selected.indexOf(biosource) < 0) {
+        all.push(biosource);
       }
     }
     return all.sort();
@@ -209,10 +212,17 @@ export class DataSelectionWizard {
     return name.indexOf(this.filterSimilarText.toLowerCase()) >= 0;
   }
 
+
   addBioSource(c: string) {
     this.deepBlueService.getBioSourceByNameObservable(c).subscribe((bs: BioSource) => {
       this.deepBlueService.addSelectedBiosource(bs);
     })
+  }
+
+  addAllBioSources() {
+    for (let bs of this.getSimilarBioSources()) {
+      this.addBioSource(bs);
+    }
   }
 
   removeBioSource(c: string) {
