@@ -1,38 +1,85 @@
 <div class="ui-fluid">
-    <div [ngClass]="{'ui-g-12': true, 'ui-lg-10': (hasDataDetail()), 'ui-lg-12': (hasDataDetail() == false) }">
-        <div class="card card-w-title">
-            <h1>Overlaping Genes with {{ deepBlueService.getDivingData().data().name() }}</h1>
+  <div [ngClass]="{'ui-g-12': true, 'ui-lg-10': (hasDataDetail()), 'ui-lg-12': (hasDataDetail() == false) }">
+    <div class="card card-w-title">
+      <h1>Overlaping Genes with {{ deepBlueService.getDivingData().data().name() }}</h1>
 
-            <div class="ui-g form-group">
-                <div class="ui-g-12 ui-md-2">
-                    <label for="input">Annotation Name</label>
-                </div>
-                <div class="ui-g-12 ui-md-2">
-                    <p><button pButton type="button" (click)="includeBar()" label="Filter overlapping"></button>
-                </div>
-                <div class="ui-g-12 ui-md-4">
-                    <p-dropdown #geneModelDropdown [options]="menuGeneModel" [(ngModel)]="selectedGeneModel" filter="filter" [autoWidth]="false"
-                        (onChange)="selectGeneModel($event)">
-                    </p-dropdown>
-                </div>
-            </div>
-            <app-overlaps-bar-chart #overlapbarchart> </app-overlaps-bar-chart>
+      <div class="ui-g form-group">
+        <div class="ui-g-12 ui-md-2">
+          <label for="input">Annotation Name</label>
         </div>
+        <div class="ui-g-12 ui-md-2">
+          <p>
+            <button pButton type="button" (click)="includeBar()" label="Filter overlapping"></button>
+        </div>
+        <div class="ui-g-12 ui-md-4">
+          <p-dropdown #geneModelDropdown [options]="menuGeneModel" [(ngModel)]="selectedGeneModel" filter="filter" [autoWidth]="false"
+            (onChange)="selectGeneModel($event)">
+          </p-dropdown>
+        </div>
+      </div>
+      <app-overlaps-bar-chart #overlapbarchart> </app-overlaps-bar-chart>
     </div>
-    <div *ngIf="hasDataDetail()" class="ui-g-12 ui-lg-2">
-        <app-data-info-box></app-data-info-box>
-    </div>
+  </div>
+  <div *ngIf="hasDataDetail()" class="ui-g-12 ui-lg-2">
+    <app-data-info-box></app-data-info-box>
+  </div>
 </div>
 
 
-<p-dialog header="Upload your own dataset" [(visible)]="showIncludeBar" [width]="800" [height]="1200">
-    <p-tabView>
-      <p-tabPanel header="Extend">
-            Direction: <p-dropdown [options]="directions" [(ngModel)]="selectedDirection" optionLabel="name" [filter]="true" filterBy="label,value.name"></p-dropdown>
-            Length:
-      </p-tabPanel>
-      <p-tabPanel header="Paste Regions">
-            cu
-      </p-tabPanel>
+<p-dialog header="Insert new column" [(visible)]="showIncludeBar" width="650">
+  <p-tabView>
+    <div class="ui-g">
+      <div class="ui-g-6">
+        <div class="ui-g" *ngFor="let c of filters">
+          <div style="word-wrap: break-word" class="ui-g-8">{{ toString(c) }}</div>
+          <div class="ui-g-offset-1 ui-g-1">
+            <button pButton type="button" icon="fa fa-fw fa-close" (click)="removeFilter(c)"></button>
+          </div>
+        </div>
+      </div>
+      <div class="ui-g-4">
+        <p-tabPanel header="Flank">
+          <div class="ui-g">
+            <div class="ui-g-4">
+              <label>Start</label>
+            </div>
+            <div class="ui-g-offset-1 ui-g-4">
+              <input style="width:100px" type="number" [(ngModel)]="start" pInputText/>
+            </div>
+          </div>
+          <div class="ui-g">
+            <div class="ui-g-4">
+              <label>Length</label>
+            </div>
+            <div class="ui-g-offset-1  ui-g-4">
+              <input style="width:100px" type="number" [(ngModel)]="length" pInputText/>
+            </div>
+          </div>
+          <button pButton type="button" (click)="insertFlank()" label="Insert Column"></button>
+        </p-tabPanel>
+
+        <p-tabPanel header="Extend">
+          <div class="ui-g">
+            <div class="ui-g-4">
+              <label>Direction</label>
+            </div>
+            <div class="ui-g-offset-1  ui-g-4">
+              <p-dropdown [style]="{'width':'100px'}" [options]="directions" [(ngModel)]="selectedDirection" optionLabel="name" [filter]="true"
+                filterBy="label,value.name"></p-dropdown>
+            </div>
+          </div>
+          <div class="ui-g">
+            <div class="ui-g-4">
+              <label>Length</label>
+            </div>
+            <div class="ui-g-offset-1  ui-g-4">
+              <input style="width:100px" type="number" [(ngModel)]="length" pInputText/>
+            </div>
+          </div>
+          <button pButton type="button" (click)="insertExtend()" label="Insert Column"></button>
+        </p-tabPanel>
+      </div>
+    </div>
   </p-tabView>
-  </p-dialog>
+
+</p-dialog>

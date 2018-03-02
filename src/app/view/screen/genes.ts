@@ -21,142 +21,184 @@ import { OverlapsBarChartComponent } from 'app/view/component/charts/overlapping
 import { DeepBlueOperation } from 'app/domain/operations';
 import { DeepBlueResult } from 'app/domain/operations';
 import { RequestManager } from 'app/service/requests-manager';
+import { IOperation } from '../../domain/interfaces';
 
 @Component({
-    templateUrl: './genes.html'
+  templateUrl: './genes.html'
 })
 export class GenesScreen implements AfterViewInit, OnDestroy {
-    showIncludeBar: boolean;
-    errorMessage: string;
-    geneModels: GeneModel[];
-    menuGeneModel: SelectItem[];
-    selectedGeneModel: SelectItem[];
+  showIncludeBar: boolean;
+  errorMessage: string;
+  geneModels: GeneModel[];
+  menuGeneModel: SelectItem[];
+  selectedGeneModel: SelectItem[];
 
-    genomeSubscription: Subscription;
+  genomeSubscription: Subscription;
 
-    bars: Object[];
+  geneOperations: IOperation[];
 
-    @ViewChild('overlapbarchart') overlapbarchart: OverlapsBarChartComponent;
-    @ViewChild('geneModelDropdown') geneModelDropdown: Dropdown;
+  bars: Object[];
 
-    selectedGeneModelSource = new BehaviorSubject<GeneModel>(null);
-    selectedGeneModelValue$: Observable<GeneModel> = this.selectedGeneModelSource.asObservable();
+  @ViewChild('overlapbarchart') overlapbarchart: OverlapsBarChartComponent;
+  @ViewChild('geneModelDropdown') geneModelDropdown: Dropdown;
 
-    currentlyProcessing: GeneModel = null;
-    current_request = 0;
-    data: any;
-    hasData = false;
+  selectedGeneModelSource = new BehaviorSubject<GeneModel>(null);
+  selectedGeneModelValue$: Observable<GeneModel> = this.selectedGeneModelSource.asObservable();
 
-    constructor(public deepBlueService: DeepBlueService, public requestManager: RequestManager,
-        public progress_element: ProgressElement, private selectedData: SelectedData) {
+  currentlyProcessing: GeneModel = null;
+  current_request = 0;
+  data: any;
+  hasData = false;
 
-        this.genomeSubscription = deepBlueService.genomeValue$.subscribe(genome => {
-            if (genome === null) {
-                return;
-            }
-            this.deepBlueService.getGeneModelsBySelectedGenome().subscribe((geneModels: GeneModel[]) => {
-                if (geneModels.length === 0) {
-                    return;
-                }
-                this.geneModels = geneModels;
-                this.menuGeneModel = geneModels.map((geneModel: GeneModel) => {
-                    const l = { label: geneModel.name, value: geneModel };
-                    // Always select the last gene model
-                    this.geneModelDropdown.selectItem(null, l);
-                    return l;
-                });
-            },
-                error => this.errorMessage = <any>error);
-        });
-    }
+  constructor(public deepBlueService: DeepBlueService, public requestManager: RequestManager,
+    public progress_element: ProgressElement, private selectedData: SelectedData) {
 
-    ngAfterViewInit() {
-        this.selectedGeneModelValue$.debounceTime(250).subscribe(() => this.processOverlaps());
-        this.selectedData.activeTopStackValue$.subscribe((dataStackItem: DataStackItem) => this.processOverlaps());
-    }
-
-    selectGeneModel(event: any) {
-        this.selectedGeneModelSource.next(event.value);
-    }
-
-    processOverlaps() {
-        this.progress_element.reset(3, this.current_request);
-
-        const gene_model = this.selectedGeneModelSource.getValue();
-
-        if (gene_model == null) {
-            this.reloadPlot([]);
-            return;
+    this.genomeSubscription = deepBlueService.genomeValue$.subscribe(genome => {
+      if (genome === null) {
+        return;
+      }
+      this.deepBlueService.getGeneModelsBySelectedGenome().subscribe((geneModels: GeneModel[]) => {
+        if (geneModels.length === 0) {
+          return;
         }
-
-        if (gene_model !== this.selectedGeneModelSource.getValue()) {
-            this.reloadPlot([]);
-            return;
-        }
-
-        this.current_request++;
-
-        // Each experiment is started, selected, overlaped, count, get request data (4 times each)
-        this.progress_element.reset(0, this.current_request);
-        this.currentlyProcessing = gene_model;
-        const start = new Date().getTime();
-
-        const current = this.selectedData.getStacksTopOperation();
-
-        this.deepBlueService.composedCountGenesOverlaps(current, gene_model).subscribe((request: DeepBlueMiddlewareRequest) => {
-            this.requestManager.enqueueRequest(request);
-            this.deepBlueService.getComposedResultIterator(request, this.progress_element, 'overlaps')
-                .subscribe((result: DeepBlueResult[]) => {
-                    const end = new Date().getTime();
-                    // Now calculate and output the difference
-                    this.currentlyProcessing = null;
-                    this.reloadPlot(result);
-                });
+        this.geneModels = geneModels;
+        this.menuGeneModel = geneModels.map((geneModel: GeneModel) => {
+          const l = { label: geneModel.name, value: geneModel };
+          // Always select the last gene model
+          this.geneModelDropdown.selectItem(null, l);
+          return l;
         });
+      },
+        error => this.errorMessage = <any>error);
+    });
+  }
 
-        if (gene_model === this.currentlyProcessing) {
-            return;
-        }
-        this.current_request++;
-        this.currentlyProcessing = gene_model;
+  ngAfterViewInit() {
+    this.selectedGeneModelValue$.debounceTime(250).subscribe(() => this.processOverlaps());
+    this.selectedData.activeTopStackValue$.subscribe((dataStackItem: DataStackItem) => this.processOverlaps());
+  }
+
+  selectGeneModel(event: any) {
+    this.selectedGeneModelSource.next(event.value);
+  }
+
+  processOverlaps() {
+    this.progress_element.reset(3, this.current_request);
+
+    const gene_model = this.selectedGeneModelSource.getValue();
+
+    if (gene_model == null) {
+      this.reloadPlot([]);
+      return;
     }
 
-    reloadPlot(datum: DeepBlueResult[]) {
+    if (gene_model !== this.selectedGeneModelSource.getValue()) {
+      this.reloadPlot([]);
+      return;
+    }
 
-        const series: Array<Object> = [];
+    this.current_request++;
 
-        datum.forEach((result: DeepBlueResult, index: number) => {
-            series.push({
-                type: 'column',
-                name: this.selectedData.getStackname(index),
-                data: [result.resultAsCount()],
-                color: this.selectedData.getStackColor(index, '0.3')
-            });
+    // Each experiment is started, selected, overlaped, count, get request data (4 times each)
+    this.progress_element.reset(0, this.current_request);
+    this.currentlyProcessing = gene_model;
+    const start = new Date().getTime();
+
+    const current = this.selectedData.getStacksTopOperation();
+
+    this.deepBlueService.composedCountGenesOverlaps(current, gene_model, this.filters).subscribe((request: DeepBlueMiddlewareRequest) => {
+      this.requestManager.cancelAllRequest();
+      this.requestManager.enqueueRequest(request);
+      this.deepBlueService.getComposedResultIterator(request, this.progress_element, 'overlaps')
+        .subscribe((result: DeepBlueResult[]) => {
+          const end = new Date().getTime();
+          // Now calculate and output the difference
+          this.currentlyProcessing = null;
+          this.reloadPlot(result);
         });
+    });
 
-        const categories = datum.map((r: DeepBlueResult) => r.getFilter().name());
-
-        this.overlapbarchart.setNewData(categories, series, null);
+    if (gene_model === this.currentlyProcessing) {
+      return;
     }
+    this.current_request++;
+    this.currentlyProcessing = gene_model;
+  }
 
-    hasDataDetail(): boolean {
-        return this.deepBlueService.getDataInfoSelected() != null;
+  reloadPlot(datum: DeepBlueResult[]) {
+
+    const series: Array<Object> = [];
+
+    datum.forEach((result: DeepBlueResult, index: number) => {
+      series.push({
+        type: 'column',
+        name: this.selectedData.getStackname(index),
+        data: [result.resultAsCount()],
+        color: this.selectedData.getStackColor(index, '0.3')
+      });
+    });
+
+    const categories = datum.map((r: DeepBlueResult) => r.getFilter().name());
+
+    this.overlapbarchart.setNewData(categories, series, null);
+  }
+
+  hasDataDetail(): boolean {
+    return this.deepBlueService.getDataInfoSelected() != null;
+  }
+
+  ngOnDestroy() {
+    this.genomeSubscription.unsubscribe();
+  }
+
+  includeBar() {
+    this.showIncludeBar = true;
+  }
+
+
+  directions = [
+    { name: 'Backward', code: 'BACKWARD' },
+    { name: 'Forward', code: 'FORWARD' },
+    { name: 'Both', code: 'BOTH' },
+  ]
+
+  selectedDirection = this.directions[2];
+
+  length = 2500;
+  start = -2500;
+
+  filters = new Array<any>();
+
+
+  insertFlank() {
+    this.addFilterAndSend({ type: 'flank', start: this.start, length: this.length });
+  }
+
+  insertExtend() {
+    this.addFilterAndSend({ type: 'extend', length: this.length, direction: this.selectedDirection.code });
+  }
+
+  addFilterAndSend(c: any) {
+    if (this.length == 0) {
+      return;
     }
+    this.filters.push(c)
+    this.length = 0;
+    this.showIncludeBar = false;
+    this.processOverlaps();
+  }
 
-    ngOnDestroy() {
-        this.genomeSubscription.unsubscribe();
+  removeFilter(c: any) {
+
+  }
+
+  toString(c: any) {
+    if (c.type == "flank") {
+      return "Flank - start: " + c.start + " , length: " + c.length;
     }
-
-
-    directions = [
-        {name: 'Backward', code: 'BACKWARD'},
-        {name: 'Forward', code: 'FORWARD'},
-        {name: 'Both', code: 'BOTH'},
-    ]
-
-    selectedDirection : any = null;
-
-    includeBar() {
-        this.showIncludeBar = true;
+    else if (c.type == "extend") {
+      return "Extend - length: " + c.length + " , direction: " + c.direction;
     }
+  }
+
 }
