@@ -122,10 +122,7 @@ export class DeepBlueService {
     biosourcesCache: Array<BioSource> = null;
 
     setDataInfoSelected(clickedData: any) {
-        let actual = this.dataInfoSelectedSource.getValue();
-        if (actual && !actual.equals(clickedData)) {
-            this.dataInfoSelectedSource.next(clickedData);
-        }
+        this.dataInfoSelectedSource.next(clickedData);
     }
 
     getDataInfoSelected(): Object {
