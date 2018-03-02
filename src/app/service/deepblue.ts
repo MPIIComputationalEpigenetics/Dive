@@ -978,7 +978,7 @@ export class DeepBlueService {
             });
     }
 
-    public composedCountGenesOverlaps(queries: IOperation[], gene_model: GeneModel): Observable<DeepBlueMiddlewareRequest> {
+    public composedCountGenesOverlaps(queries: IOperation[], gene_model: GeneModel, filters: any[]): Observable<DeepBlueMiddlewareRequest> {
         let params = new HttpParams()
             .set('gene_model_name', gene_model.name);
 
@@ -986,12 +986,18 @@ export class DeepBlueService {
             params = params.append('queries_id', query_op_id.id().id);
         }
 
-        let paramsMap = new Map<string, string | string[]>();
-        for (let k in params.keys()) {
-            paramsMap.set(k, params.getAll(k));
+        let request: any = {
+            "gene_model_name": gene_model.name,
+            "queries_id": queries.map((query) => query.id().id),
+            "filters": JSON.stringify(filters)
         }
 
-        return this.middleware.get('composed_commands/count_genes_overlaps', params)
+        let paramsMap = new Map<string, [string | string[]]>();
+        for (let k of Object.keys(request)) {
+            paramsMap.set(k, request[k]);
+        }
+
+        return this.middleware.post('composed_commands/count_genes_overlaps', request)
             .map((body: any) => {
                 const response: string = body[1] || '';
                 return new DeepBlueMiddlewareRequest(paramsMap, "count_genes_overlaps", new Id(response));
