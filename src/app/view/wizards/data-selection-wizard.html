@@ -14,6 +14,16 @@
       </div>
     </p-fieldset>
 
+
+    <p-fieldset *ngIf="selectedComparison.length > 0" legend="To Compare">
+      <div class="ui-g" *ngFor="let c of selectedComparison">
+        <div style="word-wrap: break-word" class="ui-g-8">{{ c.text() }}</div>
+        <div class="ui-g-offset-1 ui-g-1">
+          <button pButton type="button" icon="fa fa-fw fa-close" (click)="removeComparison(c)"></button>
+        </div>
+      </div>
+    </p-fieldset>
+
   </div>
   <div class="{{ wizardClassLength() }}">
     <aw-wizard #wizard [navBarLocation]="'top'" [navBarLayout]="'small'">
@@ -71,7 +81,9 @@
         <p-fieldset legend="Interesting BioSources">
           <div class="ui-g">
             <div class="ui-g-6">
-              <h2 *ngIf="progress_element.isLoading()">Analyzing dataset and searching for similar biosources...<small>You can jump to the next step</small></h2>
+              <h2 *ngIf="progress_element.isLoading()">Analyzing dataset and searching for similar biosources...
+                <small>You can jump to the next step</small>
+              </h2>
 
 
               <!--
@@ -92,12 +104,15 @@
             -->
 
               <h3>Include similar biosources:</h3>
-              <input type='text' style='padding:8px;margin:15px auto;width:60%;' placeholder='Type to filter biosources' [(ngModel)]="filterSimilarText"/>
+              <input type='text' style='padding:8px;margin:15px auto;width:60%;' placeholder='Type to filter biosources' [(ngModel)]="filterSimilarText"
+              />
               <div *ngIf="getSimilarBioSources().length > 0" class="ui-g">
-                  <div class="ui-g-8 "><b>Include all</b></div>
-                  <div class="ui-g-offset-1 ui-g-3">
-                    <button pButton type="button" icon="fa fa-fw fa-check" label="Include all" (click)="addAllBioSources()"></button>
-                  </div>
+                <div class="ui-g-8 ">
+                  <b>Include all</b>
+                </div>
+                <div class="ui-g-offset-1 ui-g-3">
+                  <button pButton type="button" icon="fa fa-fw fa-check" label="Include all" (click)="addAllBioSources()"></button>
+                </div>
               </div>
               <div class="ui-g" *ngFor="let c of getSimilarBioSources()">
                 <div class="ui-g-8 ">{{c}}</div>
@@ -174,11 +189,24 @@
         <p>Genome: {{ getGenomeLabel() }}</p>
         <p>Projects: {{ getProjectsLabel() }}</p>
         <p>Query: {{ getQueryLabel() }}</p>
-        <p>Biosources : </p>
+        <p-fieldset *ngIf="getSelectedBioSources().length > 0" legend="BioSources">
+          <div class="ui-g" *ngFor="let c of getSelectedBioSources()">
+            <div class="ui-g-8">{{ c }}</div>
+            <div class="ui-g-offset-1 ui-g-1">
+              <button pButton type="button" icon="fa fa-fw fa-close" (click)="removeBioSource(c[0])"></button>
+            </div>
+          </div>
+        </p-fieldset>
 
-        <ul *ngFor="let c of getSelectedBioSources()">
-          <li>{{ c }}</li>
-        </ul>
+
+        <p-fieldset *ngIf="selectedComparison.length > 0" legend="To Compare">
+          <div class="ui-g" *ngFor="let c of selectedComparison">
+            <div style="word-wrap: break-word" class="ui-g-8">{{ c.text() }}</div>
+            <div class="ui-g-offset-1 ui-g-1">
+              <button pButton type="button" icon="fa fa-fw fa-close" (click)="removeComparison(c)"></button>
+            </div>
+          </div>
+        </p-fieldset>
 
       </aw-wizard-step>
 

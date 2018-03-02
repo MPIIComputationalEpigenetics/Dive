@@ -11,6 +11,7 @@ import { SimilarDatasets } from "app/algorithms/similar-datasets";
 import { DeepBlueMiddlewareOverlapEnrichtmentResultItem } from "app/domain/operations";
 import { RequestManager } from "../../service/requests-manager";
 import { IStatsResult } from "app/service/statistics";
+import { SelectedData } from "app/service/selecteddata";
 
 
 @Component({
@@ -67,7 +68,8 @@ export class DataSelectionWizard {
 
   constructor(@Inject(forwardRef(() => AppComponent)) public app: AppComponent,
     private router: Router, public progress_element: ProgressElement,
-    private requestManager: RequestManager, public deepBlueService: DeepBlueService) {
+    private selectedData: SelectedData, private requestManager: RequestManager,
+    public deepBlueService: DeepBlueService) {
   }
 
   ngOnInit(): void {
@@ -78,15 +80,19 @@ export class DataSelectionWizard {
 
       this.updateProjects();
 
-      this.deepBlueService.getAnnotations(genome).subscribe(annotations => {
-        for (let annotation of annotations) {
-          if (annotation.name.toLowerCase().startsWith('cpg islands')) {
-            this.deepBlueService.selectAnnotation(annotation, this.progress_element, 0).subscribe((operation) => {
-              this.selectQueryDataSet(operation, true);
-            });
+      if (this.selectedData.getActiveCurrentOperation()) {
+        this.selectQueryDataSet(this.selectedData.getActiveCurrentOperation());
+      } else {
+        this.deepBlueService.getAnnotations(genome).subscribe(annotations => {
+          for (let annotation of annotations) {
+            if (annotation.name.toLowerCase().startsWith('cpg islands')) {
+              this.deepBlueService.selectAnnotation(annotation, this.progress_element, 0).subscribe((operation) => {
+                this.selectQueryDataSet(operation, true);
+              });
+            }
           }
-        }
-      });
+        });
+      }
     });
 
     this.deepBlueService.getGenomes().subscribe(genomes => {
@@ -116,6 +122,9 @@ export class DataSelectionWizard {
   }
 
   startAnalysis($event: any) {
+    for (let c of this.selectedComparison) {
+      this.selectedData.insertForComparison(c);
+    }
     this.router.navigate(['/similarfinder']);
   }
 
@@ -254,6 +263,19 @@ export class DataSelectionWizard {
       return "ui-g-12"
     }
     return "ui-g-10";
+  }
+
+  addComparison(c: IOperation) {
+    if (this.selectedComparison.findIndex((op) => op.id().equals(c.id())) < 0) {
+      this.selectedComparison.push(c)
+    }
+    //this.selectedData.insertForComparison(event);
+  }
+
+  removeComparison(c: IOperation) {
+    debugger;
+    let pos = this.selectedComparison.findIndex((op) => op.id().equals(c.id()));
+    this.selectedComparison.splice(pos, 1);
   }
 
 }
