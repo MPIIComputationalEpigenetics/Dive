@@ -57,4 +57,8 @@ export class ProgressElement {
         const next_value = Math.ceil(this.total_loaded * 100 / this.total_to_load);
         this.progressValueSource.next(next_value);
     }
+
+    isLoading(): boolean {
+        return this.total_loaded != this.total_to_load;
+    }
 }
