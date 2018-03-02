@@ -39,7 +39,7 @@ import { EventEmitter } from '@angular/core';
 
             <div class="dashboard">
                 <ul class="activity-list">
-                    <query-flow [queryId]="dataStack.getInitialOperation().id().id"></query-flow>
+                    <query-flow [queryId]="dataStack?.getInitialOperation()?.id()?.id"></query-flow>
                 </ul>
             </div>
         </p-panel>
