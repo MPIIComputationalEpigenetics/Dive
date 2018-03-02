@@ -7,7 +7,8 @@ import { EpigeneticMark } from 'app/domain/deepblue';
 
 
 const BASIC_MENU: any[] = [
-  { label: 'Data Selection', icon: 'dashboard', routerLink: ['/dataselection'] }
+  { label: 'Data Wizard', icon: 'view_carousel', routerLink: ['/'] },
+  { label: 'Select Query', icon: 'format_list_bulleted', routerLink: ['/dataselection'] }
 ];
 
 const EXTRA_MENU_ITEMS: any[] = [
