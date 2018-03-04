@@ -109,9 +109,9 @@ export class GenesScreen implements AfterViewInit, OnDestroy {
     this.deepBlueService.composedCountGenesOverlaps(current, gene_model, this.filters).subscribe((request: DeepBlueMiddlewareRequest) => {
       this.requestManager.cancelAllRequest();
       this.requestManager.enqueueRequest(request);
-      this.deepBlueService.getComposedResultIterator(request, this.progress_element, 'overlaps')
-        .subscribe((result: DeepBlueResult[]) => {
-          const end = new Date().getTime();
+      this.deepBlueService.getComposedResultIterator(request, this.progress_element, 'genes_overlaps')
+        .subscribe((result: DeepBlueResult[][]) => {
+          debugger;
           // Now calculate and output the difference
           this.currentlyProcessing = null;
           this.reloadPlot(result);
@@ -125,11 +125,11 @@ export class GenesScreen implements AfterViewInit, OnDestroy {
     this.currentlyProcessing = gene_model;
   }
 
-  reloadPlot(datum: DeepBlueResult[]) {
+  reloadPlot(datum: DeepBlueResult[][]) {
 
     const series: Array<Object> = [];
 
-    datum.forEach((result: DeepBlueResult, index: number) => {
+    datum.forEach((result: DeepBlueResult[], index: number) => {
       series.push({
         type: 'column',
         name: this.selectedData.getStackname(index),

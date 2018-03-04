@@ -1079,8 +1079,8 @@ export class DeepBlueService {
 
     // TODO: Move the logic of converting the data to the function callers
     public getComposedResultIterator(request: DeepBlueMiddlewareRequest, progress_element: ProgressElement, request_type: string, callback?: any, param?: any):
-        Observable<DeepBlueResult[] | DeepBlueMiddlewareGOEnrichtmentResult[] | DeepBlueMiddlewareOverlapEnrichtmentResultItem[] | DeepBlueMiddlewareOverlapEnrichtmentResult[]> {
-        const pollSubject = new Subject<DeepBlueResult[] | DeepBlueMiddlewareGOEnrichtmentResult[] | DeepBlueMiddlewareOverlapEnrichtmentResultItem[] | DeepBlueMiddlewareOverlapEnrichtmentResult[]>();
+        Observable<DeepBlueResult[] | DeepBlueResult[][] | DeepBlueMiddlewareGOEnrichtmentResult[] | DeepBlueMiddlewareOverlapEnrichtmentResultItem[] | DeepBlueMiddlewareOverlapEnrichtmentResult[]> {
+        const pollSubject = new Subject<DeepBlueResult[] | DeepBlueResult[][] | DeepBlueMiddlewareGOEnrichtmentResult[] | DeepBlueMiddlewareOverlapEnrichtmentResultItem[] | DeepBlueMiddlewareOverlapEnrichtmentResult[]>();
 
         const timer = Observable.timer(0, 1000).concatMap(() => {
 
@@ -1089,7 +1089,7 @@ export class DeepBlueService {
                 return null;
             }
 
-            return this.getComposedResult(request).map((data: [string, string | DeepBlueResult[]]) => {
+            return this.getComposedResult(request).map((data: [string, string | DeepBlueResult[] | DeepBlueResult[][] ]) => {
                 if (data[0] === 'okay') {
                     timer.unsubscribe();
                     if (request_type === 'overlaps') {
@@ -1108,6 +1108,13 @@ export class DeepBlueService {
                         pollSubject.next(
                             (<Object[]>(data[1])).map((ee) => DeepBlueMiddlewareOverlapEnrichtmentResult.fromObject(ee))
                         );
+                    } else if (request_type === 'genes_overlaps') {
+                        let result = new Array<DeepBlueResult[]>();
+                        for (let values of data[1]) {
+                            let vv = (<Object[]>(values)).map((ee) => DeepBlueResult.fromObject(ee))
+                            result.push(vv);
+                        }
+                        pollSubject.next(result);
                     }
                     pollSubject.complete();
                     progress_element.finish();
