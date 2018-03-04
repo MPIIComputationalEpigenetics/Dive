@@ -128,17 +128,18 @@ export class GenesScreen implements AfterViewInit, OnDestroy {
   reloadPlot(datum: DeepBlueResult[][]) {
 
     const series: Array<Object> = [];
-
     datum.forEach((result: DeepBlueResult[], index: number) => {
-      series.push({
-        type: 'column',
-        name: this.selectedData.getStackname(index),
-        data: [result.resultAsCount()],
-        color: this.selectedData.getStackColor(index, '0.3')
+      result.forEach((result: DeepBlueResult, index: number) => {
+        series.push({
+          type: 'column',
+          name: this.selectedData.getStackname(index),
+          data: [result.resultAsCount()],
+          color: this.selectedData.getStackColor(index, '0.3')
+        });
       });
     });
 
-    const categories = datum.map((r: DeepBlueResult) => r.getFilter().name());
+    const categories = datum.map((r: DeepBlueResult[]) => r[0].getFilter().name());
 
     this.overlapbarchart.setNewData(categories, series, null);
   }
