@@ -111,7 +111,6 @@ export class GenesScreen implements AfterViewInit, OnDestroy {
       this.requestManager.enqueueRequest(request);
       this.deepBlueService.getComposedResultIterator(request, this.progress_element, 'genes_overlaps')
         .subscribe((result: DeepBlueResult[][]) => {
-          debugger;
           // Now calculate and output the difference
           this.currentlyProcessing = null;
           this.reloadPlot(result);
@@ -127,20 +126,40 @@ export class GenesScreen implements AfterViewInit, OnDestroy {
 
   reloadPlot(datum: DeepBlueResult[][]) {
 
+    if (datum.length <= 0) {
+      return;
+    }
+
     const series: Array<Object> = [];
+
+    // By Filter
     datum.forEach((result: DeepBlueResult[], index: number) => {
+
+      // By Stack
       result.forEach((result: DeepBlueResult, index: number) => {
-        series.push({
-          type: 'column',
-          name: this.selectedData.getStackname(index),
-          data: [result.resultAsCount()],
-          color: this.selectedData.getStackColor(index, '0.3')
-        });
+
       });
     });
 
-    const categories = datum.map((r: DeepBlueResult[]) => r[0].getFilter().name());
+    for (let stack_pos = 0; stack_pos < datum[0].length; stack_pos++) {
+      const stack_values_result: Array<number> = [];
+      for (let filter_pos = 0; filter_pos < datum.length; filter_pos++) {
+        stack_values_result.push(datum[filter_pos][stack_pos].resultAsCount());
+      }
+      series.push({
+        type: 'column',
+        name: this.selectedData.getStackname(stack_pos),
+        data: stack_values_result,
+        color: this.selectedData.getStackColor(stack_pos, '0.3')
+      });
+    }
 
+    const categories = [datum[0][0].getFilter().name()];
+    for (let filter of this.filters) {
+      categories.push(JSON.stringify(filter));
+    }
+
+    console.log(categories);
     this.overlapbarchart.setNewData(categories, series, null);
   }
 
