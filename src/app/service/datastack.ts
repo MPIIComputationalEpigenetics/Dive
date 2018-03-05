@@ -292,7 +292,7 @@ export class DataStack {
 
 
     remove(data: DataStackItem) {
-        if (!this._data.remove(data)) {
+        if (this._data.remove(data)) {
             this.router.navigate(['/']);
         }
     }
