@@ -1,9 +1,9 @@
 <div class="ui-g">
   <div *ngIf="finished == false" class="ui-g-2">
     <h2>Selected Data </h2>
-    <h4>Genome: {{ getGenomeLabel() }}</h4>
-    <h4>Projects: {{ getProjectsLabel() }}</h4>
-    <h4 style="word-wrap: break-word">Query: {{ getQueryLabel() }}</h4>
+    <h4>{{ getGenomeLabel() }}</h4>
+    <h4>{{ getProjectsLabel() }}</h4>
+    <h4 style="word-wrap: break-word">{{ getQueryLabel() }}</h4>
 
     <p-fieldset *ngIf="getSelectedBioSources().length > 0" legend="BioSources">
       <div class="ui-g" *ngFor="let c of getSelectedBioSources()">
@@ -17,7 +17,7 @@
 
     <p-fieldset *ngIf="selectedComparison.length > 0" legend="To Compare">
       <div class="ui-g" *ngFor="let c of selectedComparison">
-        <div style="word-wrap: break-word" class="ui-g-8">{{ c.text() }}</div>
+        <div style="word-wrap: break-word" class="ui-g-4  ">{{ c.text() }}</div>
         <div class="ui-g-offset-1 ui-g-1">
           <button pButton type="button" icon="fa fa-fw fa-close" (click)="removeComparison(c)"></button>
         </div>

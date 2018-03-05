@@ -140,6 +140,7 @@ import { DataSelectionWizard, NavegationMenu } from 'app/view/wizards/data-selec
 import { Angulartics2Module } from 'angulartics2';
 import { Angulartics2GoogleAnalytics } from 'angulartics2/ga';
 import { MiddlewareProxy } from './service/middleware-proxy';
+import { RegionsTransformComponent } from 'app/view/component/menu/regions-transform';
 
 @NgModule({
     imports: [
@@ -255,6 +256,7 @@ import { MiddlewareProxy } from './service/middleware-proxy';
         LengthMenuFilterComponent,
         DnaPatternMenuFilterComponent,
         ColumnsMenuFilterComponent,
+        RegionsTransformComponent,
         RegionsUpload,
         RegionsPaste,
         QueryFlow,
