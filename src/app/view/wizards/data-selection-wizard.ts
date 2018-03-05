@@ -198,14 +198,14 @@ export class DataSelectionWizard {
   getSimilarBioSources(): string[] {
     let all: string[] = [];
 
-    let selected = this.deepBlueService.selectedBioSources.getValue().map((bs) => bs.name);
+    let selected = this.deepBlueService.selectedBioSources.getValue().map((bs) => bs.name.toLowerCase().replace(/[\W_]+/g, ""));
 
     if (!this.sortedEnrichmentData) {
       return all;
     }
 
     for (let bs of this.sortedEnrichmentData.biosources) {
-      let biosource = <string>bs[0];
+      let biosource = (<string>bs[0]).toLowerCase().replace(/[\W_]+/g, "");
       if (this.filterSimilar(biosource) && selected.indexOf(biosource) < 0) {
         all.push(biosource);
       }
