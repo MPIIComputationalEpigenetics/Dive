@@ -207,6 +207,7 @@ export class CSSExperimentsMenu implements IMenu {
         if (csss.length > 0) {
           this.diveMenu.remove('css');
           this.diveMenu.add('css', 'Chromatin State Segmentation', 'change_history');
+          csss.sort((a, b) => a[1].localeCompare(b[1  ]));
           for (let css of csss) {
             this.diveMenu.includeItem('css', css[1], 'fiber_manual_record',
               (event: any) => { this.selectItem(css[0]) },
