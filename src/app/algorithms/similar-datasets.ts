@@ -50,8 +50,10 @@ export class SimilarDatasets {
       })
     }
 
-    // We need to load the biosources from the server to use the deepBlueService.getBioSourceByName()
-    return deepBlueService.listBioSources().map(() =>  {
+    // We need to load the biosources and epigenetic marks from the server to use the deepBlueService.getBioSourceByName()
+    let o_em = deepBlueService.listEpigeneticMarks();
+    let o_bs = deepBlueService.listBioSources();
+    return Observable.forkJoin([o_em, o_bs]).map(() =>  {
 
       let orderFunction = this.getOrderFunction(order);
 
@@ -108,7 +110,7 @@ export class SimilarDatasets {
 
       for (let ds of filtered_data) {
         let biosource = deepBlueService.getBioSourceByName(ds.biosource);
-        let em = ds.epigenetic_mark;
+        let em = deepBlueService.getEpigeneticMarkByName(ds.epigenetic_mark);
         let rank = ds.mean_rank;
 
         if (!(biosource.name in biosources)) {
@@ -116,10 +118,10 @@ export class SimilarDatasets {
         }
         biosources[biosource.name].push(rank);
 
-        if (!(em in ems)) {
-          ems[em] = [];
+        if (!(em.name in ems)) {
+          ems[em.name] = [];
         }
-        ems[em].push(rank);
+        ems[em.name].push(rank);
       }
 
       let biosources_stats: { [key: string]: IStatsResult } = {};

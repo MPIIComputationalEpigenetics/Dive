@@ -197,9 +197,21 @@ export class DeepBlueService {
 
     // Functions to select data from the Server
 
+
+    genomeToEpigeneticMarks = new Map<string, Observable<EpigeneticMark[]>>();
+    genomeToEpigeneticMarksResult = new Map<string, EpigeneticMark[]>();
     listEpigeneticMarks(): Observable<EpigeneticMark[]> {
         if (!this.getGenome()) {
             return Observable.empty<EpigeneticMark[]>();
+        }
+
+        let genome = this.getGenome().name;
+        if (this.genomeToEpigeneticMarksResult.has(genome)) {
+            return Observable.of(this.genomeToEpigeneticMarksResult.get(genome));
+        }
+
+        if (this.genomeToEpigeneticMarks.has(genome)) {
+            return this.genomeToEpigeneticMarks.get(genome);
         }
 
         const params = new HttpParams()
@@ -207,8 +219,45 @@ export class DeepBlueService {
             .set('controlled_vocabulary', 'epigenetic_marks')
             .set('type', 'peaks');
 
-        return this.middleware.get('collection_experiments_count', params)
-            .map(this.extractEpigeneticMarks)
+        let bsObserver = this.middleware.get('collection_experiments_count', params)
+            .map(this.extractEpigeneticMarks).share();
+
+
+        this.genomeToEpigeneticMarks.set(genome, bsObserver);
+        bsObserver.subscribe((result) => {
+            this.genomeToEpigeneticMarksResult.set(genome, result);
+        })
+
+        return bsObserver;
+    }
+
+    getEpigeneticMarkByNameObservable(name: string): Observable<EpigeneticMark> {
+        let genome = this.getGenome().name;
+        if (!this.genomeToEpigeneticMarksResult.has(genome)) {
+            return this.listEpigeneticMarks().flatMap(() => Observable.of(this.getEpigeneticMarkByName(name)));
+        } else {
+            return Observable.of(this.getEpigeneticMarkByName(name));
+        }
+    }
+
+    getEpigeneticMarkByName(name: string): EpigeneticMark {
+        if (!name) {
+            return null;
+        }
+
+        let genome = this.getGenome().name;
+
+        if (!this.genomeToEpigeneticMarksResult.has(genome)) {
+            return null;
+        }
+
+        let cache = this.genomeToEpigeneticMarksResult.get(genome);
+        for (let epigenetic_mark of cache) {
+            if (epigenetic_mark.name.toLowerCase().replace(/[\W_]+/g, "") == name.toLowerCase().replace(/[\W_]+/g, "")) {
+                return epigenetic_mark;
+            }
+        }
+        return null;
     }
 
     getHistones(): Observable<EpigeneticMark[]> {
@@ -259,6 +308,10 @@ export class DeepBlueService {
         let genome = this.getGenome().name;
         if (this.genomeToBioSourceResult.has(genome)) {
             return Observable.of(this.genomeToBioSourceResult.get(genome));
+        }
+
+        if (this.genomeToBioSource.has(genome)) {
+            return this.genomeToBioSource.get(genome);
         }
 
         const params = new HttpParams()
