@@ -26,21 +26,21 @@ export class SimilarFinder implements OnDestroy {
     stackSubscriber: Subscription;
 
     cutoffOptions = [
-        {label: '1%', value: 1},
-        {label: '5%', value: 5},
-        {label: '10%', value: 10},
-        {label: '20%', value: 20},
-        {label: '35%', value: 35},
-        {label: '50%', value: 50},
-        {label: '65%', value: 65},
-        {label: '100%', value: 100}
+        { label: '1%', value: 1 },
+        { label: '5%', value: 5 },
+        { label: '10%', value: 10 },
+        { label: '20%', value: 20 },
+        { label: '35%', value: 35 },
+        { label: '50%', value: 50 },
+        { label: '65%', value: 65 },
+        { label: '100%', value: 100 }
     ];
 
     cutoffValue = 20;
 
     orderOptions = [
-        {label: 'Most similar', value: "desc"},
-        {label: 'Most dissimilar', value: "asc"}
+        { label: 'Most similar', value: "desc" },
+        { label: 'Most dissimilar', value: "asc" }
     ];
 
     orderDirection = "desc";
@@ -81,10 +81,10 @@ export class SimilarFinder implements OnDestroy {
             return;
         }
 
-        let sortedData = SimilarDatasets.sortDatasets(_self.cutoffValue, _self.orderDirection, datum);
-
-        _self.plot("Similar BioSources", sortedData['biosources'], _self.biosourcessimilaritybarchart, _self.biosourceElementClick)
-        _self.plot("Similar Epigenetic Marks", sortedData['epigenetic_marks'], _self.emssimilaritybarchart, _self.epigeneticMarkElementClick)
+        SimilarDatasets.sortDatasets(_self.deepBlueService, _self.cutoffValue, _self.orderDirection, datum).subscribe((sortedData) => {
+            _self.plot("Similar BioSources", sortedData['biosources'], _self.biosourcessimilaritybarchart, _self.biosourceElementClick)
+            _self.plot("Similar Epigenetic Marks", sortedData['epigenetic_marks'], _self.emssimilaritybarchart, _self.epigeneticMarkElementClick)
+        })
     }
 
     plot(title: string, datum: any, chart: SimilarityBarChartComponent, clickCallback: any) {
@@ -119,13 +119,13 @@ export class SimilarFinder implements OnDestroy {
 
     biosourceElementClick(click: any, _self: SimilarFinder) {
         const point = click.point;
-        const category : string = point.category.trim();
+        const category: string = point.category.trim();
 
         let bs = _self.deepBlueService.getBioSourceByName(category);
         _self.deepBlueService.addSelectedBiosource(bs);
         _self.deepBlueService.getRelatedBioSources(bs).subscribe((bss) => {
             if (bss[1].length > 1) {
-                let s : any = bss[1];
+                let s: any = bss[1];
                 console.log(s)
                 let text = "<ul>" + s.map((ss: string) => "<li>" + ss + "</li>").join("") + "</ul>";
                 console.log(text);

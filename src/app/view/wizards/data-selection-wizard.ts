@@ -162,7 +162,9 @@ export class DataSelectionWizard {
 
   reloadData(_self: DataSelectionWizard, datum: DeepBlueMiddlewareOverlapEnrichtmentResultItem[]) {
     _self.enrichmentData = datum;
-    _self.sortedEnrichmentData = SimilarDatasets.sortDatasets(_self.cutoff, _self.similarOrder, _self.enrichmentData)
+    SimilarDatasets.sortDatasets(_self.deepBlueService, _self.cutoff, _self.similarOrder, _self.enrichmentData).subscribe((sortedData) => {
+      _self.sortedEnrichmentData = sortedData
+    })
   }
 
   changeSearch($event: any, direction: string) {
@@ -181,7 +183,9 @@ export class DataSelectionWizard {
   }
 
   updateSimilarList() {
-    this.sortedEnrichmentData = SimilarDatasets.sortDatasets(this.cutoff, this.similarOrder, this.enrichmentData)
+    SimilarDatasets.sortDatasets(this.deepBlueService, this.cutoff, this.similarOrder, this.enrichmentData).subscribe((sortedData) => {
+      this.sortedEnrichmentData = sortedData
+    })
   }
 
   getGenomeLabel() {
@@ -194,14 +198,14 @@ export class DataSelectionWizard {
   getSimilarBioSources(): string[] {
     let all: string[] = [];
 
-    let selected = this.deepBlueService.selectedBioSources.getValue().map((bs) => bs.name.toLowerCase().replace(/[\W_]+/g, ""));
+    let selected = this.deepBlueService.selectedBioSources.getValue().map((bs) => bs.name);
 
     if (!this.sortedEnrichmentData) {
       return all;
     }
 
     for (let bs of this.sortedEnrichmentData.biosources) {
-      let biosource = (<string>bs[0]).toLowerCase().replace(/[\W_]+/g, "");
+      let biosource = (<string>bs[0]);
       if (this.filterSimilar(biosource) && selected.indexOf(biosource) < 0) {
         all.push(biosource);
       }
@@ -210,11 +214,10 @@ export class DataSelectionWizard {
   }
 
   filterSimilar(name: string) {
-    if (this.filterSimilarText.toLowerCase().trim().length == 0) {
+    if (this.filterSimilarText.length == 0) {
       return true;
     }
-    name = name.toLowerCase();
-    return name.indexOf(this.filterSimilarText.toLowerCase()) >= 0;
+    return name.indexOf(this.filterSimilarText) >= 0;
   }
 
 
@@ -269,7 +272,6 @@ export class DataSelectionWizard {
   }
 
   removeComparison(c: IOperation) {
-    debugger;
     let pos = this.selectedComparison.findIndex((op) => op.id().equals(c.id()));
     this.selectedComparison.splice(pos, 1);
   }

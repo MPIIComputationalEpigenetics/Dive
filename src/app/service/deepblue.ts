@@ -117,8 +117,6 @@ export class DeepBlueService {
     requestCache = new DataCache<IOperation, DeepBlueRequest>();
     resultCache = new DataCache<DeepBlueRequest, DeepBlueResult>();
 
-    biosourcesCache: Array<BioSource> = null;
-
     // Service messages
     setGenome(genome: Genome) {
         let actual = this.genomeSource.getValue();
@@ -250,22 +248,39 @@ export class DeepBlueService {
             .map(this.extractAnnotation)
     }
 
+
+    genomeToBioSource = new Map<string, Observable<BioSource[]>>();
+    genomeToBioSourceResult = new Map<string, BioSource[]>();
     listBioSources(): Observable<BioSource[]> {
         if (!this.getGenome()) {
             return Observable.empty<BioSource[]>();
         }
+
+        let genome = this.getGenome().name;
+        if (this.genomeToBioSourceResult.has(genome)) {
+            return Observable.of(this.genomeToBioSourceResult.get(genome));
+        }
+
         const params = new HttpParams()
-            .set('genome', this.getGenome().name)
+            .set('genome', genome)
             .set('controlled_vocabulary', 'biosources')
             .set('type', 'peaks');
 
-        return this.middleware.get('collection_experiments_count', params)
-            .map(this.extractBioSources)
-            .do((biosources) => this.biosourcesCache = biosources)
+        let bsObserver = this.middleware.get('collection_experiments_count', params)
+            .map(this.extractBioSources).share();
+
+
+        this.genomeToBioSource.set(genome, bsObserver);
+        bsObserver.subscribe((result) => {
+            this.genomeToBioSourceResult.set(genome, result);
+        })
+
+        return bsObserver;
     }
 
     getBioSourceByNameObservable(name: string): Observable<BioSource> {
-        if (!this.biosourcesCache) {
+        let genome = this.getGenome().name;
+        if (!this.genomeToBioSourceResult.has(genome)) {
             return this.listBioSources().flatMap(() => Observable.of(this.getBioSourceByName(name)));
         } else {
             return Observable.of(this.getBioSourceByName(name));
@@ -273,7 +288,18 @@ export class DeepBlueService {
     }
 
     getBioSourceByName(name: string): BioSource {
-        for (let biosource of this.biosourcesCache) {
+        if (!name) {
+            return null;
+        }
+
+        let genome = this.getGenome().name;
+
+        if (!this.genomeToBioSourceResult.has(genome)) {
+            return null;
+        }
+
+        let cache = this.genomeToBioSourceResult.get(genome);
+        for (let biosource of cache) {
             if (biosource.name.toLowerCase().replace(/[\W_]+/g, "") == name.toLowerCase().replace(/[\W_]+/g, "")) {
                 return biosource;
             }
@@ -1079,7 +1105,7 @@ export class DeepBlueService {
                 return null;
             }
 
-            return this.getComposedResult(request).map((data: [string, string | DeepBlueResult[] | DeepBlueResult[][] ]) => {
+            return this.getComposedResult(request).map((data: [string, string | DeepBlueResult[] | DeepBlueResult[][]]) => {
                 if (data[0] === 'okay') {
                     timer.unsubscribe();
                     if (request_type === 'overlaps') {
