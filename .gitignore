@@ -46,3 +46,6 @@ src/assets/.sass-cache/
 .vscode/.ropeproject/objectdb
 .vscode/.ropeproject/objectdb
 .vscode/.ropeproject/config.py
+
+
+dist/
