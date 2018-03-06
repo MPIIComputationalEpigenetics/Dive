@@ -133,11 +133,18 @@ export class QueryFlow implements OnInit {
     node.data.parameters = [];
 
     this.deepBlueService.countRegionsRequest(o, this.progress_element, 0).subscribe((result) => {
-      node.data.parameters.unshift("Total Regions: " + result.resultAsCount());
+      node.data.parameters.unshift("regions: " + result.resultAsCount());
     });
 
     if (o._params) {
-      node.data = { parameters: Object.keys(o._params).map((k: string) => k + ": " + o._params[k]) };
+      node.data = {
+        parameters: Object.keys(o._params).map((k: string) => {
+          if (k == "_data_type") {
+            return null;
+          }
+          return k + ": " + o._params[k]
+        })
+      };
     }
 
     node.styleClass = 'ui-person';
