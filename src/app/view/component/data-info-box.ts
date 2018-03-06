@@ -48,7 +48,6 @@ export class DataInfoBoxComponent {
 
 
   @Input() set data(data: any) {
-    debugger;
     this._data = data;
 
     if (!this._data) {

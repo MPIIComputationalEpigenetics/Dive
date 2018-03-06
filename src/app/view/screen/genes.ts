@@ -163,10 +163,6 @@ export class GenesScreen implements AfterViewInit, OnDestroy {
     this.overlapbarchart.setNewData(categories, series, null);
   }
 
-  hasDataDetail(): boolean {
-    return this.deepBlueService.getDataInfoSelected() != null;
-  }
-
   ngOnDestroy() {
     this.genomeSubscription.unsubscribe();
   }

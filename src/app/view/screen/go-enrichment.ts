@@ -223,10 +223,6 @@ export class GoEnrichmentScreenComponent implements AfterViewInit, OnDestroy {
         this.overlapbarchart.setNewData(categories, series, categories_value);
     }
 
-    hasDataDetail(): boolean {
-        return this.deepBlueService.getDataInfoSelected() != null;
-    }
-
     ngOnDestroy() {
         this.genomeSubscription.unsubscribe();
     }

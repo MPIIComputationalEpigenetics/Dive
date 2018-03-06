@@ -1,5 +1,5 @@
 <div class="ui-fluid">
-  <div [ngClass]="{'ui-g-12': true, 'ui-lg-10': (hasDataDetail()), 'ui-lg-12': (hasDataDetail() == false) }">
+  <div [ngClass]="{'ui-g-12': true}">
     <div class="card card-w-title">
       <h1>Overlaping Genes with {{ deepBlueService.getDivingData().data().name() }}</h1>
 
@@ -19,9 +19,6 @@
       </div>
       <app-overlaps-bar-chart #overlapbarchart> </app-overlaps-bar-chart>
     </div>
-  </div>
-  <div *ngIf="hasDataDetail()" class="ui-g-12 ui-lg-2">
-    <app-data-info-box></app-data-info-box>
   </div>
 </div>
 
