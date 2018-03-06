@@ -223,6 +223,6 @@ export class CSSExperimentsMenu implements IMenu {
   }
 
   selectItem(css: string) {
-    this.deepBlueService.setEpigeneticMark(new EpigeneticMark(["Chromatin State Segmentation", css]));
+    this.deepBlueService.setEpigeneticMark(new EpigeneticMark(["Chromatin State Segmentation:" + css, css]));
   }
 }
