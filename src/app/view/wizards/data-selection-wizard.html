@@ -143,11 +143,11 @@
                 <div class="ui-g">
                   <div class="ui-g-12">
                     <p-toolbar [style]="{'background-color':'transparent'}">
-                      <div *ngIf="!disablePrevious" class="ui-toolbar-group-left">
+                      <div class="ui-toolbar-group-left">
                         <button pButton type="button" label="More strict" (click)="changeSearch($event, 'more')" icon="ui-icon-zoom-in"></button>
                       </div>
 
-                      <div *ngIf="!disableNext" class="ui-toolbar-group-right">
+                      <div class="ui-toolbar-group-right">
                         <button pButton type="button" label="Less strict" (click)="changeSearch($event, 'less')" icon="ui-icon-zoom-out"></button>
                       </div>
                     </p-toolbar>

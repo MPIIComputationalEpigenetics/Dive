@@ -22,7 +22,7 @@ export class RegionsPaste {
   constructor(public deepBlueService: DeepBlueService, private progress_element: ProgressElement) {
   };
 
-  onUploadClick(event: any) {
+  onUploadClick() {
     this.deepBlueService.inputRegions(this.textAreaContent.trim(), this.progress_element, -1).subscribe((op) => {
       if (op.dataType() == "error") {
         this.hasError = true;

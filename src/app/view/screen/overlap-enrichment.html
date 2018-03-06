@@ -11,7 +11,7 @@
     <h1>{{ selected_data?.text() }} </h1>
     <select-datasets-component (datasetsSelected)="selectDatasets($event)"></select-datasets-component>
 
-    <button pButton type="button" icon="ui-icon-check-circle" label="Enrich the data selection" (click)="process($event)"></button>
+    <button pButton type="button" icon="ui-icon-check-circle" label="Enrich the data selection" (click)="process()"></button>
   </div>
 
   <div class="card card-w-title">

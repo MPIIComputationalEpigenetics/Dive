@@ -19,14 +19,14 @@
                     <label>Cut-off</label>
                 </div>
                 <div class="ui-g-2">
-                    <p-dropdown [options]="cutoffOptions" [(ngModel)]="cutoffValue" [style]="{'width':'150px'}" (onChange)=reloadData()></p-dropdown>
+                    <p-dropdown [options]="cutoffOptions" [(ngModel)]="cutoffValue" [style]="{'width':'150px'}" (onChange)="reloadData(null, null)"></p-dropdown>
                 </div>
                 <div class="ui-g-1"> </div>
                 <div class="ui-g-1">
                     <label>Order</label>
                 </div>
                 <div class="ui-g-2">
-                    <p-dropdown [options]="orderOptions" [(ngModel)]="orderDirection" [style]="{'width':'150px'}" (onChange)=reloadData()></p-dropdown>
+                    <p-dropdown [options]="orderOptions" [(ngModel)]="orderDirection" [style]="{'width':'150px'}" (onChange)="reloadData(null, null)"></p-dropdown>
                 </div>
             </div>
 

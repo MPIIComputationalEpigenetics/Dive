@@ -22,7 +22,7 @@ export class SelectQuery {
 
   constructor(public deepBlueService: DeepBlueService, private progress_element: ProgressElement) { };
 
-  onEnter(event: any) {
+  onEnter() {
     this.query_id = this.model_query_id;
   }
 
