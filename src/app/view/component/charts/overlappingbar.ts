@@ -1,5 +1,5 @@
 import { DeepBlueService } from '../../../service/deepblue';
-import { Component } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 
 @Component({
     selector: 'app-overlaps-bar-chart',
@@ -17,6 +17,8 @@ export class OverlapsBarChartComponent {
     chart: any;
     chart2: any; // Backup for when exporting the data.
     result_by_dataset_stack: any;
+
+    @Output() dataSelected = new EventEmitter();
 
     setNewData(categories: any, series: any, result_by_dataset_stack: any) {
 
@@ -130,9 +132,7 @@ export class OverlapsBarChartComponent {
         const index = point.series.columnIndex;
 
         // TODO: create a type to hold this data
-        const bar_element: Object = this.result_by_dataset_stack[category][point.series.columnIndex];
-        this.deepBlueService.setDataInfoSelected(bar_element);
-
-        setTimeout(() => this.chart['reflow'](), 0);
+        const bar_element: any = this.result_by_dataset_stack[category][point.series.columnIndex];
+        this.dataSelected.emit(bar_element);
     }
 }

@@ -54,9 +54,8 @@ export class ChromatinStatesScreenComponent implements AfterViewInit, OnDestroy 
 
   current_request = 0;
 
-  data: any;
-
-  hasDataDetail = false;
+  dataInfo: any = null;
+  showDataDetail = false;
 
   previousEpigeneticMark: EpigeneticMark;
 
@@ -159,7 +158,6 @@ export class ChromatinStatesScreenComponent implements AfterViewInit, OnDestroy 
   }
 
   ngAfterViewInit() {
-    this.deepBlueService.dataInfoSelectedValue$.subscribe((s) => { if (s) { this.hasDataDetail = true } })
     this.selectedExperimentsValue$.debounceTime(250).subscribe(() => this.processOverlaps());
     this.selectedData.activeTopStackValue$.subscribe((dataStackItem) => this.processOverlaps());
   }
@@ -345,8 +343,13 @@ export class ChromatinStatesScreenComponent implements AfterViewInit, OnDestroy 
     _self.overlapbarchart.setNewData(categories, series, result_by_dataset_stack);
   }
 
+  setDataInfo($event: any) {
+    this.dataInfo = $event;
+    this.showDataDetail = true;
+  }
+
   dataSelected() {
-    this.hasDataDetail = false;
+    this.showDataDetail = false;
   }
 
   ngOnDestroy() {

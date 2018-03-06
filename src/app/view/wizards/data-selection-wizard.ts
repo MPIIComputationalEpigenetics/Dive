@@ -128,10 +128,6 @@ export class DataSelectionWizard {
     this.router.navigate(['/similarfinder']);
   }
 
-  hasQuery($event: any) {
-    debugger;
-  }
-
   updateProjects() {
     this.deepBlueService.listProjects().subscribe((projects) => {
       this.projectItems = [];

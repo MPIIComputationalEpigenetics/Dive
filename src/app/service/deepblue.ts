@@ -100,7 +100,6 @@ export class DeepBlueService {
     public projectsSource = new BehaviorSubject<Project[]>(null);
     public dataToDiveSource = new BehaviorSubject<IOperation>(null);
     public epigeneticMarkSource = new BehaviorSubject<EpigeneticMark>(new EpigeneticMark(['', '']));
-    public dataInfoSelectedSource = new BehaviorSubject<any>(null);
     public selectedBioSources = new BehaviorSubject<BioSource[]>([]);
 
     // Observable string streams
@@ -108,7 +107,6 @@ export class DeepBlueService {
     projectsValue$ = this.projectsSource.asObservable();
     dataToDiveValue$ = this.dataToDiveSource.asObservable();
     epigeneticMarkValue$ = this.epigeneticMarkSource.asObservable();
-    dataInfoSelectedValue$ = this.dataInfoSelectedSource.asObservable();
     selectedBioSourcesValue$ = this.selectedBioSources.asObservable();
 
     idNamesQueryCache = new DataCache<IdName, DeepBlueOperation>();
@@ -120,14 +118,6 @@ export class DeepBlueService {
     resultCache = new DataCache<DeepBlueRequest, DeepBlueResult>();
 
     biosourcesCache: Array<BioSource> = null;
-
-    setDataInfoSelected(clickedData: any) {
-        this.dataInfoSelectedSource.next(clickedData);
-    }
-
-    getDataInfoSelected(): Object {
-        return this.dataInfoSelectedSource.getValue();
-    }
 
     // Service messages
     setGenome(genome: Genome) {

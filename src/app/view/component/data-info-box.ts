@@ -36,25 +36,28 @@ import { EventEmitter } from '@angular/core';
     </p-scrollPanel>
   `
 })
-export class DataInfoBoxComponent implements OnDestroy {
-  dataSelectedSubscription: Subscription;
-
+export class DataInfoBoxComponent {
   biosource: string = null;
   value: Object = null;
   results: DeepBlueResult[] = [];
+  _data: any;
 
   @Output() dataSelected = new EventEmitter();
 
-  constructor(private deepBlueService: DeepBlueService, private selectedData: SelectedData) {
-    this.dataSelectedSubscription = deepBlueService.dataInfoSelectedValue$.subscribe((data: any) => {
-      if (!data) {
-        return;
-      }
-      this.biosource = data['biosource'];
-      this.value = data['value'];
-      this.results = data['results']
-        .sort((a: DeepBlueResult, b: DeepBlueResult) => a.resultAsCount() - b.resultAsCount());
-    });
+  constructor(private deepBlueService: DeepBlueService, private selectedData: SelectedData) { }
+
+
+  @Input() set data(data: any) {
+    debugger;
+    this._data = data;
+
+    if (!this._data) {
+      return;
+    }
+    this.biosource = this._data['biosource'];
+    this.value = this._data['value'];
+    this.results = this._data['results'].sort((a: DeepBlueResult, b: DeepBlueResult) => a.resultAsCount() - b.resultAsCount());
+
   }
 
   filterOverlapping(result: DeepBlueResult) {
@@ -63,7 +66,6 @@ export class DataInfoBoxComponent implements OnDestroy {
       this.selectedData.activeStackSubject.getValue().overlap(<DeepBlueOperation>filter);
       this.dataSelected.emit(filter);
     }
-
   }
 
   filterNonOverlapping(result: DeepBlueResult) {
@@ -77,9 +79,4 @@ export class DataInfoBoxComponent implements OnDestroy {
   getStackName(): string {
     return this.biosource;
   }
-
-  ngOnDestroy() {
-    this.dataSelectedSubscription.unsubscribe();
-  }
-
 }

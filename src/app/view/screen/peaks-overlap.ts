@@ -54,9 +54,9 @@ export class PeaksOverlapScreenComponent implements AfterViewInit, OnDestroy {
 
     current_request = 0;
 
-    data: any;
+    dataInfo: any = null;
+    showDataDetail = false;
 
-    hasDataDetail = false;
 
     @ViewChild('overlapbarchart') overlapbarchart: OverlapsBarChartComponent;
     @ViewChild('multiselect') multiselect: MultiSelect;
@@ -69,7 +69,6 @@ export class PeaksOverlapScreenComponent implements AfterViewInit, OnDestroy {
     }
 
     ngAfterViewInit() {
-        this.deepBlueService.dataInfoSelectedValue$.subscribe((s) => { if (s) { this.hasDataDetail = true } })
         this.selectedExperimentsValue$.debounceTime(250).subscribe(() => this.processOverlaps());
         this.selectedData.activeTopStackValue$.subscribe((dataStackItem) => this.processOverlaps());
         this.deepBlueService.projectsValue$.subscribe(() => this.loadExperiments());
@@ -94,10 +93,6 @@ export class PeaksOverlapScreenComponent implements AfterViewInit, OnDestroy {
             },
                 error => this.errorMessage = <any>error);
         });
-    }
-
-    dataSelected() {
-        this.hasDataDetail = false;
     }
 
     segregate(experiments: FullExperiment[]) {
@@ -358,5 +353,14 @@ export class PeaksOverlapScreenComponent implements AfterViewInit, OnDestroy {
         }
 
         _self.overlapbarchart.setNewData(categories, series, result_by_dataset_stack);
+    }
+
+    setDataInfo($event: any) {
+        this.dataInfo = $event;
+        this.showDataDetail = true;
+    }
+
+    dataSelected() {
+        this.showDataDetail = false;
     }
 }
