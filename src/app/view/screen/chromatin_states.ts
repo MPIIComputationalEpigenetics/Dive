@@ -34,7 +34,6 @@ import { RequestManager } from 'app/service/requests-manager';
   templateUrl: './chromatin_states.html'
 })
 export class ChromatinStatesScreenComponent implements AfterViewInit, OnDestroy {
-  errorMessage: string;
   experiments: FullExperiment[];
   segregated_data: Object;
 
@@ -58,6 +57,8 @@ export class ChromatinStatesScreenComponent implements AfterViewInit, OnDestroy 
   data: any;
 
   hasDataDetail = false;
+
+  previousEpigeneticMark: EpigeneticMark;
 
   @ViewChild('overlapbarchart') overlapbarchart: OverlapsBarChartComponent;
   @ViewChild('multiselect') multiselect: MultiSelect;
@@ -95,7 +96,7 @@ export class ChromatinStatesScreenComponent implements AfterViewInit, OnDestroy 
         if (pre_selected_biosources.map((bs) => bs.toLowerCase().replace(/[\W_]+/g, "")).indexOf(l.norm_label) > -1) {
           event_items.push(l.value);
           this.selectedMultiSelectBiosources.push(l.value);
-      }
+        }
       }
 
       if (!(experiment_sample_id in samples)) {
@@ -137,14 +138,23 @@ export class ChromatinStatesScreenComponent implements AfterViewInit, OnDestroy 
     public progress_element: ProgressElement, private selectedData: SelectedData) {
 
     this.epigeneticMarkSubscription = deepBlueService.epigeneticMarkValue$.subscribe(css => {
+      if (!css) {
+        return;
+      }
+
       this.deepBlueService.getExperiments(deepBlueService.getGenome(), "Chromatin State Segmentation").subscribe(experiments_ids => {
-        const ids = experiments_ids.map((e) => e.id.id);
-        this.deepBlueService.getExperimentsInfos(ids).subscribe(full_info => {
-          this.experiments = <FullExperiment[]>full_info;
-          this.segregated_data = this.segregate(<FullExperiment[]>full_info);
-        });
-      },
-        error => this.errorMessage = <any>error);
+
+        if (css.equals(this.previousEpigeneticMark)) {
+          this.processOverlaps();
+        } else {
+          const ids = experiments_ids.map((e) => e.id.id);
+          this.deepBlueService.getExperimentsInfos(ids).subscribe(full_info => {
+            this.experiments = <FullExperiment[]>full_info;
+            this.segregated_data = this.segregate(<FullExperiment[]>full_info);
+            this.previousEpigeneticMark = css;
+          });
+        }
+      });
     });
   }
 
