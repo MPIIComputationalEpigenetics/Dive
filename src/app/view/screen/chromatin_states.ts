@@ -121,6 +121,7 @@ export class ChromatinStatesScreenComponent implements AfterViewInit, OnDestroy 
       projects[experiment_project].push(experiment);
     }
 
+    this.biosourcesItems.sort((a, b) => a.label.localeCompare(b.label));
     this.selectBiosources({ value: event_items });
 
     return {
