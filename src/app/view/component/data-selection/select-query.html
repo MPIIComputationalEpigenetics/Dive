@@ -2,19 +2,30 @@
   <div class="ui-g">
     <div class="ui-g-12">
       <div class="card">
-        <h1>Paste Regions</h1>
-        <h2>
-          <div class="ui-inputgroup">
-            <input type="text" pInputText placeholder="Query ID" (keyup.enter)="onEnter()" [(ngModel)]="model_query_id">
-            <button pButton type="button" icon="fa-superpowers" class="ui-button-secondary"></button>
+        <h1>Import DeepBlue's query ID</h1>
+        <div class="ui-g">
+          <div class="ui-g-6">
+            <div class="ui-g">
+              <div class="ui-g-6">
+                <input type="text" pInputText placeholder="Query ID" (keyup.enter)="useQueryId()" [(ngModel)]="model_query_id">
+              </div>
+            </div>
+
+            <div class="ui-g">
+              <div class="ui-g-6">
+                <p-toolbar>
+                  <div class="ui-toolbar-group-left">
+                    <button pButton type="button" (click)="useQueryId()" label="Display Query"></button>
+                  </div>
+                  <div *ngIf="hasQueryObject()" class="ui-toolbar-group-right">
+                    <button pButton type="button" (click)="useQuery()" label="Load Query"></button>
+                  </div>
+                </p-toolbar>
+              </div>
+            </div>
+
+            <query-flow [queryId]="query_id" (queryOp)="storeQueryObject($event)"></query-flow>
           </div>
-          <div class="Ui-inputgroup">
-            <p>
-              <button pButton type="button" (click)="useQuery()" label="Load Query"></button>
-          </div>
-        </h2>
-      <query-flow [queryId]="query_id" (queryOp)="loadQuery($event)"></query-flow>
+        </div>
       </div>
     </div>
-  </div>
-</div>

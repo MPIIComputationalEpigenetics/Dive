@@ -13,24 +13,29 @@ import { IDataParameter, IOperation } from 'app/domain/interfaces';
   selector: 'select-query'
 })
 export class SelectQuery {
+
   model_query_id: string = null;
   query_id: string = null;
-  selected_query: IOperation;
-  messages: Message[];
+  selected_query: IOperation = null;
 
   @Output() queryIdSelected = new EventEmitter();
 
   constructor(public deepBlueService: DeepBlueService, private progress_element: ProgressElement) { };
 
-  onEnter() {
+  useQueryId() {
     this.query_id = this.model_query_id;
+    this.selected_query = null;
   }
 
-  loadQuery($event: any) {
+  storeQueryObject($event: any) {
     this.selected_query = $event;
   }
 
   useQuery() {
     this.queryIdSelected.emit(this.selected_query);
+  }
+
+  hasQueryObject(): boolean {
+    return this.selected_query != null;
   }
 }
