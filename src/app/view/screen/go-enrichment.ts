@@ -44,6 +44,9 @@ export class GoEnrichmentScreenComponent implements AfterViewInit, OnDestroy {
 
     current_request = 0;
 
+    showDataDetail = false;
+    selectedGoTerm = ""
+
     columns = [
         { name: 'id', prop: 'id', column_type: 'string' },
         { name: 'name', prop: 'name', column_type: 'string' },
@@ -94,7 +97,7 @@ export class GoEnrichmentScreenComponent implements AfterViewInit, OnDestroy {
         }
         this.enrichment_data = newResults;
 
-        if (this.selectedTab > this.enrichment_data.length -1) {
+        if (this.selectedTab > this.enrichment_data.length - 1) {
             this.selectedTab = 0;
         }
         this.tabview.activeIndex = this.selectedTab;
@@ -191,6 +194,12 @@ export class GoEnrichmentScreenComponent implements AfterViewInit, OnDestroy {
     plotBar() {
         const categories = [];
         const categories_value = new Array<any>();
+        const result_by_dataset_stack: {
+            [key: string]: {
+                [key: string]: string
+            }
+        } = {};
+
 
         for (let stack = 0; stack < this.enrichment_data.length; stack++) {
             const data = this.enrichment_data[stack];
@@ -213,13 +222,15 @@ export class GoEnrichmentScreenComponent implements AfterViewInit, OnDestroy {
                 } else if (stack > 0 && categories.indexOf(category) !== -1) {
                     values_by_category[category] = go_overlap;
                 }
+
+                result_by_dataset_stack[category] = {};
             }
 
             categories_value.push(values_by_category);
         }
 
-
         const series: Array<Object> = [];
+        debugger;
         for (let stack_pos = 0; stack_pos < categories_value.length; stack_pos++) {
             const stack_values_result: Array<number> = [];
             const stack_categories_values = categories_value[stack_pos];
@@ -230,6 +241,7 @@ export class GoEnrichmentScreenComponent implements AfterViewInit, OnDestroy {
                 } else {
                     stack_values_result.push(0)
                 }
+                result_by_dataset_stack[category][stack_pos] = category;
             }
 
             series.push({
@@ -239,11 +251,16 @@ export class GoEnrichmentScreenComponent implements AfterViewInit, OnDestroy {
                 color: this.selectedData.getStackColor(stack_pos, '0.3')
             });
         }
-        this.overlapbarchart.setNewData(categories, series, categories_value);
+        debugger;
+        this.overlapbarchart.setNewData(categories, series, result_by_dataset_stack);
     }
 
     onTabChange($event: any) {
         this.selectedTab = $event.index;
+    }
+
+    setDataInfo($event: any) {
+        debugger;
     }
 
     ngOnDestroy() {

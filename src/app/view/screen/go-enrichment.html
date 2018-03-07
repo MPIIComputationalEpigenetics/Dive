@@ -58,7 +58,7 @@
       </p>
       <p-tabView #tabview (onChange)="onTabChange($event)">
         <p-tabPanel header="Plot">
-          <app-overlaps-bar-chart #overlapbarchart> </app-overlaps-bar-chart>
+          <app-overlaps-bar-chart (dataSelected)="setDataInfo($event)" #overlapbarchart> </app-overlaps-bar-chart>
         </p-tabPanel>
         <p-tabPanel *ngFor="let data of enrichment_data; let i = index" [header]=selectedData.getStackname(i)>
           <ngx-datatable class='material' [columns]="columns" [rows]='data' [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50"
@@ -69,3 +69,8 @@
     </div>
   </div>
 </div>
+
+
+<p-sidebar [(visible)]="showDataDetail" position="right" [baseZIndex]="10000" styleClass="ui-sidebar-md">
+    {{ selectedGoTerm }}
+</p-sidebar>
