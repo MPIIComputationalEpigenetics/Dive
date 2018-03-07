@@ -3,7 +3,7 @@ import { DeepBlueMiddlewareGOEnrichtmentResult, DeepBlueMiddlewareRequest } from
 import { Component, ViewChild, OnDestroy, AfterViewInit } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 
-import { MultiSelect } from 'primeng/primeng';
+import { MultiSelect, TabView } from 'primeng/primeng';
 
 import { Dropdown, SelectItem } from 'primeng/primeng';
 
@@ -26,6 +26,7 @@ import { RequestManager } from 'app/service/requests-manager';
     templateUrl: './go-enrichment.html'
 })
 export class GoEnrichmentScreenComponent implements AfterViewInit, OnDestroy {
+    selectedTab = 0;
     isWaiting: boolean;
     errorMessage: string;
     geneModels: GeneModel[];
@@ -37,9 +38,9 @@ export class GoEnrichmentScreenComponent implements AfterViewInit, OnDestroy {
     enrichment_data: Object[][] = new Array<Object[]>();
     enrichment_data_from_server: Object[][] = new Array<Object[]>();
 
-    filter_go_overlap = '0';
-    filter_ratio = '0';
-    filter_p_value = '0';
+    filter_go_overlap = '10';
+    filter_ratio = '25';
+    filter_p_value = '0.00000001';
 
     current_request = 0;
 
@@ -53,6 +54,7 @@ export class GoEnrichmentScreenComponent implements AfterViewInit, OnDestroy {
 
     @ViewChild('geneModelDropdown') geneModelDropdown: Dropdown;
     @ViewChild('overlapbarchart') overlapbarchart: OverlapsBarChartComponent;
+    @ViewChild('tabview') tabview: TabView;
 
     selectedGeneModelSource = new BehaviorSubject<GeneModel>(null);
     selectedGeneModelValue$: Observable<GeneModel> = this.selectedGeneModelSource.asObservable();
@@ -90,10 +92,12 @@ export class GoEnrichmentScreenComponent implements AfterViewInit, OnDestroy {
             const x = this.filter_enrichment_datei(this.enrichment_data_from_server[idx]);
             newResults.push(x);
         }
-
-        console.log(newResults.length);
         this.enrichment_data = newResults;
-        console.log(this.enrichment_data.length);
+
+        if (this.selectedTab > this.enrichment_data.length -1) {
+            this.selectedTab = 0;
+        }
+        this.tabview.activeIndex = this.selectedTab;
         this.plotBar();
     }
 
@@ -106,7 +110,7 @@ export class GoEnrichmentScreenComponent implements AfterViewInit, OnDestroy {
 
         let ratio = Number.MIN_SAFE_INTEGER;
         if (this.filter_ratio) {
-            ratio = Number(this.filter_ratio);
+            ratio = Number(this.filter_ratio) / 100;
         }
 
         let p_value = Number.MAX_SAFE_INTEGER;
@@ -117,11 +121,9 @@ export class GoEnrichmentScreenComponent implements AfterViewInit, OnDestroy {
         const filtered_data = [];
         for (let idx = 0; idx < value.length; idx++) {
             const row: any = value[idx];
-
             if ((row['gooverlap'] >= go_overlap) &&
-                (row['ratio'] >= ratio)) {
-                //(row['ratio'] >= ratio) &&
-                //(row['pvalue'] < p_value)) {
+                (row['ratio'] >= ratio) &&
+                (row['pvalue'] < p_value)) {
                 filtered_data.push(row);
             }
         }
@@ -238,6 +240,10 @@ export class GoEnrichmentScreenComponent implements AfterViewInit, OnDestroy {
             });
         }
         this.overlapbarchart.setNewData(categories, series, categories_value);
+    }
+
+    onTabChange($event: any) {
+        this.selectedTab = $event.index;
     }
 
     ngOnDestroy() {

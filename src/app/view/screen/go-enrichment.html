@@ -19,10 +19,11 @@
       </div>
 
       <div *ngIf="!isWaiting">
-        <p-fieldset legend="GO Filtering">
+        <p-fieldset legend="Filtering">
+
           <div class="ui-g form-group">
             <div class="ui-g-12 ui-md-3">
-              <label for="input">Mimimum number of co-located GO terms</label>
+              <label for="input">Mimimum number of overlapping genes with the GO term</label>
             </div>
             <div class="ui-g-12 ui-md-2">
               <input type="text" pInputText [(ngModel)]="filter_go_overlap" placeholder="Mimimum number of GO term overlaps" (ngModelChange)="filter_enrichment_data()"
@@ -32,20 +33,30 @@
 
           <div class="ui-g form-group">
             <div class="ui-g-12 ui-md-3">
-              <label for="input">Minimum ratio</label>
+              <label for="input">Minimum ration of overlapping genes with the total number of genes (%) </label>
             </div>
             <div class="ui-g-12 ui-md-2">
               <input type="text" pInputText [(ngModel)]="filter_ratio" placeholder="Mimimum ratio" (ngModelChange)="filter_enrichment_data()"
               />
             </div>
           </div>
+
+          <div class="ui-g form-group">
+              <div class="ui-g-12 ui-md-3">
+                <label for="input">P-Value</label>
+              </div>
+              <div class="ui-g-12 ui-md-2">
+                <input type="text" pInputText [(ngModel)]="filter_p_value" placeholder="P-value" (ngModelChange)="filter_enrichment_data()"
+                />
+              </div>
+            </div>
         </p-fieldset>
       </div>
 
       <p>
 
       </p>
-      <p-tabView>
+      <p-tabView #tabview (onChange)="onTabChange($event)">
         <p-tabPanel header="Plot">
           <app-overlaps-bar-chart #overlapbarchart> </app-overlaps-bar-chart>
         </p-tabPanel>
