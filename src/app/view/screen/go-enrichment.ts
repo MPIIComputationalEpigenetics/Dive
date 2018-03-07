@@ -1,6 +1,6 @@
 import { OverlapsBarChartComponent } from '../component/charts/overlappingbar';
 import { DeepBlueMiddlewareGOEnrichtmentResult, DeepBlueMiddlewareRequest } from '../../domain/operations';
-import { Component, OnInit, ViewChild, OnDestroy, ChangeDetectionStrategy, AfterViewInit } from '@angular/core';
+import { Component, ViewChild, OnDestroy, AfterViewInit } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 
 import { MultiSelect } from 'primeng/primeng';
@@ -23,10 +23,10 @@ import { Utils } from 'app/service/utils';
 import { RequestManager } from 'app/service/requests-manager';
 
 @Component({
-    changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './go-enrichment.html'
 })
 export class GoEnrichmentScreenComponent implements AfterViewInit, OnDestroy {
+    isWaiting: boolean;
     errorMessage: string;
     geneModels: GeneModel[];
     menuGeneModel: SelectItem[];
@@ -39,12 +39,16 @@ export class GoEnrichmentScreenComponent implements AfterViewInit, OnDestroy {
 
     filter_go_overlap = '0';
     filter_ratio = '0';
+    filter_p_value = '0';
+
+    current_request = 0;
 
     columns = [
         { name: 'id', prop: 'id', column_type: 'string' },
         { name: 'name', prop: 'name', column_type: 'string' },
         { name: 'go_overlap', prop: 'gooverlap', column_type: 'integer' },
-        { name: 'ratio', prop: 'ratio', column_type: 'double' }
+        { name: 'ratio', prop: 'ratio', column_type: 'double' },
+        { name: 'p_value', prop: 'pvalue', column_type: 'double' }
     ];
 
     @ViewChild('geneModelDropdown') geneModelDropdown: Dropdown;
@@ -80,15 +84,16 @@ export class GoEnrichmentScreenComponent implements AfterViewInit, OnDestroy {
         this.selectedData.activeTopStackValue$.subscribe((dataStackItem: DataStackItem) => this.processEnrichment());
     }
 
-    filter_enrichment_data($event: any) {
-
+    filter_enrichment_data() {
         const newResults = [];
         for (let idx = 0; idx < this.enrichment_data_from_server.length; idx++) {
             const x = this.filter_enrichment_datei(this.enrichment_data_from_server[idx]);
             newResults.push(x);
         }
 
+        console.log(newResults.length);
         this.enrichment_data = newResults;
+        console.log(this.enrichment_data.length);
         this.plotBar();
     }
 
@@ -104,16 +109,23 @@ export class GoEnrichmentScreenComponent implements AfterViewInit, OnDestroy {
             ratio = Number(this.filter_ratio);
         }
 
+        let p_value = Number.MAX_SAFE_INTEGER;
+        if (this.filter_p_value) {
+            p_value = Number(this.filter_p_value);
+        }
+
         const filtered_data = [];
         for (let idx = 0; idx < value.length; idx++) {
             const row: any = value[idx];
 
             if ((row['gooverlap'] >= go_overlap) &&
                 (row['ratio'] >= ratio)) {
+                //(row['ratio'] >= ratio) &&
+                //(row['pvalue'] < p_value)) {
                 filtered_data.push(row);
             }
         }
-        return filtered_data.sort((a: any, b: any) => b['gooverlap'] - a['gooverlap']);
+        return filtered_data.sort((a: any, b: any) => b['pvalue'] - a['pvalue']);
     }
 
     selectGeneModel(event: any) {
@@ -132,19 +144,24 @@ export class GoEnrichmentScreenComponent implements AfterViewInit, OnDestroy {
 
         const current = this.selectedData.getStacksTopOperation();
 
+        this.progress_element.reset(this.selectedData.getStacksTopOperation().length, this.current_request);
+
         this.deepBlueService.composedCalculateGenesEnrichment(current, gene_model).subscribe((request: DeepBlueMiddlewareRequest) => {
+            this.isWaiting = true;
+            this.requestManager.cancelAllRequest();
             this.requestManager.enqueueRequest(request);
-            this.deepBlueService.getComposedResultIterator(request, this.progress_element, 'go_enrichment')
+            this.deepBlueService.getComposedResultIterator(request, this.progress_element, 'go_enrichment', this.prepare_data, this)
                 .subscribe((result: DeepBlueMiddlewareGOEnrichtmentResult[]) => {
-                    const end = new Date().getTime();
-                    this.prepare_data(result);
+                    if (result.length > 0) {
+                        this.isWaiting = false;
+                        this.prepare_data(this, result);
+                    }
                 });
         });
     }
 
-    prepare_data(datum: DeepBlueMiddlewareGOEnrichtmentResult[]) {
-
-        this.enrichment_data_from_server = [];
+    prepare_data(_self: GoEnrichmentScreenComponent, datum: DeepBlueMiddlewareGOEnrichtmentResult[]) {
+        _self.enrichment_data_from_server = [];
 
         for (let pos = 0; pos < datum.length; pos++) {
             const data = datum[pos];
@@ -153,20 +170,20 @@ export class GoEnrichmentScreenComponent implements AfterViewInit, OnDestroy {
                 return x['go_overlap'] !== 0
             }).map((x: any) => {
                 const row: { [key: string]: any } = {};
-                for (let idx = 0; idx < this.columns.length; idx++) {
-                    const column_name = this.columns[idx]['name'];
+                for (let idx = 0; idx < _self.columns.length; idx++) {
+                    const column_name = _self.columns[idx]['name'];
                     const v = x[column_name];
-                    row[column_name.toLowerCase().replace('_', '')] = Utils.convert(v, this.columns[idx]['column_type'])
+                    row[column_name.toLowerCase().replace('_', '')] = Utils.convert(v, _self.columns[idx]['column_type'])
                 }
                 return row;
             });
 
             rows.sort((a: any, b: any) => b['go_overlap'] - a['go_overlap']);
 
-            this.enrichment_data_from_server.push(rows);
+            _self.enrichment_data_from_server.push(rows);
         }
 
-        this.filter_enrichment_data(null);
+        _self.filter_enrichment_data();
     }
 
     plotBar() {

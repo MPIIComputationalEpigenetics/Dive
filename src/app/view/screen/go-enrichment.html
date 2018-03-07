@@ -1,51 +1,60 @@
 <div class="ui-fluid">
-    <div [ngClass]="{'ui-g-12': true}">
-        <div class="card card-w-title">
-            <h1>GO enrichment</h1>
-
-            <div class="ui-g form-group">
-                <div class="ui-g-12 ui-md-3">
-                    <label for="input">Annotation Name</label>
-                </div>
-                <div class="ui-g-12 ui-md-2">
-                    <p-dropdown #geneModelDropdown [options]="menuGeneModel" [(ngModel)]="selectedGeneModel" filter="filter" [autoWidth]="false"
-                        (onChange)="selectGeneModel($event)">
-                    </p-dropdown>
-                </div>
-            </div>
-
-            <div class="ui-g form-group">
-                <div class="ui-g-12 ui-md-3">
-                    <label for="input">Mimimum number of co-located GO terms</label>
-                </div>
-                <div class="ui-g-12 ui-md-2">
-                    <input type="text" pInputText [(ngModel)]="filter_go_overlap" placeholder="Mimimum number of GO term overlaps" (ngModelChange)="filter_enrichment_data($event)"
-                    />
-                </div>
-            </div>
-
-            <div class="ui-g form-group">
-                <div class="ui-g-12 ui-md-3">
-                    <label for="input">Minimum ratio</label>
-                </div>
-                <div class="ui-g-12 ui-md-2">
-                    <input type="text" pInputText [(ngModel)]="filter_ratio" placeholder="Mimimum ratio" (ngModelChange)="filter_enrichment_data($event)"
-                    />
-                </div>
-            </div>
-
-            <app-overlaps-bar-chart #overlapbarchart> </app-overlaps-bar-chart>
-
-            <div class="ui-g">
-                <div *ngFor="let data of enrichment_data; let i = index">
-                    <h2> {{ selectedData.getStackname(i) }} </h2>
-                    <ngx-datatable class='material' [columns]="columns" [rows]='data' [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50"
-                        [rowHeight]="'auto'" [limit]="10">
-                    </ngx-datatable>
-                </div>
-            </div>
-
-
+  <div [ngClass]="{'ui-g-12': true}">
+    <div class="card card-w-title">
+      <h1>Gene Ontology Enrichment</h1>
+      <div class="ui-g form-group">
+        <div class="ui-g-12 ui-md-3">
+          <label for="input">Annotation Name</label>
         </div>
+        <div class="ui-g-12 ui-md-2">
+          <p-dropdown #geneModelDropdown [options]="menuGeneModel" [(ngModel)]="selectedGeneModel" filter="filter" [autoWidth]="false"
+            (onChange)="selectGeneModel($event)">
+          </p-dropdown>
+        </div>
+      </div>
+
+      <div *ngIf="isWaiting">
+        <h1>Processing Gene Ontology Enrichment</h1>
+        <h2>It may take up a few minutes, please, wait.</h2>
+      </div>
+
+      <div *ngIf="!isWaiting">
+        <p-fieldset legend="GO Filtering">
+          <div class="ui-g form-group">
+            <div class="ui-g-12 ui-md-3">
+              <label for="input">Mimimum number of co-located GO terms</label>
+            </div>
+            <div class="ui-g-12 ui-md-2">
+              <input type="text" pInputText [(ngModel)]="filter_go_overlap" placeholder="Mimimum number of GO term overlaps" (ngModelChange)="filter_enrichment_data()"
+              />
+            </div>
+          </div>
+
+          <div class="ui-g form-group">
+            <div class="ui-g-12 ui-md-3">
+              <label for="input">Minimum ratio</label>
+            </div>
+            <div class="ui-g-12 ui-md-2">
+              <input type="text" pInputText [(ngModel)]="filter_ratio" placeholder="Mimimum ratio" (ngModelChange)="filter_enrichment_data()"
+              />
+            </div>
+          </div>
+        </p-fieldset>
+      </div>
+
+      <p>
+
+      </p>
+      <p-tabView>
+        <p-tabPanel header="Plot">
+          <app-overlaps-bar-chart #overlapbarchart> </app-overlaps-bar-chart>
+        </p-tabPanel>
+        <p-tabPanel *ngFor="let data of enrichment_data; let i = index" [header]=selectedData.getStackname(i)>
+          <ngx-datatable class='material' [columns]="columns" [rows]='data' [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50"
+            [rowHeight]="'auto'" [limit]="10">
+          </ngx-datatable>
+        </p-tabPanel>
+      </p-tabView>
     </div>
+  </div>
 </div>
