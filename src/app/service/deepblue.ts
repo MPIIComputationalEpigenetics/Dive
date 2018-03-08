@@ -749,6 +749,26 @@ export class DeepBlueService {
             .do((operation) => { this.overlapsQueryCache.put(cache_key, operation) })
     }
 
+    selectGoTerm(go_term: string, gene_model: GeneModel, progress_element: ProgressElement, request_count: number): Observable<DeepBlueOperation> {
+        debugger;
+        if (!go_term) {
+            return Observable.empty<DeepBlueOperation>();
+        }
+
+        const params = new HttpParams()
+            .set('go_terms', go_term)
+            .set('gene_model', gene_model.name)
+            .set('genome', this.getGenome().name);
+
+        return this.middleware.get('select_genes', params)
+            .map((body: any) => {
+                const response: string = body[1] || '';
+                const query_id = new Id(response);
+                progress_element.increment(request_count);
+                return new DeepBlueOperation(new DeepBlueDataParameter([go_term, gene_model.name]), query_id, 'select_go', request_count);
+            })
+    }
+
     findMotif(dna_motif: string, progress_element: ProgressElement, request_count: number): Observable<DeepBlueOperation> {
         if (!dna_motif) {
             return Observable.empty<DeepBlueOperation>();
