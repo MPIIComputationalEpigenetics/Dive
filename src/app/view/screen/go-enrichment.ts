@@ -260,6 +260,13 @@ export class GoEnrichmentScreenComponent implements AfterViewInit, OnDestroy {
         this.selectedTab = $event.index;
     }
 
+    onTableClick($event: any) {
+        if ($event.type == "click") {
+            this.selectedGoTerm = $event.row.id;
+            this.showDataDetail = true;
+        }
+    }
+
     setDataInfo($event: any) {
         this.selectedGoTerm = $event;
         this.showDataDetail = true;

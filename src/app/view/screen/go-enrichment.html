@@ -62,7 +62,7 @@
         </p-tabPanel>
         <p-tabPanel *ngFor="let data of enrichment_data; let i = index" [header]=selectedData.getStackname(i)>
           <ngx-datatable class='material' [columns]="columns" [rows]='data' [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50"
-            [rowHeight]="'auto'" [limit]="10">
+            [rowHeight]="'auto'" [limit]="10" (activate)="onTableClick($event)">
           </ngx-datatable>
         </p-tabPanel>
       </p-tabView>
