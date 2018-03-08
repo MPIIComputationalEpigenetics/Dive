@@ -194,12 +194,14 @@ export class GoEnrichmentScreenComponent implements AfterViewInit, OnDestroy {
     plotBar() {
         const categories = [];
         const categories_value = new Array<any>();
+        const category_id: {
+            [key: string]: string
+        } = {};
         const result_by_dataset_stack: {
             [key: string]: {
                 [key: string]: string
             }
         } = {};
-
 
         for (let stack = 0; stack < this.enrichment_data.length; stack++) {
             const data = this.enrichment_data[stack];
@@ -213,6 +215,7 @@ export class GoEnrichmentScreenComponent implements AfterViewInit, OnDestroy {
                 const go_overlap = term['gooverlap'];
 
                 const category = name + ' (' + id + ')';
+                category_id[category] = id;
 
                 // If it is one of top 100 elements of the main stack
                 // or if its values was found in the top 100 elements of the main stack
@@ -230,7 +233,6 @@ export class GoEnrichmentScreenComponent implements AfterViewInit, OnDestroy {
         }
 
         const series: Array<Object> = [];
-        debugger;
         for (let stack_pos = 0; stack_pos < categories_value.length; stack_pos++) {
             const stack_values_result: Array<number> = [];
             const stack_categories_values = categories_value[stack_pos];
@@ -241,7 +243,7 @@ export class GoEnrichmentScreenComponent implements AfterViewInit, OnDestroy {
                 } else {
                     stack_values_result.push(0)
                 }
-                result_by_dataset_stack[category][stack_pos] = category;
+                result_by_dataset_stack[category][stack_pos] = category_id[category];
             }
 
             series.push({
@@ -251,7 +253,6 @@ export class GoEnrichmentScreenComponent implements AfterViewInit, OnDestroy {
                 color: this.selectedData.getStackColor(stack_pos, '0.3')
             });
         }
-        debugger;
         this.overlapbarchart.setNewData(categories, series, result_by_dataset_stack);
     }
 
@@ -260,7 +261,14 @@ export class GoEnrichmentScreenComponent implements AfterViewInit, OnDestroy {
     }
 
     setDataInfo($event: any) {
-        debugger;
+        this.selectedGoTerm = $event;
+        this.showDataDetail = true;
+    }
+
+    filterOverlapping(term: string) {
+        const gene_model = this.selectedGeneModelSource.getValue();
+        this.selectedData.activeStackSubject.getValue().overlapGoTerm(term, gene_model);
+        this.showDataDetail = false;
     }
 
     ngOnDestroy() {

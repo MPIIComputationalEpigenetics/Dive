@@ -72,5 +72,6 @@
 
 
 <p-sidebar [(visible)]="showDataDetail" position="right" [baseZIndex]="10000" styleClass="ui-sidebar-md">
-    {{ selectedGoTerm }}
+    <h1>Term: {{ selectedGoTerm }}</h1>
+    <p><button pButton type="button" (click)="filterOverlapping(selectedGoTerm)" label="Filter overlapping"></button>
 </p-sidebar>
