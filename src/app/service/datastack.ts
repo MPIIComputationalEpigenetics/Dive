@@ -234,8 +234,7 @@ export class DataStack {
 
     this.requestManager.cancelAllRequest();
 
-    this.deepBlueService.overlap(current_op, operation, 'false', this.progress_element, request_count)
-      .subscribe((overlap_operation) => {
+    this.deepBlueService.overlap(current_op, operation, 'false', this.progress_element, request_count).subscribe((overlap_operation) => {
         this.deepBlueService.cacheQuery(overlap_operation, this.progress_element, request_count).subscribe((cached_data) => {
           this.deepBlueService.countRegionsRequest(cached_data, this.progress_element, request_count).subscribe((total) => {
             const totalSelectedRegtions = total.resultAsCount();
