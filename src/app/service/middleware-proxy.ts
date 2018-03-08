@@ -11,7 +11,7 @@ export class MiddlewareProxy {
   private deepBlueUrl = 'api';
 
   constructor(private http: HttpClient) {
-    console.info('Starting DeepBlue Service');
+    console.info('Starting Middleware Proxy');
   }
 
   get<T>(command: string, params?: HttpParams): Observable<T> {

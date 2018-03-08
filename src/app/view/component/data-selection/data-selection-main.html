@@ -15,6 +15,10 @@
         <select-query (queryIdSelected)="selectQuery($event)"></select-query>
     </p-tabPanel>
 
+    <p-tabPanel header="Genes and GO terms">
+        <select-genes-component (queryIdSelected)="selectQuery($event)"></select-genes-component>
+    </p-tabPanel>
+
     <p-tabPanel header="Upload File">
         <regions-upload (queryIdSelected)="selectQuery($event)"></regions-upload>
     </p-tabPanel>

@@ -972,7 +972,7 @@ export class DeepBlueService {
             })
     }
 
-    selectGenes(genes: string[], gene_model: IdName, progress_element: ProgressElement, request_count: number): Observable<DeepBlueOperation> {
+    selectGenes(genes: string[], go_terms: string[], gene_model: IdName, progress_element: ProgressElement, request_count: number): Observable<DeepBlueOperation> {
         if (!gene_model) {
             return Observable.empty<DeepBlueOperation>();
         }
@@ -984,12 +984,17 @@ export class DeepBlueService {
             params = params.append('genes', name);
         }
 
+        for (let go_term of go_terms) {
+            params = params.append("go_terms", go_term);
+        }
+
         return this.middleware.get('select_genes', params)
             .map((body: any) => {
                 const response: string = body[1] || '';
                 const query_id = new Id(body[1]);
                 progress_element.increment(request_count);
-                return new DeepBlueOperation(new DeepBlueOperationArgs({ genes: genes, gene_model: gene_model }), query_id, 'select_genes', request_count);
+                debugger;
+                return new DeepBlueOperation(new DeepBlueOperationArgs({ "genes": genes, "go_terms": go_terms, "gene_model": gene_model.name }), query_id, 'select_genes', request_count);
             })
     }
 
