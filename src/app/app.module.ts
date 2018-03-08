@@ -141,6 +141,7 @@ import { Angulartics2Module } from 'angulartics2';
 import { Angulartics2GoogleAnalytics } from 'angulartics2/ga';
 import { MiddlewareProxy } from './service/middleware-proxy';
 import { RegionsTransformComponent } from 'app/view/component/menu/regions-transform';
+import { SelectMotif } from 'app/view/component/data-selection/dna-motif';
 
 @NgModule({
     imports: [
@@ -259,6 +260,7 @@ import { RegionsTransformComponent } from 'app/view/component/menu/regions-trans
         RegionsTransformComponent,
         RegionsUpload,
         RegionsPaste,
+        SelectMotif,
         QueryFlow,
         SelectQuery,
         NavegationMenu,

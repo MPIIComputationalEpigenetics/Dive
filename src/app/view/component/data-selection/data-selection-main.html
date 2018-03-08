@@ -11,6 +11,10 @@
         <select-tiling-component (queryIdSelected)="selectQuery($event)"></select-tiling-component>
     </p-tabPanel>
 
+    <p-tabPanel header="DNA Sequence Motif">
+        <select-motif (queryIdSelected)="selectQuery($event)"></select-motif>
+    </p-tabPanel>
+
     <p-tabPanel header="DeepBlue's Query ID">
         <select-query (queryIdSelected)="selectQuery($event)"></select-query>
     </p-tabPanel>

@@ -7,24 +7,20 @@
           <div class="ui-g-6">
             <div class="ui-g">
               <div class="ui-g-6">
-                <input type="text" pInputText placeholder="Query ID" (keyup.enter)="useQueryId()" [(ngModel)]="model_query_id">
+                <input type="text" pInputText placeholder="DNA Motif" (keyup.enter)="useMotif()" [(ngModel)]="motif">
               </div>
             </div>
 
             <div class="ui-g">
               <div class="ui-g-6">
-                <p-toolbar>
+                <p *ngIf="!minimulLength()">The motif must be at least 8 letters long</p>
+                <p-toolbar *ngIf="minimulLength()">
                   <div class="ui-toolbar-group-left">
-                    <button pButton type="button" (click)="useQueryId()" label="Display Query"></button>
-                  </div>
-                  <div *ngIf="hasQueryObject()" class="ui-toolbar-group-right">
-                    <button pButton type="button" (click)="useQuery()" label="Load Query"></button>
+                    <button pButton type="button" (click)="useMotif()" label="Use Motif"></button>
                   </div>
                 </p-toolbar>
               </div>
             </div>
-
-            <query-flow [queryId]="query_id" (queryOp)="storeQueryObject($event)"></query-flow>
           </div>
         </div>
       </div>
