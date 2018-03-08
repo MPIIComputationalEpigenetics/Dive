@@ -546,7 +546,7 @@ export class DeepBlueFilter extends DeepBlueOperation implements IFiltered {
     }
 
     text(): string {
-        return this._params.text();
+        return this._data.text() + " by " + this._params.text();
     }
 }
 
