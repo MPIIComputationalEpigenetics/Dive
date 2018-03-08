@@ -685,41 +685,6 @@ export class DeepBlueService {
             .do((result_operation) => { this.filtersQueryCache.put(cache_key, result_operation) });
     }
 
-    intersectWithSelected(current_operations: DeepBlueOperation[], selected_data: DeepBlueOperation[],
-        progress_element: ProgressElement, request_count: number): Observable<StackValue[]> {
-
-        const observableBatch: Observable<StackValue>[] = [];
-
-        current_operations.forEach((current, stack_pos) => {
-            selected_data.forEach((selected) => {
-                let o: Observable<StackValue>;
-                const cache_key = [current, selected];
-
-                if (this.intersectsQueryCache.get(cache_key, request_count)) {
-                    progress_element.increment(request_count);
-                    const cached_operation = this.intersectsQueryCache.get(cache_key, request_count);
-                    o = Observable.of(new StackValue(stack_pos, cached_operation));
-                } else {
-                    const params = new HttpParams()
-                        .set('query_data_id', current.query_id.id)
-                        .set('query_filter_id', selected.query_id.id);
-
-                    o = this.middleware.get('intersection', params)
-                        .map((body: any) => {
-                            const response: string = body[1] || '';
-                            const query_id = new Id(response);
-                            progress_element.increment(request_count);
-                            return new StackValue(stack_pos, new DeepBlueOperation(selected.data(), query_id, 'intersection', request_count));
-                        })
-                        .do((operation: StackValue) => { this.intersectsQueryCache.put(cache_key, operation.getDeepBlueOperation()) })
-                }
-                observableBatch.push(o);
-            });
-        });
-
-        return Observable.forkJoin(observableBatch);
-    }
-
     overlap(data_one: IOperation, data_two: IOperation, overlap: string,
         progress_element: ProgressElement, request_count: number): Observable<DeepBlueOperation> {
 
