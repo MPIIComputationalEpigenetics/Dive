@@ -425,7 +425,8 @@ export class DeepBlueTiling extends AbstractNamedDataType implements IOperation 
 
 export class DeepBlueIntersection extends DeepBlueOperation implements IFiltered {
 
-    constructor(private _subject: IOperation, public _filter: IOperation, public query_id: Id, public cached = false) {
+    constructor(private _subject: IOperation, public _filter: IOperation, public overlap: boolean,
+        public query_id: Id, public cached = false) {
         super(_subject.data(), query_id, "intersection")
     }
 
@@ -433,6 +434,7 @@ export class DeepBlueIntersection extends DeepBlueOperation implements IFiltered
         return new DeepBlueIntersection(
             this._subject.clone(),
             this._filter.clone(),
+            this.overlap,
             this.query_id,
             this.cached
         );
@@ -455,11 +457,15 @@ export class DeepBlueIntersection extends DeepBlueOperation implements IFiltered
     }
 
     cacheIt(query_id: Id): DeepBlueIntersection {
-        return new DeepBlueIntersection(this._subject, this._filter, this.query_id, true);
+        return new DeepBlueIntersection(this._subject, this._filter, this.overlap, this.query_id, true);
     }
 
     text(): string {
-        return this._subject.text() + " filtered by " + this._filter.text();
+        if (this.overlap) {
+            return "Overlapping " + this._filter.text();
+        } else {
+            return "Not overlapping " + this._filter.text();
+        }
     }
 }
 
@@ -469,10 +475,11 @@ export class DeepBlueAggregate extends DeepBlueOperation implements IFiltered {
         super(_subject.data(), query_id, "aggregate")
     }
 
-    clone(): DeepBlueIntersection {
-        return new DeepBlueIntersection(
+    clone(): DeepBlueAggregate {
+        return new DeepBlueAggregate(
             this._subject.clone(),
             this._ranges.clone(),
+            this.field,
             this.query_id,
             this.cached
         );
@@ -494,8 +501,8 @@ export class DeepBlueAggregate extends DeepBlueOperation implements IFiltered {
         return this._ranges;
     }
 
-    cacheIt(query_id: Id): DeepBlueIntersection {
-        return new DeepBlueIntersection(this._subject, this._ranges, this.query_id, true);
+    cacheIt(query_id: Id): DeepBlueAggregate {
+        return new DeepBlueAggregate(this._subject, this._ranges, this.field, this.query_id, true);
     }
 
     text(): string {
@@ -997,9 +1004,10 @@ export function toClass(o: any): IDataParameter {
                 case 'intersection': {
                     let subject = toClass(o._subject);
                     let filter = toClass(o._filter);
+                    let overlap = o.overlap;
                     let query_id = new Id(o.query_id.id);
 
-                    return new DeepBlueIntersection(<IOperation>subject, <IOperation>filter, query_id, o.cached);
+                    return new DeepBlueIntersection(<IOperation>subject, <IOperation>filter, overlap, query_id, o.cached);
                 }
 
                 case 'aggregate': {

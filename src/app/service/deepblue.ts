@@ -45,6 +45,7 @@ import {
     DeepBlueEmptyParameter,
     DeepBlueOperationError,
     DeepBlueFilter,
+    DeepBlueIntersection,
 } from '../domain/operations';
 
 import { ProgressElement } from '../service/progresselement';
@@ -111,7 +112,6 @@ export class DeepBlueService {
     selectedBioSourcesValue$ = this.selectedBioSources.asObservable();
 
     idNamesQueryCache = new DataCache<IdName, DeepBlueOperation>();
-    intersectsQueryCache = new MultiKeyDataCache<DeepBlueOperation, IOperation>();
     overlapsQueryCache = new DataCache<IKey, DeepBlueOperation>();
     filtersQueryCache = new DataCache<IKey, DeepBlueOperation>();
     operationCache = new DataCache<IOperation, IOperation>();
@@ -685,7 +685,7 @@ export class DeepBlueService {
             .do((result_operation) => { this.filtersQueryCache.put(cache_key, result_operation) });
     }
 
-    overlap(data_one: IOperation, data_two: IOperation, overlap: string,
+    overlap(data_one: IOperation, data_two: IOperation, overlap: boolean,
         progress_element: ProgressElement, request_count: number): Observable<DeepBlueOperation> {
 
         const amount = '1';
@@ -699,10 +699,12 @@ export class DeepBlueService {
             return Observable.of(cached_operation);
         }
 
+        let overlap_string = overlap ? "true" : "false";
+
         const params = new HttpParams()
             .set('query_data_id', data_one.id().id)
             .set('query_filter_id', data_two.id().id)
-            .set('overlap', overlap)
+            .set('overlap', overlap_string)
             .set('amount', amount) // TODO:  receive this parameter
             .set('amount_type', 'bp'); // TODO:  receive this parameter
 
@@ -711,7 +713,7 @@ export class DeepBlueService {
                 const response: string = body[1] || '';
                 const query_id = new Id(response);
                 progress_element.increment(request_count);
-                return new DeepBlueOperation(data_one.data(), query_id, 'overlap', request_count);
+                return new DeepBlueIntersection(data_one, data_two, overlap, query_id);
             })
             .do((operation) => { this.overlapsQueryCache.put(cache_key, operation) })
     }
