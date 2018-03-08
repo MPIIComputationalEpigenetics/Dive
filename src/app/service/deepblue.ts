@@ -44,6 +44,7 @@ import {
     toClass,
     DeepBlueEmptyParameter,
     DeepBlueOperationError,
+    DeepBlueFilter,
 } from '../domain/operations';
 
 import { ProgressElement } from '../service/progresselement';
@@ -678,7 +679,8 @@ export class DeepBlueService {
                 const response: string = body[1] || '';
                 const query_id = new Id(response);
                 progress_element.increment(request_count);
-                return new DeepBlueOperation(data.data(), query_id, 'filter', request_count);
+                let filter_parameters = new DeepBlueFilterParameters(field, operation, value, type);
+                return new DeepBlueFilter(data, filter_parameters, query_id);
             })
             .do((result_operation) => { this.filtersQueryCache.put(cache_key, result_operation) });
     }
@@ -750,7 +752,6 @@ export class DeepBlueService {
     }
 
     selectGoTerm(go_term: string, gene_model: GeneModel, progress_element: ProgressElement, request_count: number): Observable<DeepBlueOperation> {
-        debugger;
         if (!go_term) {
             return Observable.empty<DeepBlueOperation>();
         }
