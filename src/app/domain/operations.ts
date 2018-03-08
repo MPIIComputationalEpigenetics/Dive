@@ -119,7 +119,7 @@ export abstract class AbstractDataParameter extends AbstractNamedDataType implem
 
     abstract key(): string;
 
-    abstract clone(request_count?: number) : AbstractDataParameter;
+    abstract clone(request_count?: number): AbstractDataParameter;
 
     abstract text(): string;
 
@@ -131,7 +131,7 @@ export abstract class AbstractDataParameter extends AbstractNamedDataType implem
 export class DeepBlueEmptyParameter extends AbstractDataParameter {
 
     constructor() {
-         super("empty_parameter");
+        super("empty_parameter");
     }
 
     name(): string {
@@ -303,7 +303,7 @@ export class DeepBlueFilterParameters extends AbstractDataParameter {
     }
 
     asKeyValue(): Object {
-        let params : any = {};
+        let params: any = {};
 
         params["field"] = this.field;
         params["operation"] = this.operation;
@@ -314,7 +314,10 @@ export class DeepBlueFilterParameters extends AbstractDataParameter {
     }
 
     text() {
-        return JSON.stringify(this.asKeyValue());
+        if (this.field.length > 0 && this.field[0] == "@") {
+            this.field = this.field.replace("@", "")
+        }
+        return this.field + " " + this.operation + " " + this.value;
     }
 
     clone(): DeepBlueFilterParameters {
@@ -346,7 +349,7 @@ export class DeepBlueOperation extends AbstractNamedDataType implements IOperati
         return this._data;
     }
 
-    mainOperation() : IOperation {
+    mainOperation(): IOperation {
         if (this._data instanceof DeepBlueOperation) {
             return (<DeepBlueOperation>this._data).mainOperation();
         }
@@ -389,7 +392,7 @@ export class DeepBlueTiling extends AbstractNamedDataType implements IOperation 
         return new DeepBlueDataParameter(new IdName(this.query_id, "Tiling Regions of " + this.size.toLocaleString() + "bp"));
     }
 
-    mainOperation() : IOperation {
+    mainOperation(): IOperation {
         return this;
     }
 
@@ -536,7 +539,7 @@ export class DeepBlueFilter extends DeepBlueOperation implements IFiltered {
     }
 
     text(): string {
-        return this._data.text() + "(" + this._params.text() + ")";
+        return this._params.text();
     }
 }
 
