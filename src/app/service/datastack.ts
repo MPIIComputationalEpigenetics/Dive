@@ -28,10 +28,10 @@ export class DataStackFactory {
 }
 
 export class DataStackItem {
-  constructor(public op: IOperation, public what: string, public description: string, public count: number) { }
+  constructor(public op: IOperation, public count: number) { }
 
   clone(): DataStackItem {
-    return new DataStackItem(this.op, this.what, this.description, this.count);
+    return new DataStackItem(this.op, this.count);
   }
 }
 
@@ -174,7 +174,7 @@ export class DataStack {
     this.deepBlueService.cacheQuery(data, this.progress_element, request_count).subscribe((cached_data) => {
       this.deepBlueService.countRegionsRequest(cached_data, this.progress_element, request_count).subscribe((total) => {
         const totalSelectedRegtions = total.resultAsCount();
-        const dataStackItem: DataStackItem = new DataStackItem(cached_data, data.dataType(), data.text(), totalSelectedRegtions);
+        const dataStackItem: DataStackItem = new DataStackItem(cached_data, totalSelectedRegtions);
         this._data.push(dataStackItem);
         this.stackOperations(data.data());
       });
@@ -188,7 +188,7 @@ export class DataStack {
     } else {
       this.deepBlueService.countRegionsRequest(data, this.progress_element, -1).subscribe((total) => {
         const totalSelectedRegtions = total.resultAsCount();
-        const dataStackItem: DataStackItem = new DataStackItem(data, data.dataType(), data.text(), totalSelectedRegtions);
+        const dataStackItem: DataStackItem = new DataStackItem(data, totalSelectedRegtions);
         this._data.unshift(dataStackItem);
         this.stackOperations(data.data());
       });
@@ -215,7 +215,7 @@ export class DataStack {
         this.deepBlueService.countRegionsRequest(cached_data, this.progress_element, request_count).subscribe((total) => {
           const totalSelectedRegtions = total.resultAsCount();
           debugger;
-          const dataStackItem: DataStackItem = new DataStackItem(cached_data, cached_data.dataType(), operation.text(), totalSelectedRegtions);
+          const dataStackItem: DataStackItem = new DataStackItem(cached_data, totalSelectedRegtions);
           this._data.push(dataStackItem);
         });
       });
@@ -239,7 +239,7 @@ export class DataStack {
         this.deepBlueService.cacheQuery(overlap_operation, this.progress_element, request_count).subscribe((cached_data) => {
           this.deepBlueService.countRegionsRequest(cached_data, this.progress_element, request_count).subscribe((total) => {
             const totalSelectedRegtions = total.resultAsCount();
-            const dataStackItem: DataStackItem = new DataStackItem(cached_data, cached_data.dataType(), operation.text(), totalSelectedRegtions);
+            const dataStackItem: DataStackItem = new DataStackItem(cached_data, totalSelectedRegtions);
             this._data.push(dataStackItem);
           });
         });
@@ -284,7 +284,7 @@ export class DataStack {
               text = 'length';
             }
             const dataStackItem: DataStackItem =
-              new DataStackItem(cached_data, cached_data.dataType(), cached_data.text(), totalSelectedRegtions);
+              new DataStackItem(cached_data, totalSelectedRegtions);
             this._data.push(dataStackItem);
           });
         });
