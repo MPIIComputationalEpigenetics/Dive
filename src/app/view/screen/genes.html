@@ -24,59 +24,15 @@
 
 
 <p-dialog header="Insert new column" [(visible)]="showIncludeBar" width="650">
-  <p-tabView>
-    <div class="ui-g">
-      <div class="ui-g-6">
-        <div class="ui-g" *ngFor="let c of filters">
-          <div style="word-wrap: break-word" class="ui-g-8">{{ toString(c) }}</div>
-          <div class="ui-g-offset-1 ui-g-1">
-            <button pButton type="button" icon="fa fa-fw fa-close" (click)="removeFilter(c)"></button>
-          </div>
+  <div class="ui-g">
+    <div class="ui-g-6">
+      <div class="ui-g" *ngFor="let c of filters">
+        <div style="word-wrap: break-word" class="ui-g-8">{{ toString(c) }}</div>
+        <div class="ui-g-offset-1 ui-g-1">
+          <button pButton type="button" icon="fa fa-fw fa-close" (click)="removeFilter(c)"></button>
         </div>
       </div>
-      <div class="ui-g-4">
-        <p-tabPanel header="Flank">
-          <div class="ui-g">
-            <div class="ui-g-4">
-              <label>Start</label>
-            </div>
-            <div class="ui-g-offset-1 ui-g-4">
-              <input style="width:100px" type="number" [(ngModel)]="start" pInputText/>
-            </div>
-          </div>
-          <div class="ui-g">
-            <div class="ui-g-4">
-              <label>Length</label>
-            </div>
-            <div class="ui-g-offset-1  ui-g-4">
-              <input style="width:100px" type="number" [(ngModel)]="length" pInputText/>
-            </div>
-          </div>
-          <button pButton type="button" (click)="insertFlank()" label="Insert Column"></button>
-        </p-tabPanel>
-
-        <p-tabPanel header="Extend">
-          <div class="ui-g">
-            <div class="ui-g-4">
-              <label>Direction</label>
-            </div>
-            <div class="ui-g-offset-1  ui-g-4">
-              <p-dropdown [style]="{'width':'100px'}" [options]="directions" [(ngModel)]="selectedDirection" optionLabel="name" [filter]="true"
-                filterBy="label,value.name"></p-dropdown>
-            </div>
-          </div>
-          <div class="ui-g">
-            <div class="ui-g-4">
-              <label>Length</label>
-            </div>
-            <div class="ui-g-offset-1  ui-g-4">
-              <input style="width:100px" type="number" [(ngModel)]="length" pInputText/>
-            </div>
-          </div>
-          <button pButton type="button" (click)="insertExtend()" label="Insert Column"></button>
-        </p-tabPanel>
-      </div>
     </div>
-  </p-tabView>
-
+  </div>
+  <regions-transform (flankEvent)="insertFlank($event)" (extendEvent)="insertExtend($event)"></regions-transform>
 </p-dialog>

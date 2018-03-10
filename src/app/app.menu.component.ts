@@ -98,31 +98,6 @@ export class AppMenuComponent {
                     </div>
                 </form>
 
-                <form *ngIf="child.type == 'extend'" [formGroup]=child.group (keydown.enter)="child.submit()" (ngSubmit)="child.submit()">
-                    <div class="ui-g">
-                        <div class="ui-g-4">
-                            <label>Direction</label>
-                        </div>
-                        <div class="ui-g-offset-1  ui-g-4">
-                            <p-dropdown [style]="{'width':'100px'}" [options]="child.directions" [(ngModel)]="selectedDirection" optionLabel="name" [filter]="true" filterBy="label,value.name"></p-dropdown>
-                        </div>
-                    </div>
-                    <div class="ui-g">
-                        <div class="ui-g-4">
-                            <label>Length</label>
-                        </div>
-                        <div class="ui-g-offset-1  ui-g-4">
-                            <input style="width:100px" type="number" [(ngModel)]="length" pInputText/>
-                        </div>
-                    </div>
-                    <div class="ui-g">
-                        <div class="ui-g-4"><label>{{child.label}}</label></div>
-                        <div class="ui-g-offset-1 ui-g-2"><p-dropdown [style]="{'width':'40px'}" [options]="child.options" [formControlName]="child.operation_control_name"></p-dropdown></div>
-                        <div class="ui-g-offset-1 ui-g-1"><input style="width:40px" type="{{ child.type }}" [formControlName]="child.value_control_name" pInputText/></div>
-                        <div class="ui-g-offset-1 ui-g-1"><p-button (onClick)="child.submit()" icon="fa fa-fw fa-check"></p-button></div>
-                    </div>
-                </form>
-
                 <ul app-submenu [item]="child" *ngIf="child.items" [@children]="isActive(i) ? 'visible' : 'hidden'" [visible]="isActive(i)" [reset]="reset"></ul>
             </li>
         </ng-template>

@@ -140,8 +140,9 @@ import { DataSelectionWizard, NavegationMenu } from 'app/view/wizards/data-selec
 import { Angulartics2Module } from 'angulartics2';
 import { Angulartics2GoogleAnalytics } from 'angulartics2/ga';
 import { MiddlewareProxy } from './service/middleware-proxy';
-import { RegionsTransformComponent } from 'app/view/component/menu/regions-transform';
 import { SelectMotif } from 'app/view/component/data-selection/dna-motif';
+
+import { RegionsTransformComponent } from 'app/view/screen/regions-transform'
 
 @NgModule({
     imports: [
@@ -257,6 +258,7 @@ import { SelectMotif } from 'app/view/component/data-selection/dna-motif';
         LengthMenuFilterComponent,
         DnaPatternMenuFilterComponent,
         ColumnsMenuFilterComponent,
+        RegionsTransformMenu,
         RegionsTransformComponent,
         RegionsUpload,
         RegionsPaste,

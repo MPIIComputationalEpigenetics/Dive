@@ -171,41 +171,27 @@ export class GenesScreen implements AfterViewInit, OnDestroy {
     this.showIncludeBar = true;
   }
 
-
-  directions = [
-    { name: 'Backward', code: 'BACKWARD' },
-    { name: 'Forward', code: 'FORWARD' },
-    { name: 'Both', code: 'BOTH' },
-  ]
-
-  selectedDirection = this.directions[2];
-
-  length = 2500;
-  start = -2500;
-
   filters = new Array<any>();
 
-
-  insertFlank() {
-    this.addFilterAndSend({ type: 'flank', start: this.start, length: this.length });
-  }
-
-  insertExtend() {
-    this.addFilterAndSend({ type: 'extend', length: this.length, direction: this.selectedDirection.code });
-  }
-
   addFilterAndSend(c: any) {
-    if (this.length == 0) {
+    if (c.length == 0) {
       return;
     }
     this.filters.push(c)
-    this.length = 0;
     this.showIncludeBar = false;
     this.processOverlaps();
   }
 
-  removeFilter(c: any) {
+  insertFlank($event: any) {
+    this.addFilterAndSend($event);
+  }
 
+  insertExtend($event: any) {
+    this.addFilterAndSend($event);
+  }
+
+  removeFilter(c: any) {
+    console.log("this.removeFilter", c);
   }
 
   toString(c: any) {

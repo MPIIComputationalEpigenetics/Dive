@@ -16,10 +16,10 @@ import { DeepBlueService } from 'app/service/deepblue';
 import { DiveMenuService } from 'app/service/menu';
 
 @Component({
-  selector: 'regions-transform',
+  selector: 'regions-transform-menu',
   template: '<p></p>'
 })
-export class RegionsTransformComponent implements OnInit {
+export class RegionsTransformMenu implements OnInit {
 
 
   // Transforms:
