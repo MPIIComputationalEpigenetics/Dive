@@ -191,7 +191,11 @@ export class GenesScreen implements AfterViewInit, OnDestroy {
   }
 
   removeFilter(c: any) {
+    let index = this.filters.indexOf(c);
+    console.log(index);
+    this.filters.splice(index, 1);
     console.log("this.removeFilter", c);
+    this.processOverlaps();
   }
 
   toString(c: any) {

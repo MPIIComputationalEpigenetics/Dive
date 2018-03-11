@@ -33,6 +33,8 @@
         </div>
       </div>
     </div>
+    <div class="ui-g-6">
+      <regions-transform (flankEvent)="insertFlank($event)" (extendEvent)="insertExtend($event)"></regions-transform>
+    </div>
   </div>
-  <regions-transform (flankEvent)="insertFlank($event)" (extendEvent)="insertExtend($event)"></regions-transform>
 </p-dialog>
