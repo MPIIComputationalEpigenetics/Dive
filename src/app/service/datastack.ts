@@ -245,6 +245,29 @@ export class DataStack {
       });
   }
 
+  extend(length: number, direction: string) {
+    // TODO: use/make a generic method for experiments and annotations
+    const current_op = this.getCurrentOperation();
+    if (current_op == null) {
+      return;
+    }
+
+    const request_count = 0;
+    this.progress_element.reset(5, request_count);
+
+    this.requestManager.cancelAllRequest();
+
+    this.deepBlueService.extend(current_op, length, direction, this.progress_element, request_count).subscribe((extend_operation) => {
+        this.deepBlueService.cacheQuery(extend_operation, this.progress_element, request_count).subscribe((cached_data) => {
+          this.deepBlueService.countRegionsRequest(cached_data, this.progress_element, request_count).subscribe((total) => {
+            const totalSelectedRegtions = total.resultAsCount();
+            const dataStackItem: DataStackItem = new DataStackItem(cached_data, totalSelectedRegtions);
+            this._data.push(dataStackItem);
+          });
+        });
+      });
+  }
+
   overlapGoTerm(term: string, gene_model: GeneModel): any {
     const current_op = this.getCurrentOperation();
     if (current_op == null) {

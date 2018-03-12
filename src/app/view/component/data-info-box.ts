@@ -46,7 +46,6 @@ export class DataInfoBoxComponent {
 
   constructor(private deepBlueService: DeepBlueService, private selectedData: SelectedData) { }
 
-
   @Input() set data(data: any) {
     this._data = data;
 

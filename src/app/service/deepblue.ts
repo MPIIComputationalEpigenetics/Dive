@@ -46,6 +46,7 @@ import {
     DeepBlueOperationError,
     DeepBlueFilter,
     DeepBlueIntersection,
+    DeepBlueExtend,
 } from '../domain/operations';
 
 import { ProgressElement } from '../service/progresselement';
@@ -716,6 +717,20 @@ export class DeepBlueService {
                 return new DeepBlueIntersection(data_one, data_two, overlap, query_id);
             })
             .do((operation) => { this.overlapsQueryCache.put(cache_key, operation) })
+    }
+
+
+    extend(data: IOperation, length: number, direction: string, progress_element: ProgressElement, request_count: number): Observable<DeepBlueOperation> {
+        const params = new HttpParams()
+        .set('query_id', data.id().id)
+        .set('length', length.toLocaleString())
+        .set('direction', direction)
+        .set('use_strand', "true")
+
+        return this.middleware.get("extend", params).map((response: [string, string]) => {
+            let args = new DeepBlueOperationArgs(params);
+            return new DeepBlueExtend(data, args, new Id(response[1]));
+        })
     }
 
     selectGoTerm(go_term: string, gene_model: GeneModel, progress_element: ProgressElement, request_count: number): Observable<DeepBlueOperation> {
