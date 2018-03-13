@@ -106,7 +106,7 @@ export class RegionsScreen {
             return;
         }
 
-        this.deepBlueService.getInfo(actualData.data().id()).subscribe((info: FullMetadata) => {
+        this.deepBlueService.getInfo(actualData.mainOperation().data().id()).subscribe((info: FullMetadata) => {
             this.progress_element.reset(4, 0);
 
             const format = info.format();
@@ -133,6 +133,8 @@ export class RegionsScreen {
 
                     return row;
                 });
+
+                debugger;
 
                 this.progress_element.increment(0);
             })
