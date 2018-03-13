@@ -722,14 +722,22 @@ export class DeepBlueService {
 
     extend(data: IOperation, length: number, direction: string, progress_element: ProgressElement, request_count: number): Observable<DeepBlueOperation> {
         const params = new HttpParams()
-        .set('query_id', data.id().id)
-        .set('length', length.toLocaleString())
-        .set('direction', direction)
-        .set('use_strand', "true")
+            .set('query_id', data.id().id)
+            .set('length', length.toLocaleString())
+            .set('direction', direction)
+            .set('use_strand', "true")
+
+
+        let o = {
+            "length": length,
+            "direction": direction
+        }
+
+        let doa = new DeepBlueOperationArgs(o);
 
         return this.middleware.get("extend", params).map((response: [string, string]) => {
             let args = new DeepBlueOperationArgs(params);
-            return new DeepBlueExtend(data, args, new Id(response[1]));
+            return new DeepBlueExtend(data, doa, new Id(response[1]));
         })
     }
 

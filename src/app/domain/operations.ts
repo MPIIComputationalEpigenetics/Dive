@@ -195,7 +195,7 @@ export class DeepBlueDataParameter extends AbstractDataParameter {
 
 export class DeepBlueOperationArgs extends AbstractDataParameter {
 
-    constructor(public args: Object) {
+    constructor(public args: any) {
         super("operation_args");
     }
 
@@ -207,7 +207,7 @@ export class DeepBlueOperationArgs extends AbstractDataParameter {
         return new DeepBlueOperationArgs(clone(this.args));
     }
 
-    asKeyValue(): Object {
+    asKeyValue(): any {
         return this.args;
     }
 
@@ -552,7 +552,7 @@ export class DeepBlueFilter extends DeepBlueOperation implements IFiltered {
 
 export class DeepBlueFlank extends DeepBlueOperation implements IFiltered {
 
-    constructor(public _data: IOperation, public _params: IDataParameter, public query_id: Id, public cached = false) {
+    constructor(public _data: IOperation, public _params: DeepBlueOperationArgs, public query_id: Id, public cached = false) {
         super(_data, query_id, "flank")
     }
 
@@ -592,7 +592,7 @@ export class DeepBlueFlank extends DeepBlueOperation implements IFiltered {
 
 export class DeepBlueExtend extends DeepBlueOperation implements IFiltered {
 
-    constructor(public _data: IOperation, public _params: IDataParameter, public query_id: Id, public cached = false) {
+    constructor(public _data: IOperation, public _params: DeepBlueOperationArgs, public query_id: Id, public cached = false) {
         super(_data, query_id, "extend")
     }
 
@@ -626,7 +626,7 @@ export class DeepBlueExtend extends DeepBlueOperation implements IFiltered {
     }
 
     text(): string {
-        return this._data.text() + "(" + this._params.text() + ")";
+        return "extend by " + this._params.args['length'] + "bp to " + (<string>this._params.args['direction']).toLocaleLowerCase() + " direction(s)";
     }
 }
 
