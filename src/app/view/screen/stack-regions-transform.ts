@@ -25,6 +25,10 @@ export class StackRegionsTransformScreen {
       this.selectedData.activeStackSubject.getValue().extend(c.length, c.direction);
     }
 
+    else if (c.type == "flank") {
+      this.selectedData.activeStackSubject.getValue().flank(c.start, c.length);
+    }
+
   }
 
   insertFlank($event: any) {

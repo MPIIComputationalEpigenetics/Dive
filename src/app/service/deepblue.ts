@@ -47,6 +47,7 @@ import {
     DeepBlueFilter,
     DeepBlueIntersection,
     DeepBlueExtend,
+    DeepBlueFlank,
 } from '../domain/operations';
 
 import { ProgressElement } from '../service/progresselement';
@@ -737,7 +738,27 @@ export class DeepBlueService {
 
         return this.middleware.get("extend", params).map((response: [string, string]) => {
             let args = new DeepBlueOperationArgs(params);
-            return new DeepBlueExtend(data, doa, new Id(response[1]));
+            return new DeepBlueExtend(data, doa , new Id(response[1]));
+        })
+    }
+
+    flank(data: IOperation, start: number, length: number, progress_element: ProgressElement, request_count: number): Observable<DeepBlueOperation> {
+        const params = new HttpParams()
+            .set('query_id', data.id().id)
+            .set('start', start.toLocaleString())
+            .set('length', length.toLocaleString())
+            .set('use_strand', "true")
+
+        let o = {
+            "start": start,
+            "length": length
+        }
+
+        let doa = new DeepBlueOperationArgs(o);
+
+        return this.middleware.get("flank", params).map((response: [string, string]) => {
+            let args = new DeepBlueOperationArgs(params);
+            return new DeepBlueFlank(data, doa , new Id(response[1]));
         })
     }
 

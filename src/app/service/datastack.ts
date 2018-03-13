@@ -223,7 +223,6 @@ export class DataStack {
   }
 
   non_overlap(operation: IOperation) {
-    // TODO: use/make a generic method for experiments and annotations
     const current_op = this.getCurrentOperation();
     if (current_op == null) {
       return;
@@ -245,8 +244,29 @@ export class DataStack {
       });
   }
 
+  flank(start: number, length: number) {
+    const current_op = this.getCurrentOperation();
+    if (current_op == null) {
+      return;
+    }
+
+    const request_count = 0;
+    this.progress_element.reset(5, request_count);
+
+    this.requestManager.cancelAllRequest();
+
+    this.deepBlueService.flank(current_op, start, length, this.progress_element, request_count).subscribe((flank_operation) => {
+        this.deepBlueService.cacheQuery(flank_operation, this.progress_element, request_count).subscribe((cached_data) => {
+          this.deepBlueService.countRegionsRequest(cached_data, this.progress_element, request_count).subscribe((total) => {
+            const totalSelectedRegtions = total.resultAsCount();
+            const dataStackItem: DataStackItem = new DataStackItem(cached_data, totalSelectedRegtions);
+            this._data.push(dataStackItem);
+          });
+        });
+      });
+  }
+
   extend(length: number, direction: string) {
-    // TODO: use/make a generic method for experiments and annotations
     const current_op = this.getCurrentOperation();
     if (current_op == null) {
       return;

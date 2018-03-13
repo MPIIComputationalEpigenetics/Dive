@@ -12,10 +12,10 @@ const BASIC_MENU: any[] = [
 ];
 
 const EXTRA_MENU_ITEMS: any[] = [
+  { label: 'Transform Regions', icon: 'transform', routerLink: ['/transform'] },
   { label: 'Similar Data', icon: 'compare_arrows', routerLink: ['/similarfinder'] },
   { label: 'Comparison Selection', icon: 'compare', routerLink: ['comparisonselection'] },
   { label: 'Get regions', icon: 'dehaze', routerLink: ['/regions'] },
-  { label: 'Transform', icon: 'transform', routerLink: ['/transform'] },
   { name: 'filtering', label: 'Filtering', icon: 'pause', items: [] },
   { name: 'columns', label: 'Columns Filtering', icon: 'view_week', items: [] },
   { name: 'genes', label: 'Genes', icon: 'room', routerLink: ['/genes'] },

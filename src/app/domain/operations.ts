@@ -569,7 +569,7 @@ export class DeepBlueFlank extends DeepBlueOperation implements IFiltered {
     }
 
     key(): string {
-        return "extend_" + this.id().id;
+        return "flank_" + this.id().id;
     }
 
     clone(): DeepBlueFlank {
@@ -586,7 +586,7 @@ export class DeepBlueFlank extends DeepBlueOperation implements IFiltered {
     }
 
     text(): string {
-        return this._data.text() + "(" + this._params.text() + ")";
+        return "flanking at " + this._params.args['start'] + " by " + this._params.args['length'] + "bp"
     }
 }
 
