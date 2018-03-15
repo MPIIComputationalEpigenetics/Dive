@@ -48,6 +48,7 @@ import {
     DeepBlueIntersection,
     DeepBlueExtend,
     DeepBlueFlank,
+    DeepBlueFilterMotifParameters,
 } from '../domain/operations';
 
 import { ProgressElement } from '../service/progresselement';
@@ -686,6 +687,34 @@ export class DeepBlueService {
             })
             .do((result_operation) => { this.filtersQueryCache.put(cache_key, result_operation) });
     }
+
+
+    filter_by_motif(data: IOperation, motif: string, progress_element: ProgressElement, request_count: number): Observable<IOperation> {
+
+        const parameters = [motif];
+        const cache_key = new DeepBlueOperationArgs([data, parameters, 'filter_by_motif']);
+
+        if (this.filtersQueryCache.get(cache_key, request_count)) {
+            progress_element.increment(request_count);
+            const cached_operation = this.filtersQueryCache.get(cache_key, request_count);
+            return Observable.of(cached_operation);
+        }
+
+        const params = new HttpParams()
+            .set('query_id', data.id().id)
+            .set('motif', motif)
+
+        return this.middleware.get('filter_by_motif', params)
+            .map((body: any) => {
+                const response: string = body[1] || '';
+                const query_id = new Id(response);
+                progress_element.increment(request_count);
+                let filter_parameters = new DeepBlueFilterMotifParameters(motif);
+                return new DeepBlueFilter(data, filter_parameters, query_id);
+            })
+            .do((result_operation) => { this.filtersQueryCache.put(cache_key, result_operation) });
+    }
+
 
     overlap(data_one: IOperation, data_two: IOperation, overlap: boolean,
         progress_element: ProgressElement, request_count: number): Observable<DeepBlueOperation> {

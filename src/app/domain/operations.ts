@@ -128,6 +128,10 @@ export abstract class AbstractDataParameter extends AbstractNamedDataType implem
     }
 }
 
+export abstract class AbstractFilterParameter extends AbstractDataParameter {
+
+}
+
 export class DeepBlueEmptyParameter extends AbstractDataParameter {
 
     constructor() {
@@ -292,7 +296,7 @@ export class DeepBlueMetadataParameters extends AbstractDataParameter {
 }
 
 
-export class DeepBlueFilterParameters extends AbstractDataParameter {
+export class DeepBlueFilterParameters extends AbstractFilterParameter {
 
     constructor(public field: string, public operation: string, public value: string, public type: string) {
         super("filter_parameters");
@@ -337,6 +341,44 @@ export class DeepBlueFilterParameters extends AbstractDataParameter {
     }
 }
 
+export class DeepBlueFilterMotifParameters extends AbstractFilterParameter {
+
+    constructor(public motif: string) {
+        super("filter_motif_parameter");
+    }
+
+    static fromObject(o: any): DeepBlueFilterMotifParameters {
+        return new DeepBlueFilterMotifParameters(o.motif);
+    }
+
+    asKeyValue(): Object {
+        let params: any = {};
+
+        params["motif"] = this.motif;
+
+        return params;
+    }
+
+    text() {
+        return this.motif
+    }
+
+    clone(): DeepBlueFilterMotifParameters {
+        return new DeepBlueFilterMotifParameters(this.motif);
+    }
+
+    name(): string {
+        return "Filter Motif: " + this.motif;
+    }
+
+    id(): Id {
+        return new Id(textify(this.asKeyValue));
+    }
+
+    key(): string {
+        return this.id().id;
+    }
+}
 
 export class DeepBlueOperation extends AbstractNamedDataType implements IOperation {
 
@@ -512,7 +554,7 @@ export class DeepBlueAggregate extends DeepBlueOperation implements IFiltered {
 
 export class DeepBlueFilter extends DeepBlueOperation implements IFiltered {
 
-    constructor(public _data: IOperation, public _params: DeepBlueFilterParameters, public query_id: Id, public cached = false) {
+    constructor(public _data: IOperation, public _params: AbstractFilterParameter, public query_id: Id, public cached = false) {
         super(_data, query_id, "regions_filter")
     }
 

@@ -234,14 +234,14 @@ export class DataStack {
     this.requestManager.cancelAllRequest();
 
     this.deepBlueService.overlap(current_op, operation, false, this.progress_element, request_count).subscribe((overlap_operation) => {
-        this.deepBlueService.cacheQuery(overlap_operation, this.progress_element, request_count).subscribe((cached_data) => {
-          this.deepBlueService.countRegionsRequest(cached_data, this.progress_element, request_count).subscribe((total) => {
-            const totalSelectedRegtions = total.resultAsCount();
-            const dataStackItem: DataStackItem = new DataStackItem(cached_data, totalSelectedRegtions);
-            this._data.push(dataStackItem);
-          });
+      this.deepBlueService.cacheQuery(overlap_operation, this.progress_element, request_count).subscribe((cached_data) => {
+        this.deepBlueService.countRegionsRequest(cached_data, this.progress_element, request_count).subscribe((total) => {
+          const totalSelectedRegtions = total.resultAsCount();
+          const dataStackItem: DataStackItem = new DataStackItem(cached_data, totalSelectedRegtions);
+          this._data.push(dataStackItem);
         });
       });
+    });
   }
 
   flank(start: number, length: number) {
@@ -256,14 +256,14 @@ export class DataStack {
     this.requestManager.cancelAllRequest();
 
     this.deepBlueService.flank(current_op, start, length, this.progress_element, request_count).subscribe((flank_operation) => {
-        this.deepBlueService.cacheQuery(flank_operation, this.progress_element, request_count).subscribe((cached_data) => {
-          this.deepBlueService.countRegionsRequest(cached_data, this.progress_element, request_count).subscribe((total) => {
-            const totalSelectedRegtions = total.resultAsCount();
-            const dataStackItem: DataStackItem = new DataStackItem(cached_data, totalSelectedRegtions);
-            this._data.push(dataStackItem);
-          });
+      this.deepBlueService.cacheQuery(flank_operation, this.progress_element, request_count).subscribe((cached_data) => {
+        this.deepBlueService.countRegionsRequest(cached_data, this.progress_element, request_count).subscribe((total) => {
+          const totalSelectedRegtions = total.resultAsCount();
+          const dataStackItem: DataStackItem = new DataStackItem(cached_data, totalSelectedRegtions);
+          this._data.push(dataStackItem);
         });
       });
+    });
   }
 
   extend(length: number, direction: string) {
@@ -278,14 +278,14 @@ export class DataStack {
     this.requestManager.cancelAllRequest();
 
     this.deepBlueService.extend(current_op, length, direction, this.progress_element, request_count).subscribe((extend_operation) => {
-        this.deepBlueService.cacheQuery(extend_operation, this.progress_element, request_count).subscribe((cached_data) => {
-          this.deepBlueService.countRegionsRequest(cached_data, this.progress_element, request_count).subscribe((total) => {
-            const totalSelectedRegtions = total.resultAsCount();
-            const dataStackItem: DataStackItem = new DataStackItem(cached_data, totalSelectedRegtions);
-            this._data.push(dataStackItem);
-          });
+      this.deepBlueService.cacheQuery(extend_operation, this.progress_element, request_count).subscribe((cached_data) => {
+        this.deepBlueService.countRegionsRequest(cached_data, this.progress_element, request_count).subscribe((total) => {
+          const totalSelectedRegtions = total.resultAsCount();
+          const dataStackItem: DataStackItem = new DataStackItem(cached_data, totalSelectedRegtions);
+          this._data.push(dataStackItem);
         });
       });
+    });
   }
 
   overlapGoTerm(term: string, gene_model: GeneModel): any {
@@ -321,10 +321,6 @@ export class DataStack {
         this.deepBlueService.cacheQuery(filter_operation, this.progress_element, request_count).subscribe((cached_data) => {
           this.deepBlueService.countRegionsRequest(cached_data, this.progress_element, request_count).subscribe((total) => {
             const totalSelectedRegtions = total.resultAsCount();
-            let text = field;
-            if (text === '@LENGTH') {
-              text = 'length';
-            }
             const dataStackItem: DataStackItem =
               new DataStackItem(cached_data, totalSelectedRegtions);
             this._data.push(dataStackItem);
@@ -344,10 +340,18 @@ export class DataStack {
     }
 
     this.requestManager.cancelAllRequest();
+    this.deepBlueService.filter_by_motif(current_op, pattern, this.progress_element, request_count)
+      .subscribe((filter_operation) => {
+        this.deepBlueService.cacheQuery(filter_operation, this.progress_element, request_count).subscribe((cached_data) => {
+          this.deepBlueService.countRegionsRequest(cached_data, this.progress_element, request_count).subscribe((total) => {
+            const totalSelectedRegtions = total.resultAsCount();
+            const dataStackItem: DataStackItem =
+              new DataStackItem(cached_data, totalSelectedRegtions);
+            this._data.push(dataStackItem);
+          });
+        });
+      });
 
-    this.deepBlueService.findMotif(pattern, this.progress_element, request_count).subscribe((motif_op) => {
-      this.overlap(motif_op)
-    })
   }
 
 
