@@ -5,7 +5,7 @@
     <div class="ui-g-12">
       <div class="card card-w-title">
         Modify regions
-        <regions-transform (flankEvent)="insertFlank($event)" (extendEvent)="insertExtend($event)"></regions-transform>
+        <regions-transform [buttonLabel]="'Transform Regions'" (flankEvent)="insertFlank($event)" (extendEvent)="insertExtend($event)"></regions-transform>
       </div>
     </div>
   </div>

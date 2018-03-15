@@ -9,6 +9,8 @@ export class RegionsTransformComponent {
   length = 2500;
   start = -2500;
 
+  @Input() buttonLabel = "Transform Regions";
+
   @Output() flankEvent = new EventEmitter();
   @Output() extendEvent = new EventEmitter();
 

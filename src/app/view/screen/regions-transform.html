@@ -16,7 +16,7 @@
         <input style="width:100px" type="number" [(ngModel)]="length" pInputText/>
       </div>
     </div>
-    <button pButton type="button" (click)="insertFlank()" label="Insert Column"></button>
+    <button pButton type="button" (click)="insertFlank()" label="{{ buttonLabel }}"></button>
   </p-tabPanel>
 
   <p-tabPanel header="Extend">
@@ -37,6 +37,6 @@
         <input style="width:100px" type="number" [(ngModel)]="length" pInputText/>
       </div>
     </div>
-    <button pButton type="button" (click)="insertExtend()" label="Insert Column"></button>
+    <button pButton type="button" (click)="insertExtend()" label="{{ buttonLabel }}"></button>
   </p-tabPanel>
 </p-tabView>

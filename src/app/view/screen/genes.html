@@ -34,7 +34,7 @@
       </div>
     </div>
     <div class="ui-g-6">
-      <regions-transform (flankEvent)="insertFlank($event)" (extendEvent)="insertExtend($event)"></regions-transform>
+      <regions-transform  [buttonLabel]="'Insert Column'" (flankEvent)="insertFlank($event)" (extendEvent)="insertExtend($event)"></regions-transform>
     </div>
   </div>
 </p-dialog>
