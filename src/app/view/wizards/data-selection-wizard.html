@@ -75,7 +75,7 @@
       </aw-wizard-step>
 
 
-      <aw-wizard-step stepTitle="Similar Data" (stepEnter)="inWizard($event)">
+      <aw-wizard-step stepTitle="Similar Data" (stepEnter)="inSimilarData($event)" (stepExit)="exitSimilarData($event)">
         <navegation-menu></navegation-menu>
 
         <p-fieldset legend="Interesting BioSources">

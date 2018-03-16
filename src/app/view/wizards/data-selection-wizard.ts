@@ -115,6 +115,18 @@ export class DataSelectionWizard {
     }
   }
 
+  inSimilarData($event: any) {
+    debugger;
+    this.inWizard($event);
+    SimilarDatasets.processSimilar(this.selectedQuery, this.reloadData, this, this.deepBlueService, this.requestManager, this.progress_element)
+  }
+
+
+  exitSimilarData($event: any) {
+    debugger;
+    this.requestManager.cancelAllRequest();
+  }
+
   finishWizard($event: any) {
     setTimeout(() => this.app.onMenuButtonClick());
     this.finished = true;
@@ -152,12 +164,10 @@ export class DataSelectionWizard {
 
   selectQueryDataSet($event: any, notJump?: boolean) {
     this.selectedQuery = $event;
-    SimilarDatasets.processSimilar(this.selectedQuery, this.reloadData, this, this.deepBlueService, this.requestManager, this.progress_element)
 
     if (!notJump) {
       this.wizard.navigation.goToNextStep();
     }
-
   }
 
   reloadData(_self: DataSelectionWizard, datum: DeepBlueMiddlewareOverlapEnrichtmentResultItem[]) {
