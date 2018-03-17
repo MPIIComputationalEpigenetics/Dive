@@ -27,7 +27,7 @@ import { RequestManager } from 'app/service/requests-manager';
 })
 export class GoEnrichmentScreenComponent implements AfterViewInit, OnDestroy {
     selectedTab = 0;
-    isWaiting: boolean;
+    isWaiting: boolean = true;
     errorMessage: string;
     geneModels: GeneModel[];
     menuGeneModel: SelectItem[];
@@ -38,9 +38,9 @@ export class GoEnrichmentScreenComponent implements AfterViewInit, OnDestroy {
     enrichment_data: Object[][] = new Array<Object[]>();
     enrichment_data_from_server: Object[][] = new Array<Object[]>();
 
-    filter_go_overlap = '10';
-    filter_ratio = '25';
-    filter_p_value = '0.00000001';
+    filter_go_overlap = '5';
+    filter_ratio = '15';
+    filter_p_value = '5';
 
     current_request = 0;
 

@@ -116,14 +116,12 @@ export class DataSelectionWizard {
   }
 
   inSimilarData($event: any) {
-    debugger;
     this.inWizard($event);
     SimilarDatasets.processSimilar(this.selectedQuery, this.reloadData, this, this.deepBlueService, this.requestManager, this.progress_element)
   }
 
 
   exitSimilarData($event: any) {
-    debugger;
     this.requestManager.cancelAllRequest();
   }
 
