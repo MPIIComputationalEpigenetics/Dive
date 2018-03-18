@@ -50,6 +50,9 @@ export class GenesScreen implements AfterViewInit, OnDestroy {
   data: any;
   hasData = false;
 
+  showDataDetail = false;
+  selectedFilter = {};
+
   constructor(public deepBlueService: DeepBlueService, public requestManager: RequestManager,
     public progress_element: ProgressElement, private selectedData: SelectedData) {
 
@@ -130,21 +133,34 @@ export class GenesScreen implements AfterViewInit, OnDestroy {
       return;
     }
 
+    const result_by_dataset_stack: {
+      [key: string]: {
+        [key: string]: any
+      }
+    } = {};
+
     const series: Array<Object> = [];
 
-    // By Filter
-    datum.forEach((result: DeepBlueResult[], index: number) => {
+    const categories = [datum[0][0].getFilter().name()];
+    for (let filter of this.filters) {
+      let category = JSON.stringify(filter);
+      categories.push(category);
+    }
 
-      // By Stack
-      result.forEach((result: DeepBlueResult, index: number) => {
-
-      });
-    });
+    for (let category of categories) {
+      result_by_dataset_stack[category] = {}
+    }
 
     for (let stack_pos = 0; stack_pos < datum[0].length; stack_pos++) {
       const stack_values_result: Array<number> = [];
       for (let filter_pos = 0; filter_pos < datum.length; filter_pos++) {
         stack_values_result.push(datum[filter_pos][stack_pos].resultAsCount());
+
+        let filter = {}
+        if (filter_pos > 0) {
+          filter = this.filters[filter_pos - 1]
+        }
+        result_by_dataset_stack[categories[filter_pos]][stack_pos] = filter;
       }
       series.push({
         type: 'column',
@@ -154,13 +170,10 @@ export class GenesScreen implements AfterViewInit, OnDestroy {
       });
     }
 
-    const categories = [datum[0][0].getFilter().name()];
-    for (let filter of this.filters) {
-      categories.push(JSON.stringify(filter));
-    }
+
 
     console.log(categories);
-    this.overlapbarchart.setNewData(categories, series, null);
+    this.overlapbarchart.setNewData(categories, series, result_by_dataset_stack);
   }
 
   ngOnDestroy() {
@@ -203,6 +216,18 @@ export class GenesScreen implements AfterViewInit, OnDestroy {
     else if (c.type == "extend") {
       return "Extend - length: " + c.length + " , direction: " + c.direction;
     }
+  }
+
+  setDataInfo($event: any) {
+    this.selectedFilter = $event;
+    this.showDataDetail = true;
+  }
+
+  filterOverlapping(term: string) {
+    const gene_model = this.selectedGeneModelSource.getValue();
+    debugger;
+    this.selectedData.activeStackSubject.getValue().overlapGoTerm(term, gene_model);
+    this.showDataDetail = false;
   }
 
 }
