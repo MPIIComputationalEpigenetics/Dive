@@ -132,9 +132,8 @@ export class QueryFlow implements OnInit {
     node.data = {};
     node.data.parameters = [];
 
-    this.deepBlueService.countRegionsRequest(o, this.progress_element, 0).subscribe((result) => {
-      node.data.parameters.unshift("regions: " + result.resultAsCount());
-    });
+
+    let children: TreeNode[] = [];
 
     if (o._params) {
       node.data = {
@@ -143,7 +142,7 @@ export class QueryFlow implements OnInit {
             return null;
           }
           return k + ": " + o._params[k]
-        })
+        }).filter((value) => value != null)
       };
     }
 
@@ -151,8 +150,6 @@ export class QueryFlow implements OnInit {
     node.expanded = true;
 
     let lookup_keys = [];
-    let children: TreeNode[] = [];
-
     if (o.command == "intersection") {
       lookup_keys.push("_subject");
       lookup_keys.push("_filter");
@@ -175,6 +172,11 @@ export class QueryFlow implements OnInit {
     } else {
       lookup_keys.push("_data");
     }
+
+    this.deepBlueService.countRegionsRequest(o, this.progress_element, 0).subscribe((result) => {
+      node.data.parameters.unshift("regions: " + result.resultAsCount());
+    });
+
 
     for (let key of lookup_keys) {
       if (o[key]) {
