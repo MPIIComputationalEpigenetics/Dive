@@ -163,8 +163,12 @@ export class QueryFlow implements OnInit {
 
       node.data.parameters.push("field: " + o.field);
 
+    } else if ((o.command == "flank") || (o.command == "extend")) {
+      delete o._params.args['query_id'];
+      node.data = { parameters: Object.keys(o._params.args).map((k: string) => k + ": " + o._params.args[k]) };
+      lookup_keys.push("_data");
+
     } else if (o._data._data_type == "operation_args") {
-      delete o._data.args['cache'];
       node.data = { parameters: Object.keys(o._data.args).map((k: string) => k + ": " + o._data.args[k]) };
 
     } else {
