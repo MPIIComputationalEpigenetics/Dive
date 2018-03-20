@@ -1073,7 +1073,13 @@ export function toClass(o: any): IDataParameter {
 
                 case 'regions_filter': {
                     let data = toClass(o._data);
-                    let filter = DeepBlueFilterParameters.fromObject(o._params);
+                    let filter;
+                    if (o._params._data_type == "filter_parameters") {
+                        filter = DeepBlueFilterParameters.fromObject(o._params);
+                    } else if (o._params._data_type == "filter_motif_parameter") {
+                        filter = DeepBlueFilterMotifParameters.fromObject(o._params);
+                    }
+
                     let query_id = new Id(o.query_id.id);
 
                     return new DeepBlueFilter(<IOperation>data, filter, query_id, o.cached);
