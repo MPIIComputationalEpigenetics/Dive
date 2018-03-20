@@ -26,30 +26,26 @@ import { EventEmitter } from '@angular/core';
 @Component({
     selector: 'selected-data-button',
     template: `
-    <p-overlayPanel #op [dismissable]="true" [showCloseIcon]="true" appendTo="body">
-        <p-panel>
-            <p-header>
-                <div class="ui-helper-clearfix">
-                    <span class="ui-panel-title" style="font-size:16px;display:inline-block;margin-top:2px">{{ dataStack.name() }}</span>
-                    <p-splitButton [style]="{'float':'right'}" label="Use as main data" (onClick)="moveToMain()" [model]="items"></p-splitButton>
 
-                    <p-colorPicker [(ngModel)]="dataStack.color_array" format="rgb"></p-colorPicker>
-                </div>
-            </p-header>
+    <p-sidebar [(visible)]="showSidebar" position="top" [baseZIndex]="20000" styleClass="ui-sidebar-lg" [appendTo]="'body'">
+        <div class="ui-helper-clearfix">
+            <span class="ui-panel-title" style="font-size:16px;display:inline-block;margin-top:2px">{{ dataStack.name() }}</span>
+            <p-splitButton [style]="{'float':'right'}" label="Use as main data" (onClick)="moveToMain()" [model]="items"></p-splitButton>
+            <p-colorPicker [(ngModel)]="dataStack.color_array" format="rgb"></p-colorPicker>
+        </div>
 
-            <div class="dashboard">
-                <ul class="activity-list">
+        <div class="ui-g">
+            <div class="ui-g-8">
+                <p-scrollPanel [style]="{height: '95%', width: '100%', padding: '2px'}">
                     <query-flow [queryId]="dataStack?.getCurrentOperation()?.id()?.id"></query-flow>
-                </ul>
+                </p-scrollPanel>
             </div>
-        </p-panel>
-    </p-overlayPanel>
+        </div>
+    </p-sidebar>
 
     <button #bt pButton type="button" [style.background]="dataStack.getColor()" icon="ui-icon-dehaze"
-            label="{{ dataStack.name() }}"
-            (click)="op.toggle($event)">
+        label="{{ dataStack.name() }}" (click)="showSidebar = !showSidebar">
     </button>
-
     `
 
 })
@@ -57,6 +53,7 @@ export class SelectedDataButton implements OnInit {
 
     @Input() dataStack: DataStack;
     items: MenuItem[];
+    showSidebar = false;
 
     constructor(private selectedData: SelectedData) {
     }
