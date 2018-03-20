@@ -716,13 +716,10 @@ export class DeepBlueService {
     }
 
 
-    overlap(data_one: IOperation, data_two: IOperation, overlap: boolean,
+    overlap(query_data: IOperation, query_filter: IOperation, overlap: boolean,
         progress_element: ProgressElement, request_count: number): Observable<DeepBlueOperation> {
 
-        const amount = '1';
-        const amount_type = 'bp';
-        const parameters = [overlap, amount, amount_type];
-        const cache_key = new DeepBlueOperationArgs([data_one, data_two, parameters, 'overlap']);
+        const cache_key = new DeepBlueOperationArgs([query_data, query_filter, overlap, 'overlap']);
 
         if (this.overlapsQueryCache.get(cache_key, request_count)) {
             progress_element.increment(request_count);
@@ -733,18 +730,17 @@ export class DeepBlueService {
         let overlap_string = overlap ? "true" : "false";
 
         const params = new HttpParams()
-            .set('query_data_id', data_one.id().id)
-            .set('query_filter_id', data_two.id().id)
-            .set('overlap', overlap_string)
-            .set('amount', amount) // TODO:  receive this parameter
-            .set('amount_type', 'bp'); // TODO:  receive this parameter
+            .set('query_data_id', query_data.id().id)
+            .set('query_filter_id', query_filter.id().id);
 
-        return this.middleware.get('overlap', params)
+        console.log(query_data.id().id, query_filter.id().id);
+
+        return this.middleware.get('intersection', params)
             .map((body: any) => {
                 const response: string = body[1] || '';
                 const query_id = new Id(response);
                 progress_element.increment(request_count);
-                return new DeepBlueIntersection(data_one, data_two, overlap, query_id);
+                return new DeepBlueIntersection(query_data, query_filter, overlap, query_id);
             })
             .do((operation) => { this.overlapsQueryCache.put(cache_key, operation) })
     }
@@ -753,7 +749,7 @@ export class DeepBlueService {
     extend(data: IOperation, length: number, direction: string, progress_element: ProgressElement, request_count: number): Observable<DeepBlueOperation> {
         const params = new HttpParams()
             .set('query_id', data.id().id)
-            .set('length', length.toLocaleString())
+            .set('length', length.toString())
             .set('direction', direction)
             .set('use_strand', "true")
 
@@ -766,16 +762,16 @@ export class DeepBlueService {
         let doa = new DeepBlueOperationArgs(o);
 
         return this.middleware.get("extend", params).map((response: [string, string]) => {
-            let args = new DeepBlueOperationArgs(params);
             return new DeepBlueExtend(data, doa , new Id(response[1]));
         })
     }
 
     flank(data: IOperation, start: number, length: number, progress_element: ProgressElement, request_count: number): Observable<DeepBlueOperation> {
+        debugger;
         const params = new HttpParams()
             .set('query_id', data.id().id)
-            .set('start', start.toLocaleString())
-            .set('length', length.toLocaleString())
+            .set('start', start.toString())
+            .set('length', length.toString())
             .set('use_strand', "true")
 
         let o = {
@@ -786,7 +782,6 @@ export class DeepBlueService {
         let doa = new DeepBlueOperationArgs(o);
 
         return this.middleware.get("flank", params).map((response: [string, string]) => {
-            let args = new DeepBlueOperationArgs(params);
             return new DeepBlueFlank(data, doa , new Id(response[1]));
         })
     }
@@ -1066,7 +1061,6 @@ export class DeepBlueService {
                 const response: string = body[1] || '';
                 const query_id = new Id(body[1]);
                 progress_element.increment(request_count);
-                debugger;
                 return new DeepBlueOperation(new DeepBlueOperationArgs({ "genes": genes, "go_terms": go_terms, "gene_model": gene_model.name }), query_id, 'select_genes', request_count);
             })
     }
