@@ -2,10 +2,15 @@
     <div [ngClass]="{'ui-g-12': true}">
         <div class="card card-w-title">
             <h1>Overlaping {{ deepBlueService.getSelectedEpigeneticMark().name }} with {{ deepBlueService.getDivingData().data().name()
-                }}</h1>
-            <p-multiSelect #multiselect [defaultLabel]="defaultSelectBiosourcesLabel" [options]="biosourcesItems" [(ngModel)]="selectedMultiSelectBiosources"
-                (onChange)="selectBiosources($event)">
-            </p-multiSelect>
+                }}
+            </h1>
+            <div class="ui-g">
+                <div class="ui-g-8">
+                    <p-multiSelect #multiselect [defaultLabel]="defaultSelectBiosourcesLabel" [options]="biosourcesItems" [(ngModel)]="selectedMultiSelectBiosources"
+                        (onChange)="selectBiosources($event)" [style]="{'font-weight': 'bold'}">
+                    </p-multiSelect>
+                </div>
+            </div>
             <app-overlaps-bar-chart #overlapbarchart (dataSelected)="setDataInfo($event)"> </app-overlaps-bar-chart>
         </div>
     </div>

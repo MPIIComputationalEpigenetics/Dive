@@ -42,7 +42,7 @@ export class PeaksOverlapScreenComponent implements AfterViewInit, OnDestroy {
 
     epigeneticMarkSubscription: Subscription;
 
-    defaultSelectBiosourcesLabel = 'Select the BioSource';
+    defaultSelectBiosourcesLabel = 'Click here for selecting the BioSources';
 
     selectedExperimentsSource = new BehaviorSubject<IdName[]>([]);
     selectedExperimentsValue$: Observable<IdName[]> = this.selectedExperimentsSource.asObservable();
