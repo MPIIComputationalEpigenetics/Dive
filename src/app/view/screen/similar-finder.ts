@@ -27,16 +27,20 @@ export class SimilarFinder implements OnDestroy {
 
     cutoffOptions = [
         { label: '1%', value: 1 },
+        { label: '3%', value: 3 },
         { label: '5%', value: 5 },
         { label: '10%', value: 10 },
+        { label: '15%', value: 15 },
         { label: '20%', value: 20 },
         { label: '35%', value: 35 },
         { label: '50%', value: 50 },
         { label: '65%', value: 65 },
+        { label: '80%', value: 80 },
+        { label: '90%', value: 90 },
         { label: '100%', value: 100 }
     ];
 
-    cutoffValue = 20;
+    cutoffValue = 3;
 
     orderOptions = [
         { label: 'Most similar', value: "desc" },
