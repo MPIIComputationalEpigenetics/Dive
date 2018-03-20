@@ -170,8 +170,6 @@ export class GenesScreen implements AfterViewInit, OnDestroy {
       });
     }
 
-
-
     console.log(categories);
     this.overlapbarchart.setNewData(categories, series, result_by_dataset_stack);
   }
@@ -223,11 +221,33 @@ export class GenesScreen implements AfterViewInit, OnDestroy {
     this.showDataDetail = true;
   }
 
-  filterOverlapping(term: string) {
+  filterOverlapping(term: any) {
     const gene_model = this.selectedGeneModelSource.getValue();
-    debugger;
-    this.selectedData.activeStackSubject.getValue().overlapGoTerm(term, gene_model);
     this.showDataDetail = false;
+
+
+    this.deepBlueService.selectGenes([], [], gene_model, this.progress_element, -1).subscribe((op) => {
+
+      let genesObservable: Observable<IOperation> = null;
+      if ('type' in term) {
+        if (term.type == 'flank') {
+          genesObservable = this.deepBlueService.flank(op, term.start, term.length, this.progress_element, -1)
+        } else if (term.type == 'extend') {
+          genesObservable = this.deepBlueService.extend(op, term.length, term.direction, this.progress_element, -1);
+        }
+      } else {
+        genesObservable = Observable.of(op);
+      }
+
+      genesObservable.subscribe((genesOp) => {
+        this.selectedData.activeStackSubject.getValue().overlap(genesOp);
+      })
+    });
+
+
+    // Select genes (all)
+    // Overlap with filter
+
   }
 
 }

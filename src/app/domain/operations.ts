@@ -203,6 +203,10 @@ export class DeepBlueOperationArgs extends AbstractDataParameter {
         super("operation_args");
     }
 
+    static fromObject(o: any): DeepBlueOperationArgs {
+        return new DeepBlueOperationArgs(o);
+    }
+
     key(): string {
         return textify(this.args);
     }
@@ -781,6 +785,12 @@ export class DeepBlueResult implements ICloneable {
     }
 }
 
+export class DeepBlueResultError extends DeepBlueResult {
+    constructor(public request: DeepBlueRequest, public error: string, public request_count?: number) {
+        super(request, error, request_count);
+    }
+}
+
 export class StackValue {
     constructor(public stack: number,
         public value: IOperation | DeepBlueRequest | DeepBlueResult) { }
@@ -1067,6 +1077,22 @@ export function toClass(o: any): IDataParameter {
                     let query_id = new Id(o.query_id.id);
 
                     return new DeepBlueFilter(<IOperation>data, filter, query_id, o.cached);
+                }
+
+                case 'flank': {
+                    let data = toClass(o._data);
+                    let params = toClass(o._params);
+                    let query_id = new Id(o.query_id.id);
+
+                    return new DeepBlueFlank(<IOperation>data, <DeepBlueOperationArgs>params, query_id);
+                }
+
+                case 'extend': {
+                    let data = toClass(o._data);
+                    let params = toClass(o._params);
+                    let query_id = new Id(o.query_id.id);
+
+                    return new DeepBlueExtend(<IOperation>data, <DeepBlueOperationArgs>params, query_id);
                 }
 
                 default: {

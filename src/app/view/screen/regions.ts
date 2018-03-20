@@ -134,8 +134,6 @@ export class RegionsScreen {
                     return row;
                 });
 
-                debugger;
-
                 this.progress_element.increment(0);
             })
         });
