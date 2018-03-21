@@ -35,7 +35,7 @@ export class SelectDatasetsComponent implements OnInit {
   ];
 
   visibleSidebar = false;
-  selectedRow: FullExperiment;
+  selectedRow: FullExperiment = null;
 
   projectsSubscription: Subscription;
   datasetTreeNodes: TreeNode[] = [];
@@ -86,9 +86,10 @@ export class SelectDatasetsComponent implements OnInit {
 
   nodeSelect(event: any) {
     if (event.node.data.leaf) {
+      this.visibleSidebar = true;
+      this.selectedRow = null;
       this.deepBlueService.getInfo(event.node.data.id).subscribe((info) => {
         this.selectedRow = <FullExperiment>info;
-        this.visibleSidebar = true;
         if (event.node.data._query_id) {
           this.clicked_query_id = event.node.data._query_id.query_id.id;
         } else {
