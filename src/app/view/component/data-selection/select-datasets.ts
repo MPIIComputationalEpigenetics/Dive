@@ -63,7 +63,6 @@ export class SelectDatasetsComponent implements OnInit {
 
       this.progress_element.startIndeterminate()
 
-
       let genome = this.deepBlueService.genomeSource.getValue();
       this.datasetTreeNodes = [];
       this.datasets = [];
@@ -93,7 +92,9 @@ export class SelectDatasetsComponent implements OnInit {
         if (event.node.data._query_id) {
           this.clicked_query_id = event.node.data._query_id.query_id.id;
         } else {
-          this.clicked_query_id = "";
+          let id_name = new IdName(event.node.data.id, event.node.data.name);
+          this.deepBlueService.selectExperiment(id_name, this.progress_element, 0)
+            .subscribe((q) => this.clicked_query_id = q.query_id.id);
         }
       })
     }
