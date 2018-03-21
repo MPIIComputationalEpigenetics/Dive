@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit, Input, OnDestroy, Output } from '@angular/core';
+import { Component, ViewChild, OnInit, Input, OnDestroy, Output, AfterViewInit } from '@angular/core';
 
 import { Subscription } from 'rxjs/Subscription';
 
@@ -13,7 +13,7 @@ import { FullMetadata } from 'app/domain/deepblue';
 import { Genome } from 'app/domain/deepblue';
 import { IdName } from 'app/domain/deepblue';
 
-import { StackValue } from 'app/domain/operations';
+import { StackValue, DeepBlueOperation } from 'app/domain/operations';
 
 import { DataCache } from 'app/service/deepblue';
 import { DeepBlueService } from 'app/service/deepblue';
@@ -26,36 +26,42 @@ import { EventEmitter } from '@angular/core';
 @Component({
     selector: 'selected-data-button',
     template: `
-
     <p-sidebar [(visible)]="showSidebar" position="top" [baseZIndex]="20000" styleClass="ui-sidebar-lg" [appendTo]="'body'">
         <div class="ui-helper-clearfix">
-            <span class="ui-panel-title" style="font-size:16px;display:inline-block;margin-top:2px">{{ dataStack.name() }}</span>
+            <span class="ui-panel-title" style="font-size:16px;display:inline-block;margin-top:2px">{{ _dataStack.name() }}</span>
             <p-splitButton [style]="{'float':'right'}" label="Use as main data" (onClick)="moveToMain()" [model]="items"></p-splitButton>
-            <p-colorPicker [(ngModel)]="dataStack.color_array" format="rgb"></p-colorPicker>
+            <p-colorPicker [(ngModel)]="_dataStack.color_array" format="rgb"></p-colorPicker>
         </div>
 
         <div class="ui-g">
             <div class="ui-g-8">
                 <p-scrollPanel [style]="{height: '95%', width: '100%', padding: '2px'}">
-                    <query-flow [queryId]="dataStack?.getCurrentOperation()?.id()?.id"></query-flow>
+                    <query-flow [queryId]="_dataStack?.getCurrentOperation()?.id()?.id"></query-flow>
                 </p-scrollPanel>
+            </div>
+            <div class="ui-g-4">
+                <h2>Information</h2>
+
+                <pre>{{ fullMetadata }}</pre>
+
             </div>
         </div>
     </p-sidebar>
 
-    <button #bt pButton type="button" [style.background]="dataStack.getColor()" icon="ui-icon-dehaze"
-        label="{{ dataStack.name() }}" (click)="showSidebar = !showSidebar">
+    <button #bt pButton type="button" [style.background]="_dataStack.getColor()" icon="ui-icon-dehaze"
+        label="{{ _dataStack.name() }}" (click)="showSidebar = !showSidebar">
     </button>
     `
 
 })
 export class SelectedDataButton implements OnInit {
 
-    @Input() dataStack: DataStack;
+    _dataStack: DataStack;
     items: MenuItem[];
     showSidebar = false;
+    fullMetadata : FullMetadata = null;
 
-    constructor(private selectedData: SelectedData) {
+    constructor(private deepBlueService: DeepBlueService, private selectedData: SelectedData) {
     }
 
     ngOnInit() {
@@ -73,7 +79,7 @@ export class SelectedDataButton implements OnInit {
     }
 
     remove() {
-        this.selectedData.removeStack(this.dataStack);
+        this.selectedData.removeStack(this._dataStack);
     }
 
     rename() {
@@ -81,7 +87,26 @@ export class SelectedDataButton implements OnInit {
     }
 
     moveToMain() {
-        this.selectedData.setActiveStack(this.dataStack);
+        this.selectedData.setActiveStack(this._dataStack);
+    }
+
+    @Input() set dataStack(ds: DataStack) {
+        this._dataStack = ds;
+        this.loadMetadata();
+    }
+
+    loadMetadata() {
+        let mainOp = this._dataStack.getInitialOperation().mainOperation();
+        if ((<DeepBlueOperation>mainOp).command == "select_experiment") {
+            let name = mainOp.data().name();
+            this.deepBlueService.nameToId(name, "experiments").subscribe((idName) => {
+                console.log(idName);
+                this.deepBlueService.getInfo(idName[0].id).subscribe((metadata) => {
+                    debugger;
+                    this.fullMetadata = metadata
+                })
+            })
+        }
     }
 
 }

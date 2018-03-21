@@ -767,7 +767,6 @@ export class DeepBlueService {
     }
 
     flank(data: IOperation, start: number, length: number, progress_element: ProgressElement, request_count: number): Observable<DeepBlueOperation> {
-        debugger;
         const params = new HttpParams()
             .set('query_id', data.id().id)
             .set('start', start.toString())
@@ -973,6 +972,21 @@ export class DeepBlueService {
             })
     }
 
+    nameToId(name: string, collection: string) : Observable<IdName[]> {
+        let request = {
+            "name": name,
+            "collection": collection
+        }
+
+        return this.middleware.post('name_to_id', request)
+            .map((body: any) => {
+                const data = body[1] || [];
+                return data.map((value: any) => {
+                    return new IdName(new Id(value[0]), value[1]);
+                })
+
+            })
+    }
     getInfo(id: Id): Observable<FullMetadata> {
         const params = new HttpParams()
             .set('id', id.id);

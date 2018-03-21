@@ -55,7 +55,6 @@ export class DataInfoBoxComponent {
     this.biosource = this._data['biosource'];
     this.value = this._data['value'];
     this.results = this._data['results'].sort((a: DeepBlueResult, b: DeepBlueResult) => a.resultAsCount() - b.resultAsCount());
-
   }
 
   filterOverlapping(result: DeepBlueResult) {
