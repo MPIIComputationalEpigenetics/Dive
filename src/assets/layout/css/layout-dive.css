@@ -196,23 +196,23 @@
     opacity: 0;
     transform: scale(2.5); } }
 .splash-screen {
-  background-color: #FFFFFF;
+  background-color: transparent;
   height: 100%;
   padding-top: 200px; }
   .splash-screen .splash-container {
-    width: 800px;
+    width: 675px;
     margin: 0 auto;
     text-align: center; }
   .splash-screen .logo {
-    height: 160px;
-    background: url("../images/DB_Dive_Cover.png") top left no-repeat;
+    height: 400px;
+    background: url("../images/DIVE_PoweredBy.png") top left no-repeat;
     background-size: contain; }
   .splash-screen .load-bar {
     position: relative;
     margin-top: 20px;
     width: 100%;
-    height: 6px;
-    background-color: #ffffff; }
+    height: 10px;
+    background-color: transparent; }
   .splash-screen .bar {
     content: "";
     display: inline;
@@ -222,10 +222,10 @@
     left: 50%;
     text-align: center; }
   .splash-screen .bar:nth-child(1) {
-    background-color: #3F4A9F;
+    background-color: #fd5e53;
     animation: loading 3s linear infinite; }
   .splash-screen .bar:nth-child(2) {
-    background-color: #FFFFFF;
+    background-color: #dfd225;
     animation: loading 3s linear 1s infinite; }
   .splash-screen .bar:nth-child(3) {
     background-color: #005DAC;

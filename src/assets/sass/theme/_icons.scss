@@ -33,7 +33,7 @@
 .fa-arrow-circle-right {@include icon-override("play_circle_outline"); }
 .fa-arrow-circle-left {@include icon-override("play_circle_outline"); @include rotate(180deg);}
 .fa-calendar { @include icon-override("date_range"); }
-.fa-arrow-down{ @include icon-override("arrow_downward"); } 
+.fa-arrow-down{ @include icon-override("arrow_downward"); }
 .fa-arrow-up { @include icon-override("arrow_upward"); }
 
 .ui-icon-carat-2-n-s {@include icon-override("sort");}
