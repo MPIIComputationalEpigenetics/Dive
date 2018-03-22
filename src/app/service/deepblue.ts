@@ -1003,7 +1003,7 @@ export class DeepBlueService {
                     return new FullGeneModel(data[0]);
                 } else {
                     console.warn('UNKNOW TYPE: ' + id);
-                    return new FullExperiment(data[0]);
+                    return new FullMetadata(data[0]);
                 }
 
             });

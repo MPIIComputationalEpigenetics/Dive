@@ -6,7 +6,7 @@ import { MenuItem } from 'primeng/primeng';
 import { Dropdown } from 'primeng/primeng';
 import { SelectItem } from 'primeng/primeng';
 
-import { Annotation } from 'app/domain/deepblue';
+import { Annotation, FullExperiment } from 'app/domain/deepblue';
 import { EpigeneticMark } from 'app/domain/deepblue';
 import { Experiment } from 'app/domain/deepblue';
 import { FullMetadata } from 'app/domain/deepblue';
@@ -42,14 +42,23 @@ import { EventEmitter } from '@angular/core';
             <div class="ui-g-4">
                 <h2>Information</h2>
 
-                <pre>{{ fullMetadata }}</pre>
+                <pre>{{ fullMetadata.name }}</pre>
+                <pre>{{ fullMetadata.biosource() }}</pre>
+                <pre>{{ fullMetadata.epigenetic_mark() }}</pre>
 
             </div>
         </div>
     </p-sidebar>
 
+    <p-overlayPanel #op [dismissable]="true" [showCloseIcon]="true" appendTo="body">
+        <pre>{{ fullMetadata.biosource() }}</pre>
+        <pre>{{ fullMetadata.epigenetic_mark() }}</pre>
+        <pre> Click for more information </pre>
+    </p-overlayPanel>
+
     <button #bt pButton type="button" [style.background]="_dataStack.getColor()" icon="ui-icon-dehaze"
-        label="{{ _dataStack.name() }}" (click)="showSidebar = !showSidebar">
+        (mouseenter)="op.toggle($event)" (mouseleave)="op.toggle($event)" (click)="showSidebar = !showSidebar"
+        label="{{ _dataStack.name() }}" >
     </button>
     `
 
@@ -59,7 +68,7 @@ export class SelectedDataButton implements OnInit {
     _dataStack: DataStack;
     items: MenuItem[];
     showSidebar = false;
-    fullMetadata : FullMetadata = null;
+    fullMetadata: FullExperiment = null;
 
     constructor(private deepBlueService: DeepBlueService, private selectedData: SelectedData) {
     }
@@ -102,8 +111,7 @@ export class SelectedDataButton implements OnInit {
             this.deepBlueService.nameToId(name, "experiments").subscribe((idName) => {
                 console.log(idName);
                 this.deepBlueService.getInfo(idName[0].id).subscribe((metadata) => {
-                    debugger;
-                    this.fullMetadata = metadata
+                    this.fullMetadata = metadata as FullExperiment;
                 })
             })
         }
