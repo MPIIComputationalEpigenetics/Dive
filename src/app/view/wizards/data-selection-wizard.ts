@@ -1,4 +1,4 @@
-import { Component, OnDestroy, AfterViewInit, ViewChild, Inject, forwardRef, Input } from "@angular/core";
+import { Component, OnDestroy, AfterViewInit, ViewChild, Inject, forwardRef, Input, OnInit } from "@angular/core";
 import { DeepBlueService } from "app/service/deepblue";
 import { SelectItem, Dropdown, MultiSelect } from "primeng/primeng";
 import { Project, BioSource } from "app/domain/deepblue";
@@ -9,7 +9,7 @@ import { Router } from "@angular/router";
 import { ProgressElement } from "app/service/progresselement";
 import { SimilarDatasets } from "app/algorithms/similar-datasets";
 import { DeepBlueMiddlewareOverlapEnrichtmentResultItem } from "app/domain/operations";
-import { RequestManager } from "../../service/requests-manager";
+import { RequestManager } from "app/service/requests-manager";
 import { IStatsResult } from "app/service/statistics";
 import { SelectedData } from "app/service/selecteddata";
 
@@ -34,10 +34,9 @@ export class NavegationMenu {
 }
 
 @Component({
-  selector: 'data-selection-wizard',
   templateUrl: './data-selection-wizard.html'
 })
-export class DataSelectionWizard {
+export class DataSelectionWizard implements AfterViewInit {
 
   finished: boolean = true;
   genomeItems: SelectItem[] = [];
@@ -72,8 +71,9 @@ export class DataSelectionWizard {
     public deepBlueService: DeepBlueService) {
   }
 
-  ngOnInit(): void {
+  ngAfterViewInit(): void {
     this.deepBlueService.genomeValue$.subscribe(genome => {
+      console.log("genone", genome);
       if (genome === null) {
         return;
       }

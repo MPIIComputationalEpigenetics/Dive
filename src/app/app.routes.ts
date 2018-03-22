@@ -8,13 +8,14 @@ import { OverlapEnrichmentScreenComponent } from "app/view/screen/overlap-enrich
 import { GoEnrichmentScreenComponent } from 'app/view/screen/go-enrichment';
 import { PeaksOverlapScreenComponent } from 'app/view/screen/peaks-overlap';
 import { SimilarFinder } from 'app/view/screen/similar-finder';
-import { InitialScreenComponent } from 'app/view/screen/initial';
 import { RouterGuard } from 'app/service/router-guard';
 import { ComparisonSelectionScreen } from 'app/view/screen/comparison-selection';
 import { StackRegionsTransformScreen } from 'app/view/screen/stack-regions-transform';
+import { OverlapEnrichmentWizard } from './view/wizards/overlap-enrichment-wizard';
+import { DataSelectionWizard } from './view/wizards/data-selection-wizard';
 
 export const routes: Routes = [
-    { path: '', component: InitialScreenComponent },
+    { path: '', component: DataSelectionWizard },
     { path: 'dataselection', component: DataSelectionScreen },
     { path: 'comparisonselection', component: ComparisonSelectionScreen, canActivate: [RouterGuard] },
     { path: 'similarfinder', component: SimilarFinder, canActivate: [RouterGuard] },
@@ -23,7 +24,7 @@ export const routes: Routes = [
     { path: 'genes', component: GenesScreen, canActivate: [RouterGuard] },
     { path: 'go_enrichment', component: GoEnrichmentScreenComponent, canActivate: [RouterGuard] },
     { path: 'chromatin_states', component: ChromatinStatesScreenComponent, canActivate: [RouterGuard] },
-    { path: 'overlap_enrichment', component: OverlapEnrichmentScreenComponent, canActivate: [RouterGuard] },
+    { path: 'overlap_enrichment', component: OverlapEnrichmentWizard, canActivate: [RouterGuard] },
     { path: 'peaks_overlap', component: PeaksOverlapScreenComponent, canActivate: [RouterGuard] }
 ];
 

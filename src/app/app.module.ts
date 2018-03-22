@@ -128,7 +128,6 @@ import { SelectQuery } from 'app/view/component/data-selection/select-query';
 import { PeaksOverlapScreenComponent } from 'app/view/screen/peaks-overlap';
 import { RequestManager } from 'app/service/requests-manager';
 import { DataSelectionMainComponent } from 'app/view/component/data-selection/data-selection-main';
-import { InitialScreenComponent } from 'app/view/screen/initial';
 import { QueryFlow } from 'app/view/component/query-flow';
 import { DiveMenuService } from 'app/service/menu';
 import { RouterGuard } from 'app/service/router-guard';
@@ -136,6 +135,7 @@ import { ComparisonSelectionScreen } from 'app/view/screen/comparison-selection'
 
 import { ArchwizardModule } from 'ng2-archwizard';
 import { DataSelectionWizard, NavegationMenu } from 'app/view/wizards/data-selection-wizard';
+import { OverlapEnrichmentWizard } from 'app/view/wizards/overlap-enrichment-wizard';
 
 import { Angulartics2Module } from 'angulartics2';
 import { Angulartics2GoogleAnalytics } from 'angulartics2/ga';
@@ -242,7 +242,6 @@ import { StackRegionsTransformScreen } from 'app/view/screen/stack-regions-trans
         SelectExperimentsComponent,
         SelectTilingRegionsComponent,
         SelectGenesComponent,
-        InitialScreenComponent,
         DataSelectionScreen,
         ComparisonSelectionScreen,
         RegionsScreen,
@@ -267,7 +266,8 @@ import { StackRegionsTransformScreen } from 'app/view/screen/stack-regions-trans
         QueryFlow,
         SelectQuery,
         NavegationMenu,
-        DataSelectionWizard
+        DataSelectionWizard,
+        OverlapEnrichmentWizard
     ],
     providers: [
         { provide: LocationStrategy, useClass: HashLocationStrategy },
