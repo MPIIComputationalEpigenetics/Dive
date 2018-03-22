@@ -42,14 +42,6 @@ export class AppMenuComponent {
             this.model = menuItems
         });
     }
-
-    changeTheme(theme: string) {
-        const themeLink: HTMLLinkElement = <HTMLLinkElement>document.getElementById('theme-css');
-        const layoutLink: HTMLLinkElement = <HTMLLinkElement>document.getElementById('layout-css');
-
-        themeLink.href = 'assets/theme/theme-' + theme + '.css';
-        layoutLink.href = 'assets/layout/css/layout-' + theme + '.css';
-    }
 }
 
 @Component({
