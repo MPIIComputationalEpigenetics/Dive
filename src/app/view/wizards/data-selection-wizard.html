@@ -16,7 +16,6 @@
           </div>
         </p-fieldset>
 
-
         <p-fieldset *ngIf="selectedComparison.length > 0" legend="To Compare">
           <div class="ui-g" *ngFor="let c of selectedComparison">
             <div style="word-wrap: break-word" class="ui-g-4  ">{{ c.text() }}</div>

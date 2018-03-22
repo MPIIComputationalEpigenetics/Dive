@@ -1,211 +1,66 @@
-<div class="ui-g">
-  <div *ngIf="finished == false" class="ui-g-2">
-    <h2>Selected Data </h2>
-    <h4>{{ getGenomeLabel() }}</h4>
-    <h4>{{ getProjectsLabel() }}</h4>
-    <h4 style="word-wrap: break-word">{{ getQueryLabel() }}</h4>
-
-    <p-fieldset *ngIf="getSelectedBioSources().length > 0" legend="BioSources">
-      <div class="ui-g" *ngFor="let c of getSelectedBioSources()">
-        <div class="ui-g-8">{{ c }}</div>
-        <div class="ui-g-offset-1 ui-g-1">
-          <button pButton type="button" icon="fa fa-fw fa-close" (click)="removeBioSource(c[0])"></button>
-        </div>
-      </div>
-    </p-fieldset>
-
-
-    <p-fieldset *ngIf="selectedComparison.length > 0" legend="To Compare">
-      <div class="ui-g" *ngFor="let c of selectedComparison">
-        <div style="word-wrap: break-word" class="ui-g-4  ">{{ c.text() }}</div>
-        <div class="ui-g-offset-1 ui-g-1">
-          <button pButton type="button" icon="fa fa-fw fa-close" (click)="removeComparison(c)"></button>
-        </div>
-      </div>
-    </p-fieldset>
-
-  </div>
-  <div class="{{ wizardClassLength() }}">
-    <aw-wizard #wizard [navBarLocation]="'top'" [navBarLayout]="'small'">
-
-      <aw-wizard-step stepTitle="Overlapping Enrichment" (stepEnter)="inWizard($event)">
-
-        <navegation-menu [disablePrevious]="true"></navegation-menu>
-
-        <p-fieldset legend="Welcome">
-          We are going to perform overlapping enrichment
-        </p-fieldset>
-
-
-      </aw-wizard-step>
-
-      <aw-wizard-step stepTitle="Select Genome" (stepEnter)="inWizard($event)">
-        <navegation-menu></navegation-menu>
-
-        <p-fieldset legend="Select Genome">
-          <div class="ui-inputgroup">
-            <span class="ui-inputgroup-addon" style="border-style: none">Genome</span>
-            <p-dropdown #genomesDropdown [options]="genomeItems" [style]="{'width':'75px'}" (onChange)="selectGenome($event)" [(ngModel)]="selectedGenome"></p-dropdown>
-          </div>
-        </p-fieldset>
-
-      </aw-wizard-step>
-
-      <aw-wizard-step stepTitle="Select Projects" (stepEnter)="inWizard($event)">
-        <navegation-menu></navegation-menu>
-
-        <p-fieldset legend="Select Genome">
-          <div class="ui-inputgroup">
-            <span class="ui-inputgroup-addon" style="border-style: none">Projects</span>
-            <p-multiSelect #multiselect [defaultLabel]="defaultSelectProjects" [options]="projectItems" [(ngModel)]="selectedProjects"
-              (onChange)="selectProjects($event)"></p-multiSelect>
-          </div>
-        </p-fieldset>
-
-      </aw-wizard-step>
-
-      <aw-wizard-step stepTitle="Select Query" (stepEnter)="inWizard($event)">
-        <navegation-menu></navegation-menu>
-
-        <p-fieldset legend="Select Query Dataset">
-          <data-selection-main (queryIdSelected)="selectQueryDataSet($event)"></data-selection-main>
-        </p-fieldset>
-
-
-      </aw-wizard-step>
-
-
-      <aw-wizard-step stepTitle="Similar Data" (stepEnter)="inSimilarData($event)" (stepExit)="exitSimilarData($event)">
-        <navegation-menu></navegation-menu>
-
-        <p-fieldset legend="Interesting BioSources">
-          <div class="ui-g">
-            <div class="ui-g-6">
-              <h2 *ngIf="progress_element.isLoading()">Analyzing dataset and searching for similar biosources...
-                <small>You can jump to the next step</small>
-              </h2>
-
-
-              <!--
-              <h3>Include all following BioSources in your analysis? (You still can include them later)</h3>
-              <div class="ui-g">
-                <div class="ui-g-6">
-                  <p-toolbar [style]="{'background-color':'transparent'}">
-                    <div *ngIf="!disablePrevious" class="ui-toolbar-group-left">
-                      <button pButton type="button" awPreviousStep label="No" icon="ui-icon-thumb-down"></button>
-                    </div>
-
-                    <div *ngIf="!disableNext" class="ui-toolbar-group-right">
-                      <button pButton type="button" awNextStep label="Yes" icon="ui-icon-thumb-up"></button>
-                    </div>
-                  </p-toolbar>
-                </div>
-              </div>
-            -->
-
-              <h3>Include similar biosources:</h3>
-              <input type='text' style='padding:8px;margin:15px auto;width:60%;' placeholder='Type to filter biosources' [(ngModel)]="filterSimilarText"
-              />
-              <div *ngIf="getSimilarBioSources().length > 0" class="ui-g">
-                <div class="ui-g-8 ">
-                  <b>Include all</b>
-                </div>
-                <div class="ui-g-offset-1 ui-g-3">
-                  <button pButton type="button" icon="fa fa-fw fa-check" label="Include all" (click)="addAllBioSources()"></button>
-                </div>
-              </div>
-              <div class="ui-g" *ngFor="let c of getSimilarBioSources()">
-                <div class="ui-g-8 ">{{c}}</div>
-                <div class="ui-g-offset-1 ui-g-3">
-                  <button pButton type="button" icon="fa fa-fw fa-check" label="Select" (click)="addBioSource(c)"></button>
-                </div>
-              </div>
-
-            </div>
-
-            <div class="ui-g-offset-2 ui-g-4">
-              <p-fieldset legend="Parameters">
-
-                <h3>List data as: </h3>
-                <div class="ui-g" style="width:250px;margin-bottom:10px">
-                  <div class="ui-g-12">
-                    <p-radioButton name="group2" value="desc" label="Most similar" (onClick)="updateSimilarList()" [(ngModel)]="similarOrder"
-                      inputId="preopt1"></p-radioButton>
-                  </div>
-                  <div class="ui-g-12">
-                    <p-radioButton name="group2" value="asc" label="Most dissimilar" (onClick)="updateSimilarList()" [(ngModel)]="similarOrder"
-                      inputId="preopt2"></p-radioButton>
-                  </div>
-                </div>
-
-
-                You can also list the terms in more or less strict way. [click here for information about the method (TODO)]
-                <div class="ui-g">
-                  <div class="ui-g-12">
-                    <p-toolbar [style]="{'background-color':'transparent'}">
-                      <div class="ui-toolbar-group-left">
-                        <button pButton type="button" label="More strict" (click)="changeSearch($event, 'more')" icon="ui-icon-zoom-in"></button>
-                      </div>
-
-                      <div class="ui-toolbar-group-right">
-                        <button pButton type="button" label="Less strict" (click)="changeSearch($event, 'less')" icon="ui-icon-zoom-out"></button>
-                      </div>
-                    </p-toolbar>
-                    <h1>cutoff: {{ cutoff }}</h1>
-                  </div>
-                </div>
-              </p-fieldset>
-            </div>
-          </div>
-        </p-fieldset>
-
-
-      </aw-wizard-step>
-
-      <aw-wizard-step stepTitle="Select Comparison Datasets" (stepEnter)="inWizard($event)">
-        <navegation-menu></navegation-menu>
-
-        <p-fieldset legend="Select Comparisons">
-          <data-selection-main (queryIdSelected)="addComparison($event)"></data-selection-main>
-        </p-fieldset>
-
-      </aw-wizard-step>
-
-      <aw-wizard-step stepTitle="Complete" (stepEnter)="finishWizard($event)">
-        <p-toolbar>
-          <div class="ui-toolbar-group-left">
-            <button pButton type="button" awPreviousStep label="Back" icon="ui-icon-arrow-back"></button>
-          </div>
-
-          <div class="ui-toolbar-group-right">
-            <button pButton type="button" class="ui-button-success" awNextStep (click)="startAnalysis($event)" label="Start Analysis"
-              icon="fa fa-fw fa-check"></button>
-          </div>
-        </p-toolbar>`
-
+<div class="ui-fluid">
+  <div class="card card-w-title">
+    <div class="ui-g">
+      <div *ngIf="finished == false" class="ui-g-2">
         <h2>Selected Data </h2>
-        <p>Genome: {{ getGenomeLabel() }}</p>
-        <p>Projects: {{ getProjectsLabel() }}</p>
-        <p>Query: {{ getQueryLabel() }}</p>
-        <p-fieldset *ngIf="getSelectedBioSources().length > 0" legend="BioSources">
-          <div class="ui-g" *ngFor="let c of getSelectedBioSources()">
-            <div class="ui-g-8">{{ c }}</div>
-            <div class="ui-g-offset-1 ui-g-1">
-              <button pButton type="button" icon="fa fa-fw fa-close" (click)="removeBioSource(c[0])"></button>
-            </div>
-          </div>
-        </p-fieldset>
+        <h4 style="word-wrap: break-word">{{ background?.text() }}</h4>
+        <h4>{{ getDatasetsLabel() }}</h4>
+      </div>
+
+      <div class="{{ wizardClassLength() }}">
+        <aw-wizard #wizard [navBarLocation]="'top'" [navBarLayout]="'small'">
+
+          <aw-wizard-step stepTitle="Overlapping Enrichment" (stepEnter)="inWizard($event)">
+
+            <navegation-menu [disablePrevious]="true"></navegation-menu>
+
+            <p-fieldset legend="Welcome">
+              We are going to perform overlapping enrichment
+            </p-fieldset>
 
 
-        <p-fieldset *ngIf="selectedComparison.length > 0" legend="To Compare">
-          <div class="ui-g" *ngFor="let c of selectedComparison">
-            <div style="word-wrap: break-word" class="ui-g-8">{{ c.text() }}</div>
-            <div class="ui-g-offset-1 ui-g-1">
-              <button pButton type="button" icon="fa fa-fw fa-close" (click)="removeComparison(c)"></button>
-            </div>
-          </div>
-        </p-fieldset>
+          </aw-wizard-step>
 
-      </aw-wizard-step>
+          <aw-wizard-step stepTitle="Background" (stepEnter)="inWizard($event)">
+            <navegation-menu></navegation-menu>
 
-    </aw-wizard>
+            <p>Blablabla Select background data</p>
+            <p>
+              <small>background is blablabla</small>
+            </p>
+            <data-selection-main (queryIdSelected)="selectBackgroud($event)"></data-selection-main>
+          </aw-wizard-step>
+
+          <aw-wizard-step stepTitle="Datasets" (stepEnter)="inWizard($event)">
+            <navegation-menu></navegation-menu>
+
+            <p>Blablabla Select the datasets data</p>
+            <p>
+              <small>datasets that will be used for the enrichment is blablabla remember that the execution time grows with more
+                datasets
+              </small>
+            </p>
+
+          </aw-wizard-step>
+
+          <aw-wizard-step stepTitle="Execute" (stepEnter)="finishWizard($event)">
+            <p-toolbar>
+              <div class="ui-toolbar-group-left">
+                <button pButton type="button" awPreviousStep label="Back" icon="ui-icon-arrow-back"></button>
+              </div>
+
+              <div class="ui-toolbar-group-right">
+                <button pButton type="button" class="ui-button-success" awNextStep (click)="startEnrichment($event)" label="Start Analysis"
+                  icon="fa fa-fw fa-check"></button>
+              </div>
+            </p-toolbar>`
+
+            <h2>Selected Data </h2>
+
+          </aw-wizard-step>
+
+        </aw-wizard>
+      </div>
+    </div>
+  </div>
+</div>
