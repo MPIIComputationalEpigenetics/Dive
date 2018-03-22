@@ -21,6 +21,7 @@ import { MultiKeyDataCache } from 'app/service/deepblue';
 import { SelectedData } from 'app/service/selecteddata';
 import { DataStack } from 'app/service/datastack';
 import { EventEmitter } from '@angular/core';
+import { ProgressElement } from '../../service/progresselement';
 
 
 @Component({
@@ -44,17 +45,24 @@ import { EventEmitter } from '@angular/core';
 
                 {{ _dataStack.name() }}
                 <p-colorPicker [(ngModel)]="_dataStack.color_array" format="rgb"></p-colorPicker>
-                <pre>{{ fullMetadata?.biosource() }}</pre>
-                <pre>{{ fullMetadata?.epigenetic_mark() }}</pre>
+                <pre>
+                {{ totalRegions }} regions
+                {{ fullMetadata?.biosource() }}
+                {{ fullMetadata?.epigenetic_mark() }}
+                </pre>
 
             </div>
         </div>
     </p-sidebar>
 
     <p-overlayPanel #op [dismissable]="true" [showCloseIcon]="true" appendTo="body">
-        <pre>{{ fullMetadata?.biosource() }}</pre>
-        <pre>{{ fullMetadata?.epigenetic_mark() }}</pre>
-        <pre> Click for more information </pre>
+        <pre>
+        {{ totalRegions }} regions
+        {{ fullMetadata?.biosource() }}
+        {{ fullMetadata?.epigenetic_mark() }}
+        </pre>
+
+        Click for more information
     </p-overlayPanel>
 
     <button #bt pButton type="button" [style.background]="_dataStack.getColor()" icon="ui-icon-dehaze"
@@ -70,8 +78,9 @@ export class SelectedDataButton implements OnInit {
     items: MenuItem[];
     showSidebar = false;
     fullMetadata: FullExperiment = null;
+    totalRegions = -1;
 
-    constructor(private deepBlueService: DeepBlueService, private selectedData: SelectedData) {
+    constructor(private deepBlueService: DeepBlueService, private selectedData: SelectedData, private progress_element: ProgressElement) {
     }
 
     ngOnInit() {
@@ -106,18 +115,26 @@ export class SelectedDataButton implements OnInit {
     }
 
     loadMetadata() {
-        let mainOp = this._dataStack.getInitialOperation().mainOperation();
-        if ((<DeepBlueOperation>mainOp).command == "select_experiment") {
-            let name = mainOp.data().name();
-            this.deepBlueService.nameToId(name, "experiments").subscribe((idName) => {
-                console.log(idName);
-                this.deepBlueService.getInfo(idName[0].id).subscribe((metadata) => {
-                    this.fullMetadata = metadata as FullExperiment;
+        this._dataStack.getStackValueObserver().subscribe(() => {
+            let op = this._dataStack.getInitialOperation();
+            if (!op) {
+                return;
+            }
+            let mainOp = op.mainOperation();
+            if ((<DeepBlueOperation>mainOp).command == "select_experiment") {
+                let name = mainOp.data().name();
+                this.deepBlueService.nameToId(name, "experiments").subscribe((idName) => {
+                    console.log(idName);
+                    this.deepBlueService.getInfo(idName[0].id).subscribe((metadata) => {
+                        this.fullMetadata = metadata as FullExperiment;
+                    })
                 })
-            })
-        }
+            }
+            this.deepBlueService.countRegionsRequest(this._dataStack.getCurrentOperation(), this.progress_element, -1).subscribe((total) => {
+                this.totalRegions = total.resultAsCount();
+            });
+        });
     }
-
 }
 
 
