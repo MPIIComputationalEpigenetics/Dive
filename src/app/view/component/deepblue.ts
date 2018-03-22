@@ -42,17 +42,18 @@ import { EventEmitter } from '@angular/core';
             <div class="ui-g-4">
                 <h2>Information</h2>
 
-                <pre>{{ fullMetadata.name }}</pre>
-                <pre>{{ fullMetadata.biosource() }}</pre>
-                <pre>{{ fullMetadata.epigenetic_mark() }}</pre>
+                {{ _dataStack.name() }}
+                <p-colorPicker [(ngModel)]="_dataStack.color_array" format="rgb"></p-colorPicker>
+                <pre>{{ fullMetadata?.biosource() }}</pre>
+                <pre>{{ fullMetadata?.epigenetic_mark() }}</pre>
 
             </div>
         </div>
     </p-sidebar>
 
     <p-overlayPanel #op [dismissable]="true" [showCloseIcon]="true" appendTo="body">
-        <pre>{{ fullMetadata.biosource() }}</pre>
-        <pre>{{ fullMetadata.epigenetic_mark() }}</pre>
+        <pre>{{ fullMetadata?.biosource() }}</pre>
+        <pre>{{ fullMetadata?.epigenetic_mark() }}</pre>
         <pre> Click for more information </pre>
     </p-overlayPanel>
 
