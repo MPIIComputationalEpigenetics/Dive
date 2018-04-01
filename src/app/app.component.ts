@@ -88,7 +88,7 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
 
     ngOnInit() {
         this.zone.runOutsideAngular(() => { this.bindRipple(); });
-        this.titleService.setTitle("Dive (" + appVersion + ")");
+        this.titleService.setTitle("DIVE (" + appVersion + ")");
     }
 
     bindRipple() {
