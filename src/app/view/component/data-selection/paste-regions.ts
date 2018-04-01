@@ -5,7 +5,6 @@ import { EventEmitter } from '@angular/core';
 import { DeepBlueOperation } from 'app/domain/operations';
 import { Id } from 'app/domain/deepblue';
 import { DeepBlueService } from 'app/service/deepblue';
-import { ProgressElement } from 'app/service/progresselement';
 
 @Component({
   templateUrl: './paste-regions.html',
@@ -19,11 +18,11 @@ export class RegionsPaste {
 
   @Output() queryIdSelected = new EventEmitter();
 
-  constructor(public deepBlueService: DeepBlueService, private progress_element: ProgressElement) {
+  constructor(public deepBlueService: DeepBlueService) {
   };
 
   onUploadClick() {
-    this.deepBlueService.inputRegions(this.textAreaContent.trim(), this.progress_element, -1).subscribe((op) => {
+    this.deepBlueService.inputRegions(this.textAreaContent.trim()).subscribe((op) => {
       if (op.dataType() == "error") {
         this.hasError = true;
         this.errorMessage = op.text();

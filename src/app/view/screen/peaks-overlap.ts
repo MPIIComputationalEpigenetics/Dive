@@ -214,7 +214,7 @@ export class PeaksOverlapScreenComponent implements AfterViewInit, OnDestroy {
         this.deepBlueService.composedCountOverlaps(current, experiments).subscribe((request: DeepBlueMiddlewareRequest) => {
             this.requestManager.cancelAllRequest();
             this.requestManager.enqueueRequest(request);
-            this.deepBlueService.getComposedResultIterator(request, this.progress_element, 'overlaps', this.reloadPlot, this)
+            this.deepBlueService.getComposedResultIterator(request, 'overlaps', this.reloadPlot, this)
                 .subscribe((result: DeepBlueResult[]) => {
                     const end = new Date().getTime();
                     this.currentlyProcessing = [];

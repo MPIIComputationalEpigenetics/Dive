@@ -5,7 +5,6 @@ import { MenuItem } from 'primeng/primeng';
 import { DeepBlueService } from "app/service/deepblue";
 import { SelectedData } from "app/service/selecteddata";
 import { IOperation } from 'app/domain/interfaces';
-import { ProgressElement } from 'app/service/progresselement';
 import { SimilarityBarChartComponent } from 'app/view/component/charts/similarity';
 import { DeepBlueMiddlewareOverlapEnrichtmentResultItem } from 'app/domain/operations';
 import { Statistics, IStatsResult } from 'app/service/statistics';
@@ -53,7 +52,7 @@ export class SimilarFinder implements OnDestroy {
 
     constructor(private confirmationService: ConfirmationService,
         private deepBlueService: DeepBlueService, public requestManager: RequestManager,
-        public progress_element: ProgressElement, private selectedData: SelectedData) {
+        private selectedData: SelectedData) {
 
         this.stackSubscriber = this.selectedData.activeTopStackValue$.subscribe((dataStackItem) => {
             if (dataStackItem) {
@@ -67,7 +66,7 @@ export class SimilarFinder implements OnDestroy {
     }
 
     processSimilar(data: IOperation) {
-        SimilarDatasets.processSimilar(data, this.reloadData, this, this.deepBlueService, this.requestManager, this.progress_element);
+        SimilarDatasets.processSimilar(data, this.reloadData, this, this.deepBlueService, this.requestManager);
     }
 
     reloadData(_self: SimilarFinder, datum: DeepBlueMiddlewareOverlapEnrichtmentResultItem[]) {

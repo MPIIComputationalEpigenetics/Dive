@@ -21,8 +21,8 @@ export class SelectMotif {
   constructor(public deepBlueService: DeepBlueService, private progress_element: ProgressElement) { };
 
   useMotif() {
-    this.deepBlueService.findMotif(this.motif, this.progress_element, -1).subscribe((op) => {
-      this.deepBlueService.cacheQuery(op, this.progress_element, -1).subscribe((cached_data) => {
+    this.deepBlueService.findMotif(this.motif).subscribe((op) => {
+      this.deepBlueService.cacheQuery(op).subscribe((cached_data) => {
         this.queryIdSelected.emit(cached_data);
       })
     })

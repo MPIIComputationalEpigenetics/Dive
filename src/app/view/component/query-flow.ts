@@ -2,7 +2,6 @@ import { Component, ViewEncapsulation, OnInit, Input, Output, EventEmitter } fro
 import { DeepBlueService } from "app/service/deepblue";
 import { IOperation } from "app/domain/interfaces";
 import { TreeNode } from "primeng/primeng";
-import { ProgressElement } from "app/service/progresselement";
 import { Id } from "app/domain/deepblue";
 
 @Component({
@@ -100,7 +99,7 @@ export class QueryFlow implements OnInit {
 
   @Output() queryOp = new EventEmitter<IOperation>();
 
-  constructor(public deepBlueService: DeepBlueService, private progress_element: ProgressElement) { };
+  constructor(public deepBlueService: DeepBlueService) { };
 
   ngOnInit() {
     this.data = [];
@@ -173,7 +172,7 @@ export class QueryFlow implements OnInit {
       lookup_keys.push("_data");
     }
 
-    this.deepBlueService.countRegionsRequest(o, this.progress_element, 0).subscribe((result) => {
+    this.deepBlueService.countRegionsRequest(o).subscribe((result) => {
       node.data.parameters.unshift("regions: " + result.resultAsCount());
     });
 
@@ -200,7 +199,7 @@ export class QueryFlow implements OnInit {
     node.data = {};
     node.data.parameters = [];
 
-    this.deepBlueService.countRegionsRequest(o, this.progress_element, 0).subscribe((result) => {
+    this.deepBlueService.countRegionsRequest(o).subscribe((result) => {
       node.data.parameters.unshift("Total Regions: " + result.resultAsCount());
     });
 

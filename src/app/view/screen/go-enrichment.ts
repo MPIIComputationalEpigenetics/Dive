@@ -155,7 +155,7 @@ export class GoEnrichmentScreenComponent implements AfterViewInit, OnDestroy {
             this.isWaiting = true;
             this.requestManager.cancelAllRequest();
             this.requestManager.enqueueRequest(request);
-            this.deepBlueService.getComposedResultIterator(request, this.progress_element, 'go_enrichment', this.prepare_data, this)
+            this.deepBlueService.getComposedResultIterator(request, 'go_enrichment', this.prepare_data, this)
                 .subscribe((result: DeepBlueMiddlewareGOEnrichtmentResult[]) => {
                     if (result.length > 0) {
                         this.isWaiting = false;

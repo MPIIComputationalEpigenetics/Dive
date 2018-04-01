@@ -112,7 +112,7 @@ export class RegionsScreen {
             const format = info.format();
             const columns_types = info.columns();
 
-            this.deepBlueService.getRegions(actualData, format, this.progress_element, 0).subscribe((regions: DeepBlueResult) => {
+            this.deepBlueService.getRegions(actualData, format).subscribe((regions: DeepBlueResult) => {
                 this.request_id = regions.getRequestId();
                 this.progress_element.increment(0);
 

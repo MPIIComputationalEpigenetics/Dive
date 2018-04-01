@@ -5,7 +5,6 @@ import { EventEmitter } from '@angular/core';
 import { DeepBlueOperation } from 'app/domain/operations';
 import { Id, GeneModel } from 'app/domain/deepblue';
 import { DeepBlueService } from 'app/service/deepblue';
-import { ProgressElement } from 'app/service/progresselement';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -29,7 +28,7 @@ export class SelectGenesComponent {
 
   @Output() queryIdSelected = new EventEmitter();
 
-  constructor(public deepBlueService: DeepBlueService, private progress_element: ProgressElement) {
+  constructor(public deepBlueService: DeepBlueService) {
   };
 
   ngAfterViewInit() {
@@ -79,7 +78,7 @@ export class SelectGenesComponent {
     console.log(genes);
 
     this.request_count++;
-    this.deepBlueService.selectGenes(genes, gos, this.selectedGeneModel, this.progress_element, this.request_count).subscribe((op) => {
+    this.deepBlueService.selectGenes(genes, gos, this.selectedGeneModel).subscribe((op) => {
       if (op.dataType() == "error") {
         this.hasError = true;
         this.errorMessage = op.text();

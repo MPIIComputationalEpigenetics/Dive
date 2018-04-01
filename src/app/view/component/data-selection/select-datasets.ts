@@ -83,23 +83,6 @@ export class SelectDatasetsComponent implements OnInit {
     this.buildItems();
   }
 
-  nodeSelect(event: any) {
-    if (event.node.data.leaf) {
-      this.visibleSidebar = true;
-      this.selectedRow = null;
-      this.deepBlueService.getInfo(event.node.data.id).subscribe((info) => {
-        this.selectedRow = <FullExperiment>info;
-        if (event.node.data._query_id) {
-          this.clicked_query_id = event.node.data._query_id.query_id.id;
-        } else {
-          let id_name = new IdName(event.node.data.id, event.node.data.name);
-          this.deepBlueService.selectExperiment(id_name, this.progress_element, 0)
-            .subscribe((q) => this.clicked_query_id = q.query_id.id);
-        }
-      })
-    }
-  }
-
   buildNode(dataset: Dataset, projectNames: string[], epigenetic_mark?: string, passFilter?: boolean): TreeNode {
 
     if (!epigenetic_mark) {
@@ -203,12 +186,12 @@ export class SelectDatasetsComponent implements OnInit {
       let o_exps = null;
       let e_exps = null;
 
-      e_exps = this.deepBlueService.mergeQueries(selected_queries, this.progress_element, 0);
-      o_exps = this.deepBlueService.selectExperiments(selected_experiments.map((node: TreeNode) => node.data.name), this.progress_element, 0);
+      e_exps = this.deepBlueService.mergeQueries(selected_queries);
+      o_exps = this.deepBlueService.selectExperiments(selected_experiments.map((node: TreeNode) => node.data.name));
 
       if (e_exps && o_exps) {
         Observable.forkJoin([e_exps, o_exps]).subscribe((completion: IOperation[]) => {
-          e_exps = this.deepBlueService.mergeQueries(completion, this.progress_element, 0).subscribe((final: IOperation) => {
+          e_exps = this.deepBlueService.mergeQueries(completion).subscribe((final: IOperation) => {
             this.queryIdSelected.emit(final);
           })
         });
@@ -227,13 +210,12 @@ export class SelectDatasetsComponent implements OnInit {
         this.queryIdSelected.emit(selected_node.data._query_id);
       } else {
         let id_name = new IdName(selected_node.data.id, selected_node.data.name);
-        this.deepBlueService.selectExperiment(id_name, this.progress_element, 0)
+        this.deepBlueService.selectExperiment(id_name)
           .subscribe((q) => this.queryIdSelected.emit(q));
       }
     }
 
     this.buildDatasets();
-
   }
 
   buildDatasets() {
@@ -261,6 +243,23 @@ export class SelectDatasetsComponent implements OnInit {
     }
 
     this.datasetsSelected.emit(datasets);
+  }
+
+  nodeSelect(event: any) {
+    if (event.node.data.leaf) {
+      this.visibleSidebar = true;
+      this.selectedRow = null;
+      this.deepBlueService.getInfo(event.node.data.id).subscribe((info) => {
+        this.selectedRow = <FullExperiment>info;
+        if (event.node.data._query_id) {
+          this.clicked_query_id = event.node.data._query_id.query_id.id;
+        } else {
+          let id_name = new IdName(event.node.data.id, event.node.data.name);
+          this.deepBlueService.selectExperiment(id_name).subscribe((q) => this.clicked_query_id = q.query_id.id);
+        }
+      })
+    }
+    this.buildDatasets();
   }
 
   ngOnDestroy() {

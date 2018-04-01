@@ -21,8 +21,6 @@ import { MultiKeyDataCache } from 'app/service/deepblue';
 import { SelectedData } from 'app/service/selecteddata';
 import { DataStack } from 'app/service/datastack';
 import { EventEmitter } from '@angular/core';
-import { ProgressElement } from '../../service/progresselement';
-
 
 @Component({
     selector: 'selected-data-button',
@@ -80,7 +78,7 @@ export class SelectedDataButton implements OnInit {
     fullMetadata: FullExperiment = null;
     totalRegions = -1;
 
-    constructor(private deepBlueService: DeepBlueService, private selectedData: SelectedData, private progress_element: ProgressElement) {
+    constructor(private deepBlueService: DeepBlueService, private selectedData: SelectedData) {
     }
 
     ngOnInit() {
@@ -130,7 +128,7 @@ export class SelectedDataButton implements OnInit {
                     })
                 })
             }
-            this.deepBlueService.countRegionsRequest(this._dataStack.getCurrentOperation(), this.progress_element, -1).subscribe((total) => {
+            this.deepBlueService.countRegionsRequest(this._dataStack.getCurrentOperation()).subscribe((total) => {
                 this.totalRegions = total.resultAsCount();
             });
         });

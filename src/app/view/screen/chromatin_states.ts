@@ -205,7 +205,7 @@ export class ChromatinStatesScreenComponent implements AfterViewInit, OnDestroy 
     this.deepBlueService.composedCountOverlaps(current, experiments, [filter]).subscribe((request: DeepBlueMiddlewareRequest) => {
       this.requestManager.cancelAllRequest();
       this.requestManager.enqueueRequest(request);
-      this.deepBlueService.getComposedResultIterator(request, this.progress_element, 'overlaps', this.reloadPlot, this)
+      this.deepBlueService.getComposedResultIterator(request, 'overlaps', this.reloadPlot, this)
         .subscribe((result: DeepBlueResult[]) => {
           this.currentlyProcessing = [];
           this.reloadPlot(this, result);

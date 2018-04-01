@@ -1,6 +1,5 @@
 import { DeepBlueService } from "app/service/deepblue";
 import { IOperation } from 'app/domain/interfaces';
-import { ProgressElement } from 'app/service/progresselement';
 import { DeepBlueMiddlewareOverlapEnrichtmentResultItem } from 'app/domain/operations';
 import { Statistics, IStatsResult } from 'app/service/statistics';
 import { BioSource } from 'app/domain/deepblue';
@@ -27,12 +26,12 @@ export class SimilarDatasets {
 
   static processSimilar(data: IOperation,
     callback: (_self: any, result: DeepBlueMiddlewareOverlapEnrichtmentResultItem[]) => void, _self: any,
-    deepBlueService: DeepBlueService, requestManager: RequestManager, progress_element: ProgressElement) {
+    deepBlueService: DeepBlueService, requestManager: RequestManager) {
 
     deepBlueService.composedCalculateFastsEnrichment(data).subscribe((request) => {
       requestManager.cancelAllRequest();
       requestManager.enqueueRequest(request)
-      deepBlueService.getComposedResultIterator(request, progress_element, 'overlaps_enrichment_fast', callback, _self)
+      deepBlueService.getComposedResultIterator(request, 'overlaps_enrichment_fast', callback, _self)
         .subscribe((result: DeepBlueMiddlewareOverlapEnrichtmentResultItem[]) => {
           callback(_self, result);
         })

@@ -112,7 +112,7 @@ export class GenesScreen implements AfterViewInit, OnDestroy {
     this.deepBlueService.composedCountGenesOverlaps(current, gene_model, this.filters).subscribe((request: DeepBlueMiddlewareRequest) => {
       this.requestManager.cancelAllRequest();
       this.requestManager.enqueueRequest(request);
-      this.deepBlueService.getComposedResultIterator(request, this.progress_element, 'genes_overlaps')
+      this.deepBlueService.getComposedResultIterator(request, 'genes_overlaps')
         .subscribe((result: DeepBlueResult[][]) => {
           // Now calculate and output the difference
           this.currentlyProcessing = null;
@@ -226,14 +226,14 @@ export class GenesScreen implements AfterViewInit, OnDestroy {
     this.showDataDetail = false;
 
 
-    this.deepBlueService.selectGenes([], [], gene_model, this.progress_element, -1).subscribe((op) => {
+    this.deepBlueService.selectGenes([], [], gene_model).subscribe((op) => {
 
       let genesObservable: Observable<IOperation> = null;
       if ('type' in term) {
         if (term.type == 'flank') {
-          genesObservable = this.deepBlueService.flank(op, term.start, term.length, this.progress_element, -1)
+          genesObservable = this.deepBlueService.flank(op, term.start, term.length, -1)
         } else if (term.type == 'extend') {
-          genesObservable = this.deepBlueService.extend(op, term.length, term.direction, this.progress_element, -1);
+          genesObservable = this.deepBlueService.extend(op, term.length, term.direction, -1);
         }
       } else {
         genesObservable = Observable.of(op);

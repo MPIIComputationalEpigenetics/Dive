@@ -1,6 +1,5 @@
 import { DeepBlueService } from 'app/service/deepblue';
 import { Component, Output, EventEmitter, ChangeDetectorRef, OnInit, ViewChild } from "@angular/core";
-import { ProgressElement } from 'app/service/progresselement';
 import { DeepBlueTiling } from 'app/domain/operations';
 import { InplaceModule, Inplace } from 'primeng/primeng';
 import { BehaviorSubject } from 'rxjs';
@@ -20,7 +19,7 @@ export class SelectTilingRegionsComponent {
   @ViewChild('inplace') inPlace: Inplace;
   @Output() queryIdSelected = new EventEmitter();
 
-  constructor(private deepBlueService: DeepBlueService, private progress_element: ProgressElement, public cdRef: ChangeDetectorRef) { }
+  constructor(private deepBlueService: DeepBlueService, public cdRef: ChangeDetectorRef) { }
 
   onEnter($event: any) {
     this.cdRef.detectChanges();
@@ -32,7 +31,7 @@ export class SelectTilingRegionsComponent {
   }
 
   select_click() {
-    this.deepBlueService.tilingRegions(this.size, [], this.progress_element, 0).subscribe((tiling: DeepBlueTiling) => {
+    this.deepBlueService.tilingRegions(this.size, []).subscribe((tiling: DeepBlueTiling) => {
       this.queryIdSelected.emit(tiling);
     });
   }

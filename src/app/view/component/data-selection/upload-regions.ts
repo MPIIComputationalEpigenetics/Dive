@@ -5,7 +5,6 @@ import { EventEmitter } from '@angular/core';
 import { DeepBlueOperation, DeepBlueEmptyParameter } from 'app/domain/operations';
 import { Id } from 'app/domain/deepblue';
 import { DeepBlueService } from 'app/service/deepblue';
-import { ProgressElement } from 'app/service/progresselement';
 
 @Component({
   templateUrl: './upload-regions.html',
@@ -23,7 +22,7 @@ export class RegionsUpload {
   @Output() queryIdSelected = new EventEmitter();
 
 
-  constructor(public deepBlueService: DeepBlueService, private progress_element: ProgressElement) {
+  constructor(public deepBlueService: DeepBlueService) {
   };
 
   onUpload(event: any) {
@@ -38,7 +37,7 @@ export class RegionsUpload {
       this.errorMessage = response[1];
     } else {
       let query_id: string = response[1];
-      this.queryIdSelected.emit(new DeepBlueOperation(new DeepBlueEmptyParameter(), new Id(query_id), 'input_regions', -1));
+      this.queryIdSelected.emit(new DeepBlueOperation(new DeepBlueEmptyParameter(), new Id(query_id), 'input_regions'));
     }
 
   }

@@ -86,7 +86,7 @@ export class DataSelectionWizard implements AfterViewInit {
         this.deepBlueService.getAnnotations(genome).subscribe(annotations => {
           for (let annotation of annotations) {
             if (annotation.name.toLowerCase().startsWith('cpg islands')) {
-              this.deepBlueService.selectAnnotation(annotation, this.progress_element, 0).subscribe((operation) => {
+              this.deepBlueService.selectAnnotation(annotation).subscribe((operation) => {
                 this.selectQueryDataSet(operation, true);
               });
             }
@@ -117,7 +117,7 @@ export class DataSelectionWizard implements AfterViewInit {
 
   inSimilarData($event: any) {
     this.inWizard($event);
-    SimilarDatasets.processSimilar(this.selectedQuery, this.reloadData, this, this.deepBlueService, this.requestManager, this.progress_element)
+    SimilarDatasets.processSimilar(this.selectedQuery, this.reloadData, this, this.deepBlueService, this.requestManager)
   }
 
 

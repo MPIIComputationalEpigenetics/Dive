@@ -139,6 +139,8 @@ export class DataStack {
 
   _data: DataStackItems = new DataStackItems();
 
+  total_requests = 0;
+
   constructor(private deepBlueService: DeepBlueService, private requestManager: RequestManager,
     private progress_element: ProgressElement, private router: Router) {
     let random_color = randomColor({ format: 'rgbArray', luminosity: 'dark' });
@@ -167,12 +169,13 @@ export class DataStack {
       return;
     }
 
-    const request_count = 0;
+    const request_count = ++this.total_requests;
+
     this.progress_element.reset(4, request_count);
 
     // TODO: use/make a generic method for experiments and annotations
-    this.deepBlueService.cacheQuery(data, this.progress_element, request_count).subscribe((cached_data) => {
-      this.deepBlueService.countRegionsRequest(cached_data, this.progress_element, request_count).subscribe((total) => {
+    this.deepBlueService.cacheQuery(data, request_count).subscribe((cached_data) => {
+      this.deepBlueService.countRegionsRequest(cached_data, request_count).subscribe((total) => {
         const totalSelectedRegtions = total.resultAsCount();
         const dataStackItem: DataStackItem = new DataStackItem(cached_data, totalSelectedRegtions);
         this._data.push(dataStackItem);
@@ -186,7 +189,7 @@ export class DataStack {
     if (!(data instanceof DeepBlueOperation)) {
       return;
     } else {
-      this.deepBlueService.countRegionsRequest(data, this.progress_element, -1).subscribe((total) => {
+      this.deepBlueService.countRegionsRequest(data).subscribe((total) => {
         const totalSelectedRegtions = total.resultAsCount();
         const dataStackItem: DataStackItem = new DataStackItem(data, totalSelectedRegtions);
         this._data.unshift(dataStackItem);
@@ -205,14 +208,15 @@ export class DataStack {
       return;
     }
 
-    const request_count = 0;
+    const request_count = ++this.total_requests;
+
     this.progress_element.reset(5, request_count);
 
     this.requestManager.cancelAllRequest();
 
-    this.deepBlueService.overlap(current_op, operation, true, this.progress_element, request_count).subscribe((overlap_operation) => {
-      this.deepBlueService.cacheQuery(overlap_operation, this.progress_element, request_count).subscribe((cached_data) => {
-        this.deepBlueService.countRegionsRequest(cached_data, this.progress_element, request_count).subscribe((total) => {
+    this.deepBlueService.overlap(current_op, operation, true).subscribe((overlap_operation) => {
+      this.deepBlueService.cacheQuery(overlap_operation, request_count).subscribe((cached_data) => {
+        this.deepBlueService.countRegionsRequest(cached_data, request_count).subscribe((total) => {
           const totalSelectedRegtions = total.resultAsCount();
           const dataStackItem: DataStackItem = new DataStackItem(cached_data, totalSelectedRegtions);
           this._data.push(dataStackItem);
@@ -227,14 +231,15 @@ export class DataStack {
       return;
     }
 
-    const request_count = 0;
+    const request_count = ++this.total_requests;
+
     this.progress_element.reset(5, request_count);
 
     this.requestManager.cancelAllRequest();
 
-    this.deepBlueService.overlap(current_op, operation, false, this.progress_element, request_count).subscribe((overlap_operation) => {
-      this.deepBlueService.cacheQuery(overlap_operation, this.progress_element, request_count).subscribe((cached_data) => {
-        this.deepBlueService.countRegionsRequest(cached_data, this.progress_element, request_count).subscribe((total) => {
+    this.deepBlueService.overlap(current_op, operation, false, request_count).subscribe((overlap_operation) => {
+      this.deepBlueService.cacheQuery(overlap_operation, request_count).subscribe((cached_data) => {
+        this.deepBlueService.countRegionsRequest(cached_data, request_count).subscribe((total) => {
           const totalSelectedRegtions = total.resultAsCount();
           const dataStackItem: DataStackItem = new DataStackItem(cached_data, totalSelectedRegtions);
           this._data.push(dataStackItem);
@@ -249,14 +254,15 @@ export class DataStack {
       return;
     }
 
-    const request_count = 0;
+    const request_count = ++this.total_requests;
+
     this.progress_element.reset(5, request_count);
 
     this.requestManager.cancelAllRequest();
 
-    this.deepBlueService.flank(current_op, start, length, this.progress_element, request_count).subscribe((flank_operation) => {
-      this.deepBlueService.cacheQuery(flank_operation, this.progress_element, request_count).subscribe((cached_data) => {
-        this.deepBlueService.countRegionsRequest(cached_data, this.progress_element, request_count).subscribe((total) => {
+    this.deepBlueService.flank(current_op, start, length, request_count).subscribe((flank_operation) => {
+      this.deepBlueService.cacheQuery(flank_operation, request_count).subscribe((cached_data) => {
+        this.deepBlueService.countRegionsRequest(cached_data, request_count).subscribe((total) => {
           const totalSelectedRegtions = total.resultAsCount();
           const dataStackItem: DataStackItem = new DataStackItem(cached_data, totalSelectedRegtions);
           this._data.push(dataStackItem);
@@ -271,14 +277,15 @@ export class DataStack {
       return;
     }
 
-    const request_count = 0;
+    const request_count = ++this.total_requests;
+
     this.progress_element.reset(5, request_count);
 
     this.requestManager.cancelAllRequest();
 
-    this.deepBlueService.extend(current_op, length, direction, this.progress_element, request_count).subscribe((extend_operation) => {
-      this.deepBlueService.cacheQuery(extend_operation, this.progress_element, request_count).subscribe((cached_data) => {
-        this.deepBlueService.countRegionsRequest(cached_data, this.progress_element, request_count).subscribe((total) => {
+    this.deepBlueService.extend(current_op, length, direction, request_count).subscribe((extend_operation) => {
+      this.deepBlueService.cacheQuery(extend_operation, request_count).subscribe((cached_data) => {
+        this.deepBlueService.countRegionsRequest(cached_data, request_count).subscribe((total) => {
           const totalSelectedRegtions = total.resultAsCount();
           const dataStackItem: DataStackItem = new DataStackItem(cached_data, totalSelectedRegtions);
           this._data.push(dataStackItem);
@@ -293,18 +300,20 @@ export class DataStack {
       return;
     }
 
-    const request_count = 0;
+    const request_count = ++this.total_requests;
+
     this.progress_element.reset(5, request_count);
 
     this.requestManager.cancelAllRequest();
 
-    this.deepBlueService.selectGoTerm(term, gene_model, this.progress_element, request_count).subscribe((go_selected) => {
+    this.deepBlueService.selectGoTerm(term, gene_model, request_count).subscribe((go_selected) => {
       this.overlap(go_selected)
     });
   }
 
   filter_regions(field: string, operation: string, value: string, type: string) {
-    const request_count = 0;
+    const request_count = ++this.total_requests;
+
     this.progress_element.reset(4, request_count);
 
     const current_op = this.getCurrentOperation();
@@ -314,10 +323,10 @@ export class DataStack {
 
     this.requestManager.cancelAllRequest();
 
-    this.deepBlueService.filter_region(current_op, field, operation, value, type, this.progress_element, request_count)
+    this.deepBlueService.filter_region(current_op, field, operation, value, type, request_count)
       .subscribe((filter_operation) => {
-        this.deepBlueService.cacheQuery(filter_operation, this.progress_element, request_count).subscribe((cached_data) => {
-          this.deepBlueService.countRegionsRequest(cached_data, this.progress_element, request_count).subscribe((total) => {
+        this.deepBlueService.cacheQuery(filter_operation, request_count).subscribe((cached_data) => {
+          this.deepBlueService.countRegionsRequest(cached_data, request_count).subscribe((total) => {
             const totalSelectedRegtions = total.resultAsCount();
             const dataStackItem: DataStackItem =
               new DataStackItem(cached_data, totalSelectedRegtions);
@@ -329,7 +338,8 @@ export class DataStack {
   }
 
   filter_by_dna_motif(pattern: string) {
-    const request_count = 0;
+    const request_count = ++this.total_requests;
+
     this.progress_element.reset(4, request_count);
 
     const current_op = this.getCurrentOperation();
@@ -338,10 +348,10 @@ export class DataStack {
     }
 
     this.requestManager.cancelAllRequest();
-    this.deepBlueService.filter_by_motif(current_op, pattern, this.progress_element, request_count)
+    this.deepBlueService.filter_by_motif(current_op, pattern, request_count)
       .subscribe((filter_operation) => {
-        this.deepBlueService.cacheQuery(filter_operation, this.progress_element, request_count).subscribe((cached_data) => {
-          this.deepBlueService.countRegionsRequest(cached_data, this.progress_element, request_count).subscribe((total) => {
+        this.deepBlueService.cacheQuery(filter_operation, request_count).subscribe((cached_data) => {
+          this.deepBlueService.countRegionsRequest(cached_data, request_count).subscribe((total) => {
             const totalSelectedRegtions = total.resultAsCount();
             const dataStackItem: DataStackItem =
               new DataStackItem(cached_data, totalSelectedRegtions);
@@ -351,7 +361,6 @@ export class DataStack {
       });
 
   }
-
 
   remove(data: DataStackItem) {
     if (this._data.remove(data)) {
