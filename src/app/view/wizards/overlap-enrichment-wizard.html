@@ -5,45 +5,66 @@
         <h2>Selected Data </h2>
         <h4 style="word-wrap: break-word">{{ background?.text() }}</h4>
         <h4>{{ getDatasetsLabel() }}</h4>
+        <h4>{{ selected_datasets }}</h4>
       </div>
 
-      <div class="{{ wizardClassLength() }}">
+      <div *ngIf="visibleWizard" class="{{ wizardClassLength() }}">
         <aw-wizard #wizard [navBarLocation]="'top'" [navBarLayout]="'small'">
 
+          <!-- Introduction -->
           <aw-wizard-step stepTitle="Overlapping Enrichment" (stepEnter)="inWizard($event)">
-
             <navegation-menu [disablePrevious]="true"></navegation-menu>
-
             <p-fieldset legend="Welcome">
               We are going to perform overlapping enrichment
             </p-fieldset>
-
-
           </aw-wizard-step>
 
+          <!-- Background -->
+
           <aw-wizard-step stepTitle="Background" (stepEnter)="inWizard($event)">
-            <navegation-menu></navegation-menu>
+            <p-toolbar>
+              <div class="ui-toolbar-group-left">
+                <button pButton type="button" awPreviousStep label="Back" icon="ui-icon-arrow-back"></button>
+              </div>
+              <div class="ui-toolbar-group-right">
+                <button pButton [disabled]="!background" awNextStep type="button" label="Next"></button>
+              </div>
+            </p-toolbar>
+
 
             <p>Blablabla Select background data</p>
             <p>
               <small>background is blablabla</small>
             </p>
+            <h3 *ngIf="!background">Select the background data</h3>
             <data-selection-main (queryIdSelected)="selectBackgroud($event)"></data-selection-main>
           </aw-wizard-step>
 
+          <!-- Datasets -->
+
           <aw-wizard-step stepTitle="Datasets" (stepEnter)="inWizard($event)">
-            <navegation-menu></navegation-menu>
+            <p-toolbar>
+              <div class="ui-toolbar-group-left">
+                <button pButton type="button" awPreviousStep label="Back" icon="ui-icon-arrow-back"></button>
+              </div>
+              <div class="ui-toolbar-group-right">
+                <button pButton type="button" awNextStep label="Next" icon="ui-icon-arrow-forward" [disabled]="selected_datasets.length > 0"></button>
+              </div>
+            </p-toolbar>
 
             <p>Blablabla Select the datasets data</p>
             <p>
               <small>datasets that will be used for the enrichment is blablabla remember that the execution time grows with more
                 datasets
               </small>
+              <select-datasets-component (datasetsSelected)="selectDatasets($event)"></select-datasets-component>
             </p>
 
           </aw-wizard-step>
 
-          <aw-wizard-step stepTitle="Execute" (stepEnter)="finishWizard($event)">
+          <!-- Summary -->
+
+          <aw-wizard-step stepTitle="Execute" (stepEnter)="inWizard($event)" (stepExit)="finishWizard($event)">
             <p-toolbar>
               <div class="ui-toolbar-group-left">
                 <button pButton type="button" awPreviousStep label="Back" icon="ui-icon-arrow-back"></button>
@@ -53,13 +74,24 @@
                 <button pButton type="button" class="ui-button-success" awNextStep (click)="startEnrichment($event)" label="Start Analysis"
                   icon="fa fa-fw fa-check"></button>
               </div>
-            </p-toolbar>`
+
+            </p-toolbar>
 
             <h2>Selected Data </h2>
 
           </aw-wizard-step>
 
         </aw-wizard>
+
+
+        <div *ngIf="enrichment_data.length > 0" class="card card-w-title">
+          <h1>Results</h1>
+          <div *ngFor="let data of enrichment_data; let i = index">
+            <h2> {{ selectedData.getStackname(i) }} </h2>
+            <ngx-datatable class='material' [columns]="columns" [rows]='data' [columnMode]="'force'" [limit]="50"></ngx-datatable>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
