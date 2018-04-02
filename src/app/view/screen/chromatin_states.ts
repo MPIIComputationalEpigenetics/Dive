@@ -33,6 +33,8 @@ import { SelectedData } from 'app/service/selected-data';
   templateUrl: './chromatin_states.html'
 })
 export class ChromatinStatesScreenComponent implements AfterViewInit, OnDestroy {
+  selectedExperimentsSubscription: Subscription;
+  activeTopStackSubscription: Subscription;
   experiments: FullExperiment[];
   segregated_data: Object;
 
@@ -157,8 +159,15 @@ export class ChromatinStatesScreenComponent implements AfterViewInit, OnDestroy 
   }
 
   ngAfterViewInit() {
-    this.selectedExperimentsValue$.debounceTime(250).subscribe(() => this.processOverlaps());
-    this.selectedData.activeTopStackValue$.subscribe((dataStackItem) => this.processOverlaps());
+    this.selectedExperimentsSubscription = this.selectedExperimentsValue$.debounceTime(250).subscribe(() => this.processOverlaps());
+    this.activeTopStackSubscription = this.selectedData.activeTopStackValue$.subscribe((dataStackItem) => this.processOverlaps());
+  }
+
+
+  ngOnDestroy() {
+    this.selectedExperimentsSubscription.unsubscribe();
+    this.activeTopStackSubscription.unsubscribe();
+    this.epigeneticMarkSubscription.unsubscribe();
   }
 
   selectBiosources(event: any) {
@@ -349,9 +358,5 @@ export class ChromatinStatesScreenComponent implements AfterViewInit, OnDestroy 
 
   dataSelected() {
     this.showDataDetail = false;
-  }
-
-  ngOnDestroy() {
-    this.epigeneticMarkSubscription.unsubscribe();
   }
 }

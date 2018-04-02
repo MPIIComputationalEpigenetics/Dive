@@ -39,6 +39,9 @@ export class PeaksOverlapScreenComponent implements AfterViewInit, OnDestroy {
     biosourcesItems: SelectItem[] = [];
     selectedMultiSelectBiosources: Object[] = [];
 
+    selectedExperimentsSubscription: Subscription;
+    projectSubscription: Subscription;
+    activeTopStackSubscription: Subscription;
     epigeneticMarkSubscription: Subscription;
 
     defaultSelectBiosourcesLabel = 'Click here for selecting the BioSources';
@@ -68,12 +71,15 @@ export class PeaksOverlapScreenComponent implements AfterViewInit, OnDestroy {
     }
 
     ngAfterViewInit() {
-        this.selectedExperimentsValue$.debounceTime(250).subscribe(() => this.processOverlaps());
-        this.selectedData.activeTopStackValue$.subscribe((dataStackItem) => this.processOverlaps());
-        this.deepBlueService.projectsValue$.subscribe(() => this.loadExperiments());
+        this.selectedExperimentsSubscription = this.selectedExperimentsValue$.debounceTime(250).subscribe(() => this.processOverlaps());
+        this.activeTopStackSubscription = this.selectedData.activeTopStackValue$.subscribe((dataStackItem) => this.processOverlaps());
+        this.projectSubscription = this.deepBlueService.projectsValue$.subscribe(() => this.loadExperiments());
     }
 
     ngOnDestroy() {
+        this.selectedExperimentsSubscription.unsubscribe();
+        this.projectSubscription.unsubscribe();
+        this.activeTopStackSubscription.unsubscribe();
         this.epigeneticMarkSubscription.unsubscribe();
     }
 
