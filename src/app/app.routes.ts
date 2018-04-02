@@ -1,4 +1,4 @@
-import { Routes, RouterModule } from '@angular/router';
+import { Routes, RouterModule, Router } from '@angular/router';
 import { ModuleWithProviders } from '@angular/core';
 import { DataSelectionScreen } from 'app/view/screen/data-selection';
 import { RegionsScreen } from 'app/view/screen/regions';
@@ -16,7 +16,7 @@ import { DataSelectionWizard } from './view/wizards/data-selection-wizard';
 
 export const routes: Routes = [
     { path: '', component: DataSelectionWizard },
-    { path: 'dataselection', component: DataSelectionScreen },
+    { path: 'dataselection', component: DataSelectionScreen, canActivate: [RouterGuard] },
     { path: 'comparisonselection', component: ComparisonSelectionScreen, canActivate: [RouterGuard] },
     { path: 'similarfinder', component: SimilarFinder, canActivate: [RouterGuard] },
     { path: 'transform', component: StackRegionsTransformScreen, canActivate: [RouterGuard] },
