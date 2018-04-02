@@ -1,63 +1,84 @@
-import { DataStackViewComponent } from 'app/view/component/datastack';
-import { SelectedData } from 'app/service/selected-data';
-import { NgModule } from '@angular/core';
-import { FormsModule, FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
-import { BrowserModule } from '@angular/platform-browser';
-import { LocationStrategy, HashLocationStrategy } from '@angular/common';
-import { AppRoutes } from './app.routes';
-import { InplaceModule, ConfirmationService, ScrollPanelModule } from 'primeng/primeng';
-
 import 'rxjs/Rx';
 
 import { AccordionModule } from 'primeng/primeng';
+import { AppFooter } from './app.footer.component';
+import { AppMenuComponent, AppSubMenu } from './app.menu.component';
+import { AppRoutes } from './app.routes';
+import { AppTopBar } from './app.topbar.component';
 import { AutoCompleteModule } from 'primeng/primeng';
 import { BreadcrumbModule } from 'primeng/primeng';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BrowserModule } from '@angular/platform-browser';
 import { ButtonModule } from 'primeng/primeng';
 import { CalendarModule } from 'primeng/primeng';
+import { CardModule } from 'primeng/card';
 import { CarouselModule } from 'primeng/primeng';
+import { ChartModule } from 'angular2-highcharts';
 import { CheckboxModule } from 'primeng/primeng';
 import { ChipsModule } from 'primeng/primeng';
 import { CodeHighlighterModule } from 'primeng/primeng';
+import { ColorPickerModule } from 'primeng/colorpicker';
 import { ConfirmDialogModule } from 'primeng/primeng';
-import { SharedModule } from 'primeng/primeng';
 import { ContextMenuModule } from 'primeng/primeng';
 import { DataGridModule } from 'primeng/primeng';
 import { DataListModule } from 'primeng/primeng';
+import { DataLoadProgressBar } from 'app/view/component/progressbar';
 import { DataScrollerModule } from 'primeng/primeng';
+import { DataSelectionScreen } from 'app/view/screen/data-selection';
+import { DataStackViewComponent } from 'app/view/component/data-stack';
 import { DataTableModule } from 'primeng/primeng';
+import { DeepBlueService } from 'app/service/deepblue';
 import { DialogModule } from 'primeng/primeng';
 import { DragDropModule } from 'primeng/primeng';
 import { DropdownModule } from 'primeng/primeng';
 import { EditorModule } from 'primeng/primeng';
 import { FieldsetModule } from 'primeng/primeng';
 import { FileUploadModule } from 'primeng/primeng';
+import { FormsModule, FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { GalleriaModule } from 'primeng/primeng';
+import { GenesScreen } from 'app/view/screen/genes';
 import { GMapModule } from 'primeng/primeng';
+import { GoEnrichmentScreenComponent } from 'app/view/screen/go-enrichment';
 import { GrowlModule } from 'primeng/primeng';
+import { HighchartsStatic } from 'angular2-highcharts/dist/HighchartsService';
+import { HttpClientModule } from '@angular/common/http';
+import { InplaceModule, ConfirmationService, ScrollPanelModule } from 'primeng/primeng';
 import { InputMaskModule } from 'primeng/primeng';
 import { InputSwitchModule } from 'primeng/primeng';
-import { InputTextModule } from 'primeng/primeng';
 import { InputTextareaModule } from 'primeng/primeng';
+import { InputTextModule } from 'primeng/primeng';
 import { LightboxModule } from 'primeng/primeng';
 import { ListboxModule } from 'primeng/primeng';
+import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 import { MegaMenuModule } from 'primeng/primeng';
-import { MenuModule } from 'primeng/primeng';
 import { MenubarModule } from 'primeng/primeng';
+import { MenuModule } from 'primeng/primeng';
 import { MessagesModule } from 'primeng/primeng';
 import { MultiSelectModule } from 'primeng/primeng';
+import { NgModule } from '@angular/core';
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { OrderListModule } from 'primeng/primeng';
+import { OrganizationChartModule } from 'primeng/primeng';
+import { OverlapEnrichmentScreenComponent } from 'app/view/screen/overlap-enrichment';
+import { OverlapsBarChartComponent } from 'app/view/component/charts/overlappingbar';
 import { OverlayPanelModule } from 'primeng/primeng';
 import { PaginatorModule } from 'primeng/primeng';
-import { PanelModule } from 'primeng/primeng';
 import { PanelMenuModule } from 'primeng/primeng';
+import { PanelModule } from 'primeng/primeng';
 import { PasswordModule } from 'primeng/primeng';
 import { PickListModule } from 'primeng/primeng';
 import { ProgressBarModule } from 'primeng/primeng';
+import { ProgressElement } from 'app/service/progresselement';
 import { RadioButtonModule } from 'primeng/primeng';
 import { RatingModule } from 'primeng/primeng';
+import { RegionsScreen } from 'app/view/screen/regions';
 import { ScheduleModule } from 'primeng/primeng';
 import { SelectButtonModule } from 'primeng/primeng';
+import { SelectedData } from 'app/service/selected-data';
+import { SharedModule } from 'primeng/primeng';
+import { SidebarModule } from 'primeng/primeng';
+import { SimilarFinder } from 'app/view/screen/similar-finder';
+import { SimilarityBarChartComponent } from 'app/view/component/charts/similarity';
 import { SlideMenuModule } from 'primeng/primeng';
 import { SliderModule } from 'primeng/primeng';
 import { SpinnerModule } from 'primeng/primeng';
@@ -72,37 +93,6 @@ import { ToolbarModule } from 'primeng/primeng';
 import { TooltipModule } from 'primeng/primeng';
 import { TreeModule } from 'primeng/primeng';
 import { TreeTableModule } from 'primeng/primeng';
-import { SidebarModule } from 'primeng/primeng';
-import { OrganizationChartModule } from 'primeng/primeng';
-import { CardModule } from 'primeng/card';
-
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
-import { AppMenuComponent, AppSubMenu } from './app.menu.component';
-import { AppTopBar } from './app.topbar.component';
-import { AppFooter } from './app.footer.component';
-
-import { NgxDatatableModule } from '@swimlane/ngx-datatable';
-
-import { DeepBlueService } from 'app/service/deepblue';
-import { ProgressElement } from 'app/service/progresselement';
-
-import { OverlapsBarChartComponent } from 'app/view/component/charts/overlappingbar';
-import { SimilarityBarChartComponent } from 'app/view/component/charts/similarity';
-
-import { DataSelectionScreen } from 'app/view/screen/data-selection';
-import { RegionsScreen } from 'app/view/screen/regions';
-import { GenesScreen } from 'app/view/screen/genes';
-import { GoEnrichmentScreenComponent } from 'app/view/screen/go-enrichment';
-import { OverlapEnrichmentScreenComponent } from 'app/view/screen/overlap-enrichment';
-import { SimilarFinder } from 'app/view/screen/similar-finder';
-
-import { DataLoadProgressBar } from 'app/view/component/progressbar';
-
-import { HighchartsStatic } from 'angular2-highcharts/dist/HighchartsService';
-import { ChartModule } from 'angular2-highcharts';
-
-import { ColorPickerModule } from 'primeng/colorpicker';
 
 export function highchartsFactory() {
     return require('highcharts');
