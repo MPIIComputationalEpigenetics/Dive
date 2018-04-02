@@ -11,7 +11,7 @@ import { SimilarDatasets } from "app/algorithms/similar-datasets";
 import { DeepBlueMiddlewareOverlapEnrichtmentResultItem } from "app/domain/operations";
 import { RequestManager } from "app/service/requests-manager";
 import { IStatsResult } from "app/service/statistics";
-import { SelectedData } from "app/service/selecteddata";
+import { SelectedData } from "app/service/selected-data";
 
 
 @Component({

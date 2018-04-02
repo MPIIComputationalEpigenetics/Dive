@@ -18,10 +18,9 @@ import { StackValue, DeepBlueResult, DeepBlueOperation } from 'app/domain/operat
 import { DataCache } from 'app/service/deepblue';
 import { DeepBlueService } from 'app/service/deepblue';
 import { MultiKeyDataCache } from 'app/service/deepblue';
-import { SelectedData } from 'app/service/selecteddata';
-import { DataStack } from 'app/service/datastack';
 import { Output } from '@angular/core';
 import { EventEmitter } from '@angular/core';
+import { SelectedData } from 'app/service/selected-data';
 
 @Component({
   selector: 'app-data-info-box',

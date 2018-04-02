@@ -1,6 +1,5 @@
 import { DataStackViewComponent } from 'app/view/component/datastack';
-import { DataStackFactory } from 'app/service/datastack';
-import { SelectedData } from 'app/service/selecteddata';
+import { SelectedData } from 'app/service/selected-data';
 import { NgModule } from '@angular/core';
 import { FormsModule, FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
@@ -145,6 +144,7 @@ import { SelectMotif } from 'app/view/component/data-selection/dna-motif';
 import { RegionsTransformComponent } from 'app/view/screen/regions-transform'
 import { StackRegionsTransformScreen } from 'app/view/screen/stack-regions-transform'
 import { DefaultData } from 'app/service/defaultdata';
+import { DataStackFactory } from 'app/service/data-stack-factory';
 
 @NgModule({
     imports: [

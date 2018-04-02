@@ -3,7 +3,6 @@ import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { ConfirmDialogModule, ConfirmationService } from 'primeng/primeng';
 import { MenuItem } from 'primeng/primeng';
 import { DeepBlueService } from "app/service/deepblue";
-import { SelectedData } from "app/service/selecteddata";
 import { IOperation } from 'app/domain/interfaces';
 import { SimilarityBarChartComponent } from 'app/view/component/charts/similarity';
 import { DeepBlueMiddlewareOverlapEnrichtmentResultItem } from 'app/domain/operations';
@@ -12,6 +11,7 @@ import { BioSource } from 'app/domain/deepblue';
 import { RequestManager } from 'app/service/requests-manager';
 import { Subscription } from 'rxjs';
 import { SimilarDatasets } from '../../algorithms/similar-datasets';
+import { SelectedData } from 'app/service/selected-data';
 
 @Component({
     templateUrl: './similar-finder.html'

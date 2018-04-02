@@ -22,12 +22,11 @@ import { StackValue } from 'app/domain/operations';
 import { DeepBlueFilterParameters } from 'app/domain/operations';
 
 import { DeepBlueService } from 'app/service/deepblue';
-import { DataStack } from 'app/service/datastack';
-import { SelectedData } from 'app/service/selecteddata';
 import { ProgressElement } from 'app/service/progresselement';
 
 import { Statistics } from 'app/service/statistics';
 import { RequestManager } from 'app/service/requests-manager';
+import { SelectedData } from 'app/service/selected-data';
 
 
 @Component({

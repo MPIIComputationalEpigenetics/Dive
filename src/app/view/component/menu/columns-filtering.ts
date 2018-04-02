@@ -2,7 +2,7 @@ import { FormBuilder } from '@angular/forms';
 
 import { Subscription } from 'rxjs/Subscription';
 
-import { SelectedData } from 'app/service/selecteddata';
+import { SelectedData } from 'app/service/selected-data';
 
 import {
   SimpleChanges,

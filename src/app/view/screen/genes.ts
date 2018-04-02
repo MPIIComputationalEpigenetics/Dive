@@ -11,9 +11,8 @@ import { Observable } from 'rxjs/Observable';
 
 import { BioSource, EpigeneticMark, FullExperiment, Genome, GeneModel } from 'app/domain/deepblue';
 
-import { DataStackItem } from 'app/service/datastack';
 import { DeepBlueService } from 'app/service/deepblue';
-import { SelectedData } from 'app/service/selecteddata';
+import { SelectedData } from 'app/service/selected-data';
 import { ProgressElement } from 'app/service/progresselement';
 
 import { OverlapsBarChartComponent } from 'app/view/component/charts/overlappingbar';
@@ -78,7 +77,7 @@ export class GenesScreen implements AfterViewInit, OnDestroy {
 
   ngAfterViewInit() {
     this.selectedGeneModelValue$.debounceTime(250).subscribe(() => this.processOverlaps());
-    this.selectedData.activeTopStackValue$.subscribe((dataStackItem: DataStackItem) => this.processOverlaps());
+    this.selectedData.activeTopStackValue$.subscribe(() => this.processOverlaps());
   }
 
   selectGeneModel(event: any) {

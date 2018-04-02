@@ -7,7 +7,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { SelectItem } from 'primeng/primeng';
 import { MultiSelect } from 'primeng/primeng';
 
-import { SelectedData } from 'app/service/selecteddata';
+import { SelectedData } from 'app/service/selected-data';
 import { ProgressElement } from 'app/service/progresselement';
 
 import { IdName, Id } from 'app/domain/deepblue';
@@ -37,7 +37,7 @@ export class RegionsScreen {
 
     constructor(private deepBlueService: DeepBlueService,
         public progress_element: ProgressElement, private selectedData: SelectedData) {
-        this.topStackSubscription = this.selectedData.activeTopStackValue$.subscribe((dataStackItem) => this.processRegions())
+        this.topStackSubscription = this.selectedData.activeTopStackValue$.subscribe(_ => this.processRegions())
         this.processRegions();
     }
 

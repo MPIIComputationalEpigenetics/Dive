@@ -18,9 +18,9 @@ import { StackValue, DeepBlueOperation } from 'app/domain/operations';
 import { DataCache } from 'app/service/deepblue';
 import { DeepBlueService } from 'app/service/deepblue';
 import { MultiKeyDataCache } from 'app/service/deepblue';
-import { SelectedData } from 'app/service/selecteddata';
-import { DataStack } from 'app/service/datastack';
 import { EventEmitter } from '@angular/core';
+import { DataStack } from 'app/data-structures/data-stack/data-stack';
+import { SelectedData } from 'app/service/selected-data';
 
 @Component({
     selector: 'selected-data-button',

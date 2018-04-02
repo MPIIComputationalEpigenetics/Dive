@@ -11,8 +11,10 @@ import { Annotation, Id, FullMetadata } from 'app/domain/deepblue';
 import { DeepBlueOperation, DeepBlueDataParameter } from 'app/domain/operations'
 
 import { DeepBlueService } from 'app/service/deepblue';
-import { DataStack, DataStackFactory, DataStackItem } from 'app/service/datastack';
 import { IOperation } from 'app/domain/interfaces';
+import { DataStack } from 'app/data-structures/data-stack/data-stack';
+import { DataStackItem } from 'app/data-structures/data-stack/data-stack-item';
+import { DataStackFactory } from 'app/service/data-stack-factory';
 
 @Injectable()
 export class SelectedData implements OnDestroy {

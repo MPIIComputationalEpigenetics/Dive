@@ -12,15 +12,14 @@ import { Observable } from 'rxjs/Observable';
 
 import { BioSource, EpigeneticMark, FullExperiment, Genome, GeneModel } from 'app/domain/deepblue';
 
-import { DataStackItem } from 'app/service/datastack';
 import { DeepBlueService } from 'app/service/deepblue';
-import { SelectedData } from 'app/service/selecteddata';
 import { ProgressElement } from 'app/service/progresselement';
 
 import { DeepBlueOperation } from 'app/domain/operations';
 import { DeepBlueResult } from 'app/domain/operations';
 import { Utils } from 'app/service/utils';
 import { RequestManager } from 'app/service/requests-manager';
+import { SelectedData } from 'app/service/selected-data';
 
 @Component({
     templateUrl: './go-enrichment.html'
@@ -85,8 +84,8 @@ export class GoEnrichmentScreenComponent implements AfterViewInit, OnDestroy {
     }
 
     ngAfterViewInit() {
-        this.selectedGeneModelValue$.debounceTime(250).subscribe(() => this.processEnrichment());
-        this.selectedData.activeTopStackValue$.subscribe((dataStackItem: DataStackItem) => this.processEnrichment());
+        this.selectedGeneModelValue$.debounceTime(250).subscribe(_ => this.processEnrichment());
+        this.selectedData.activeTopStackValue$.subscribe(_ => this.processEnrichment());
     }
 
     filter_enrichment_data() {

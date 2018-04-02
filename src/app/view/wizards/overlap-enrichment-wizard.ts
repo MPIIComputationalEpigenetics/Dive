@@ -11,9 +11,9 @@ import { SimilarDatasets } from "app/algorithms/similar-datasets";
 import { DeepBlueMiddlewareOverlapEnrichtmentResultItem, DeepBlueMiddlewareRequest, DeepBlueMiddlewareOverlapEnrichtmentResult } from "app/domain/operations";
 import { RequestManager } from "../../service/requests-manager";
 import { IStatsResult } from "app/service/statistics";
-import { SelectedData } from "app/service/selecteddata";
 import { Utils } from "app/service/utils";
 import { DefaultData } from "../../service/defaultdata";
+import { SelectedData } from "app/service/selected-data";
 
 @Component({
   selector: 'overlap-enrichment-wizard',

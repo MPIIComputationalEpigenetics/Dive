@@ -12,9 +12,7 @@ import { Observable } from 'rxjs/Observable';
 
 import { BioSource, EpigeneticMark, FullExperiment, Genome, GeneModel } from 'app/domain/deepblue';
 
-import { DataStackItem } from 'app/service/datastack';
 import { DeepBlueService } from 'app/service/deepblue';
-import { SelectedData } from 'app/service/selecteddata';
 import { ProgressElement } from 'app/service/progresselement';
 
 import { DeepBlueOperation, DeepBlueMiddlewareRequest } from 'app/domain/operations';
@@ -22,6 +20,7 @@ import { DeepBlueResult, DeepBlueMiddlewareOverlapEnrichtmentResult, DeepBlueMid
 import { IOperation, IRow } from 'app/domain/interfaces';
 import { Utils } from 'app/service/utils';
 import { RequestManager } from 'app/service/requests-manager';
+import { SelectedData } from 'app/service/selected-data';
 
 @Component({
     templateUrl: './overlap-enrichment.html'

@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 
-import { SelectedData } from 'app/service/selecteddata';
 import { DeepBlueService } from 'app/service/deepblue';
-import { DataStack, DataStackItems, DataStackItem } from 'app/service/datastack';
 import { Observable, Subscriber, Subscription } from 'rxjs';
+import { SelectedData } from 'app/service/selected-data';
+import { DataStack } from 'app/data-structures/data-stack/data-stack';
 
 @Component({
     selector: 'app-data-stack',

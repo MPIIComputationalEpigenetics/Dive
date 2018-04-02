@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { DeepBlueService } from "app/service/deepblue";
 import { IOperation } from 'app/domain/interfaces';
 import { Router } from '@angular/router';
-import { SelectedData } from 'app/service/selecteddata';
+import { SelectedData } from 'app/service/selected-data';
 
 @Component({
     templateUrl: './comparison-selection.html'

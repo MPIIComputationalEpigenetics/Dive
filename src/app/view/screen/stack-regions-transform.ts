@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { DeepBlueService } from 'app/service/deepblue';
-import { SelectedData } from 'app/service/selecteddata';
+import { SelectedData } from 'app/service/selected-data';
 import { ProgressElement } from 'app/service/progresselement';
 
 import { OverlapsBarChartComponent } from 'app/view/component/charts/overlappingbar';
