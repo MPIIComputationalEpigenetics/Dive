@@ -228,7 +228,7 @@ export class DeepBlueOperationArgs extends AbstractDataParameter {
     }
 
     id(): Id {
-        throw new Id(this.text());
+        return new Id(this.text());
     }
 }
 
@@ -683,7 +683,7 @@ export class DeepBlueOperationError extends AbstractNamedDataType implements IOp
     }
 
     data(): IDataParameter {
-        throw new DeepBlueDataParameter(this.message);
+        return new DeepBlueDataParameter(this.message);
     }
 
     mainOperation(): IOperation {
@@ -946,7 +946,7 @@ export class DeepBlueRequest extends AbstractDeepBlueRequest {
     }
 
     text(): string {
-        throw "Request: " + this._id.id;
+        return "Request: " + this._id.id;
     }
 
     id(): Id {
