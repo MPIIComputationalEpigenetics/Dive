@@ -1029,7 +1029,9 @@ export function toClass(o: any): IDataParameter {
     switch (o._data_type) {
         case 'data_parameter': {
             let data;
-            if (o._data.name) {
+            if (o._data.id) {
+                data = new IdName(new Id(o._data.id.id), o._data.name);
+            } else if (o._data.name) {
                 data = new Name(o._data.name);
             } else {
                 data = o._data;
