@@ -168,6 +168,9 @@ export class QueryFlow implements OnInit {
       delete o._data.args['cache'];
       node.data = { parameters: Object.keys(o._data.args).map((k: string) => k + ": " + o._data.args[k]) };
 
+    } else if (o._data._data_type == "data_parameter") {
+      node.data = { parameters: ["name: " + o._data._data.name]};
+
     } else {
       lookup_keys.push("_data");
     }
