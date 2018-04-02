@@ -592,7 +592,7 @@ export class DeepBlueService {
                 const response: string = body[1] || '';
                 const query_id = new Id(response);
                 this.progress_element.increment(request_count);
-                return new DeepBlueOperation(new DeepBlueDataParameter(annotation), query_id, 'select_annotation', request_count);
+                return new DeepBlueOperation(new DeepBlueDataParameter(annotation), query_id, 'select_annotations', request_count);
             })
             .do((operation) => { this.idNamesQueryCache.put(annotation, operation) })
     }
@@ -617,7 +617,7 @@ export class DeepBlueService {
                 const response: string = body[1] || '';
                 const query_id = new Id(response);
                 this.progress_element.increment(request_count);
-                return new DeepBlueOperation(new DeepBlueDataParameter(experiment), query_id, 'select_experiment', request_count);
+                return new DeepBlueOperation(new DeepBlueDataParameter(experiment), query_id, 'select_experiments', request_count);
             })
             .do((operation) => { this.idNamesQueryCache.put(experiment, operation) });
     }
@@ -798,7 +798,7 @@ export class DeepBlueService {
                 const response: string = body[1] || '';
                 const query_id = new Id(response);
                 this.progress_element.increment(request_count);
-                return new DeepBlueOperation(new DeepBlueDataParameter([go_term, gene_model.name]), query_id, 'select_go', request_count);
+                return new DeepBlueOperation(new DeepBlueDataParameter([go_term, gene_model.name]), query_id, 'select_genes', request_count);
             })
     }
 
@@ -985,6 +985,7 @@ export class DeepBlueService {
 
             })
     }
+
     getInfo(id: Id): Observable<FullMetadata> {
         const params = new HttpParams()
             .set('id', id.id);
