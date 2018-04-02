@@ -144,6 +144,7 @@ import { SelectMotif } from 'app/view/component/data-selection/dna-motif';
 
 import { RegionsTransformComponent } from 'app/view/screen/regions-transform'
 import { StackRegionsTransformScreen } from 'app/view/screen/stack-regions-transform'
+import { DefaultData } from 'app/service/defaultdata';
 
 @NgModule({
     imports: [
@@ -279,6 +280,7 @@ import { StackRegionsTransformScreen } from 'app/view/screen/stack-regions-trans
         ConfirmationService,
         MiddlewareProxy,
         DeepBlueService,
+        DefaultData,
         RouterGuard,
         ProgressElement,
         DataStackFactory,
