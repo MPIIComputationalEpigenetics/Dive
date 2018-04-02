@@ -13,6 +13,7 @@ import { RequestManager } from "../../service/requests-manager";
 import { IStatsResult } from "app/service/statistics";
 import { SelectedData } from "app/service/selecteddata";
 import { Utils } from "app/service/utils";
+import { DefaultData } from "../../service/defaultdata";
 
 @Component({
   selector: 'overlap-enrichment-wizard',
@@ -21,7 +22,6 @@ import { Utils } from "app/service/utils";
 export class OverlapEnrichmentWizard {
 
   finished: boolean = true;
-  visibleWizard: boolean = true;
 
   background: IOperation;
   selected_datasets = new Array<Object>();
@@ -34,17 +34,18 @@ export class OverlapEnrichmentWizard {
   @ViewChild('wizard') wizard: WizardComponent;
 
   constructor(@Inject(forwardRef(() => AppComponent)) public app: AppComponent,
-    public progress_element: ProgressElement, public selectedData: SelectedData,
+    public defaultData: DefaultData,  public selectedData: SelectedData,
     private requestManager: RequestManager, public deepBlueService: DeepBlueService) {
   }
 
   ngOnInit(): void {
+    this.defaultData.TILING_REGIONS_5K().subscribe((data) => this.background = data);
   }
 
   inWizard($event: any) {
     if (this.finished) {
       this.finished = false;
-      setTimeout(() => this.app.onMenuButtonClick());
+      this.app.onMenuButtonClick();
     }
   }
 
@@ -60,8 +61,9 @@ export class OverlapEnrichmentWizard {
   finishWizard($event: any) {
     setTimeout(() => this.app.onMenuButtonClick());
     this.finished = true;
+    this.enrichment_data = [];
+    this.enrichment_data_from_server = [];
     this.startEnrichment();
-    this.visibleWizard = false;
   }
 
   getDatasetsLabel() {
@@ -116,7 +118,6 @@ export class OverlapEnrichmentWizard {
     }
 
     this.enrichment_data = newResults;
-    //this.plotBar();
   }
 
 

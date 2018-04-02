@@ -1,14 +1,15 @@
 <div class="ui-fluid">
   <div class="card card-w-title">
     <div class="ui-g">
-      <div *ngIf="finished == false" class="ui-g-2">
+
+      <div *ngIf="!finished" class="ui-g-2">
         <h2>Selected Data </h2>
         <h4 style="word-wrap: break-word">{{ background?.text() }}</h4>
         <h4>{{ getDatasetsLabel() }}</h4>
         <h4>{{ selected_datasets }}</h4>
       </div>
 
-      <div *ngIf="visibleWizard" class="{{ wizardClassLength() }}">
+      <div class="{{ wizardClassLength() }}">
         <aw-wizard #wizard [navBarLocation]="'top'" [navBarLayout]="'small'">
 
           <!-- Introduction -->
@@ -48,7 +49,8 @@
                 <button pButton type="button" awPreviousStep label="Back" icon="ui-icon-arrow-back"></button>
               </div>
               <div class="ui-toolbar-group-right">
-                <button pButton type="button" awNextStep label="Next" icon="ui-icon-arrow-forward" [disabled]="selected_datasets.length > 0"></button>
+                <button pButton type="button" awNextStep label="Start Analysis" icon="ui-icon-arrow-forward"
+                  [disabled]="selected_datasets.length > 0"></button>
               </div>
             </p-toolbar>
 
@@ -64,33 +66,29 @@
 
           <!-- Summary -->
 
-          <aw-wizard-step stepTitle="Execute" (stepEnter)="inWizard($event)" (stepExit)="finishWizard($event)">
+          <aw-wizard-step stepTitle="Results" (stepEnter)="finishWizard($event)">
             <p-toolbar>
               <div class="ui-toolbar-group-left">
                 <button pButton type="button" awPreviousStep label="Back" icon="ui-icon-arrow-back"></button>
               </div>
-
-              <div class="ui-toolbar-group-right">
-                <button pButton type="button" class="ui-button-success" awNextStep (click)="startEnrichment($event)" label="Start Analysis"
-                  icon="fa fa-fw fa-check"></button>
-              </div>
-
             </p-toolbar>
 
-            <h2>Selected Data </h2>
+            <h2 *ngIf="enrichment_data.length == 0">Processing... </h2>
+
+            <div *ngIf="enrichment_data.length > 0" class="card card-w-title">
+              <h1>Results</h1>
+              <div *ngFor="let data of enrichment_data; let i = index">
+                <h2> {{ selectedData.getStackname(i) }} </h2>
+                <ngx-datatable class='material' [columns]="columns" [rows]='data' [columnMode]="'force'" [limit]="50"></ngx-datatable>
+              </div>
+            </div>
 
           </aw-wizard-step>
 
         </aw-wizard>
 
 
-        <div *ngIf="enrichment_data.length > 0" class="card card-w-title">
-          <h1>Results</h1>
-          <div *ngFor="let data of enrichment_data; let i = index">
-            <h2> {{ selectedData.getStackname(i) }} </h2>
-            <ngx-datatable class='material' [columns]="columns" [rows]='data' [columnMode]="'force'" [limit]="50"></ngx-datatable>
-          </div>
-        </div>
+
 
       </div>
     </div>
