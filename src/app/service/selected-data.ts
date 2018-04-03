@@ -75,7 +75,7 @@ export class SelectedData implements OnDestroy {
     if (this.currentStackSubscription != null && !this.currentStackSubscription.closed) {
       this.currentStackSubscription.unsubscribe();
     }
-    this.currentStackSubscription = stack.getTopStackValueObserver().subscribe((dataStackItem: DataStackItem) =>{
+    this.currentStackSubscription = stack.getTopStackValueObserver().subscribe((dataStackItem: DataStackItem) => {
       this.activeTopStackSubject.next(dataStackItem)
     })
 
@@ -157,12 +157,28 @@ export class SelectedData implements OnDestroy {
   }
 
   generateStateUrl(): any {
-    let s_qids = [];
-    for (let stack of this._stacks) {
-      s_qids.push(stack.getCurrentOperation().id().id);
+    if (this._stacks.length == 0) {
+      return window.location.origin;
     }
 
-    return window.location.origin + "/#/load_queries?qids=" + s_qids.join("&");
+    // http://localhost:56570/#/load_query?qid=q33678&gid=g5&cid=q55029&cid=q61709&cid=q50975
+
+    let currentId = this._stacks[0].getCurrentOperation().id().id;
+    let queryPart = "/#/load_query?qid=" + currentId
+
+    let gid = this.deepBlueService.getGenome().id.id;
+    queryPart = queryPart + "&gid=" + gid
+
+    let compPart = [];
+    let compstacks = this._stacks.slice(1);
+    if (compstacks.length > 0) {
+      for (let stack of compstacks) {
+        compPart.push("cid="+stack.getCurrentOperation().id().id);
+      }
+      queryPart = queryPart + "&" + compPart.join("&");
+    }
+
+    return window.location.origin + queryPart;
   }
 
 }
