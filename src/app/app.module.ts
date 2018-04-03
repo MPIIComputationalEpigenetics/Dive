@@ -135,6 +135,7 @@ import { RegionsTransformComponent } from 'app/view/screen/regions-transform'
 import { StackRegionsTransformScreen } from 'app/view/screen/stack-regions-transform'
 import { DefaultData } from 'app/service/defaultdata';
 import { DataStackFactory } from 'app/service/data-stack-factory';
+import { LoadQueriesScreen } from 'app/view/screen/load-queries';
 
 @NgModule({
     imports: [
@@ -234,6 +235,7 @@ import { DataStackFactory } from 'app/service/data-stack-factory';
         SelectTilingRegionsComponent,
         SelectGenesComponent,
         DataSelectionScreen,
+        LoadQueriesScreen,
         ComparisonSelectionScreen,
         RegionsScreen,
         SimilarFinder,

@@ -13,6 +13,7 @@ import { ComparisonSelectionScreen } from 'app/view/screen/comparison-selection'
 import { StackRegionsTransformScreen } from 'app/view/screen/stack-regions-transform';
 import { OverlapEnrichmentWizard } from './view/wizards/overlap-enrichment-wizard';
 import { DataSelectionWizard } from './view/wizards/data-selection-wizard';
+import { LoadQueriesScreen } from 'app/view/screen/load-queries';
 
 export const routes: Routes = [
     { path: '', component: DataSelectionWizard },
@@ -25,7 +26,8 @@ export const routes: Routes = [
     { path: 'go_enrichment', component: GoEnrichmentScreenComponent, canActivate: [RouterGuard] },
     { path: 'chromatin_states', component: ChromatinStatesScreenComponent, canActivate: [RouterGuard] },
     { path: 'overlap_enrichment', component: OverlapEnrichmentWizard, canActivate: [RouterGuard] },
-    { path: 'peaks_overlap', component: PeaksOverlapScreenComponent, canActivate: [RouterGuard] }
+    { path: 'peaks_overlap', component: PeaksOverlapScreenComponent, canActivate: [RouterGuard] },
+    { path: 'load_query', component: LoadQueriesScreen },
 ];
 
 export const AppRoutes: ModuleWithProviders = RouterModule.forRoot(routes);
