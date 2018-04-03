@@ -136,6 +136,7 @@ import { StackRegionsTransformScreen } from 'app/view/screen/stack-regions-trans
 import { DefaultData } from 'app/service/defaultdata';
 import { DataStackFactory } from 'app/service/data-stack-factory';
 import { LoadQueriesScreen } from 'app/view/screen/load-queries';
+import { CopyComponent } from 'app/view/component/copy';
 
 @NgModule({
     imports: [
@@ -233,6 +234,7 @@ import { LoadQueriesScreen } from 'app/view/screen/load-queries';
         SelectDatasetsComponent,
         SelectExperimentsComponent,
         SelectTilingRegionsComponent,
+        CopyComponent,
         SelectGenesComponent,
         DataSelectionScreen,
         LoadQueriesScreen,
