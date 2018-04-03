@@ -1,15 +1,16 @@
 import { Component, Inject, forwardRef } from '@angular/core';
 import { AppComponent } from './app.component';
+import { SelectedData } from './service/selected-data';
 
 @Component({
-    selector: 'app-topbar',
-    template: `
+  selector: 'app-topbar',
+  template: `
         <div class="topbar clearfix">
             <div class="topbar-left">
                 <div class="logo"></div>
             </div>
 
-            <div class="topbar-right">
+            <div class="topbar-right" style="padding:16px;padding-right: 40px;">
                 <a id="menu-button" href="#" (click)="app.onMenuButtonClick($event)">
                     <i></i>
                 </a>
@@ -19,6 +20,21 @@ import { AppComponent } from './app.component';
                 </a>
 
                 <ul class="topbar-items animated fadeInDown" [ngClass]="{'topbar-items-visible': app.topbarMenuActive}">
+                    <li #settings [ngClass]="{'active-top-menu':app.activeTopbarItem === settings}">
+                      <a href="#" (click)="app.onTopbarItemClick($event,settings)">
+                        <i class="topbar-icon material-icons" style="font-size:44px;">share</i>
+                          <span class="topbar-item-name">Settings</span>
+                      </a>
+                      <ul class="ultima-menu animated fadeInDown" style="width:475px">
+                        <li role="menuitem">
+                          <a>
+                            <i class="material-icons">share</i>
+                            <span>{{ exportLink() }}</span><cmp-copy [text]=exportLink()></cmp-copy>
+                          </a>
+                        </li>
+                      </ul>
+                    </li>
+
                     <li style="width:475px">
                         <p-toolbar>
                             <div class="ui-toolbar-group-left">
@@ -29,9 +45,15 @@ import { AppComponent } from './app.component';
                 </ul>
             </div>
         </div>
-
     `
 })
 export class AppTopBar {
-    constructor(@Inject(forwardRef(() => AppComponent)) public app: AppComponent) { }
+  constructor(@Inject(forwardRef(() => AppComponent)) public app: AppComponent,
+    public selectedData: SelectedData) { }
+
+  display = false;
+
+  exportLink() {
+    return this.selectedData.generateStateUrl();
+  }
 }
