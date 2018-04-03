@@ -1,5 +1,4 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
 
 import { Observable } from 'rxjs/Observable'
 import { Subscription } from 'rxjs/Subscription';
@@ -155,6 +154,15 @@ export class SelectedData implements OnDestroy {
     }
 
     return this._stacks[pos].getColor(alpha);
+  }
+
+  generateStateUrl(): any {
+    let s_qids = [];
+    for (let stack of this._stacks) {
+      s_qids.push(stack.getCurrentOperation().id().id);
+    }
+
+    return window.location.origin + "/#/load_queries?qids=" + s_qids.join("&");
   }
 
 }
