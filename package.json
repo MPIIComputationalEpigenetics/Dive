@@ -26,7 +26,6 @@
     "ajv": "^6.0.1",
     "angular-archwizard": "^3.0.0",
     "angular2-highcharts": "^0.5.5",
-    // "angulartics2": "^5.1.0",
     "chart.js": "^2.6.0",
     "core-js": "^2.4.1",
     "jquery": "^3.2.1",
