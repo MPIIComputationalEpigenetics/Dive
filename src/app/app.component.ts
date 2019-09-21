@@ -1,7 +1,7 @@
 import { Component, AfterViewInit, ElementRef, Renderer, ViewChild, OnDestroy, OnInit, NgZone } from '@angular/core';
 import { ScrollPanel } from 'primeng/primeng';
 import { Title } from '@angular/platform-browser';
-import { Angulartics2GoogleAnalytics } from 'angulartics2/ga';
+//import { Angulartics2GoogleAnalytics } from 'angulartics2/ga';
 
 enum MenuOrientation {
     STATIC,
@@ -84,7 +84,7 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
     rippleMouseDownListener: any;
 
     constructor(public renderer: Renderer, public zone: NgZone,
-        private titleService: Title, angulartics2GoogleAnalytics: Angulartics2GoogleAnalytics) { }
+        private titleService: Title) {} //, angulartics2GoogleAnalytics: Angulartics2GoogleAnalytics)
 
     ngOnInit() {
         this.zone.runOutsideAngular(() => { this.bindRipple(); });

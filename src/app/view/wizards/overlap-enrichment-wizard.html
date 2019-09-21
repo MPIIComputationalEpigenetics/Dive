@@ -33,10 +33,12 @@
             </p-toolbar>
 
 
-            <p>Blablabla Select background data</p>
+            <p>Select background data</p>
+            <!--
             <p>
               <small>background is blablabla</small>
             </p>
+            -->
             <h3 *ngIf="!background">Select the background data</h3>
             <data-selection-main (queryIdSelected)="selectBackgroud($event)"></data-selection-main>
           </aw-wizard-step>
@@ -54,11 +56,13 @@
               </div>
             </p-toolbar>
 
-            <p>Blablabla Select the datasets data</p>
+            <p>Select datasets data</p>            
             <p>
+            <!--  
               <small>datasets that will be used for the enrichment is blablabla remember that the execution time grows with more
                 datasets
               </small>
+            -->
               <select-datasets-component (datasetsSelected)="selectDatasets($event)"></select-datasets-component>
             </p>
 

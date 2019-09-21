@@ -122,12 +122,11 @@ import { DiveMenuService } from 'app/service/menu';
 import { RouterGuard } from 'app/service/router-guard';
 import { ComparisonSelectionScreen } from 'app/view/screen/comparison-selection';
 
-import { ArchwizardModule } from 'ng2-archwizard';
 import { DataSelectionWizard, NavegationMenu } from 'app/view/wizards/data-selection-wizard';
 import { OverlapEnrichmentWizard } from 'app/view/wizards/overlap-enrichment-wizard';
 
-import { Angulartics2Module } from 'angulartics2';
-import { Angulartics2GoogleAnalytics } from 'angulartics2/ga';
+//import { Angulartics2Module } from 'angulartics2';
+//import { Angulartics2GoogleAnalytics } from 'angulartics2/ga';
 import { MiddlewareProxy } from './service/middleware-proxy';
 import { SelectMotif } from 'app/view/component/data-selection/dna-motif';
 
@@ -137,6 +136,8 @@ import { DefaultData } from 'app/service/defaultdata';
 import { DataStackFactory } from 'app/service/data-stack-factory';
 import { LoadQueriesScreen } from 'app/view/screen/load-queries';
 import { CopyComponent } from 'app/view/component/copy';
+
+import { ArchwizardModule } from 'angular-archwizard';
 
 @NgModule({
     imports: [
@@ -217,7 +218,7 @@ import { CopyComponent } from 'app/view/component/copy';
         OrganizationChartModule,
         CardModule,
         ColorPickerModule,
-        Angulartics2Module.forRoot([Angulartics2GoogleAnalytics])
+        //Angulartics2Module.forRoot([Angulartics2GoogleAnalytics])
     ],
     declarations: [
         AppComponent,

@@ -6,8 +6,12 @@ import {AppComponent} from 'app/app.component';
     template: `
         <div class="footer">
             <div class="card clearfix">
-                <span class="footer-text-left">Max Planck Institute for Informatics - Computational Biology and Applied Algorithmics Department</span>
-                <span class="footer-text-right"><span class="ui-icon ui-icon-copyright"></span>  <span>All Rights Reserved</span></span>
+                <span class="footer-text-left">
+                    Max Planck Institute for Informatics - Computational Biology and Applied Algorithmics Department. <a href="https://www.mpi-inf.mpg.de/imprint/">Imprint</a> - <a href="https://www.mpi-inf.mpg.de/data-protection/">Data Protection</a>
+                </span>
+                <span class="footer-text-right">
+                    <span class="ui-icon ui-icon-copyright"></span> <span>All Rights Reserved</span>
+                </span>
             </div>
         </div>
     `

@@ -3,7 +3,7 @@ import { DeepBlueService } from "app/service/deepblue";
 import { SelectItem, Dropdown, MultiSelect } from "primeng/primeng";
 import { Project, BioSource } from "app/domain/deepblue";
 import { IOperation, IRow } from "app/domain/interfaces";
-import { WizardComponent } from "ng2-archwizard";
+import { ArchwizardModule, WizardComponent } from 'angular-archwizard';
 import { AppComponent } from "app/app.component";
 import { Router } from "@angular/router";
 import { ProgressElement } from "app/service/progresselement";
