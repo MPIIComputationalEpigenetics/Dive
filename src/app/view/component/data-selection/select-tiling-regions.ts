@@ -16,7 +16,7 @@ export class SelectTilingRegionsComponent {
   max: number = 1000000;
   size: number = 10000;
 
-  @ViewChild('inplace') inPlace: Inplace;
+  @ViewChild('inplace', { static: true }) inPlace: Inplace;
   @Output() queryIdSelected = new EventEmitter();
 
   constructor(private deepBlueService: DeepBlueService, public cdRef: ChangeDetectorRef) { }

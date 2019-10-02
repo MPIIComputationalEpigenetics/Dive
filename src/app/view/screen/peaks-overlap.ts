@@ -60,8 +60,8 @@ export class PeaksOverlapScreenComponent implements AfterViewInit, OnDestroy {
     showDataDetail = false;
 
 
-    @ViewChild('overlapbarchart') overlapbarchart: OverlapsBarChartComponent;
-    @ViewChild('multiselect') multiselect: MultiSelect;
+    @ViewChild('overlapbarchart', { static: true }) overlapbarchart: OverlapsBarChartComponent;
+    @ViewChild('multiselect', { static: true }) multiselect: MultiSelect;
 
 
     constructor(public deepBlueService: DeepBlueService, public requestManager: RequestManager,

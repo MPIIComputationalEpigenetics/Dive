@@ -60,8 +60,8 @@ export class ChromatinStatesScreenComponent implements AfterViewInit, OnDestroy 
 
   previousEpigeneticMark: EpigeneticMark;
 
-  @ViewChild('overlapbarchart') overlapbarchart: OverlapsBarChartComponent;
-  @ViewChild('multiselect') multiselect: MultiSelect;
+  @ViewChild('overlapbarchart', { static: true }) overlapbarchart: OverlapsBarChartComponent;
+  @ViewChild('multiselect', { static: true }) multiselect: MultiSelect;
 
   segregate(experiments: FullExperiment[]) {
 

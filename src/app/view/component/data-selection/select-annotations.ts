@@ -25,7 +25,7 @@ export class SelectAnnotationsComponent implements OnDestroy {
 
     @Output() queryIdSelected = new EventEmitter();
 
-    @ViewChild('annotationsDropdown') annotationsDropdown: Dropdown;
+    @ViewChild('annotationsDropdown', { static: true }) annotationsDropdown: Dropdown;
 
     constructor(private deepBlueService: DeepBlueService) {
 

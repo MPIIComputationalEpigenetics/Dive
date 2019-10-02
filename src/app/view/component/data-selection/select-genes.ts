@@ -24,7 +24,7 @@ export class SelectGenesComponent {
 
   request_count = 0;
 
-  @ViewChild('geneModelDropdown') geneModelDropdown: Dropdown;
+  @ViewChild('geneModelDropdown', { static: true }) geneModelDropdown: Dropdown;
 
   @Output() queryIdSelected = new EventEmitter();
 

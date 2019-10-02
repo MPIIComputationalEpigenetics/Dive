@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, ElementRef, Renderer, ViewChild, OnDestroy, OnInit, NgZone } from '@angular/core';
+import { Component, AfterViewInit, ElementRef, ViewChild, OnDestroy, OnInit, NgZone, Renderer2 } from '@angular/core';
 import { ScrollPanel } from 'primeng/primeng';
 import { Title } from '@angular/platform-browser';
 //import { Angulartics2GoogleAnalytics } from 'angulartics2/ga';
@@ -75,15 +75,15 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
 
     menuHoverActive: boolean;
 
-    @ViewChild('layoutContainer') layourContainerViewChild: ElementRef;
+    @ViewChild('layoutContainer', { static: true }) layourContainerViewChild: ElementRef;
 
-    @ViewChild('scrollPanel') layoutMenuScrollerViewChild: ScrollPanel;
+    @ViewChild('scrollPanel', { static: true }) layoutMenuScrollerViewChild: ScrollPanel;
 
     rippleInitListener: any;
 
     rippleMouseDownListener: any;
 
-    constructor(public renderer: Renderer, public zone: NgZone,
+    constructor(public renderer: Renderer2, public zone: NgZone,
         private titleService: Title) {} //, angulartics2GoogleAnalytics: Angulartics2GoogleAnalytics)
 
     ngOnInit() {

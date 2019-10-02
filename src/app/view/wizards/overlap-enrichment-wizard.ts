@@ -31,7 +31,7 @@ export class OverlapEnrichmentWizard {
 
   columns = DeepBlueMiddlewareOverlapEnrichtmentResultItem.asColumns();
 
-  @ViewChild('wizard') wizard: WizardComponent;
+  @ViewChild('wizard', { static: true }) wizard: WizardComponent;
 
   constructor(@Inject(forwardRef(() => AppComponent)) public app: AppComponent,
     public defaultData: DefaultData,  public selectedData: SelectedData,

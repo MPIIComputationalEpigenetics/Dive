@@ -60,9 +60,9 @@ export class DataSelectionWizard implements AfterViewInit {
 
   selectedComparison: IOperation[] = [];
 
-  @ViewChild('wizard') wizard: WizardComponent;
-  @ViewChild('genomesDropdown') genomesDropdown: Dropdown;
-  @ViewChild('multiselect') multiselect: MultiSelect;
+  @ViewChild('wizard', { static: true }) wizard: WizardComponent;
+  @ViewChild('genomesDropdown', { static: true }) genomesDropdown: Dropdown;
+  @ViewChild('multiselect', { static: true }) multiselect: MultiSelect;
 
 
   constructor(@Inject(forwardRef(() => AppComponent)) public app: AppComponent,

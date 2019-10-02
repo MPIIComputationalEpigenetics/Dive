@@ -38,8 +38,8 @@ export class GenesScreen implements AfterViewInit, OnDestroy {
 
   bars: Object[];
 
-  @ViewChild('overlapbarchart') overlapbarchart: OverlapsBarChartComponent;
-  @ViewChild('geneModelDropdown') geneModelDropdown: Dropdown;
+  @ViewChild('overlapbarchart', { static: true }) overlapbarchart: OverlapsBarChartComponent;
+  @ViewChild('geneModelDropdown', { static: true }) geneModelDropdown: Dropdown;
 
   selectedGeneModelSource = new BehaviorSubject<GeneModel>(null);
   selectedGeneModelValue$: Observable<GeneModel> = this.selectedGeneModelSource.asObservable();

@@ -54,9 +54,9 @@ export class GoEnrichmentScreenComponent implements AfterViewInit, OnDestroy {
         { name: 'p_value', prop: 'pvalue', column_type: 'double' }
     ];
 
-    @ViewChild('geneModelDropdown') geneModelDropdown: Dropdown;
-    @ViewChild('overlapbarchart') overlapbarchart: OverlapsBarChartComponent;
-    @ViewChild('tabview') tabview: TabView;
+    @ViewChild('geneModelDropdown', { static: true }) geneModelDropdown: Dropdown;
+    @ViewChild('overlapbarchart', { static: true }) overlapbarchart: OverlapsBarChartComponent;
+    @ViewChild('tabview', { static: true }) tabview: TabView;
 
     selectedGeneModelSource = new BehaviorSubject<GeneModel>(null);
     selectedGeneModelValue$: Observable<GeneModel> = this.selectedGeneModelSource.asObservable();

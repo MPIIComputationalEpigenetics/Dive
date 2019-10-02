@@ -19,8 +19,8 @@ import { SelectedData } from 'app/service/selected-data';
 export class SimilarFinder implements OnDestroy {
 
 
-    @ViewChild('biosourcessimilaritybarchart') biosourcessimilaritybarchart: SimilarityBarChartComponent;
-    @ViewChild('emssimilaritybarchart') emssimilaritybarchart: SimilarityBarChartComponent;
+    @ViewChild('biosourcessimilaritybarchart', { static: true }) biosourcessimilaritybarchart: SimilarityBarChartComponent;
+    @ViewChild('emssimilaritybarchart', { static: true }) emssimilaritybarchart: SimilarityBarChartComponent;
 
     stackSubscriber: Subscription;
 
