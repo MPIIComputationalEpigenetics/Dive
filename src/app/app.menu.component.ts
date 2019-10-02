@@ -1,13 +1,8 @@
 import { Component } from '@angular/core';
 import { Input } from '@angular/core';
-import { OnInit } from '@angular/core';
-import { EventEmitter } from '@angular/core';
-import { ViewChild } from '@angular/core';
-import { trigger } from '@angular/core';
-import { state } from '@angular/core';
-import { transition } from '@angular/core';
-import { style } from '@angular/core';
-import { animate } from '@angular/core';
+
+import {trigger, state, style, transition, animate} from '@angular/animations';
+
 import { Inject } from '@angular/core';
 import { forwardRef } from '@angular/core';
 
