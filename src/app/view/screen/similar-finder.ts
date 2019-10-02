@@ -1,17 +1,14 @@
-import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { Component, ViewChild, OnDestroy } from '@angular/core';
 
-import { ConfirmDialogModule, ConfirmationService } from 'primeng/primeng';
-import { MenuItem } from 'primeng/primeng';
 import { DeepBlueService } from "app/service/deepblue";
 import { IOperation } from 'app/domain/interfaces';
 import { SimilarityBarChartComponent } from 'app/view/component/charts/similarity';
 import { DeepBlueMiddlewareOverlapEnrichtmentResultItem } from 'app/domain/operations';
-import { Statistics, IStatsResult } from 'app/service/statistics';
-import { BioSource } from 'app/domain/deepblue';
 import { RequestManager } from 'app/service/requests-manager';
 import { Subscription } from 'rxjs';
 import { SimilarDatasets } from '../../algorithms/similar-datasets';
 import { SelectedData } from 'app/service/selected-data';
+import { ConfirmationService } from 'primeng/components/common/confirmationservice';
 
 @Component({
     templateUrl: './similar-finder.html'

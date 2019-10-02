@@ -1,8 +1,6 @@
-import { Component, OnInit } from "@angular/core";
+import { Component } from "@angular/core";
 import { ActivatedRoute, ParamMap, Router } from "@angular/router";
-import { Observable } from "rxjs/Observable";
 import { DeepBlueService } from "../../service/deepblue";
-import { query } from "@angular/core/src/animation/dsl";
 import { Id } from "app/domain/deepblue";
 import { SelectedData } from "../../service/selected-data";
 

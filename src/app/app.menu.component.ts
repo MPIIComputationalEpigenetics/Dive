@@ -8,10 +8,10 @@ import { forwardRef } from '@angular/core';
 
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
-import { MenuItem } from 'primeng/primeng';
 
 import { AppComponent } from 'app/app.component';
 import { DiveMenuService } from 'app/service/menu';
+import { MenuItem } from 'primeng/components/common/menuitem';
 
 @Component({
     selector: 'app-menu',

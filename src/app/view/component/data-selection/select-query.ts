@@ -1,11 +1,7 @@
 import { Component, Output, ViewEncapsulation } from '@angular/core';
-import { InputTextareaModule, TreeNode } from 'primeng/primeng';
-import { Message } from 'primeng/primeng';
 import { EventEmitter } from '@angular/core';
 import { DeepBlueService } from 'app/service/deepblue';
-import { OnInit } from '@angular/core/src/metadata/lifecycle_hooks';
-import { Id } from 'app/domain/deepblue';
-import { IDataParameter, IOperation } from 'app/domain/interfaces';
+import { IOperation } from 'app/domain/interfaces';
 
 @Component({
   templateUrl: './select-query.html',

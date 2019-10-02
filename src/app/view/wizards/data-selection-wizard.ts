@@ -1,9 +1,8 @@
-import { Component, OnDestroy, AfterViewInit, ViewChild, Inject, forwardRef, Input, OnInit } from "@angular/core";
+import { Component, AfterViewInit, ViewChild, Inject, forwardRef, Input } from "@angular/core";
 import { DeepBlueService } from "app/service/deepblue";
-import { SelectItem, Dropdown, MultiSelect } from "primeng/primeng";
 import { Project, BioSource } from "app/domain/deepblue";
 import { IOperation } from "app/domain/interfaces";
-import { ArchwizardModule, WizardComponent } from 'angular-archwizard';
+import { WizardComponent } from 'angular-archwizard';
 import { AppComponent } from "app/app.component";
 import { Router } from "@angular/router";
 import { ProgressElement } from "app/service/progresselement";
@@ -12,6 +11,9 @@ import { DeepBlueMiddlewareOverlapEnrichtmentResultItem } from "app/domain/opera
 import { RequestManager } from "app/service/requests-manager";
 import { IStatsResult } from "app/service/statistics";
 import { SelectedData } from "app/service/selected-data";
+import { SelectItem } from "primeng/components/common/selectitem";
+import { MultiSelect } from "primeng/components/multiselect/multiselect";
+import { Dropdown } from "primeng/components/dropdown/dropdown";
 
 
 @Component({
@@ -164,7 +166,7 @@ export class DataSelectionWizard implements AfterViewInit {
     this.selectedQuery = $event;
 
     if (!notJump) {
-      this.wizard.navigation.goToNextStep();
+      this.wizard.goToNextStep();
     }
   }
 

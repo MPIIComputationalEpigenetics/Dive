@@ -1,9 +1,10 @@
-import { Component, ViewChild, OnInit, Input, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { Component, ViewChild, Input, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { Annotation } from "app/domain/deepblue";
-import { SelectItem, Dropdown } from "primeng/primeng";
 import { Subscription } from "rxjs";
 import { DeepBlueService } from "app/service/deepblue";
 import { DeepBlueOperation } from 'app/domain/operations';
+import { SelectItem } from 'primeng/components/common/selectitem';
+import { Dropdown } from 'primeng/components/dropdown/dropdown';
 
 
 @Component({

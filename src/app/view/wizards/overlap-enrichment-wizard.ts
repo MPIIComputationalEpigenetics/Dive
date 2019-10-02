@@ -1,19 +1,13 @@
-import { Component, OnDestroy, AfterViewInit, ViewChild, Inject, forwardRef, Input } from "@angular/core";
+import { Component, ViewChild, Inject, forwardRef } from "@angular/core";
 import { DeepBlueService } from "app/service/deepblue";
-import { SelectItem, Dropdown, MultiSelect } from "primeng/primeng";
-import { Project, BioSource } from "app/domain/deepblue";
 import { IOperation, IRow } from "app/domain/interfaces";
-import { ArchwizardModule, WizardComponent } from 'angular-archwizard';
 import { AppComponent } from "app/app.component";
-import { Router } from "@angular/router";
-import { ProgressElement } from "app/service/progresselement";
-import { SimilarDatasets } from "app/algorithms/similar-datasets";
 import { DeepBlueMiddlewareOverlapEnrichtmentResultItem, DeepBlueMiddlewareRequest, DeepBlueMiddlewareOverlapEnrichtmentResult } from "app/domain/operations";
 import { RequestManager } from "../../service/requests-manager";
-import { IStatsResult } from "app/service/statistics";
 import { Utils } from "app/service/utils";
 import { DefaultData } from "../../service/defaultdata";
 import { SelectedData } from "app/service/selected-data";
+import { WizardComponent } from "angular-archwizard";
 
 @Component({
   selector: 'overlap-enrichment-wizard',

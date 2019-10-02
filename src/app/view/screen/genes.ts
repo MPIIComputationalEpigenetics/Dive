@@ -2,14 +2,10 @@ import { DeepBlueMiddlewareRequest } from '../../domain/operations';
 import { Component, OnInit, ViewChild, OnDestroy, AfterViewInit } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 
-import { MultiSelect } from 'primeng/primeng';
-
-import { Dropdown, SelectItem } from 'primeng/primeng';
-
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 
-import { BioSource, EpigeneticMark, FullExperiment, Genome, GeneModel } from 'app/domain/deepblue';
+import { GeneModel } from 'app/domain/deepblue';
 
 import { DeepBlueService } from 'app/service/deepblue';
 import { SelectedData } from 'app/service/selected-data';
@@ -17,10 +13,11 @@ import { ProgressElement } from 'app/service/progresselement';
 
 import { OverlapsBarChartComponent } from 'app/view/component/charts/overlappingbar';
 
-import { DeepBlueOperation } from 'app/domain/operations';
 import { DeepBlueResult } from 'app/domain/operations';
 import { RequestManager } from 'app/service/requests-manager';
 import { IOperation } from '../../domain/interfaces';
+import { SelectItem } from 'primeng/components/common/selectitem';
+import { Dropdown } from 'primeng/components/dropdown/dropdown';
 
 @Component({
   templateUrl: './genes.html'

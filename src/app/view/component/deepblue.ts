@@ -1,26 +1,13 @@
 import { Component, ViewChild, OnInit, Input, OnDestroy, Output, AfterViewInit } from '@angular/core';
 
-import { Subscription } from 'rxjs/Subscription';
+import { FullExperiment } from 'app/domain/deepblue';
 
-import { MenuItem } from 'primeng/primeng';
-import { Dropdown } from 'primeng/primeng';
-import { SelectItem } from 'primeng/primeng';
+import { DeepBlueOperation } from 'app/domain/operations';
 
-import { Annotation, FullExperiment } from 'app/domain/deepblue';
-import { EpigeneticMark } from 'app/domain/deepblue';
-import { Experiment } from 'app/domain/deepblue';
-import { FullMetadata } from 'app/domain/deepblue';
-import { Genome } from 'app/domain/deepblue';
-import { IdName } from 'app/domain/deepblue';
-
-import { StackValue, DeepBlueOperation } from 'app/domain/operations';
-
-import { DataCache } from 'app/service/deepblue';
 import { DeepBlueService } from 'app/service/deepblue';
-import { MultiKeyDataCache } from 'app/service/deepblue';
-import { EventEmitter } from '@angular/core';
 import { DataStack } from 'app/data-structures/data-stack/data-stack';
 import { SelectedData } from 'app/service/selected-data';
+import { MenuItem } from 'primeng/components/common/menuitem';
 
 @Component({
     selector: 'selected-data-button',

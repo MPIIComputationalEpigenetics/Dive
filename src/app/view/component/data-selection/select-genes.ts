@@ -1,11 +1,9 @@
 import { Component, Output, ViewChild } from '@angular/core';
-import { InputTextareaModule, Dropdown } from 'primeng/primeng';
-import { Message } from 'primeng/primeng';
 import { EventEmitter } from '@angular/core';
-import { DeepBlueOperation } from 'app/domain/operations';
-import { Id, GeneModel } from 'app/domain/deepblue';
+import { GeneModel } from 'app/domain/deepblue';
 import { DeepBlueService } from 'app/service/deepblue';
 import { Subscription } from 'rxjs';
+import { Dropdown } from 'primeng/components/dropdown/dropdown';
 
 @Component({
   selector: 'select-genes-component',

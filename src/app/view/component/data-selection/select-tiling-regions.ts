@@ -1,9 +1,7 @@
 import { DeepBlueService } from 'app/service/deepblue';
 import { Component, Output, EventEmitter, ChangeDetectorRef, OnInit, ViewChild } from "@angular/core";
 import { DeepBlueTiling } from 'app/domain/operations';
-import { InplaceModule, Inplace } from 'primeng/primeng';
-import { BehaviorSubject } from 'rxjs';
-import { Observable } from 'rxjs/Observable';
+import { Inplace } from 'primeng/components/inplace/inplace';
 
 
 @Component({

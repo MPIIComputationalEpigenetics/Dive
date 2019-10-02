@@ -1,23 +1,8 @@
-import { Component, ViewChild, OnInit, Input, OnDestroy } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
-import { Subscription } from 'rxjs/Subscription';
+import { DeepBlueResult, DeepBlueOperation } from 'app/domain/operations';
 
-import { MenuItem } from 'primeng/primeng';
-import { Dropdown } from 'primeng/primeng';
-import { SelectItem } from 'primeng/primeng';
-
-import { Annotation } from 'app/domain/deepblue';
-import { EpigeneticMark } from 'app/domain/deepblue';
-import { Experiment } from 'app/domain/deepblue';
-import { FullMetadata } from 'app/domain/deepblue';
-import { Genome } from 'app/domain/deepblue';
-import { IdName } from 'app/domain/deepblue';
-
-import { StackValue, DeepBlueResult, DeepBlueOperation } from 'app/domain/operations';
-
-import { DataCache } from 'app/service/deepblue';
 import { DeepBlueService } from 'app/service/deepblue';
-import { MultiKeyDataCache } from 'app/service/deepblue';
 import { Output } from '@angular/core';
 import { EventEmitter } from '@angular/core';
 import { SelectedData } from 'app/service/selected-data';

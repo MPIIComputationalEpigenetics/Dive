@@ -1,22 +1,10 @@
-import { Component, OnInit, ViewChild, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
-
-import { OverlapsBarChartComponent } from '../component/charts/overlappingbar';
-import { Subscription } from 'rxjs/Subscription';
-
-import { MultiSelect } from 'primeng/primeng';
-
-import { Dropdown, SelectItem } from 'primeng/primeng';
-
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Observable } from 'rxjs/Observable';
-
-import { BioSource, EpigeneticMark, FullExperiment, Genome, GeneModel } from 'app/domain/deepblue';
+import { Component, OnDestroy } from '@angular/core';
 
 import { DeepBlueService } from 'app/service/deepblue';
 import { ProgressElement } from 'app/service/progresselement';
 
-import { DeepBlueOperation, DeepBlueMiddlewareRequest } from 'app/domain/operations';
-import { DeepBlueResult, DeepBlueMiddlewareOverlapEnrichtmentResult, DeepBlueMiddlewareOverlapEnrichtmentResultItem, DeepBlueMiddlewareGOEnrichtmentResult } from 'app/domain/operations';
+import { DeepBlueMiddlewareRequest } from 'app/domain/operations';
+import { DeepBlueMiddlewareOverlapEnrichtmentResult, DeepBlueMiddlewareOverlapEnrichtmentResultItem } from 'app/domain/operations';
 import { IOperation, IRow } from 'app/domain/interfaces';
 import { Utils } from 'app/service/utils';
 import { RequestManager } from 'app/service/requests-manager';

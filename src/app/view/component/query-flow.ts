@@ -1,8 +1,8 @@
 import { Component, ViewEncapsulation, OnInit, Input, Output, EventEmitter } from "@angular/core";
 import { DeepBlueService } from "app/service/deepblue";
 import { IOperation } from "app/domain/interfaces";
-import { TreeNode } from "primeng/primeng";
 import { Id } from "app/domain/deepblue";
+import { TreeNode } from "primeng/components/common/treenode";
 
 @Component({
   templateUrl: './query-flow.html',

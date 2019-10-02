@@ -1,5 +1,5 @@
 import { Component, AfterViewInit, ElementRef, ViewChild, OnDestroy, OnInit, NgZone, Renderer2 } from '@angular/core';
-import { ScrollPanel } from 'primeng/primeng';
+import { ScrollPanel } from 'primeng/scrollpanel';
 import { Title } from '@angular/platform-browser';
 //import { Angulartics2GoogleAnalytics } from 'angulartics2/ga';
 

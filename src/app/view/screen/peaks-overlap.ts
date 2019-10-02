@@ -1,31 +1,24 @@
 import { OverlapsBarChartComponent } from '../component/charts/overlappingbar';
-import { DeepBlueMiddlewareRequest, DeepBlueError } from '../../domain/operations';
-import { Experiment } from '../../domain/deepblue';
-import { Component, OnInit, ViewChild, OnDestroy, AfterViewInit } from '@angular/core';
+import { DeepBlueMiddlewareRequest } from '../../domain/operations';
+import { Component, ViewChild, OnDestroy, AfterViewInit } from '@angular/core';
 
 import { Subscription } from 'rxjs/Subscription';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 
-import { SelectItem } from 'primeng/primeng';
-import { MultiSelect } from 'primeng/primeng';
-
 import { BioSource } from 'app/domain/deepblue';
-import { EpigeneticMark } from 'app/domain/deepblue';
 import { FullExperiment } from 'app/domain/deepblue';
-import { Genome } from 'app/domain/deepblue';
 import { IdName } from 'app/domain/deepblue';
-import { DeepBlueOperation } from 'app/domain/operations';
 import { DeepBlueResult } from 'app/domain/operations';
-import { StackValue } from 'app/domain/operations';
 
 import { DeepBlueService } from 'app/service/deepblue';
 import { ProgressElement } from 'app/service/progresselement';
 
 import { Statistics } from 'app/service/statistics';
 import { RequestManager } from 'app/service/requests-manager';
-import { AfterViewChecked } from '@angular/core/src/metadata/lifecycle_hooks';
 import { SelectedData } from 'app/service/selected-data';
+import { SelectItem } from 'primeng/components/common/selectitem';
+import { MultiSelect } from 'primeng/components/multiselect/multiselect';
 
 
 @Component({

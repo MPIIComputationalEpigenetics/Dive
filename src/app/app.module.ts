@@ -1,97 +1,33 @@
 import 'rxjs/Rx';
 
-import { AccordionModule } from 'primeng/primeng';
 import { AppFooter } from './app.footer.component';
 import { AppMenuComponent, AppSubMenu } from './app.menu.component';
 import { AppRoutes } from './app.routes';
 import { AppTopBar } from './app.topbar.component';
-import { AutoCompleteModule } from 'primeng/primeng';
-import { BreadcrumbModule } from 'primeng/primeng';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
-import { ButtonModule } from 'primeng/primeng';
-import { CalendarModule } from 'primeng/primeng';
 import { CardModule } from 'primeng/card';
-import { CarouselModule } from 'primeng/primeng';
 import { ChartModule } from 'angular2-highcharts';
-import { CheckboxModule } from 'primeng/primeng';
-import { ChipsModule } from 'primeng/primeng';
-import { CodeHighlighterModule } from 'primeng/primeng';
 import { ColorPickerModule } from 'primeng/colorpicker';
-import { ConfirmDialogModule } from 'primeng/primeng';
-import { ContextMenuModule } from 'primeng/primeng';
-import { DataGridModule } from 'primeng/primeng';
-import { DataListModule } from 'primeng/primeng';
 import { DataLoadProgressBar } from 'app/view/component/progressbar';
-import { DataScrollerModule } from 'primeng/primeng';
 import { DataSelectionScreen } from 'app/view/screen/data-selection';
 import { DataStackViewComponent } from 'app/view/component/data-stack';
 import { DeepBlueService } from 'app/service/deepblue';
-import { DialogModule } from 'primeng/primeng';
-import { DragDropModule } from 'primeng/primeng';
-import { DropdownModule } from 'primeng/primeng';
-import { EditorModule } from 'primeng/primeng';
-import { FieldsetModule } from 'primeng/primeng';
-import { FileUploadModule } from 'primeng/primeng';
 import { FormsModule, FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { GalleriaModule } from 'primeng/primeng';
 import { GenesScreen } from 'app/view/screen/genes';
-import { GMapModule } from 'primeng/primeng';
 import { GoEnrichmentScreenComponent } from 'app/view/screen/go-enrichment';
-import { GrowlModule } from 'primeng/primeng';
 import { HighchartsStatic } from 'angular2-highcharts/dist/HighchartsService';
 import { HttpClientModule } from '@angular/common/http';
-import { InplaceModule, ConfirmationService, ScrollPanelModule } from 'primeng/primeng';
-import { InputMaskModule } from 'primeng/primeng';
-import { InputSwitchModule } from 'primeng/primeng';
-import { InputTextareaModule } from 'primeng/primeng';
-import { InputTextModule } from 'primeng/primeng';
-import { LightboxModule } from 'primeng/primeng';
-import { ListboxModule } from 'primeng/primeng';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
-import { MegaMenuModule } from 'primeng/primeng';
-import { MenubarModule } from 'primeng/primeng';
-import { MenuModule } from 'primeng/primeng';
-import { MessagesModule } from 'primeng/primeng';
-import { MultiSelectModule } from 'primeng/primeng';
 import { NgModule } from '@angular/core';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
-import { OrderListModule } from 'primeng/primeng';
-import { OrganizationChartModule } from 'primeng/primeng';
 import { OverlapEnrichmentScreenComponent } from 'app/view/screen/overlap-enrichment';
 import { OverlapsBarChartComponent } from 'app/view/component/charts/overlappingbar';
-import { OverlayPanelModule } from 'primeng/primeng';
-import { PaginatorModule } from 'primeng/primeng';
-import { PanelMenuModule } from 'primeng/primeng';
-import { PanelModule } from 'primeng/primeng';
-import { PasswordModule } from 'primeng/primeng';
-import { PickListModule } from 'primeng/primeng';
-import { ProgressBarModule } from 'primeng/primeng';
 import { ProgressElement } from 'app/service/progresselement';
-import { RadioButtonModule } from 'primeng/primeng';
-import { RatingModule } from 'primeng/primeng';
 import { RegionsScreen } from 'app/view/screen/regions';
-import { ScheduleModule } from 'primeng/primeng';
-import { SelectButtonModule } from 'primeng/primeng';
 import { SelectedData } from 'app/service/selected-data';
-import { SharedModule } from 'primeng/primeng';
-import { SidebarModule } from 'primeng/primeng';
 import { SimilarFinder } from 'app/view/screen/similar-finder';
 import { SimilarityBarChartComponent } from 'app/view/component/charts/similarity';
-import { SlideMenuModule } from 'primeng/primeng';
-import { SliderModule } from 'primeng/primeng';
-import { SpinnerModule } from 'primeng/primeng';
-import { SplitButtonModule } from 'primeng/primeng';
-import { StepsModule } from 'primeng/primeng';
-import { TabMenuModule } from 'primeng/primeng';
-import { TabViewModule } from 'primeng/primeng';
-import { TerminalModule } from 'primeng/primeng';
-import { TieredMenuModule } from 'primeng/primeng';
-import { ToggleButtonModule } from 'primeng/primeng';
-import { ToolbarModule } from 'primeng/primeng';
-import { TooltipModule } from 'primeng/primeng';
-import { TreeModule } from 'primeng/primeng';
-import { TreeTableModule } from 'primeng/primeng';
 
 export function highchartsFactory() {
     return require('highcharts');
@@ -137,16 +73,76 @@ import { LoadQueriesScreen } from 'app/view/screen/load-queries';
 import { CopyComponent } from 'app/view/component/copy';
 
 import { ArchwizardModule } from 'angular-archwizard';
+import { AccordionModule } from 'primeng/components/accordion/accordion';
+import { BreadcrumbModule } from 'primeng/components/breadcrumb/breadcrumb';
+import { ButtonModule } from 'primeng/components/button/button';
+import { CalendarModule } from 'primeng/components/calendar/calendar';
+import { CarouselModule } from 'primeng/components/carousel/carousel';
+import { CheckboxModule } from 'primeng/components/checkbox/checkbox';
+import { ChipsModule } from 'primeng/components/chips/chips';
+import { CodeHighlighterModule } from 'primeng/components/codehighlighter/codehighlighter';
+import { ConfirmDialogModule } from 'primeng/components/confirmdialog/confirmdialog';
+import { SharedModule } from 'primeng/components/common/shared';
+import { OrganizationChartModule } from 'primeng/components/organizationchart/organizationchart';
+import { ContextMenuModule } from 'primeng/components/contextmenu/contextmenu';
+import { DataScrollerModule } from 'primeng/components/datascroller/datascroller';
+import { DialogModule } from 'primeng/components/dialog/dialog';
+import { DragDropModule } from 'primeng/components/dragdrop/dragdrop';
+import { DropdownModule } from 'primeng/components/dropdown/dropdown';
+import { FieldsetModule } from 'primeng/components/fieldset/fieldset';
+import { TooltipModule } from 'primeng/components/tooltip/tooltip';
+import { ToolbarModule } from 'primeng/components/toolbar/toolbar';
+import { ToggleButtonModule } from 'primeng/components/togglebutton/togglebutton';
+import { TieredMenuModule } from 'primeng/components/tieredmenu/tieredmenu';
+import { TerminalModule } from 'primeng/components/terminal/terminal';
+import { TabViewModule } from 'primeng/components/tabview/tabview';
+import { TabMenuModule } from 'primeng/components/tabmenu/tabmenu';
+import { StepsModule } from 'primeng/components/steps/steps';
+import { FileUploadModule } from 'primeng/components/fileupload/fileupload';
+import { GrowlModule } from 'primeng/components/growl/growl';
+import { InplaceModule } from 'primeng/components/inplace/inplace';
+import { InputMaskModule } from 'primeng/components/inputmask/inputmask';
+import { InputSwitchModule } from 'primeng/components/inputswitch/inputswitch';
+import { InputTextModule } from 'primeng/components/inputtext/inputtext';
+import { InputTextareaModule } from 'primeng/components/inputtextarea/inputtextarea';
+import { LightboxModule } from 'primeng/components/lightbox/lightbox';
+import { ListboxModule } from 'primeng/components/listbox/listbox';
+import { MegaMenuModule } from 'primeng/components/megamenu/megamenu';
+import { MenuModule } from 'primeng/components/menu/menu';
+import { MenubarModule } from 'primeng/components/menubar/menubar';
+import { MessagesModule } from 'primeng/components/messages/messages';
+import { MultiSelectModule } from 'primeng/components/multiselect/multiselect';
+import { OrderListModule } from 'primeng/components/orderlist/orderlist';
+import { OverlayPanelModule } from 'primeng/components/overlaypanel/overlaypanel';
+import { PaginatorModule } from 'primeng/components/paginator/paginator';
+import { PanelModule } from 'primeng/components/panel/panel';
+import { PanelMenuModule } from 'primeng/components/panelmenu/panelmenu';
+import { PasswordModule } from 'primeng/components/password/password';
+import { ProgressBarModule } from 'primeng/components/progressbar/progressbar';
+import { PickListModule } from 'primeng/components/picklist/picklist';
+import { RadioButtonModule } from 'primeng/components/radiobutton/radiobutton';
+import { RatingModule } from 'primeng/components/rating/rating';
+import { ScrollPanelModule } from 'primeng/scrollpanel';
+import { ScheduleModule } from 'primeng/components/schedule/schedule';
+import { SelectButtonModule } from 'primeng/components/selectbutton/selectbutton';
+import { SidebarModule } from 'primeng/components/sidebar/sidebar';
+import { SlideMenuModule } from 'primeng/components/slidemenu/slidemenu';
+import { SliderModule } from 'primeng/components/slider/slider';
+import { SpinnerModule } from 'primeng/components/spinner/spinner';
+import { SplitButtonModule } from 'primeng/components/splitbutton/splitbutton';
+import { ConfirmationService } from 'primeng/components/common/confirmationservice';
+import { TreeTableModule } from 'primeng/components/treetable/treetable';
+import { AutoCompleteModule } from 'primeng/components/autocomplete/autocomplete';
 
 @NgModule({
     imports: [
+        AutoCompleteModule,
         ArchwizardModule,
         BrowserModule,
         FormsModule,
         AppRoutes,
         HttpClientModule,
         AccordionModule,
-        AutoCompleteModule,
         BreadcrumbModule,
         ButtonModule,
         CalendarModule,
@@ -157,17 +153,12 @@ import { ArchwizardModule } from 'angular-archwizard';
         ConfirmDialogModule,
         SharedModule,
         ContextMenuModule,
-        DataGridModule,
-        DataListModule,
         DataScrollerModule,
         DialogModule,
         DragDropModule,
         DropdownModule,
-        EditorModule,
         FieldsetModule,
         FileUploadModule,
-        GalleriaModule,
-        GMapModule,
         GrowlModule,
         InplaceModule,
         InputMaskModule,
@@ -206,11 +197,10 @@ import { ArchwizardModule } from 'angular-archwizard';
         TabViewModule,
         TerminalModule,
         TieredMenuModule,
+        TreeTableModule,
         ToggleButtonModule,
         ToolbarModule,
         TooltipModule,
-        TreeModule,
-        TreeTableModule,
         ChartModule,
         BrowserAnimationsModule,
         OrganizationChartModule,

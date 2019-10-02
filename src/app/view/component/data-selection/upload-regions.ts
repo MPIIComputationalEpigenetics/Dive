@@ -1,6 +1,4 @@
 import { Component, Output } from '@angular/core';
-import { InputTextareaModule } from 'primeng/primeng';
-import { Message } from 'primeng/primeng';
 import { EventEmitter } from '@angular/core';
 import { DeepBlueOperation, DeepBlueEmptyParameter } from 'app/domain/operations';
 import { Id } from 'app/domain/deepblue';
