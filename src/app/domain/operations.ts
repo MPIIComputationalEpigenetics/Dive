@@ -1,10 +1,7 @@
-import { EpigeneticMark, Name } from './deepblue';
+import { Name } from './deepblue';
 import { ICloneable, IOperation, IDataParameter, ITextable, IFiltered, INamedDataType } from '../domain/interfaces'
 import { IKey } from '../domain/interfaces';
 import { IdName, FullMetadata, Id } from '../domain/deepblue';
-import { request } from 'https';
-import { stringify } from 'querystring';
-
 
 function clone(obj: any) {
     let copy: any;
@@ -192,7 +189,7 @@ export class DeepBlueDataParameter extends AbstractDataParameter {
     }
 
     text(): string {
-        return stringify(this._data);
+        return JSON.stringify(this._data);
     }
 }
 
