@@ -26,7 +26,6 @@ import { DataLoadProgressBar } from 'app/view/component/progressbar';
 import { DataScrollerModule } from 'primeng/primeng';
 import { DataSelectionScreen } from 'app/view/screen/data-selection';
 import { DataStackViewComponent } from 'app/view/component/data-stack';
-import { DataTableModule } from 'primeng/primeng';
 import { DeepBlueService } from 'app/service/deepblue';
 import { DialogModule } from 'primeng/primeng';
 import { DragDropModule } from 'primeng/primeng';
@@ -161,7 +160,6 @@ import { ArchwizardModule } from 'angular-archwizard';
         DataGridModule,
         DataListModule,
         DataScrollerModule,
-        DataTableModule,
         DialogModule,
         DragDropModule,
         DropdownModule,
