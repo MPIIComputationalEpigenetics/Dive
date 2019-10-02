@@ -206,7 +206,7 @@ export class DeepBlueService {
     genomeToEpigeneticMarksResult = new Map<string, EpigeneticMark[]>();
     listEpigeneticMarks(): Observable<EpigeneticMark[]> {
         if (!this.getGenome()) {
-            return Observable.empty<EpigeneticMark[]>();
+            return Observable.empty();
         }
 
         let genome = this.getGenome().name;
@@ -266,7 +266,7 @@ export class DeepBlueService {
 
     getHistones(): Observable<EpigeneticMark[]> {
         if (!this.getGenome()) {
-            return Observable.empty<EpigeneticMark[]>();
+            return Observable.empty();
         }
         const params = new HttpParams()
             .set('genome', this.getGenome().name)
@@ -291,7 +291,7 @@ export class DeepBlueService {
 
     getAnnotations(genome: Genome): Observable<Annotation[]> {
         if (!genome) {
-            return Observable.empty<Annotation[]>();
+            return Observable.empty();
         }
 
         const params = new HttpParams()
@@ -306,7 +306,7 @@ export class DeepBlueService {
     genomeToBioSourceResult = new Map<string, BioSource[]>();
     listBioSources(): Observable<BioSource[]> {
         if (!this.getGenome()) {
-            return Observable.empty<BioSource[]>();
+            return Observable.empty();
         }
 
         let genome = this.getGenome().name;
@@ -366,7 +366,7 @@ export class DeepBlueService {
 
     listTechniques(): Observable<Technique[]> {
         if (!this.getGenome()) {
-            return Observable.empty<Technique[]>();
+            return Observable.empty();
         }
         const params = new HttpParams()
             .set('genome', this.getGenome().name)
@@ -379,7 +379,7 @@ export class DeepBlueService {
 
     listProjects(): Observable<Project[]> {
         if (!this.getGenome()) {
-            return Observable.empty<Project[]>();
+            return Observable.empty();
         }
         const params = new HttpParams()
             .set('genome', this.getGenome().name)
@@ -392,7 +392,7 @@ export class DeepBlueService {
 
     listExperiments(epigenetic_marks: EpigeneticMark[], biosources: BioSource[], techniques: Technique[], projects: Project[]): Observable<Experiment[]> {
         if (!this.getGenome()) {
-            return Observable.empty<Project[]>();
+            return Observable.empty();
         }
 
         let params = new HttpParams()
@@ -496,11 +496,11 @@ export class DeepBlueService {
 
     getExperiments(genome: Genome, epigenetic_mark: IdName | string): Observable<IdName[]> {
         if (!genome) {
-            return Observable.empty<IdName[]>();
+            return Observable.empty();
         }
 
         if (!epigenetic_mark) {
-            return Observable.empty<IdName[]>();
+            return Observable.empty();
         }
 
         let epigenetic_mark_name = "";
@@ -574,7 +574,7 @@ export class DeepBlueService {
 
     selectAnnotation(annotation: IdName, request_count: number = -1): Observable<DeepBlueOperation> {
         if (!annotation) {
-            return Observable.empty<DeepBlueOperation>();
+            return Observable.empty();
         }
 
         if (this.idNamesQueryCache.get(annotation, request_count)) {
@@ -599,7 +599,7 @@ export class DeepBlueService {
 
     selectExperiment(experiment: IdName, request_count: number = -1): Observable<DeepBlueOperation> {
         if (!experiment) {
-            return Observable.empty<DeepBlueOperation>();
+            return Observable.empty();
         }
 
         if (this.idNamesQueryCache.get(experiment, request_count)) {
@@ -635,7 +635,7 @@ export class DeepBlueService {
 
     mergeQueries(queries_id: IOperation[], request_count: number): Observable<IOperation> {
         if (!queries_id || queries_id.length == 0) {
-            return Observable.empty<DeepBlueOperation>();
+            return Observable.empty();
         }
 
         if (queries_id.length == 1) {
@@ -785,7 +785,7 @@ export class DeepBlueService {
 
     selectGoTerm(go_term: string, gene_model: GeneModel, request_count: number): Observable<DeepBlueOperation> {
         if (!go_term) {
-            return Observable.empty<DeepBlueOperation>();
+            return Observable.empty();
         }
 
         const params = new HttpParams()
@@ -804,7 +804,7 @@ export class DeepBlueService {
 
     findMotif(dna_motif: string, request_count: number = -1): Observable<DeepBlueOperation> {
         if (!dna_motif) {
-            return Observable.empty<DeepBlueOperation>();
+            return Observable.empty();
         }
 
         const params = new HttpParams()
@@ -822,7 +822,7 @@ export class DeepBlueService {
 
     cacheQuery(selected_data: IOperation, request_count: number = -1): Observable<IOperation> {
         if (!selected_data) {
-            return Observable.empty<DeepBlueOperation>();
+            return Observable.empty();
         }
 
         if (this.operationCache.get(selected_data, request_count)) {
@@ -1055,7 +1055,7 @@ export class DeepBlueService {
 
     selectGenes(genes: string[], go_terms: string[], gene_model: IdName, request_count: number = -1): Observable<DeepBlueOperation> {
         if (!gene_model) {
-            return Observable.empty<DeepBlueOperation>();
+            return Observable.empty();
         }
 
         let params = new HttpParams()
@@ -1080,7 +1080,7 @@ export class DeepBlueService {
 
     inputRegions(region_set: string, request_count: number = -1): Observable<IOperation> {
         if (!region_set) {
-            return Observable.empty<IOperation>();
+            return Observable.empty();
         }
 
         let request = {
