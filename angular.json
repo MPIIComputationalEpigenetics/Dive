@@ -20,10 +20,12 @@
               "src/assets"
             ],
             "styles": [
+              "node_modules/primeng/resources/primeng.min.css",
+              "node_modules/angular-archwizard/archwizard.css",
               "node_modules/@swimlane/ngx-datatable/index.css",
               "node_modules/@swimlane/ngx-datatable/themes/material.css",
               "node_modules/@swimlane/ngx-datatable/assets/icons.css",
-              "src/styles.scss"
+              "src/assets/theme/theme-dive.css"
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.js",
