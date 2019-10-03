@@ -72,7 +72,7 @@ export class GoEnrichmentScreenComponent implements AfterViewInit, OnDestroy {
                 this.geneModels = geneModels;
                 this.menuGeneModel = geneModels.map((geneModel: GeneModel) => {
                     const l = { label: geneModel.name, value: geneModel };
-                    this.geneModelDropdown.selectItem(null, l);
+                    this.geneModelDropdown.selectItem({}, l);
                     return l;
                 });
             },

@@ -104,7 +104,7 @@ export class DataSelectionWizard implements AfterViewInit {
         let item = { label: genome.name, value: genome };
         this.genomeItems.push(item);
         if (!this.selectedGenome) {
-          this.genomesDropdown.selectItem(null, item);
+          this.genomesDropdown.selectItem({}, item);
         }
       }
     });

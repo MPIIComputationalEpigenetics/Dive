@@ -64,7 +64,7 @@ export class GenesScreen implements AfterViewInit, OnDestroy {
         this.menuGeneModel = geneModels.map((geneModel: GeneModel) => {
           const l = { label: geneModel.name, value: geneModel };
           // Always select the last gene model
-          this.geneModelDropdown.selectItem(null, l);
+          this.geneModelDropdown.selectItem({}, l);
           return l;
         });
       },

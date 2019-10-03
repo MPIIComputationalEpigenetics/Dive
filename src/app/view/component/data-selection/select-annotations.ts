@@ -42,11 +42,11 @@ export class SelectAnnotationsComponent implements OnDestroy {
                 this.menuAnnotations = annotations.map((annotation: Annotation) => {
                     let l = { label: annotation.name, value: annotation };
                     if (l.label.toLowerCase().startsWith('cpg islands')) {
-                        this.annotationsDropdown.selectItem(null, l);
+                        this.annotationsDropdown.selectItem({}, l);
                     }
 
                     if (l.label.toLowerCase().startsWith('blueprint')) {
-                        this.annotationsDropdown.selectItem(null, l);
+                        this.annotationsDropdown.selectItem({}, l);
                     }
                     return l;
                 });

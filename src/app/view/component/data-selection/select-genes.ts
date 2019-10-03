@@ -41,7 +41,7 @@ export class SelectGenesComponent {
         this.geneModels = geneModels;
         this.menuGeneModel = geneModels.map((geneModel: GeneModel) => {
           const l = { label: geneModel.name, value: geneModel };
-          this.geneModelDropdown.selectItem(null, l);
+          this.geneModelDropdown.selectItem({}, l);
           return l;
         });
       },
