@@ -1,17 +1,5 @@
 import { Component, Output, EventEmitter, Input, OnInit } from '@angular/core';
-
-import {
-  Annotation,
-  BioSource,
-  EpigeneticMark,
-  Experiment,
-  IdName,
-  Technique,
-  Project,
-  Id,
-  FullMetadata,
-  FullExperiment,
-} from 'app/domain/deepblue';
+import { IdName, Project, Id, FullExperiment } from 'app/domain/deepblue';
 
 import { DeepBlueService } from 'app/service/deepblue';
 import { Subscription } from 'rxjs';
@@ -28,16 +16,12 @@ type Dataset = [string, string[]];
 })
 export class SelectDatasetsComponent implements OnInit {
 
-  datatable_columns = [
-    { name: 'name', prop: 'name', column_type: 'string' }
-  ];
-
   visibleSidebar = false;
   selectedRow: FullExperiment = null;
 
   projectsSubscription: Subscription;
   datasetTreeNodes: TreeNode[] = [];
-  selectedDatasets: any = [];
+  selectedDatasets: TreeNode[] = [];
   datasets: [string, string[]][] = [];
 
   projects: Project[] = [];
@@ -74,7 +58,14 @@ export class SelectDatasetsComponent implements OnInit {
 
   buildItems() {
     let projectNames = this.projects.map((project) => project.name);
-    this.datasetTreeNodes = <TreeNode[]>this.datasets.map((dataset: Dataset) => this.buildNode(dataset, projectNames)).filter((node) => node.children.length > 0);
+    this.datasetTreeNodes = this.datasets.map((dataset: Dataset) => {
+        let n = this.buildNode(dataset, projectNames)
+        console.log(n)
+        return n;
+      }).filter((node) => {
+        return node.children.length > 0
+        }
+      );
   }
 
   updateFilter($event: any) {
@@ -89,7 +80,8 @@ export class SelectDatasetsComponent implements OnInit {
 
     let name = dataset[0];
 
-    if (this.filterText.toLowerCase().trim().length > 0 && name.toLowerCase().indexOf(this.filterText.toLowerCase()) >= 0) {
+    if (this.filterText.toLowerCase().trim().length > 0 && 
+      name.toLowerCase().indexOf(this.filterText.toLowerCase()) >= 0) {
       passFilter = true;
     }
 
@@ -244,6 +236,7 @@ export class SelectDatasetsComponent implements OnInit {
   }
 
   nodeSelect(event: any) {
+    debugger;
     if (event.node.data.leaf) {
       this.visibleSidebar = true;
       this.selectedRow = null;
