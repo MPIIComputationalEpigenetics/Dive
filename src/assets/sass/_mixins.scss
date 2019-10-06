@@ -109,10 +109,10 @@
   filter: alpha(opacity=$opacity-ie);
 }
 
-@mixin icon-override($icon) {
-    &:before {
-        content: $icon;
-    }
+@mixin border-box-sizing() {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 @mixin material-icon($icon) {
@@ -145,6 +145,10 @@
     &:before {
         content: $icon;
     }
+}
+
+@mixin icon-override($icon) {
+    @include material-icon($icon);
 }
 
 @mixin rotate($deg) {
