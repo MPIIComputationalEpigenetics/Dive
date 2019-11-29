@@ -163,7 +163,12 @@ export class SelectedData implements OnDestroy {
 
     // http://localhost:56570/#/load_query?qid=q33678&gid=g5&cid=q55029&cid=q61709&cid=q50975
 
-    let currentId = this._stacks[0].getCurrentOperation().id().id;
+    let current = this._stacks[0].getCurrentOperation()
+    if (current === null) {
+      return "";
+    }
+
+    let currentId = current.id().id;
     let queryPart = "/#/load_query?qid=" + currentId
 
     let gid = this.deepBlueService.getGenome().id.id;
