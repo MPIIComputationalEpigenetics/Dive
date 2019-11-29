@@ -31479,3 +31479,5 @@ body .ui-terminal .ui-terminal-input {
   font: normal 1em "Roboto", "Helvetica Neue", sans-serif; }
 
 /* Add your customizations of the theme here */
+.ui-dropdown {
+  min-width: 50px !important; }

@@ -7,3 +7,7 @@ $accentLightColor: #86b0f5;
 $accentTextColor: #ffffff;
 
 @import '../sass/theme/_theme';
+
+.ui-dropdown {
+    min-width: 50px !important;
+}
