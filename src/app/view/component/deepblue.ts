@@ -12,7 +12,7 @@ import { MenuItem } from 'primeng/components/common/menuitem';
 @Component({
     selector: 'selected-data-button',
     template: `
-    <p-sidebar [(visible)]="showSidebar" position="top" [baseZIndex]="20000" styleClass="ui-sidebar-lg" [appendTo]="'body'">
+    <p-sidebar [(visible)]="showSidebar" [appendTo]="'body'" [fullScreen]="true">
         <div class="ui-helper-clearfix">
             <span class="ui-panel-title" style="font-size:16px;display:inline-block;margin-top:2px">{{ _dataStack.name() }}</span>
             <p-splitButton [style]="{'float':'right'}" label="Use as main data" (onClick)="moveToMain()" [model]="items"></p-splitButton>
